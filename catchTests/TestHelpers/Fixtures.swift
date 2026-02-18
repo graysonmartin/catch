@@ -1,0 +1,35 @@
+import Foundation
+import SwiftData
+
+extension Location {
+    static func make(
+        name: String = "Back Alley",
+        latitude: Double? = 37.334722,
+        longitude: Double? = -122.008889
+    ) -> Location {
+        Location(name: name, latitude: latitude, longitude: longitude)
+    }
+}
+
+@MainActor
+enum Fixtures {
+    static func cat(name: String = "Mr. Whiskers", in context: ModelContext) -> Cat {
+        let cat = Cat(name: name)
+        context.insert(cat)
+        return cat
+    }
+
+    static func encounter(for cat: Cat, in context: ModelContext) -> Encounter {
+        let encounter = Encounter(cat: cat)
+        context.insert(encounter)
+        return encounter
+    }
+
+    static func careEntry(for cat: Cat, durationDays: Int = 3, in context: ModelContext) -> CareEntry {
+        let start = Date()
+        let end = Calendar.current.date(byAdding: .day, value: durationDays, to: start)!
+        let entry = CareEntry(startDate: start, endDate: end, cat: cat)
+        context.insert(entry)
+        return entry
+    }
+}

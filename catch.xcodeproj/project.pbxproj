@@ -31,6 +31,16 @@
 		E8000001AA000022 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000026 /* LocationPickerView.swift */; };
 		E8000001AA000023 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000027 /* Location.swift */; };
 		E8000001AA000024 /* PhotoCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000028 /* PhotoCarouselView.swift */; };
+		E8A100000001 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000010 /* LocationTests.swift */; };
+		E8A100000002 /* CareEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000011 /* CareEntryTests.swift */; };
+		E8A100000003 /* CatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000012 /* CatTests.swift */; };
+		E8A100000004 /* EncounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000013 /* EncounterTests.swift */; };
+		E8A100000005 /* ModelContainerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000014 /* ModelContainerFactory.swift */; };
+		E8A100000006 /* Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000015 /* Fixtures.swift */; };
+		E8A100000007 /* Cat.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000010 /* Cat.swift */; };
+		E8A100000008 /* Encounter.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000011 /* Encounter.swift */; };
+		E8A100000009 /* CareEntry.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000012 /* CareEntry.swift */; };
+		E8A10000000A /* Location.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000027 /* Location.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,10 +69,24 @@
 		E8000001AA000026 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
 		E8000001AA000027 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		E8000001AA000028 /* PhotoCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCarouselView.swift; sourceTree = "<group>"; };
+		E8A100000010 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
+		E8A100000011 /* CareEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareEntryTests.swift; sourceTree = "<group>"; };
+		E8A100000012 /* CatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatTests.swift; sourceTree = "<group>"; };
+		E8A100000013 /* EncounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterTests.swift; sourceTree = "<group>"; };
+		E8A100000014 /* ModelContainerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerFactory.swift; sourceTree = "<group>"; };
+		E8A100000015 /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
+		E8A100000016 /* catchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = catchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		E80000012B5A00000006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8A100000020 /* Frameworks (catchTests) */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -76,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				E80000012B5A00000008 /* catch */,
+				E8A100000021 /* catchTests */,
 				E80000012B5A00000009 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -99,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				E80000012B5A00000005 /* catch.app */,
+				E8A100000016 /* catchTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -159,6 +185,35 @@
 			path = Theme;
 			sourceTree = "<group>";
 		};
+		E8A100000021 /* catchTests */ = {
+			isa = PBXGroup;
+			children = (
+				E8A100000022 /* Models */,
+				E8A100000023 /* TestHelpers */,
+			);
+			path = catchTests;
+			sourceTree = "<group>";
+		};
+		E8A100000022 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E8A100000010 /* LocationTests.swift */,
+				E8A100000011 /* CareEntryTests.swift */,
+				E8A100000012 /* CatTests.swift */,
+				E8A100000013 /* EncounterTests.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E8A100000023 /* TestHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				E8A100000014 /* ModelContainerFactory.swift */,
+				E8A100000015 /* Fixtures.swift */,
+			);
+			path = TestHelpers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -179,6 +234,22 @@
 			productReference = E80000012B5A00000005 /* catch.app */;
 			productType = "com.apple.product-type.application";
 		};
+		E8A100000030 /* catchTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E8A100000042 /* Build configuration list for PBXNativeTarget "catchTests" */;
+			buildPhases = (
+				E8A100000031 /* Sources */,
+				E8A100000020 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = catchTests;
+			productName = catchTests;
+			productReference = E8A100000016 /* catchTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -191,6 +262,10 @@
 				TargetAttributes = {
 					E80000012B5A0000000A = {
 						CreatedOnToolsVersion = 15.4;
+					};
+					E8A100000030 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = E80000012B5A0000000A;
 					};
 				};
 			};
@@ -208,6 +283,7 @@
 			projectRoot = "";
 			targets = (
 				E80000012B5A0000000A /* catch */,
+				E8A100000030 /* catchTests */,
 			);
 		};
 /* End PBXProject section */
@@ -251,6 +327,23 @@
 				E8000001AA000022 /* LocationPickerView.swift in Sources */,
 				E8000001AA000023 /* Location.swift in Sources */,
 				E8000001AA000024 /* PhotoCarouselView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8A100000031 /* Sources (catchTests) */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E8A100000001 /* LocationTests.swift in Sources */,
+				E8A100000002 /* CareEntryTests.swift in Sources */,
+				E8A100000003 /* CatTests.swift in Sources */,
+				E8A100000004 /* EncounterTests.swift in Sources */,
+				E8A100000005 /* ModelContainerFactory.swift in Sources */,
+				E8A100000006 /* Fixtures.swift in Sources */,
+				E8A100000007 /* Cat.swift in Sources (catchTests) */,
+				E8A100000008 /* Encounter.swift in Sources (catchTests) */,
+				E8A100000009 /* CareEntry.swift in Sources (catchTests) */,
+				E8A10000000A /* Location.swift in Sources (catchTests) */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,6 +529,38 @@
 			};
 			name = Release;
 		};
+		E8A100000040 /* Debug (catchTests) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.catch.catchTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E8A100000041 /* Release (catchTests) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.catch.catchTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -453,6 +578,15 @@
 			buildConfigurations = (
 				E80000012B5A00000017 /* Debug */,
 				E80000012B5A00000018 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E8A100000042 /* Build configuration list for PBXNativeTarget "catchTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8A100000040 /* Debug */,
+				E8A100000041 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
