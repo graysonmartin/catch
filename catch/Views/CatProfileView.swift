@@ -1,52 +1,71 @@
 import SwiftUI
 
 struct CatProfileView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @Bindable var cat: Cat
     @State private var showingAddCare = false
     @State private var showingEdit = false
+    @State private var showingDeleteCat = false
+    @State private var encounterToDelete: Encounter?
+    @State private var careEntryToDelete: CareEntry?
+
+    private var sortedEncounters: [Encounter] {
+        cat.encounters.sorted { $0.date > $1.date }
+    }
+
+    private var sortedCareEntries: [CareEntry] {
+        cat.careEntries.sorted { $0.startDate > $1.startDate }
+    }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                // Photo header
-                PhotoCarouselView(
-                    photos: cat.photos,
-                    height: 250,
-                    cornerRadius: 16
-                )
-                .padding(.horizontal)
-
-                // Info section
-                VStack(spacing: 12) {
-                    HStack {
-                        Text(cat.name)
-                            .font(.title.weight(.bold))
-                            .foregroundStyle(CatchTheme.textPrimary)
-                        if cat.isOwned {
-                            Image(systemName: "heart.fill")
-                                .foregroundStyle(CatchTheme.primary)
-                        }
-                        Spacer()
-                    }
-
-                    if !cat.estimatedAge.isEmpty {
-                        infoRow(icon: "calendar", label: "Age", value: cat.estimatedAge)
-                    }
-                    if !cat.location.name.isEmpty {
-                        infoRow(icon: "mappin.circle.fill", label: "Location", value: cat.location.name)
-                    }
-                    if !cat.notes.isEmpty {
-                        infoRow(icon: "note.text", label: "Notes", value: cat.notes)
-                    }
-
-                    Text("First seen \(cat.createdAt.formatted(date: .abbreviated, time: .omitted))")
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+        List {
+            // Photo header
+            Section {
+                if !cat.photos.isEmpty {
+                    PhotoCarouselView(
+                        photos: cat.photos,
+                        height: 250,
+                        cornerRadius: 16
+                    )
                 }
-                .padding(.horizontal)
+            }
+            .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+            .listRowBackground(CatchTheme.background)
+            .listRowSeparator(.hidden)
 
-                // Action buttons
+            // Info section
+            Section {
+                HStack {
+                    Text(cat.name)
+                        .font(.title.weight(.bold))
+                        .foregroundStyle(CatchTheme.textPrimary)
+                    if cat.isOwned {
+                        Image(systemName: "heart.fill")
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                    Spacer()
+                }
+
+                if !cat.estimatedAge.isEmpty {
+                    infoRow(icon: "calendar", label: "Age", value: cat.estimatedAge)
+                }
+                if !cat.location.name.isEmpty {
+                    infoRow(icon: "mappin.circle.fill", label: "Location", value: cat.location.name)
+                }
+                if !cat.notes.isEmpty {
+                    infoRow(icon: "note.text", label: "Notes", value: cat.notes)
+                }
+
+                Text("First seen \(cat.createdAt.formatted(date: .abbreviated, time: .omitted))")
+                    .font(.caption)
+                    .foregroundStyle(CatchTheme.textSecondary)
+            }
+            .listRowBackground(CatchTheme.background)
+            .listRowSeparator(.hidden)
+
+            // Action buttons
+            Section {
                 HStack(spacing: 12) {
                     Button {
                         showingEdit = true
@@ -72,46 +91,83 @@ struct CatProfileView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                 }
-                .padding(.horizontal)
-
-                // Encounters section
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Encounters (\(cat.encounters.count))")
-                        .font(.headline)
-                        .foregroundStyle(CatchTheme.textPrimary)
-
-                    if cat.encounters.isEmpty {
-                        Text("No encounters logged.")
-                            .font(.subheadline)
-                            .foregroundStyle(CatchTheme.textSecondary)
-                    } else {
-                        ForEach(cat.encounters.sorted(by: { $0.date > $1.date })) { encounter in
-                            encounterRow(encounter)
-                        }
-                    }
-                }
-                .padding(.horizontal)
-
-                // Care log section
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Care Log (\(cat.careEntries.count))")
-                        .font(.headline)
-                        .foregroundStyle(CatchTheme.textPrimary)
-
-                    if cat.careEntries.isEmpty {
-                        Text("No care entries logged.")
-                            .font(.subheadline)
-                            .foregroundStyle(CatchTheme.textSecondary)
-                    } else {
-                        ForEach(cat.careEntries.sorted(by: { $0.startDate > $1.startDate })) { entry in
-                            careRow(entry)
-                        }
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.bottom, 20)
+                .buttonStyle(.plain)
             }
+            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+            .listRowBackground(CatchTheme.background)
+            .listRowSeparator(.hidden)
+
+            // Encounters section
+            Section {
+                if sortedEncounters.isEmpty {
+                    Text("No encounters logged.")
+                        .font(.subheadline)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                        .listRowBackground(CatchTheme.background)
+                } else {
+                    ForEach(sortedEncounters) { encounter in
+                        encounterRow(encounter)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button("Delete", role: .destructive) {
+                                    encounterToDelete = encounter
+                                }
+                            }
+                    }
+                }
+            } header: {
+                Text("Encounters (\(cat.encounters.count))")
+                    .font(.headline)
+                    .foregroundStyle(CatchTheme.textPrimary)
+                    .textCase(nil)
+            }
+            .listRowBackground(CatchTheme.background)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+
+            // Care log section
+            Section {
+                if sortedCareEntries.isEmpty {
+                    Text("No care entries logged.")
+                        .font(.subheadline)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                        .listRowBackground(CatchTheme.background)
+                } else {
+                    ForEach(sortedCareEntries) { entry in
+                        careRow(entry)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button("Delete", role: .destructive) {
+                                    careEntryToDelete = entry
+                                }
+                            }
+                    }
+                }
+            } header: {
+                Text("Care Log (\(cat.careEntries.count))")
+                    .font(.headline)
+                    .foregroundStyle(CatchTheme.textPrimary)
+                    .textCase(nil)
+            }
+            .listRowBackground(CatchTheme.background)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+
+            // Delete cat
+            Section {
+                Button(role: .destructive) {
+                    showingDeleteCat = true
+                } label: {
+                    HStack {
+                        Spacer()
+                        Label("delete this cat", systemImage: "trash")
+                            .font(.subheadline.weight(.medium))
+                        Spacer()
+                    }
+                }
+            }
+            .listRowBackground(CatchTheme.background)
         }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
         .background(CatchTheme.background)
         .navigationTitle(cat.name)
         .navigationBarTitleDisplayMode(.inline)
@@ -120,6 +176,47 @@ struct CatProfileView: View {
         }
         .sheet(isPresented: $showingEdit) {
             EditCatView(cat: cat)
+        }
+        .alert("delete encounter?", isPresented: Binding(
+            get: { encounterToDelete != nil },
+            set: { if !$0 { encounterToDelete = nil } }
+        )) {
+            Button("Delete", role: .destructive) {
+                if let encounter = encounterToDelete {
+                    modelContext.delete(encounter)
+                    encounterToDelete = nil
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                encounterToDelete = nil
+            }
+        } message: {
+            Text("gone forever. no take-backs.")
+        }
+        .alert("delete care entry?", isPresented: Binding(
+            get: { careEntryToDelete != nil },
+            set: { if !$0 { careEntryToDelete = nil } }
+        )) {
+            Button("Delete", role: .destructive) {
+                if let entry = careEntryToDelete {
+                    modelContext.delete(entry)
+                    careEntryToDelete = nil
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                careEntryToDelete = nil
+            }
+        } message: {
+            Text("gone forever. no take-backs.")
+        }
+        .alert("delete \(cat.name)?", isPresented: $showingDeleteCat) {
+            Button("Delete", role: .destructive) {
+                modelContext.delete(cat)
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("this deletes all their encounters and care entries too. absolutely no undo.")
         }
     }
 

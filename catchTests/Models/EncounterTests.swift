@@ -101,4 +101,29 @@ final class EncounterTests: XCTestCase {
         let fetched = try context.fetch(FetchDescriptor<Encounter>())
         XCTAssertEqual(fetched.first?.photos.count, 0)
     }
+
+    func test_deleteEncounter_removeFromStore() throws {
+        let cat = Fixtures.cat(name: "Fleeting", in: context)
+        let encounter = Fixtures.encounter(for: cat, in: context)
+        try context.save()
+
+        context.delete(encounter)
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<Encounter>())
+        XCTAssertEqual(fetched.count, 0)
+    }
+
+    func test_deleteEncounter_doesNotDeleteCat() throws {
+        let cat = Fixtures.cat(name: "Survivor", in: context)
+        let encounter = Fixtures.encounter(for: cat, in: context)
+        try context.save()
+
+        context.delete(encounter)
+        try context.save()
+
+        let cats = try context.fetch(FetchDescriptor<Cat>())
+        XCTAssertEqual(cats.count, 1)
+        XCTAssertEqual(cats.first?.name, "Survivor")
+    }
 }
