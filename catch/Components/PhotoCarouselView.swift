@@ -9,6 +9,7 @@ struct PhotoCarouselView: View {
     var emptyBackgroundColor: Color = CatchTheme.secondary.opacity(0.3)
 
     @State private var currentPage = 0
+    @State private var viewerSelection: PhotoViewerSelection?
 
     private enum Layout {
         static let dotSize: CGFloat = 6
@@ -22,12 +23,17 @@ struct PhotoCarouselView: View {
     }
 
     var body: some View {
-        if photos.isEmpty {
-            emptyState
-        } else if photos.count == 1 {
-            singlePhoto
-        } else {
-            carousel
+        Group {
+            if photos.isEmpty {
+                emptyState
+            } else if photos.count == 1 {
+                singlePhoto
+            } else {
+                carousel
+            }
+        }
+        .fullScreenCover(item: $viewerSelection) { selection in
+            PhotoViewerView(photos: photos, currentIndex: selection.index)
         }
     }
 
@@ -46,6 +52,9 @@ struct PhotoCarouselView: View {
             .frame(maxWidth: .infinity)
             .frame(height: height)
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .onTapGesture {
+                viewerSelection = PhotoViewerSelection(index: 0)
+            }
     }
 
     private var carousel: some View {
@@ -54,6 +63,9 @@ struct PhotoCarouselView: View {
                 ForEach(photos.indices, id: \.self) { index in
                     photoImage(photos[index])
                         .tag(index)
+                        .onTapGesture {
+                            viewerSelection = PhotoViewerSelection(index: index)
+                        }
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -95,4 +107,9 @@ struct PhotoCarouselView: View {
             }
         }
     }
+}
+
+struct PhotoViewerSelection: Identifiable {
+    let id = UUID()
+    let index: Int
 }
