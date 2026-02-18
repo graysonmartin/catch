@@ -17,10 +17,10 @@ struct CatMapView: View {
         NavigationStack {
             Group {
                 if catsWithLocation.isEmpty {
-                    ContentUnavailableView(
-                        "No Locations Yet",
-                        systemImage: "map",
-                        description: Text("Cats with GPS coordinates will appear here.")
+                    EmptyStateView(
+                        icon: "map",
+                        title: "no locations yet",
+                        subtitle: "cats with GPS coordinates will appear here. use the location button when logging encounters."
                     )
                 } else {
                     ClusterMapView(
