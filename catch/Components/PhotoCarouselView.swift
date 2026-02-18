@@ -5,8 +5,21 @@ struct PhotoCarouselView: View {
     var height: CGFloat = 200
     var cornerRadius: CGFloat = 12
     var showsIndicator: Bool = true
+    var accentColor: Color = CatchTheme.primary
+    var emptyBackgroundColor: Color = CatchTheme.secondary.opacity(0.3)
 
     @State private var currentPage = 0
+
+    private enum Layout {
+        static let dotSize: CGFloat = 6
+        static let dotSpacing: CGFloat = 6
+        static let indicatorPaddingH: CGFloat = 8
+        static let indicatorPaddingV: CGFloat = 4
+        static let indicatorBottomPadding: CGFloat = 8
+        static let indicatorBackgroundOpacity: Double = 0.3
+        static let inactiveDotOpacity: Double = 0.5
+        static let emptyIconScale: CGFloat = 0.25
+    }
 
     var body: some View {
         if photos.isEmpty {
@@ -20,11 +33,11 @@ struct PhotoCarouselView: View {
 
     private var emptyState: some View {
         Image(systemName: "pawprint.fill")
-            .font(.system(size: height * 0.25))
-            .foregroundStyle(CatchTheme.primary)
+            .font(.system(size: height * Layout.emptyIconScale))
+            .foregroundStyle(accentColor)
             .frame(maxWidth: .infinity)
             .frame(height: height)
-            .background(CatchTheme.secondary.opacity(0.3))
+            .background(emptyBackgroundColor)
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
     }
 
@@ -49,30 +62,37 @@ struct PhotoCarouselView: View {
 
             if showsIndicator {
                 pageIndicator
-                    .padding(.bottom, 8)
+                    .padding(.bottom, Layout.indicatorBottomPadding)
             }
         }
     }
 
     private var pageIndicator: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: Layout.dotSpacing) {
             ForEach(photos.indices, id: \.self) { index in
                 Circle()
-                    .fill(index == currentPage ? Color.white : Color.white.opacity(0.5))
-                    .frame(width: 6, height: 6)
+                    .fill(index == currentPage ? Color.white : Color.white.opacity(Layout.inactiveDotOpacity))
+                    .frame(width: Layout.dotSize, height: Layout.dotSize)
             }
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(Capsule().fill(.black.opacity(0.3)))
+        .padding(.horizontal, Layout.indicatorPaddingH)
+        .padding(.vertical, Layout.indicatorPaddingV)
+        .background(Capsule().fill(.black.opacity(Layout.indicatorBackgroundOpacity)))
     }
 
-    @ViewBuilder
     private func photoImage(_ data: Data) -> some View {
-        if let uiImage = UIImage(data: data) {
-            Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
+        Group {
+            if let uiImage = UIImage(data: data) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                Image(systemName: "photo")
+                    .font(.system(size: height * Layout.emptyIconScale))
+                    .foregroundStyle(accentColor.opacity(0.5))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(emptyBackgroundColor)
+            }
         }
     }
 }
