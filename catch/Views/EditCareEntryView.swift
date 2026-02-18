@@ -1,15 +1,19 @@
 import SwiftUI
-import SwiftData
 
-struct AddCareEntryView: View {
-    @Environment(\.modelContext) private var modelContext
+struct EditCareEntryView: View {
     @Environment(\.dismiss) private var dismiss
+    @Bindable var entry: CareEntry
 
-    let cat: Cat
+    @State private var startDate: Date
+    @State private var endDate: Date
+    @State private var notes: String
 
-    @State private var startDate = Date()
-    @State private var endDate = Date()
-    @State private var notes = ""
+    init(entry: CareEntry) {
+        self.entry = entry
+        _startDate = State(initialValue: entry.startDate)
+        _endDate = State(initialValue: entry.endDate)
+        _notes = State(initialValue: entry.notes)
+    }
 
     private var durationDays: Int {
         Calendar.current.dateComponents([.day], from: startDate, to: endDate).day ?? 0
@@ -26,6 +30,18 @@ struct AddCareEntryView: View {
     var body: some View {
         NavigationStack {
             Form {
+                if let cat = entry.cat {
+                    Section {
+                        HStack(spacing: 8) {
+                            Image(systemName: "pawprint.fill")
+                                .foregroundStyle(CatchTheme.primary)
+                            Text(cat.name)
+                                .font(.body.weight(.medium))
+                                .foregroundStyle(CatchTheme.textPrimary)
+                        }
+                    }
+                }
+
                 Section("date range") {
                     DatePicker("start", selection: $startDate, displayedComponents: .date)
                         .onChange(of: startDate) { _, newStart in
@@ -49,7 +65,7 @@ struct AddCareEntryView: View {
                         .lineLimit(3...6)
                 }
             }
-            .navigationTitle("add care entry")
+            .navigationTitle("edit care entry")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -64,13 +80,9 @@ struct AddCareEntryView: View {
     }
 
     private func save() {
-        let entry = CareEntry(
-            startDate: startDate,
-            endDate: endDate,
-            notes: notes,
-            cat: cat
-        )
-        modelContext.insert(entry)
+        entry.startDate = startDate
+        entry.endDate = endDate
+        entry.notes = notes
         dismiss()
     }
 }

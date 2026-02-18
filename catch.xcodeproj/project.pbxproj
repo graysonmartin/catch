@@ -27,6 +27,7 @@
 		E8000001AA00000E /* LogEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001D /* LogEncounterView.swift */; };
 		E8000001AA00000F /* AddCareEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001E /* AddCareEntryView.swift */; };
 		E8000001AA000020 /* EditCatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001F /* EditCatView.swift */; };
+		E8000001AA000039 /* EditCareEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002D /* EditCareEntryView.swift */; };
 		E8000001AA000021 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000025 /* MapView.swift */; };
 		E8000001AA000022 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000026 /* LocationPickerView.swift */; };
 		E8000001AA000023 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000027 /* Location.swift */; };
@@ -67,6 +68,7 @@
 		E8000001AA00001D /* LogEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEncounterView.swift; sourceTree = "<group>"; };
 		E8000001AA00001E /* AddCareEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCareEntryView.swift; sourceTree = "<group>"; };
 		E8000001AA00001F /* EditCatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCatView.swift; sourceTree = "<group>"; };
+		E8000001AA00002D /* EditCareEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCareEntryView.swift; sourceTree = "<group>"; };
 		E8000001AA000025 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		E8000001AA000026 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
 		E8000001AA000027 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				E8000001AA00001D /* LogEncounterView.swift */,
 				E8000001AA00001E /* AddCareEntryView.swift */,
 				E8000001AA00001F /* EditCatView.swift */,
+				E8000001AA00002D /* EditCareEntryView.swift */,
 				E8000001AA000025 /* MapView.swift */,
 			);
 			path = Views;
@@ -329,6 +332,7 @@
 				E8000001AA00000E /* LogEncounterView.swift in Sources */,
 				E8000001AA00000F /* AddCareEntryView.swift in Sources */,
 				E8000001AA000020 /* EditCatView.swift in Sources */,
+				E8000001AA000039 /* EditCareEntryView.swift in Sources */,
 				E8000001AA000021 /* MapView.swift in Sources */,
 				E8000001AA000022 /* LocationPickerView.swift in Sources */,
 				E8000001AA000023 /* Location.swift in Sources */,

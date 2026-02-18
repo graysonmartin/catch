@@ -9,6 +9,7 @@ struct CatProfileView: View {
     @State private var showingDeleteCat = false
     @State private var encounterToDelete: Encounter?
     @State private var careEntryToDelete: CareEntry?
+    @State private var careEntryToEdit: CareEntry?
 
     private var sortedEncounters: [Encounter] {
         cat.encounters.sorted { $0.date > $1.date }
@@ -134,6 +135,10 @@ struct CatProfileView: View {
                 } else {
                     ForEach(sortedCareEntries) { entry in
                         careRow(entry)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                careEntryToEdit = entry
+                            }
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                 Button("Delete", role: .destructive) {
                                     careEntryToDelete = entry
@@ -176,6 +181,9 @@ struct CatProfileView: View {
         }
         .sheet(isPresented: $showingEdit) {
             EditCatView(cat: cat)
+        }
+        .sheet(item: $careEntryToEdit) { entry in
+            EditCareEntryView(entry: entry)
         }
         .alert("delete encounter?", isPresented: Binding(
             get: { encounterToDelete != nil },
@@ -267,7 +275,7 @@ struct CatProfileView: View {
                 Text("\(entry.startDate.formatted(date: .abbreviated, time: .omitted)) - \(entry.endDate.formatted(date: .abbreviated, time: .omitted))")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.textPrimary)
-                Text("\(entry.durationDays) day\(entry.durationDays == 1 ? "" : "s")")
+                Text(entry.durationDays == 0 ? "same day" : "\(entry.durationDays) day\(entry.durationDays == 1 ? "" : "s")")
                     .font(.caption)
                     .foregroundStyle(CatchTheme.primary)
                 if !entry.notes.isEmpty {
@@ -277,6 +285,9 @@ struct CatProfileView: View {
                 }
             }
             Spacer()
+            Image(systemName: "pencil")
+                .font(.caption)
+                .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
         }
         .padding(12)
         .background(CatchTheme.cardBackground)
