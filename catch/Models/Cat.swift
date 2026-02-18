@@ -37,4 +37,8 @@ final class Cat {
         self.encounters = []
         self.careEntries = []
     }
+
+    var lastEncounterDate: Date? {
+        encounters.map(\.date).max()
+    }
 }

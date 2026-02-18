@@ -93,4 +93,36 @@ final class CatTests: XCTestCase {
         XCTAssertEqual(try context.fetch(FetchDescriptor<Cat>()).count, 0)
         XCTAssertEqual(try context.fetch(FetchDescriptor<CareEntry>()).count, 0)
     }
+
+    // MARK: - lastEncounterDate
+
+    func test_lastEncounterDate_nilWhenNoEncounters() {
+        let cat = Cat(name: "Lonely")
+        XCTAssertNil(cat.lastEncounterDate)
+    }
+
+    func test_lastEncounterDate_returnsSingleEncounterDate() throws {
+        let cat = Fixtures.cat(name: "Solo", in: context)
+        let encounter = Fixtures.encounter(for: cat, in: context)
+        try context.save()
+
+        XCTAssertEqual(cat.lastEncounterDate, encounter.date)
+    }
+
+    func test_lastEncounterDate_returnsMostRecentDate() throws {
+        let cat = Fixtures.cat(name: "Popular", in: context)
+
+        let oldDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        let recentDate = Calendar.current.date(byAdding: .hour, value: -1, to: Date())!
+
+        let oldEncounter = Encounter(date: oldDate, cat: cat)
+        context.insert(oldEncounter)
+
+        let recentEncounter = Encounter(date: recentDate, cat: cat)
+        context.insert(recentEncounter)
+
+        try context.save()
+
+        XCTAssertEqual(cat.lastEncounterDate, recentDate)
+    }
 }
