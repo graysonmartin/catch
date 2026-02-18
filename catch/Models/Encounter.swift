@@ -8,10 +8,14 @@ final class Encounter {
     var notes: String
     var cat: Cat?
 
-    init(date: Date = Date(), location: Location = .empty, notes: String = "", cat: Cat? = nil) {
+    @Attribute(.externalStorage)
+    var photos: [Data]
+
+    init(date: Date = Date(), location: Location = .empty, notes: String = "", cat: Cat? = nil, photos: [Data] = []) {
         self.date = date
         self.location = location
         self.notes = notes
         self.cat = cat
+        self.photos = photos
     }
 }

@@ -67,7 +67,8 @@ struct AddCatView: View {
             date: Date(),
             location: location,
             notes: "",
-            cat: cat
+            cat: cat,
+            photos: photos
         )
         modelContext.insert(encounter)
 

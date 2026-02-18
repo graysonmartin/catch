@@ -10,6 +10,7 @@ struct LogEncounterView: View {
     @State private var date = Date()
     @State private var location = Location.empty
     @State private var notes = ""
+    @State private var photos: [Data] = []
 
     var body: some View {
         NavigationStack {
@@ -31,6 +32,10 @@ struct LogEncounterView: View {
                 Section("Encounter Details") {
                     DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
                     LocationPickerView(location: $location)
+                }
+
+                Section("Photos") {
+                    PhotoPickerView(selectedPhotos: $photos)
                 }
 
                 Section("Notes") {
@@ -59,7 +64,8 @@ struct LogEncounterView: View {
             date: date,
             location: location,
             notes: notes,
-            cat: cat
+            cat: cat,
+            photos: photos
         )
         modelContext.insert(encounter)
         dismiss()
