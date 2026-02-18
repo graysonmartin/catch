@@ -9,11 +9,13 @@ enum FeedSortOption: String, CaseIterable, Identifiable {
 }
 
 struct FeedView: View {
+    @Environment(\.modelContext) private var modelContext
     @Query(sort: \Encounter.date, order: .reverse) private var encounters: [Encounter]
     @Query private var cats: [Cat]
     @Binding var scrollToTop: Bool
     @State private var searchText = ""
     @State private var sortOption: FeedSortOption = .newest
+    @State private var encounterToDelete: Encounter?
 
     private var filteredEncounters: [Encounter] {
         let filtered: [Encounter]
@@ -64,6 +66,16 @@ struct FeedView: View {
                                         .buttonStyle(.plain)
                                     } else {
                                         FeedItemView(encounter: encounter)
+                                            .overlay(alignment: .topTrailing) {
+                                                Button {
+                                                    encounterToDelete = encounter
+                                                } label: {
+                                                    Image(systemName: "xmark.circle.fill")
+                                                        .font(.title3)
+                                                        .foregroundStyle(.white, CatchTheme.textSecondary)
+                                                }
+                                                .padding(8)
+                                            }
                                     }
                                 }
                             }
@@ -101,6 +113,22 @@ struct FeedView: View {
             }
             .navigationDestination(for: Cat.self) { cat in
                 CatProfileView(cat: cat)
+            }
+            .alert("delete orphaned encounter?", isPresented: Binding(
+                get: { encounterToDelete != nil },
+                set: { if !$0 { encounterToDelete = nil } }
+            )) {
+                Button("Delete", role: .destructive) {
+                    if let encounter = encounterToDelete {
+                        modelContext.delete(encounter)
+                        encounterToDelete = nil
+                    }
+                }
+                Button("Cancel", role: .cancel) {
+                    encounterToDelete = nil
+                }
+            } message: {
+                Text("this encounter lost its cat. let it go.")
             }
         }
     }
