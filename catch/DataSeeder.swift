@@ -18,122 +18,122 @@ enum DataSeeder {
         let photo3 = jpegData(named: "SeedCat3")  // orange tabby in garden
         let photo4 = jpegData(named: "SeedCat4")  // brown tabby at door
 
-        // -- Cat 1: Steven (the main character) --
-        let steven = Cat(
-            name: "Steven",
+        // -- Cat 1: garfield (the main character) --
+        let garfield = Cat(
+            name: "garfield",
             estimatedAge: "3",
             location: Location(name: "Home", latitude: 37.7749, longitude: -122.4194),
             notes: "the original. the blueprint. simply unmatched.",
             isOwned: true,
             photos: photo3
         )
-        context.insert(steven)
+        context.insert(garfield)
 
-        let stevenEnc1 = Encounter(
+        let garfieldEnc1 = Encounter(
             date: calendar.date(byAdding: .day, value: -30, to: now)!,
             location: Location(name: "Home", latitude: 37.7749, longitude: -122.4194),
             notes: "day one. he chose me.",
-            cat: steven,
+            cat: garfield,
             photos: photo3
         )
-        context.insert(stevenEnc1)
+        context.insert(garfieldEnc1)
 
-        let stevenEnc2 = Encounter(
+        let garfieldEnc2 = Encounter(
             date: calendar.date(byAdding: .day, value: -7, to: now)!,
             location: Location(name: "Kitchen counter", latitude: 37.7749, longitude: -122.4194),
             notes: "caught him on the counter again. zero remorse.",
-            cat: steven
+            cat: garfield
         )
-        context.insert(stevenEnc2)
+        context.insert(garfieldEnc2)
 
-        let stevenCare = CareEntry(
+        let garfieldCare = CareEntry(
             startDate: calendar.date(byAdding: .day, value: -14, to: now)!,
             endDate: calendar.date(byAdding: .day, value: -7, to: now)!,
             notes: "stayed home all week. he was thriving. i was his servant.",
-            cat: steven
+            cat: garfield
         )
-        context.insert(stevenCare)
+        context.insert(garfieldCare)
 
-        // -- Cat 2: Mochi (ragdoll in shopping bag) --
-        let mochi = Cat(
-            name: "Mochi",
+        // -- Cat 2: sprinkles (ragdoll in shopping bag) --
+        let sprinkles = Cat(
+            name: "sprinkles",
             estimatedAge: "5",
             location: Location(name: "Grocery store parking lot", latitude: 37.7850, longitude: -122.4094),
             notes: "found her sitting in someone's grocery bag like she owned it",
             photos: photo1
         )
-        context.insert(mochi)
+        context.insert(sprinkles)
 
-        let mochiEnc1 = Encounter(
+        let sprinklesEnc1 = Encounter(
             date: calendar.date(byAdding: .day, value: -21, to: now)!,
             location: Location(name: "Grocery store parking lot", latitude: 37.7850, longitude: -122.4094),
             notes: "she was just... in the bag. no explanation.",
-            cat: mochi,
+            cat: sprinkles,
             photos: photo1
         )
-        context.insert(mochiEnc1)
+        context.insert(sprinklesEnc1)
 
-        let mochiEnc2 = Encounter(
+        let sprinklesEnc2 = Encounter(
             date: calendar.date(byAdding: .day, value: -3, to: now)!,
             location: Location(name: "Same parking lot", latitude: 37.7851, longitude: -122.4093),
             notes: "different bag this time. same energy.",
-            cat: mochi
+            cat: sprinkles
         )
-        context.insert(mochiEnc2)
+        context.insert(sprinklesEnc2)
 
-        // -- Cat 3: Sergeant (russian blue with harness) --
-        let sergeant = Cat(
-            name: "Sergeant",
+        // -- Cat 3: tsuki (russian blue with harness) --
+        let tsuki = Cat(
+            name: "tsuki",
             estimatedAge: "4",
             location: Location(name: "The park", latitude: 37.7694, longitude: -122.4862),
             notes: "walks around in a harness like he's on a mission. respect.",
             photos: photo2
         )
-        context.insert(sergeant)
+        context.insert(tsuki)
 
-        let sergeantEnc = Encounter(
+        let tsukiEnc = Encounter(
             date: calendar.date(byAdding: .day, value: -10, to: now)!,
             location: Location(name: "The park", latitude: 37.7694, longitude: -122.4862),
             notes: "he walked right up to me. i think he was doing recon.",
-            cat: sergeant,
+            cat: tsuki,
             photos: photo2
         )
-        context.insert(sergeantEnc)
+        context.insert(tsukiEnc)
 
-        // -- Cat 4: Gremlin (brown tabby yelling at door) --
-        let gremlin = Cat(
-            name: "Gremlin",
+        // -- Cat 4: missBologna (brown tabby yelling at door) --
+        let missBologna = Cat(
+            name: "Miss Bologna",
             estimatedAge: "2",
             location: Location(name: "Back door", latitude: 37.7730, longitude: -122.4310),
             notes: "screams at the sliding door every single morning. iconic.",
             photos: photo4
         )
-        context.insert(gremlin)
+        context.insert(missBologna)
 
-        let gremlinEnc1 = Encounter(
+        let missBolognaEnc1 = Encounter(
             date: calendar.date(byAdding: .day, value: -15, to: now)!,
             location: Location(name: "Back door", latitude: 37.7730, longitude: -122.4310),
             notes: "showed up yelling. let her in. she yelled more.",
-            cat: gremlin,
+            cat: missBologna,
             photos: photo4
         )
-        context.insert(gremlinEnc1)
+        context.insert(missBolognaEnc1)
 
-        let gremlinEnc2 = Encounter(
+        let missBolognaEnc2 = Encounter(
             date: calendar.date(byAdding: .day, value: -1, to: now)!,
             location: Location(name: "Back door", latitude: 37.7730, longitude: -122.4310),
             notes: "back again. louder this time. she's evolving.",
-            cat: gremlin
+            cat: missBologna
         )
-        context.insert(gremlinEnc2)
+        context.insert(missBolognaEnc2)
 
-        let gremlinCare = CareEntry(
+        let missBolognaCare = CareEntry(
             startDate: calendar.date(byAdding: .day, value: -5, to: now)!,
             endDate: calendar.date(byAdding: .day, value: -3, to: now)!,
             notes: "it was raining so she stayed over. she judged my apartment the entire time.",
-            cat: gremlin
+            cat: missBologna
         )
-        context.insert(gremlinCare)
+        context.insert(missBolognaCare)
     }
 
     private static func jpegData(named assetName: String) -> [Data] {
