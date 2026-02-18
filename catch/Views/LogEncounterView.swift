@@ -15,15 +15,33 @@ struct LogEncounterView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Which cat?") {
+                Section("which cat?") {
                     if cats.isEmpty {
-                        Text("No cats registered yet. Add a new cat first.")
+                        Text("no cats registered yet. add one first.")
                             .foregroundStyle(CatchTheme.textSecondary)
                     } else {
-                        Picker("Cat", selection: $selectedCat) {
-                            Text("Select a cat").tag(nil as Cat?)
-                            ForEach(cats) { cat in
-                                Text(cat.name).tag(cat as Cat?)
+                        NavigationLink {
+                            CatPickerView(cats: cats, selectedCat: $selectedCat)
+                        } label: {
+                            if let cat = selectedCat {
+                                HStack(spacing: 12) {
+                                    CatPhotoView(photoData: cat.photos.first, size: 40)
+
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(cat.name)
+                                            .font(.body.weight(.semibold))
+                                            .foregroundStyle(CatchTheme.textPrimary)
+
+                                        if !cat.location.name.isEmpty {
+                                            Text(cat.location.name)
+                                                .font(.caption)
+                                                .foregroundStyle(CatchTheme.textSecondary)
+                                        }
+                                    }
+                                }
+                            } else {
+                                Text("pick a cat")
+                                    .foregroundStyle(CatchTheme.textSecondary)
                             }
                         }
                     }
@@ -53,6 +71,11 @@ struct LogEncounterView: View {
                     Button("Save") { save() }
                         .disabled(selectedCat == nil)
                         .fontWeight(.semibold)
+                }
+            }
+            .onAppear {
+                if cats.count == 1 && selectedCat == nil {
+                    selectedCat = cats.first
                 }
             }
         }
