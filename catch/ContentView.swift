@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var selectedTab = 0
     @State private var feedScrollToTop = false
 
@@ -31,5 +32,11 @@ struct ContentView: View {
                 .tag(3)
         }
         .tint(CatchTheme.primary)
+        .fullScreenCover(isPresented: Binding(
+            get: { !hasCompletedOnboarding },
+            set: { if !$0 { hasCompletedOnboarding = true } }
+        )) {
+            OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
+        }
     }
 }
