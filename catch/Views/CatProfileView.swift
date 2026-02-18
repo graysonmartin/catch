@@ -9,18 +9,12 @@ struct CatProfileView: View {
         ScrollView {
             VStack(spacing: 20) {
                 // Photo header
-                if let photoData = cat.photos.first, let uiImage = UIImage(data: photoData) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 250)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                        .padding(.horizontal)
-                } else {
-                    CatPhotoView(photoData: nil, size: 150)
-                        .padding(.top, 20)
-                }
+                PhotoCarouselView(
+                    photos: cat.photos,
+                    height: 250,
+                    cornerRadius: 16
+                )
+                .padding(.horizontal)
 
                 // Info section
                 VStack(spacing: 12) {
