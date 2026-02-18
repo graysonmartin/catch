@@ -31,6 +31,7 @@
 		E8000001AA000022 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000026 /* LocationPickerView.swift */; };
 		E8000001AA000023 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000027 /* Location.swift */; };
 		E8000001AA000024 /* PhotoCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000028 /* PhotoCarouselView.swift */; };
+		E8000001BB000002 /* DataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001BB000001 /* DataSeeder.swift */; };
 		E8A100000001 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000010 /* LocationTests.swift */; };
 		E8A100000002 /* CareEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000011 /* CareEntryTests.swift */; };
 		E8A100000003 /* CatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000012 /* CatTests.swift */; };
@@ -69,6 +70,7 @@
 		E8000001AA000026 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
 		E8000001AA000027 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		E8000001AA000028 /* PhotoCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCarouselView.swift; sourceTree = "<group>"; };
+		E8000001BB000001 /* DataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSeeder.swift; sourceTree = "<group>"; };
 		E8A100000010 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
 		E8A100000011 /* CareEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareEntryTests.swift; sourceTree = "<group>"; };
 		E8A100000012 /* CatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatTests.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 			children = (
 				E80000012B5A00000010 /* catchApp.swift */,
 				E80000012B5A00000011 /* ContentView.swift */,
+				E8000001BB000001 /* DataSeeder.swift */,
 				E8000001AA000030 /* Models */,
 				E8000001AA000031 /* Views */,
 				E8000001AA000032 /* Components */,
@@ -327,6 +330,7 @@
 				E8000001AA000022 /* LocationPickerView.swift in Sources */,
 				E8000001AA000023 /* Location.swift in Sources */,
 				E8000001AA000024 /* PhotoCarouselView.swift in Sources */,
+				E8000001BB000002 /* DataSeeder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
