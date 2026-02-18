@@ -19,8 +19,8 @@ enum Fixtures {
         return cat
     }
 
-    static func encounter(for cat: Cat, in context: ModelContext) -> Encounter {
-        let encounter = Encounter(cat: cat)
+    static func encounter(for cat: Cat, photos: [Data] = [], in context: ModelContext) -> Encounter {
+        let encounter = Encounter(cat: cat, photos: photos)
         context.insert(encounter)
         return encounter
     }

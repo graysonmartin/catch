@@ -44,8 +44,9 @@ struct FeedItemView: View {
                 }
             }
 
-            // Photos
-            if let photos = encounter.cat?.photos, !photos.isEmpty {
+            // Photos — prefer encounter-specific photos, fall back to cat's photos
+            if let photos = (!encounter.photos.isEmpty ? encounter.photos : encounter.cat?.photos),
+               !photos.isEmpty {
                 PhotoCarouselView(photos: photos, height: 200, cornerRadius: 12)
             }
 
