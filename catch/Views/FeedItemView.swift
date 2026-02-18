@@ -44,15 +44,9 @@ struct FeedItemView: View {
                 }
             }
 
-            // Photo (larger) if available
-            if let photoData = encounter.cat?.photos.first,
-               let uiImage = UIImage(data: photoData) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 200)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            // Photos
+            if let photos = encounter.cat?.photos, !photos.isEmpty {
+                PhotoCarouselView(photos: photos, height: 200, cornerRadius: 12)
             }
 
             // Location
