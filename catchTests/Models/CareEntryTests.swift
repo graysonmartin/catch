@@ -72,4 +72,29 @@ final class CareEntryTests: XCTestCase {
         let fetched = try context.fetch(FetchDescriptor<CareEntry>()).first
         XCTAssertEqual(fetched?.notes, "fed twice daily")
     }
+
+    func test_deleteCareEntry_removeFromStore() throws {
+        let cat = Fixtures.cat(in: context)
+        let entry = Fixtures.careEntry(for: cat, in: context)
+        try context.save()
+
+        context.delete(entry)
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<CareEntry>())
+        XCTAssertEqual(fetched.count, 0)
+    }
+
+    func test_deleteCareEntry_doesNotDeleteCat() throws {
+        let cat = Fixtures.cat(name: "Keeper", in: context)
+        let entry = Fixtures.careEntry(for: cat, in: context)
+        try context.save()
+
+        context.delete(entry)
+        try context.save()
+
+        let cats = try context.fetch(FetchDescriptor<Cat>())
+        XCTAssertEqual(cats.count, 1)
+        XCTAssertEqual(cats.first?.name, "Keeper")
+    }
 }
