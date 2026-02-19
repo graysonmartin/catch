@@ -28,7 +28,7 @@ struct EmptyStateView: View {
                         .padding(.horizontal, 24)
                         .padding(.vertical, 10)
                         .background(CatchTheme.primary)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
                 }
                 .padding(.top, 4)
             }

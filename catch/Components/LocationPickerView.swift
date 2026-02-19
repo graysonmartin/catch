@@ -116,12 +116,15 @@ struct LocationPickerView: View {
         }
     }
 
+    private static let locationMaxRetries = 50
+    private static let locationRetryIntervalMs = 200
+
     private func fetchCurrentLocation() {
         fetcher.requestLocation()
 
         Task {
-            for _ in 0..<50 {
-                try? await Task.sleep(for: .milliseconds(200))
+            for _ in 0..<Self.locationMaxRetries {
+                try? await Task.sleep(for: .milliseconds(Self.locationRetryIntervalMs))
                 if let loc = fetcher.result {
                     location.latitude = loc.coordinate.latitude
                     location.longitude = loc.coordinate.longitude

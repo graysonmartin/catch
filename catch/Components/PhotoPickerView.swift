@@ -29,7 +29,7 @@ struct PhotoPickerView: View {
 
             PhotosPicker(
                 selection: $pickerItems,
-                maxSelectionCount: 5,
+                maxSelectionCount: CatchTheme.maxPhotoSelection,
                 matching: .images
             ) {
                 Label("Add Photos", systemImage: "photo.on.rectangle.angled")
@@ -41,7 +41,7 @@ struct PhotoPickerView: View {
                     for item in newItems {
                         if let data = try? await item.loadTransferable(type: Data.self),
                            let uiImage = UIImage(data: data),
-                           let compressed = uiImage.jpegData(compressionQuality: 0.7) {
+                           let compressed = uiImage.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) {
                             selectedPhotos.append(compressed)
                         }
                     }
