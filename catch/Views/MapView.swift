@@ -71,7 +71,8 @@ struct ClusterListSheet: View {
                     onSelect(cat)
                 } label: {
                     HStack(spacing: 12) {
-                        if let photoData = cat.photos.first, let uiImage = UIImage(data: photoData) {
+                        if let photoData = cat.photos.first,
+                           let uiImage = ImageDownsampler.downsample(data: photoData, to: CGSize(width: 44, height: 44)) {
                             Image(uiImage: uiImage)
                                 .resizable()
                                 .scaledToFill()
