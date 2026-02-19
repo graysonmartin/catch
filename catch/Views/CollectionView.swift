@@ -114,7 +114,7 @@ struct CatCardView: View {
                     }
                 }
 
-                Text("\(cat.encounters.count) encounter\(cat.encounters.count == 1 ? "" : "s")")
+                Text("spotted \(cat.encounters.count) time\(cat.encounters.count == 1 ? "" : "s")")
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }

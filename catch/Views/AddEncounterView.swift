@@ -15,7 +15,7 @@ struct AddEncounterView: View {
                     .font(.system(size: 48))
                     .foregroundStyle(CatchTheme.primary)
 
-                Text("Log a Cat Encounter")
+                Text("log a sighting")
                     .font(.title2.weight(.semibold))
                     .foregroundStyle(CatchTheme.textPrimary)
 

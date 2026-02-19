@@ -31,8 +31,8 @@ struct AddCatView: View {
                         .lineLimit(3...6)
                 }
 
-                Section("First Encounter") {
-                    Text("A first encounter will be logged automatically with today's date and the location above.")
+                Section("first sighting") {
+                    Text("a first sighting gets logged automatically with today's date and the location above. welcome to the census.")
                         .font(.caption)
                         .foregroundStyle(CatchTheme.textSecondary)
                 }

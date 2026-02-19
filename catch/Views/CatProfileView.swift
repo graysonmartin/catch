@@ -60,7 +60,7 @@ struct CatProfileView: View {
                     infoRow(icon: "note.text", label: "Notes", value: cat.notes)
                 }
 
-                Text("First seen \(cat.createdAt.formatted(date: .abbreviated, time: .omitted))")
+                Text("first spotted \(cat.createdAt.formatted(date: .abbreviated, time: .omitted))")
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }
@@ -134,7 +134,7 @@ struct CatProfileView: View {
                     }
                 }
             } header: {
-                Text("Encounters (\(cat.encounters.count))")
+                Text("Sightings (\(cat.encounters.count))")
                     .font(.headline)
                     .foregroundStyle(CatchTheme.textPrimary)
                     .textCase(nil)
@@ -248,7 +248,7 @@ struct CatProfileView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("this deletes all their encounters and care entries too. absolutely no undo.")
+            Text("this cat will vanish — along with all their sightings and care logs. like they do at 3am.")
         }
     }
 

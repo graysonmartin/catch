@@ -20,7 +20,7 @@ struct FeedItemView: View {
                         Text(encounter.cat?.name ?? "Unknown Cat")
                             .font(.headline)
                             .foregroundStyle(CatchTheme.textPrimary)
-                        Text(isFirstEncounter ? "NEW" : "REPEAT")
+                        Text(isFirstEncounter ? "NEW" : "AGAIN")
                             .font(.system(size: 9, weight: .bold))
                             .foregroundStyle(isFirstEncounter ? CatchTheme.primary : CatchTheme.textSecondary)
                             .padding(.horizontal, 6)
