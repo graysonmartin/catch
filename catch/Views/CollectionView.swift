@@ -99,7 +99,7 @@ struct CatCardView: View {
             CatPhotoView(photoData: cat.photos.first, size: 120)
                 .frame(maxWidth: .infinity)
                 .frame(height: 120)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
 
             VStack(spacing: 4) {
                 HStack {
@@ -121,7 +121,7 @@ struct CatCardView: View {
         }
         .padding(12)
         .background(CatchTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
+        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+        .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
     }
 }

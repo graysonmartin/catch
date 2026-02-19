@@ -79,7 +79,7 @@ struct CatProfileView: View {
                             .padding(.vertical, 12)
                             .background(CatchTheme.secondary)
                             .foregroundStyle(CatchTheme.textPrimary)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
                     }
 
                     Button {
@@ -91,7 +91,7 @@ struct CatProfileView: View {
                             .padding(.vertical, 12)
                             .background(CatchTheme.primary)
                             .foregroundStyle(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
                     }
 
                     Button {
@@ -103,7 +103,7 @@ struct CatProfileView: View {
                             .padding(.vertical, 12)
                             .background(CatchTheme.secondary)
                             .foregroundStyle(CatchTheme.textPrimary)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
                     }
                 }
                 .buttonStyle(.plain)
@@ -293,7 +293,7 @@ struct CatProfileView: View {
         }
         .padding(12)
         .background(CatchTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
     }
 
     private func careRow(_ entry: CareEntry) -> some View {
@@ -318,6 +318,6 @@ struct CatProfileView: View {
         }
         .padding(12)
         .background(CatchTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
     }
 }

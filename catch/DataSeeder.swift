@@ -138,7 +138,7 @@ enum DataSeeder {
 
     private static func jpegData(named assetName: String) -> [Data] {
         guard let image = UIImage(named: assetName),
-              let data = image.jpegData(compressionQuality: 0.7) else {
+              let data = image.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) else {
             return []
         }
         return [data]
