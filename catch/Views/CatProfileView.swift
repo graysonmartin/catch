@@ -7,6 +7,7 @@ struct CatProfileView: View {
     @State private var showingAddCare = false
     @State private var showingEdit = false
     @State private var showingDeleteCat = false
+    @State private var showingLogEncounter = false
     @State private var encounterToDelete: Encounter?
     @State private var careEntryToDelete: CareEntry?
 
@@ -80,14 +81,26 @@ struct CatProfileView: View {
                     }
 
                     Button {
-                        showingAddCare = true
+                        showingLogEncounter = true
                     } label: {
-                        Label("Add Care", systemImage: "heart.text.square")
+                        Label("Spotted", systemImage: "eye.fill")
                             .font(.subheadline.weight(.medium))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 12)
                             .background(CatchTheme.primary)
                             .foregroundStyle(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+
+                    Button {
+                        showingAddCare = true
+                    } label: {
+                        Label("Care", systemImage: "heart.text.square")
+                            .font(.subheadline.weight(.medium))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(CatchTheme.secondary)
+                            .foregroundStyle(CatchTheme.textPrimary)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                 }
@@ -176,6 +189,9 @@ struct CatProfileView: View {
         }
         .sheet(isPresented: $showingEdit) {
             EditCatView(cat: cat)
+        }
+        .sheet(isPresented: $showingLogEncounter) {
+            LogEncounterView(preselectedCat: cat)
         }
         .alert("delete encounter?", isPresented: Binding(
             get: { encounterToDelete != nil },
