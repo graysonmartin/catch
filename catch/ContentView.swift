@@ -29,6 +29,12 @@ struct ContentView: View {
                     Label("Collection", systemImage: "square.grid.2x2.fill")
                 }
                 .tag(3)
+
+            ProfileView()
+                .tabItem {
+                    Label("Profile", systemImage: "person.crop.circle")
+                }
+                .tag(4)
         }
         .tint(CatchTheme.primary)
     }

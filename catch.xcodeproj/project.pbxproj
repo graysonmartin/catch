@@ -51,6 +51,11 @@
 		E8A10000000A /* Location.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000027 /* Location.swift */; };
 		E8A10000000B /* ImageDownsampler.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000050 /* ImageDownsampler.swift */; };
 		E8A10000000C /* ImageDownsamplerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000017 /* ImageDownsamplerTests.swift */; };
+		E8000001AA000052 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
+		E8000001AA000053 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000061 /* ProfileView.swift */; };
+		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
+		E8A10000000D /* UserProfile.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
+		E8A10000000E /* UserProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000018 /* UserProfileTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +100,10 @@
 		E8A100000014 /* ModelContainerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerFactory.swift; sourceTree = "<group>"; };
 		E8A100000015 /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
 		E8A100000016 /* catchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = catchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8000001AA000060 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		E8000001AA000061 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		E8000001AA000062 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		E8A100000018 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +173,7 @@
 				E8000001AA000011 /* Encounter.swift */,
 				E8000001AA000012 /* CareEntry.swift */,
 				E8000001AA000027 /* Location.swift */,
+				E8000001AA000060 /* UserProfile.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -186,6 +196,8 @@
 				E8000001AA00002E /* ClusterMapView.swift */,
 				E8000001AA00002F /* MapAnnotations.swift */,
 				E8000001AA00002A /* OnboardingView.swift */,
+				E8000001AA000061 /* ProfileView.swift */,
+				E8000001AA000062 /* EditProfileView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -229,6 +241,7 @@
 				E8A100000011 /* CareEntryTests.swift */,
 				E8A100000012 /* CatTests.swift */,
 				E8A100000013 /* EncounterTests.swift */,
+				E8A100000018 /* UserProfileTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -371,6 +384,9 @@
 				E8000001AA000035 /* CatPickerView.swift in Sources */,
 				E8000001AA000036 /* OnboardingView.swift in Sources */,
 				E8000001AA000051 /* ImageDownsampler.swift in Sources */,
+				E8000001AA000052 /* UserProfile.swift in Sources */,
+				E8000001AA000053 /* ProfileView.swift in Sources */,
+				E8000001AA000054 /* EditProfileView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +406,8 @@
 				E8A10000000A /* Location.swift in Sources (catchTests) */,
 				E8A10000000B /* ImageDownsampler.swift in Sources (catchTests) */,
 				E8A10000000C /* ImageDownsamplerTests.swift in Sources */,
+				E8A10000000D /* UserProfile.swift in Sources (catchTests) */,
+				E8A10000000E /* UserProfileTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

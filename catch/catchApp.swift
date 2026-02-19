@@ -8,7 +8,7 @@ struct catchApp: App {
 
     init() {
         do {
-            modelContainer = try ModelContainer(for: Cat.self)
+            modelContainer = try ModelContainer(for: Cat.self, UserProfile.self)
         } catch {
             fatalError("Failed to create ModelContainer: \(error)")
         }

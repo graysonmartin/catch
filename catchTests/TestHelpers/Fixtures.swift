@@ -32,4 +32,16 @@ enum Fixtures {
         context.insert(entry)
         return entry
     }
+
+    @discardableResult
+    static func userProfile(
+        displayName: String = "test user",
+        bio: String = "test bio",
+        avatarData: Data? = nil,
+        in context: ModelContext
+    ) -> UserProfile {
+        let profile = UserProfile(displayName: displayName, bio: bio, avatarData: avatarData)
+        context.insert(profile)
+        return profile
+    }
 }
