@@ -4,10 +4,23 @@ import CoreLocation
 @Observable
 class LocationFetcher: NSObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
-    var result: CLLocation?
     var isLoading = false
     var error: String?
-    private var pendingRequest = false
+
+    private var authContinuation: CheckedContinuation<Bool, Never>?
+    private var locationContinuation: CheckedContinuation<CLLocation, any Error>?
+
+    enum FetchError: LocalizedError {
+        case denied
+        case timeout
+
+        var errorDescription: String? {
+            switch self {
+            case .denied: return "Location access denied. Enable it in Settings."
+            case .timeout: return "Location request timed out. Try again."
+            }
+        }
+    }
 
     override init() {
         super.init()
@@ -15,44 +28,62 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate {
         manager.desiredAccuracy = kCLLocationAccuracyBest
     }
 
-    func requestLocation() {
+    func fetchLocation() async throws -> CLLocation {
         isLoading = true
         error = nil
-        result = nil
 
         let status = manager.authorizationStatus
         if status == .notDetermined {
-            pendingRequest = true
-            manager.requestWhenInUseAuthorization()
-        } else if status == .authorizedWhenInUse || status == .authorizedAlways {
-            manager.requestLocation()
-        } else {
-            error = "Location access denied. Enable it in Settings."
+            let authorized = await withCheckedContinuation { (cont: CheckedContinuation<Bool, Never>) in
+                self.authContinuation = cont
+                self.manager.requestWhenInUseAuthorization()
+            }
+            guard authorized else {
+                isLoading = false
+                error = FetchError.denied.errorDescription
+                throw FetchError.denied
+            }
+        } else if status != .authorizedWhenInUse && status != .authorizedAlways {
             isLoading = false
+            error = FetchError.denied.errorDescription
+            throw FetchError.denied
+        }
+
+        do {
+            let location = try await withCheckedThrowingContinuation { (cont: CheckedContinuation<CLLocation, any Error>) in
+                self.locationContinuation = cont
+                self.manager.requestLocation()
+            }
+            isLoading = false
+            return location
+        } catch {
+            isLoading = false
+            self.error = error.localizedDescription
+            throw error
         }
     }
 
+    // MARK: - CLLocationManagerDelegate
+
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        if pendingRequest {
-            pendingRequest = false
-            let status = manager.authorizationStatus
-            if status == .authorizedWhenInUse || status == .authorizedAlways {
-                manager.requestLocation()
-            } else if status != .notDetermined {
-                error = "Location access denied. Enable it in Settings."
-                isLoading = false
-            }
-        }
+        guard let cont = authContinuation else { return }
+        let status = manager.authorizationStatus
+        guard status != .notDetermined else { return }
+
+        authContinuation = nil
+        cont.resume(returning: status == .authorizedWhenInUse || status == .authorizedAlways)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        result = locations.first
-        isLoading = false
+        guard let cont = locationContinuation, let loc = locations.first else { return }
+        locationContinuation = nil
+        cont.resume(returning: loc)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        self.error = error.localizedDescription
-        isLoading = false
+        guard let cont = locationContinuation else { return }
+        locationContinuation = nil
+        cont.resume(throwing: error)
     }
 }
 
@@ -117,21 +148,15 @@ struct LocationPickerView: View {
     }
 
     private func fetchCurrentLocation() {
-        fetcher.requestLocation()
-
         Task {
-            for _ in 0..<50 {
-                try? await Task.sleep(for: .milliseconds(200))
-                if let loc = fetcher.result {
-                    location.latitude = loc.coordinate.latitude
-                    location.longitude = loc.coordinate.longitude
-                    hasUsedGPS = true
-                    await reverseGeocode(loc)
-                    return
-                }
-                if fetcher.error != nil {
-                    return
-                }
+            do {
+                let loc = try await fetcher.fetchLocation()
+                location.latitude = loc.coordinate.latitude
+                location.longitude = loc.coordinate.longitude
+                hasUsedGPS = true
+                await reverseGeocode(loc)
+            } catch {
+                // Error already set on fetcher by fetchLocation()
             }
         }
     }
