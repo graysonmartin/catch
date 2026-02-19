@@ -3,14 +3,12 @@ import SwiftData
 
 @main
 struct catchApp: App {
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     let modelContainer: ModelContainer
 
     init() {
         do {
             modelContainer = try ModelContainer(for: Cat.self)
-            #if DEBUG
-            DataSeeder.seedIfEmpty(context: modelContainer.mainContext)
-            #endif
         } catch {
             fatalError("Failed to create ModelContainer: \(error)")
         }
@@ -18,7 +16,16 @@ struct catchApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if hasCompletedOnboarding {
+                ContentView()
+                    #if DEBUG
+                    .task {
+                        DataSeeder.seedIfEmpty(context: modelContainer.mainContext)
+                    }
+                    #endif
+            } else {
+                OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
+            }
         }
         .modelContainer(modelContainer)
     }

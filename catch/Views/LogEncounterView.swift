@@ -11,14 +11,26 @@ struct LogEncounterView: View {
     @State private var location = Location.empty
     @State private var notes = ""
     @State private var photos: [Data] = []
+    @State private var showingAddCat = false
+
+    var preselectedCat: Cat? = nil
 
     var body: some View {
         NavigationStack {
             Form {
                 Section("which cat?") {
                     if cats.isEmpty {
-                        Text("no cats registered yet. add one first.")
-                            .foregroundStyle(CatchTheme.textSecondary)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("no cats registered yet")
+                                .foregroundStyle(CatchTheme.textSecondary)
+                            Button {
+                                showingAddCat = true
+                            } label: {
+                                Label("register one now", systemImage: "plus.circle.fill")
+                                    .font(.subheadline.weight(.medium))
+                                    .foregroundStyle(CatchTheme.primary)
+                            }
+                        }
                     } else {
                         NavigationLink {
                             CatPickerView(cats: cats, selectedCat: $selectedCat)
@@ -74,9 +86,14 @@ struct LogEncounterView: View {
                 }
             }
             .onAppear {
-                if cats.count == 1 && selectedCat == nil {
+                if let preselectedCat {
+                    selectedCat = preselectedCat
+                } else if cats.count == 1 && selectedCat == nil {
                     selectedCat = cats.first
                 }
+            }
+            .sheet(isPresented: $showingAddCat) {
+                AddCatView()
             }
         }
     }
