@@ -108,7 +108,7 @@ struct PhotoPickerView: View {
     private func deleteButton(index: Int) -> some View {
         Button {
             withAnimation {
-                selectedPhotos.remove(at: index)
+                _ = selectedPhotos.remove(at: index)
             }
         } label: {
             Image(systemName: "xmark.circle.fill")
