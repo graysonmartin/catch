@@ -87,17 +87,26 @@ struct LocationPickerView: View {
             }
 
             if let error = fetcher.error {
-                HStack(spacing: 4) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(error)
                         .font(.caption)
                         .foregroundStyle(.red)
-                    if error.contains("Settings") {
-                        Button {
-                            if let url = URL(string: UIApplication.openSettingsURLString) {
-                                UIApplication.shared.open(url)
+                    HStack(spacing: 12) {
+                        if error.contains("Settings") {
+                            Button {
+                                if let url = URL(string: UIApplication.openSettingsURLString) {
+                                    UIApplication.shared.open(url)
+                                }
+                            } label: {
+                                Text("open settings")
+                                    .font(.caption.weight(.medium))
+                                    .foregroundStyle(CatchTheme.primary)
                             }
+                        }
+                        Button {
+                            fetchCurrentLocation()
                         } label: {
-                            Text("Open Settings")
+                            Text("try again")
                                 .font(.caption.weight(.medium))
                                 .foregroundStyle(CatchTheme.primary)
                         }
@@ -132,6 +141,11 @@ struct LocationPickerView: View {
                 if fetcher.error != nil {
                     return
                 }
+            }
+            // Polling exhausted without result or error — timeout
+            if fetcher.result == nil && fetcher.error == nil {
+                fetcher.error = "location request timed out. make sure you have a clear view of the sky."
+                fetcher.isLoading = false
             }
         }
     }
