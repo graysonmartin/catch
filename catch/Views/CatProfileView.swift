@@ -7,6 +7,7 @@ struct CatProfileView: View {
     @State private var showingAddCare = false
     @State private var showingEdit = false
     @State private var showingDeleteCat = false
+    @State private var encounterToEdit: Encounter?
     @State private var showingLogEncounter = false
     @State private var encounterToDelete: Encounter?
     @State private var careEntryToDelete: CareEntry?
@@ -120,6 +121,10 @@ struct CatProfileView: View {
                 } else {
                     ForEach(sortedEncounters) { encounter in
                         encounterRow(encounter)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                encounterToEdit = encounter
+                            }
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                 Button("Delete", role: .destructive) {
                                     encounterToDelete = encounter
@@ -184,6 +189,9 @@ struct CatProfileView: View {
         .background(CatchTheme.background)
         .navigationTitle(cat.name)
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $encounterToEdit) { encounter in
+            EditEncounterView(encounter: encounter)
+        }
         .sheet(isPresented: $showingAddCare) {
             AddCareEntryView(cat: cat)
         }
@@ -271,6 +279,9 @@ struct CatProfileView: View {
                 }
             }
             Spacer()
+            Image(systemName: "pencil")
+                .font(.caption)
+                .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
         }
         .padding(12)
         .background(CatchTheme.cardBackground)
