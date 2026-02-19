@@ -205,6 +205,7 @@ struct CatProfileView: View {
         }
         .sheet(item: $careEntryToEdit) { entry in
             EditCareEntryView(entry: entry)
+        }
         .sheet(isPresented: $showingLogEncounter) {
             LogEncounterView(preselectedCat: cat)
         }
