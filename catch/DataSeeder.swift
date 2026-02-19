@@ -134,6 +134,16 @@ enum DataSeeder {
             cat: missBologna
         )
         context.insert(missBolognaCare)
+
+        // -- User Profile --
+        let profileCount = (try? context.fetchCount(FetchDescriptor<UserProfile>())) ?? 0
+        if profileCount == 0 {
+            let profile = UserProfile(
+                displayName: "cat enthusiast",
+                bio: "just out here cataloging every cat i see. it's not weird, you're weird."
+            )
+            context.insert(profile)
+        }
     }
 
     private static func jpegData(named assetName: String) -> [Data] {
