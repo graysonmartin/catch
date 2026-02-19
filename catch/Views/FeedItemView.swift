@@ -1,5 +1,19 @@
 import SwiftUI
 
+private enum PillLayout {
+    static let fontSize: CGFloat = 9
+    static let horizontalPadding: CGFloat = 6
+    static let verticalPadding: CGFloat = 2
+    static let cornerRadius: CGFloat = 4
+    static let activeBackgroundOpacity: Double = 0.15
+    static let inactiveBackgroundOpacity: Double = 0.1
+}
+
+private enum FeedItemLayout {
+    static let thumbnailSize: CGFloat = 48
+    static let carouselHeight: CGFloat = 200
+}
+
 struct FeedItemView: View {
     let encounter: Encounter
 
@@ -13,7 +27,7 @@ struct FeedItemView: View {
         VStack(alignment: .leading, spacing: 12) {
             // Header: photo + name + date
             HStack(spacing: 12) {
-                CatPhotoView(photoData: encounter.cat?.photos.first, size: 48)
+                CatPhotoView(photoData: encounter.cat?.photos.first, size: FeedItemLayout.thumbnailSize)
 
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 4) {
@@ -21,13 +35,13 @@ struct FeedItemView: View {
                             .font(.headline)
                             .foregroundStyle(CatchTheme.textPrimary)
                         Text(isFirstEncounter ? "NEW" : "REPEAT")
-                            .font(.system(size: 9, weight: .bold))
+                            .font(.system(size: PillLayout.fontSize, weight: .bold))
                             .foregroundStyle(isFirstEncounter ? CatchTheme.primary : CatchTheme.textSecondary)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
+                            .padding(.horizontal, PillLayout.horizontalPadding)
+                            .padding(.vertical, PillLayout.verticalPadding)
                             .background(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .fill(isFirstEncounter ? CatchTheme.primary.opacity(0.15) : CatchTheme.textSecondary.opacity(0.1))
+                                RoundedRectangle(cornerRadius: PillLayout.cornerRadius)
+                                    .fill(isFirstEncounter ? CatchTheme.primary.opacity(PillLayout.activeBackgroundOpacity) : CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity))
                             )
                     }
                     Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
@@ -47,7 +61,7 @@ struct FeedItemView: View {
             // Photos — prefer encounter-specific photos, fall back to cat's photos
             if let photos = (!encounter.photos.isEmpty ? encounter.photos : encounter.cat?.photos),
                !photos.isEmpty {
-                PhotoCarouselView(photos: photos, height: 200, cornerRadius: 12)
+                PhotoCarouselView(photos: photos, height: FeedItemLayout.carouselHeight, cornerRadius: CatchTheme.cornerRadiusSmall)
             }
 
             // Location
@@ -66,7 +80,7 @@ struct FeedItemView: View {
         }
         .padding()
         .background(CatchTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
+        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+        .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
     }
 }

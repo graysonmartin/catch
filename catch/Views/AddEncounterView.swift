@@ -29,7 +29,7 @@ struct AddEncounterView: View {
                             .padding(.vertical, 20)
                             .background(CatchTheme.primary)
                             .foregroundStyle(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
                     }
 
                     Button {
@@ -41,7 +41,7 @@ struct AddEncounterView: View {
                             .padding(.vertical, 20)
                             .background(CatchTheme.secondary)
                             .foregroundStyle(CatchTheme.textPrimary)
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
                     }
                 }
                 .padding(.horizontal, 32)

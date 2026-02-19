@@ -20,6 +20,6 @@ struct CatPhotoView: View {
             }
         }
         .frame(width: size, height: size)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
     }
 }

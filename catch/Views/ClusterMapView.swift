@@ -2,6 +2,19 @@ import SwiftUI
 import SwiftData
 import MapKit
 
+private enum MapConfig {
+    static let clusterZoomSpan: CLLocationDegrees = 0.003
+    static let spiderfyThreshold: CLLocationDegrees = 0.005
+    static let spiderfyRadiusMultiplier: Double = 0.08
+    static let overlapThreshold: CLLocationDegrees = 0.001
+    static let maxSpiderfyCount = 9
+    static let photoComparisonPrefixSize = 64
+
+    static let clusterReuseID = "cluster"
+    static let overflowReuseID = "overflow"
+    static let catPinReuseID = "catPin"
+}
+
 // MARK: - Snapshot for change detection
 
 struct CatSnapshot: Equatable {
@@ -18,7 +31,7 @@ struct CatSnapshot: Equatable {
         self.latitude = cat.location.latitude
         self.longitude = cat.location.longitude
         self.photoCount = cat.photos.count
-        self.firstPhotoPrefix = cat.photos.first.map { Data($0.prefix(64)) }
+        self.firstPhotoPrefix = cat.photos.first.map { Data($0.prefix(MapConfig.photoComparisonPrefixSize)) }
     }
 }
 
@@ -87,23 +100,20 @@ struct ClusterMapView: UIViewRepresentable {
 
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if let cluster = annotation as? MKClusterAnnotation {
-                let id = "cluster"
-                let view = (mapView.dequeueReusableAnnotationView(withIdentifier: id) as? CatClusterView)
-                    ?? CatClusterView(annotation: cluster, reuseIdentifier: id)
+                let view = (mapView.dequeueReusableAnnotationView(withIdentifier: MapConfig.clusterReuseID) as? CatClusterView)
+                    ?? CatClusterView(annotation: cluster, reuseIdentifier: MapConfig.clusterReuseID)
                 view.annotation = cluster
                 return view
             }
             if let overflow = annotation as? OverflowAnnotation {
-                let id = "overflow"
-                let view = (mapView.dequeueReusableAnnotationView(withIdentifier: id) as? OverflowAnnotationView)
-                    ?? OverflowAnnotationView(annotation: overflow, reuseIdentifier: id)
+                let view = (mapView.dequeueReusableAnnotationView(withIdentifier: MapConfig.overflowReuseID) as? OverflowAnnotationView)
+                    ?? OverflowAnnotationView(annotation: overflow, reuseIdentifier: MapConfig.overflowReuseID)
                 view.annotation = overflow
                 return view
             }
             if let catAnnotation = annotation as? CatAnnotation {
-                let id = "catPin"
-                let view = (mapView.dequeueReusableAnnotationView(withIdentifier: id) as? CatAnnotationView)
-                    ?? CatAnnotationView(annotation: catAnnotation, reuseIdentifier: id)
+                let view = (mapView.dequeueReusableAnnotationView(withIdentifier: MapConfig.catPinReuseID) as? CatAnnotationView)
+                    ?? CatAnnotationView(annotation: catAnnotation, reuseIdentifier: MapConfig.catPinReuseID)
                 view.annotation = catAnnotation
                 return view
             }
@@ -117,7 +127,7 @@ struct ClusterMapView: UIViewRepresentable {
                 // Zoom in toward the cluster to trigger spiderfy
                 let region = MKCoordinateRegion(
                     center: cluster.coordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003)
+                    span: MKCoordinateSpan(latitudeDelta: MapConfig.clusterZoomSpan, longitudeDelta: MapConfig.clusterZoomSpan)
                 )
                 mapView.setRegion(region, animated: true)
             } else if let overflow = view.annotation as? OverflowAnnotation {
@@ -132,7 +142,7 @@ struct ClusterMapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
             guard !isUpdatingRegion else { return }
             let span = mapView.region.span
-            let zoomedIn = span.latitudeDelta < 0.005
+            let zoomedIn = span.latitudeDelta < MapConfig.spiderfyThreshold
 
             if zoomedIn && !isSpiderfied {
                 spiderfy(mapView)
@@ -141,7 +151,7 @@ struct ClusterMapView: UIViewRepresentable {
             }
         }
 
-        private let maxSpiderfyCount = 9
+        private let maxSpiderfyCount = MapConfig.maxSpiderfyCount
 
         private func spiderfy(_ mapView: MKMapView) {
             isUpdatingRegion = true
@@ -165,7 +175,7 @@ struct ClusterMapView: UIViewRepresentable {
             mapView.removeAnnotations(mapView.annotations.filter { $0 is CatAnnotation || $0 is MKClusterAnnotation })
 
             let groups = findOverlappingGroups(allAnnotations)
-            let radius = mapView.region.span.latitudeDelta * 0.08
+            let radius = mapView.region.span.latitudeDelta * MapConfig.spiderfyRadiusMultiplier
             var hiddenAnnotations: Set<ObjectIdentifier> = []
 
             for group in groups {
@@ -246,7 +256,7 @@ struct ClusterMapView: UIViewRepresentable {
             DispatchQueue.main.async {
                 for annotation in restored {
                     if let view = mapView.view(for: annotation) as? CatAnnotationView {
-                        view.clusteringIdentifier = "catCluster"
+                        view.clusteringIdentifier = AnnotationLayout.clusteringID
                     }
                 }
                 self.isUpdatingRegion = false
@@ -269,7 +279,7 @@ struct ClusterMapView: UIViewRepresentable {
                     if used.contains(otherId) { continue }
                     let dLat = abs(annotation.coordinate.latitude - other.coordinate.latitude)
                     let dLng = abs(annotation.coordinate.longitude - other.coordinate.longitude)
-                    if dLat < 0.001 && dLng < 0.001 {
+                    if dLat < MapConfig.overlapThreshold && dLng < MapConfig.overlapThreshold {
                         group.append(other)
                         used.insert(otherId)
                     }

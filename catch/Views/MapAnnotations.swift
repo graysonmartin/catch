@@ -1,5 +1,17 @@
 import MapKit
 
+enum AnnotationLayout {
+    static let catPinSize: CGFloat = 40
+    static let catPinBorderInset: CGFloat = 1
+    static let catIconPointSize: CGFloat = 18
+    static let overflowBubbleSize: CGFloat = 36
+    static let overflowFontSize: CGFloat = 13
+    static let clusterBubbleSize: CGFloat = 44
+    static let clusterBorderInset: CGFloat = 3
+    static let clusterFontSize: CGFloat = 16
+    static let clusteringID = "catCluster"
+}
+
 // MARK: - Annotation models
 
 class CatAnnotation: MKPointAnnotation {
@@ -17,7 +29,7 @@ class OverflowAnnotation: MKPointAnnotation {
 class CatAnnotationView: MKAnnotationView {
     override init(annotation: (any MKAnnotation)?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        clusteringIdentifier = "catCluster"
+        clusteringIdentifier = AnnotationLayout.clusteringID
         collisionMode = .circle
         displayPriority = .defaultHigh
         render()
@@ -29,7 +41,7 @@ class CatAnnotationView: MKAnnotationView {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        clusteringIdentifier = "catCluster"
+        clusteringIdentifier = AnnotationLayout.clusteringID
     }
 
     override var annotation: (any MKAnnotation)? {
@@ -39,14 +51,14 @@ class CatAnnotationView: MKAnnotationView {
     private func render() {
         guard let catAnnotation = annotation as? CatAnnotation, let cat = catAnnotation.cat else { return }
 
-        let size: CGFloat = 40
+        let size = AnnotationLayout.catPinSize
+        let inset = AnnotationLayout.catPinBorderInset
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
-        let primary = UIColor(red: 1.0, green: 0.6, blue: 0.2, alpha: 1.0)
 
         image = renderer.image { ctx in
             if let photoData = cat.photos.first,
                let photo = ImageDownsampler.downsample(data: photoData, to: CGSize(width: size, height: size)) {
-                let path = UIBezierPath(ovalIn: CGRect(x: 1, y: 1, width: size - 2, height: size - 2))
+                let path = UIBezierPath(ovalIn: CGRect(x: inset, y: inset, width: size - inset * 2, height: size - inset * 2))
                 ctx.cgContext.saveGState()
                 path.addClip()
                 let aspect = photo.size.width / photo.size.height
@@ -60,12 +72,12 @@ class CatAnnotationView: MKAnnotationView {
                 }
                 photo.draw(in: drawRect)
                 ctx.cgContext.restoreGState()
-                primary.setStroke()
-                UIBezierPath(ovalIn: CGRect(x: 1, y: 1, width: size - 2, height: size - 2)).stroke()
+                CatchTheme.primaryUIColor.setStroke()
+                UIBezierPath(ovalIn: CGRect(x: inset, y: inset, width: size - inset * 2, height: size - inset * 2)).stroke()
             } else {
-                primary.setFill()
+                CatchTheme.primaryUIColor.setFill()
                 UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: size, height: size)).fill()
-                let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+                let config = UIImage.SymbolConfiguration(pointSize: AnnotationLayout.catIconPointSize, weight: .medium)
                 if let icon = UIImage(systemName: "cat.fill", withConfiguration: config)?
                     .withTintColor(.white, renderingMode: .alwaysOriginal) {
                     let o = CGPoint(x: (size - icon.size.width) / 2, y: (size - icon.size.height) / 2)
@@ -98,17 +110,16 @@ class OverflowAnnotationView: MKAnnotationView {
         guard let overflow = annotation as? OverflowAnnotation else { return }
         let count = overflow.overflowCats.count
 
-        let size: CGFloat = 36
+        let size = AnnotationLayout.overflowBubbleSize
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
-        let primary = UIColor(red: 1.0, green: 0.6, blue: 0.2, alpha: 1.0)
 
         image = renderer.image { _ in
-            primary.setFill()
+            CatchTheme.primaryUIColor.setFill()
             UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: size, height: size)).fill()
 
             let text = "+\(count)" as NSString
             let attrs: [NSAttributedString.Key: Any] = [
-                .font: UIFont.boldSystemFont(ofSize: 13),
+                .font: UIFont.boldSystemFont(ofSize: AnnotationLayout.overflowFontSize),
                 .foregroundColor: UIColor.white
             ]
             let textSize = text.size(withAttributes: attrs)
@@ -139,20 +150,20 @@ class CatClusterView: MKAnnotationView {
         guard let cluster = annotation as? MKClusterAnnotation else { return }
         let count = cluster.memberAnnotations.count
 
-        let size: CGFloat = 44
+        let size = AnnotationLayout.clusterBubbleSize
+        let inset = AnnotationLayout.clusterBorderInset
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
-        let primary = UIColor(red: 1.0, green: 0.6, blue: 0.2, alpha: 1.0)
 
         image = renderer.image { _ in
-            primary.setFill()
+            CatchTheme.primaryUIColor.setFill()
             UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: size, height: size)).fill()
             UIColor.white.setFill()
-            UIBezierPath(ovalIn: CGRect(x: 3, y: 3, width: size - 6, height: size - 6)).fill()
+            UIBezierPath(ovalIn: CGRect(x: inset, y: inset, width: size - inset * 2, height: size - inset * 2)).fill()
 
             let text = "\(count)" as NSString
             let attrs: [NSAttributedString.Key: Any] = [
-                .font: UIFont.boldSystemFont(ofSize: 16),
-                .foregroundColor: primary
+                .font: UIFont.boldSystemFont(ofSize: AnnotationLayout.clusterFontSize),
+                .foregroundColor: CatchTheme.primaryUIColor
             ]
             let textSize = text.size(withAttributes: attrs)
             text.draw(at: CGPoint(x: (size - textSize.width) / 2, y: (size - textSize.height) / 2), withAttributes: attrs)
