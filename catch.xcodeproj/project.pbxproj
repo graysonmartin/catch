@@ -28,12 +28,14 @@
 		E8000001AA00000F /* AddCareEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001E /* AddCareEntryView.swift */; };
 		E8000001AA000020 /* EditCatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001F /* EditCatView.swift */; };
 		E8000001AA000039 /* EditCareEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002D /* EditCareEntryView.swift */; };
+		E8000001AA000038 /* EditEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002C /* EditEncounterView.swift */; };
 		E8000001AA000021 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000025 /* MapView.swift */; };
 		E8000001AA000022 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000026 /* LocationPickerView.swift */; };
 		E8000001AA000023 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000027 /* Location.swift */; };
 		E8000001AA000024 /* PhotoCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000028 /* PhotoCarouselView.swift */; };
 		E8000001BB000002 /* DataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001BB000001 /* DataSeeder.swift */; };
 		E8000001AA000035 /* CatPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000029 /* CatPickerView.swift */; };
+		E8000001AA000036 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002A /* OnboardingView.swift */; };
 		E8A100000001 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000010 /* LocationTests.swift */; };
 		E8A100000002 /* CareEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000011 /* CareEntryTests.swift */; };
 		E8A100000003 /* CatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000012 /* CatTests.swift */; };
@@ -69,12 +71,14 @@
 		E8000001AA00001E /* AddCareEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCareEntryView.swift; sourceTree = "<group>"; };
 		E8000001AA00001F /* EditCatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCatView.swift; sourceTree = "<group>"; };
 		E8000001AA00002D /* EditCareEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCareEntryView.swift; sourceTree = "<group>"; };
+		E8000001AA00002C /* EditEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEncounterView.swift; sourceTree = "<group>"; };
 		E8000001AA000025 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		E8000001AA000026 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
 		E8000001AA000027 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		E8000001AA000028 /* PhotoCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCarouselView.swift; sourceTree = "<group>"; };
 		E8000001BB000001 /* DataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSeeder.swift; sourceTree = "<group>"; };
 		E8000001AA000029 /* CatPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatPickerView.swift; sourceTree = "<group>"; };
+		E8000001AA00002A /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		E8A100000010 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
 		E8A100000011 /* CareEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareEntryTests.swift; sourceTree = "<group>"; };
 		E8A100000012 /* CatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatTests.swift; sourceTree = "<group>"; };
@@ -168,7 +172,9 @@
 				E8000001AA00001E /* AddCareEntryView.swift */,
 				E8000001AA00001F /* EditCatView.swift */,
 				E8000001AA00002D /* EditCareEntryView.swift */,
+				E8000001AA00002C /* EditEncounterView.swift */,
 				E8000001AA000025 /* MapView.swift */,
+				E8000001AA00002A /* OnboardingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -333,12 +339,14 @@
 				E8000001AA00000F /* AddCareEntryView.swift in Sources */,
 				E8000001AA000020 /* EditCatView.swift in Sources */,
 				E8000001AA000039 /* EditCareEntryView.swift in Sources */,
+				E8000001AA000038 /* EditEncounterView.swift in Sources */,
 				E8000001AA000021 /* MapView.swift in Sources */,
 				E8000001AA000022 /* LocationPickerView.swift in Sources */,
 				E8000001AA000023 /* Location.swift in Sources */,
 				E8000001AA000024 /* PhotoCarouselView.swift in Sources */,
 				E8000001BB000002 /* DataSeeder.swift in Sources */,
 				E8000001AA000035 /* CatPickerView.swift in Sources */,
+				E8000001AA000036 /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

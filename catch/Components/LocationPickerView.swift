@@ -87,9 +87,22 @@ struct LocationPickerView: View {
             }
 
             if let error = fetcher.error {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(.red)
+                HStack(spacing: 4) {
+                    Text(error)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                    if error.contains("Settings") {
+                        Button {
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url)
+                            }
+                        } label: {
+                            Text("Open Settings")
+                                .font(.caption.weight(.medium))
+                                .foregroundStyle(CatchTheme.primary)
+                        }
+                    }
+                }
             }
 
             TextField("Or type location name", text: $location.name)
