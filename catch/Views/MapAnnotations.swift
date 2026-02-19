@@ -44,7 +44,8 @@ class CatAnnotationView: MKAnnotationView {
         let primary = UIColor(red: 1.0, green: 0.6, blue: 0.2, alpha: 1.0)
 
         image = renderer.image { ctx in
-            if let photoData = cat.photos.first, let photo = UIImage(data: photoData) {
+            if let photoData = cat.photos.first,
+               let photo = ImageDownsampler.downsample(data: photoData, to: CGSize(width: size, height: size)) {
                 let path = UIBezierPath(ovalIn: CGRect(x: 1, y: 1, width: size - 2, height: size - 2))
                 ctx.cgContext.saveGState()
                 path.addClip()
