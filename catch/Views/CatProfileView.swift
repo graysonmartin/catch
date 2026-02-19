@@ -104,10 +104,19 @@ struct CatProfileView: View {
             // Encounters section
             Section {
                 if sortedEncounters.isEmpty {
-                    Text(CatchStrings.CatProfile.noEncountersLogged)
-                        .font(.subheadline)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                        .listRowBackground(CatchTheme.background)
+                    VStack(spacing: 8) {
+                        Text(CatchStrings.CatProfile.noEncountersLogged)
+                            .font(.subheadline)
+                            .foregroundStyle(CatchTheme.textSecondary)
+                        Button {
+                            showingLogEncounter = true
+                        } label: {
+                            Text(CatchStrings.CatProfile.logSighting)
+                                .font(.caption.weight(.medium))
+                                .foregroundStyle(CatchTheme.primary)
+                        }
+                    }
+                    .listRowBackground(CatchTheme.background)
                 } else {
                     ForEach(sortedEncounters) { encounter in
                         encounterRow(encounter)

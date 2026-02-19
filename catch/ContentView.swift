@@ -8,7 +8,7 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            FeedView(scrollToTop: $feedScrollToTop)
+            FeedView(scrollToTop: $feedScrollToTop, selectedTab: $selectedTab)
                 .tabItem {
                     Label(CatchStrings.Tabs.feed, systemImage: "pawprint.fill")
                 }
@@ -20,13 +20,13 @@ struct ContentView: View {
                 }
                 .tag(1)
 
-            CatMapView()
+            CatMapView(selectedTab: $selectedTab)
                 .tabItem {
                     Label(CatchStrings.Tabs.map, systemImage: "map.fill")
                 }
                 .tag(2)
 
-            CollectionView()
+            CollectionView(selectedTab: $selectedTab)
                 .tabItem {
                     Label(CatchStrings.Tabs.collection, systemImage: "square.grid.2x2.fill")
                 }
