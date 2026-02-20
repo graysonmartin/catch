@@ -1,9 +1,9 @@
-import Testing
+import XCTest
 
 @MainActor
-struct FollowServiceErrorTests {
+final class FollowServiceErrorTests: XCTestCase {
 
-    @Test func allCases_haveNonNilErrorDescriptions() {
+    func test_allCases_haveNonNilErrorDescriptions() {
         let cases: [FollowServiceError] = [
             .notSignedIn,
             .cannotFollowSelf,
@@ -13,22 +13,22 @@ struct FollowServiceErrorTests {
             .unauthorized
         ]
         for error in cases {
-            #expect(error.errorDescription != nil)
-            #expect(!error.errorDescription!.isEmpty)
+            XCTAssertNotNil(error.errorDescription)
+            XCTAssertFalse(error.errorDescription!.isEmpty)
         }
     }
 
-    @Test func equatable_matchesSameCase() {
-        #expect(FollowServiceError.notSignedIn == .notSignedIn)
-        #expect(FollowServiceError.cannotFollowSelf == .cannotFollowSelf)
-        #expect(FollowServiceError.alreadyFollowing == .alreadyFollowing)
-        #expect(FollowServiceError.requestAlreadyPending == .requestAlreadyPending)
-        #expect(FollowServiceError.followNotFound == .followNotFound)
-        #expect(FollowServiceError.unauthorized == .unauthorized)
+    func test_equatable_matchesSameCase() {
+        XCTAssertEqual(FollowServiceError.notSignedIn, .notSignedIn)
+        XCTAssertEqual(FollowServiceError.cannotFollowSelf, .cannotFollowSelf)
+        XCTAssertEqual(FollowServiceError.alreadyFollowing, .alreadyFollowing)
+        XCTAssertEqual(FollowServiceError.requestAlreadyPending, .requestAlreadyPending)
+        XCTAssertEqual(FollowServiceError.followNotFound, .followNotFound)
+        XCTAssertEqual(FollowServiceError.unauthorized, .unauthorized)
     }
 
-    @Test func equatable_differsBetweenCases() {
-        #expect(FollowServiceError.notSignedIn != .cannotFollowSelf)
-        #expect(FollowServiceError.alreadyFollowing != .requestAlreadyPending)
+    func test_equatable_differsBetweenCases() {
+        XCTAssertNotEqual(FollowServiceError.notSignedIn, .cannotFollowSelf)
+        XCTAssertNotEqual(FollowServiceError.alreadyFollowing, .requestAlreadyPending)
     }
 }

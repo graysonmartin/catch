@@ -1,23 +1,23 @@
-import Testing
+import XCTest
 
 @MainActor
-struct FollowStatusTests {
+final class FollowStatusTests: XCTestCase {
 
-    @Test func allCases_containsActiveAndPending() {
+    func test_allCases_containsActiveAndPending() {
         let cases = FollowStatus.allCases
-        #expect(cases.count == 2)
-        #expect(cases.contains(.active))
-        #expect(cases.contains(.pending))
+        XCTAssertEqual(cases.count, 2)
+        XCTAssertTrue(cases.contains(.active))
+        XCTAssertTrue(cases.contains(.pending))
     }
 
-    @Test func rawValues_matchExpectedStrings() {
-        #expect(FollowStatus.active.rawValue == "active")
-        #expect(FollowStatus.pending.rawValue == "pending")
+    func test_rawValues_matchExpectedStrings() {
+        XCTAssertEqual(FollowStatus.active.rawValue, "active")
+        XCTAssertEqual(FollowStatus.pending.rawValue, "pending")
     }
 
-    @Test func initFromRawValue_roundTrips() {
-        #expect(FollowStatus(rawValue: "active") == .active)
-        #expect(FollowStatus(rawValue: "pending") == .pending)
-        #expect(FollowStatus(rawValue: "bogus") == nil)
+    func test_initFromRawValue_roundTrips() {
+        XCTAssertEqual(FollowStatus(rawValue: "active"), .active)
+        XCTAssertEqual(FollowStatus(rawValue: "pending"), .pending)
+        XCTAssertNil(FollowStatus(rawValue: "bogus"))
     }
 }

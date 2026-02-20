@@ -1,8 +1,8 @@
 import Foundation
-import Testing
+import XCTest
 
 @MainActor
-struct FollowTests {
+final class FollowTests: XCTestCase {
 
     private func makeFollow(
         id: String = "test-id",
@@ -19,34 +19,34 @@ struct FollowTests {
         )
     }
 
-    @Test func isActive_trueForActiveStatus() {
+    func test_isActive_trueForActiveStatus() {
         let follow = makeFollow(status: .active)
-        #expect(follow.isActive)
-        #expect(!follow.isPending)
+        XCTAssertTrue(follow.isActive)
+        XCTAssertFalse(follow.isPending)
     }
 
-    @Test func isPending_trueForPendingStatus() {
+    func test_isPending_trueForPendingStatus() {
         let follow = makeFollow(status: .pending)
-        #expect(follow.isPending)
-        #expect(!follow.isActive)
+        XCTAssertTrue(follow.isPending)
+        XCTAssertFalse(follow.isActive)
     }
 
-    @Test func equatable_matchesOnAllFields() {
+    func test_equatable_matchesOnAllFields() {
         let date = Date()
         let a = Follow(id: "1", followerID: "a", followeeID: "b", status: .active, createdAt: date)
         let b = Follow(id: "1", followerID: "a", followeeID: "b", status: .active, createdAt: date)
-        #expect(a == b)
+        XCTAssertEqual(a, b)
     }
 
-    @Test func equatable_differsByStatus() {
+    func test_equatable_differsByStatus() {
         let date = Date()
         let a = Follow(id: "1", followerID: "a", followeeID: "b", status: .active, createdAt: date)
         let b = Follow(id: "1", followerID: "a", followeeID: "b", status: .pending, createdAt: date)
-        #expect(a != b)
+        XCTAssertNotEqual(a, b)
     }
 
-    @Test func id_matchesProvidedValue() {
+    func test_id_matchesProvidedValue() {
         let follow = makeFollow(id: "custom-id")
-        #expect(follow.id == "custom-id")
+        XCTAssertEqual(follow.id, "custom-id")
     }
 }
