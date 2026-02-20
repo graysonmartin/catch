@@ -40,6 +40,7 @@ enum Fixtures {
         avatarData: Data? = nil,
         appleUserID: String? = nil,
         cloudKitRecordName: String? = nil,
+        isPrivate: Bool = false,
         in context: ModelContext
     ) -> UserProfile {
         let profile = UserProfile(
@@ -47,7 +48,8 @@ enum Fixtures {
             bio: bio,
             avatarData: avatarData,
             appleUserID: appleUserID,
-            cloudKitRecordName: cloudKitRecordName
+            cloudKitRecordName: cloudKitRecordName,
+            isPrivate: isPrivate
         )
         context.insert(profile)
         return profile

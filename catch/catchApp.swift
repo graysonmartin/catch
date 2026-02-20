@@ -5,12 +5,12 @@ import SwiftData
 struct catchApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var authService = AppleAuthService()
-    @State private var friendService = CKFriendService()
+    @State private var followService = CKFollowService()
     let modelContainer: ModelContainer
 
     init() {
         do {
-            let schema = Schema(versionedSchema: CatchSchemaV2.self)
+            let schema = Schema(versionedSchema: CatchSchemaV3.self)
             let config = ModelConfiguration(schema: schema)
             modelContainer = try ModelContainer(
                 for: schema,
@@ -27,7 +27,7 @@ struct catchApp: App {
             if hasCompletedOnboarding {
                 ContentView()
                     .environment(authService)
-                    .environment(friendService)
+                    .environment(followService)
                     .task {
                         await authService.checkCredentialState()
                     }

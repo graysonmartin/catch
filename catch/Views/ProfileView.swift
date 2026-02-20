@@ -5,6 +5,7 @@ import AuthenticationServices
 struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(AppleAuthService.self) private var authService
+    @Environment(CKFollowService.self) private var followService
     @Query private var profiles: [UserProfile]
     @Query private var cats: [Cat]
     @Query private var encounters: [Encounter]
@@ -56,6 +57,9 @@ struct ProfileView: View {
                 avatarSection(profile)
                 infoSection(profile)
                 statsSection
+                if authService.authState.isSignedIn {
+                    socialSection
+                }
                 authSection(profile)
                 joinDateSection(profile)
             }
@@ -131,6 +135,39 @@ struct ProfileView: View {
         )
     }
 
+    private var socialSection: some View {
+        NavigationLink {
+            SocialView()
+        } label: {
+            HStack(spacing: 12) {
+                statCard(
+                    count: followService.followers.count,
+                    label: "followers",
+                    icon: "person.2.fill"
+                )
+                .overlay(alignment: .topTrailing) {
+                    if followService.pendingRequests.count > 0 {
+                        Text("\(followService.pendingRequests.count)")
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(.white)
+                            .frame(minWidth: 18, minHeight: 18)
+                            .background(Color.red)
+                            .clipShape(Circle())
+                            .offset(x: -4, y: 4)
+                    }
+                }
+
+                statCard(
+                    count: followService.following.count,
+                    label: "following",
+                    icon: "person.badge.plus"
+                )
+            }
+            .padding(.horizontal, 20)
+        }
+        .buttonStyle(.plain)
+    }
+
     private func joinDateSection(_ profile: UserProfile) -> some View {
         Text("lurking since \(profile.createdAt.formatted(.dateTime.month(.wide).year()))")
             .font(.caption)
@@ -196,7 +233,8 @@ struct ProfileView: View {
                 let recordName = try await cloudKitService.saveUserProfile(
                     appleUserID: appleUserID,
                     displayName: profile.displayName,
-                    bio: profile.bio
+                    bio: profile.bio,
+                    isPrivate: profile.isPrivate
                 )
                 profile.cloudKitRecordName = recordName
             } catch {

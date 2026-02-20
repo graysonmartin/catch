@@ -5,7 +5,8 @@ protocol CloudKitService: Sendable {
     func saveUserProfile(
         appleUserID: String,
         displayName: String,
-        bio: String
+        bio: String,
+        isPrivate: Bool
     ) async throws -> String
 
     func fetchUserProfile(
@@ -15,6 +16,10 @@ protocol CloudKitService: Sendable {
     func deleteUserProfile(
         recordName: String
     ) async throws
+
+    func searchUsers(
+        query: String
+    ) async throws -> [CloudUserProfile]
 }
 
 struct CloudUserProfile: Sendable {
@@ -22,4 +27,5 @@ struct CloudUserProfile: Sendable {
     let appleUserID: String
     let displayName: String
     let bio: String
+    let isPrivate: Bool
 }

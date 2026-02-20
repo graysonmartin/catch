@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(CKFollowService.self) private var followService
+    @Environment(AppleAuthService.self) private var authService
     @State private var selectedTab = 0
     @State private var feedScrollToTop = false
 
@@ -35,7 +37,12 @@ struct ContentView: View {
                     Label("Profile", systemImage: "person.crop.circle")
                 }
                 .tag(4)
+                .badge(followService.pendingRequests.count)
         }
         .tint(CatchTheme.primary)
+        .task {
+            guard let userID = authService.authState.user?.userIdentifier else { return }
+            try? await followService.refresh(for: userID)
+        }
     }
 }

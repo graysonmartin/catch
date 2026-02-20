@@ -24,6 +24,7 @@ final class UserProfileTests: XCTestCase {
         XCTAssertNil(profile.avatarData)
         XCTAssertNil(profile.appleUserID)
         XCTAssertNil(profile.cloudKitRecordName)
+        XCTAssertFalse(profile.isPrivate)
         XCTAssertLessThanOrEqual(profile.createdAt, Date())
     }
 
@@ -99,5 +100,26 @@ final class UserProfileTests: XCTestCase {
         let fetched = try context.fetch(FetchDescriptor<UserProfile>())
         XCTAssertEqual(fetched.first?.appleUserID, "apple-789")
         XCTAssertEqual(fetched.first?.cloudKitRecordName, "ck-789")
+    }
+
+    // MARK: - Privacy
+
+    func test_isPrivate_defaultsToFalse() {
+        let profile = UserProfile()
+        XCTAssertFalse(profile.isPrivate)
+    }
+
+    func test_isPrivate_persistsWhenTrue() throws {
+        let profile = Fixtures.userProfile(in: context)
+        profile.isPrivate = true
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<UserProfile>())
+        XCTAssertTrue(fetched.first?.isPrivate ?? false)
+    }
+
+    func test_isPrivate_canBeSetViaInit() {
+        let profile = UserProfile(isPrivate: true)
+        XCTAssertTrue(profile.isPrivate)
     }
 }

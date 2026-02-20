@@ -8,6 +8,7 @@ struct EditProfileView: View {
     @State private var displayName: String
     @State private var bio: String
     @State private var avatarData: Data?
+    @State private var isPrivate: Bool
     @State private var pickerItem: PhotosPickerItem?
     @State private var isShowingPhotoOptions = false
 
@@ -16,6 +17,7 @@ struct EditProfileView: View {
         _displayName = State(initialValue: profile.displayName)
         _bio = State(initialValue: profile.bio)
         _avatarData = State(initialValue: profile.avatarData)
+        _isPrivate = State(initialValue: profile.isPrivate)
     }
 
     var body: some View {
@@ -23,6 +25,7 @@ struct EditProfileView: View {
             Form {
                 avatarSection
                 infoSection
+                privacySection
             }
             .navigationTitle("edit profile")
             .navigationBarTitleDisplayMode(.inline)
@@ -89,12 +92,21 @@ struct EditProfileView: View {
         }
     }
 
+    private var privacySection: some View {
+        Section {
+            Toggle("private profile", isOn: $isPrivate)
+        } footer: {
+            Text("when private, people have to request to follow you. going private won't auto-approve existing requests.")
+        }
+    }
+
     // MARK: - Actions
 
     private func save() {
         profile.displayName = displayName.trimmingCharacters(in: .whitespaces)
         profile.bio = bio.trimmingCharacters(in: .whitespaces)
         profile.avatarData = avatarData
+        profile.isPrivate = isPrivate
         dismiss()
     }
 
