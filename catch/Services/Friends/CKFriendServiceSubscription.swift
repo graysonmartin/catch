@@ -6,9 +6,11 @@ extension CKFriendService {
     /// Silently fails if push entitlements are not configured.
     func registerForIncomingRequestNotifications(userID: String) async {
         let predicate = NSPredicate(format: "receiverID == %@", userID)
+        let subscriptionID = "incoming-friend-requests-\(userID)"
         let subscription = CKQuerySubscription(
             recordType: "FriendRequest",
             predicate: predicate,
+            subscriptionID: subscriptionID,
             options: [.firesOnRecordCreation, .firesOnRecordUpdate]
         )
 
