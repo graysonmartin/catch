@@ -214,6 +214,24 @@ struct ProfileView: View {
             Text("sign in to back up your profile")
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
+
+            #if DEBUG
+            Button {
+                authService.debugSignIn()
+                if let userID = authService.authState.user?.userIdentifier {
+                    profile.appleUserID = userID
+                }
+            } label: {
+                Text("fake sign in (debug)")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(.red.opacity(0.8))
+                    .clipShape(Capsule())
+            }
+            #endif
         }
     }
 

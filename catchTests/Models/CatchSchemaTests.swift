@@ -20,54 +20,20 @@ final class CatchSchemaTests: XCTestCase {
         XCTAssertTrue(models.contains(where: { $0 == UserProfile.self }))
     }
 
-    // MARK: - V2
-
-    func test_v2VersionIdentifier_is2_0_0() {
-        let version = CatchSchemaV2.versionIdentifier
-        XCTAssertEqual(version, Schema.Version(2, 0, 0))
-    }
-
-    func test_v2DeclaresAllFourModelTypes() {
-        let models = CatchSchemaV2.models
-        XCTAssertEqual(models.count, 4)
-        XCTAssertTrue(models.contains(where: { $0 == Cat.self }))
-        XCTAssertTrue(models.contains(where: { $0 == Encounter.self }))
-        XCTAssertTrue(models.contains(where: { $0 == CareEntry.self }))
-        XCTAssertTrue(models.contains(where: { $0 == UserProfile.self }))
-    }
-
-    // MARK: - V3
-
-    func test_v3VersionIdentifier_is3_0_0() {
-        let version = CatchSchemaV3.versionIdentifier
-        XCTAssertEqual(version, Schema.Version(3, 0, 0))
-    }
-
-    func test_v3DeclaresAllFourModelTypes() {
-        let models = CatchSchemaV3.models
-        XCTAssertEqual(models.count, 4)
-        XCTAssertTrue(models.contains(where: { $0 == Cat.self }))
-        XCTAssertTrue(models.contains(where: { $0 == Encounter.self }))
-        XCTAssertTrue(models.contains(where: { $0 == CareEntry.self }))
-        XCTAssertTrue(models.contains(where: { $0 == UserProfile.self }))
-    }
-
     // MARK: - Migration Plan
 
-    func test_migrationPlanIncludesAllSchemas() {
+    func test_migrationPlanIncludesSingleSchema() {
         let schemas = CatchMigrationPlan.schemas
-        XCTAssertEqual(schemas.count, 3)
+        XCTAssertEqual(schemas.count, 1)
         XCTAssertTrue(schemas[0] == CatchSchemaV1.self)
-        XCTAssertTrue(schemas[1] == CatchSchemaV2.self)
-        XCTAssertTrue(schemas[2] == CatchSchemaV3.self)
     }
 
-    func test_migrationPlanHasTwoLightweightStages() {
-        XCTAssertEqual(CatchMigrationPlan.stages.count, 2)
+    func test_migrationPlanHasNoStages() {
+        XCTAssertEqual(CatchMigrationPlan.stages.count, 0)
     }
 
-    func test_v3ModelContainerCanBeCreated() throws {
-        let schema = Schema(versionedSchema: CatchSchemaV3.self)
+    func test_v1ModelContainerCanBeCreated() throws {
+        let schema = Schema(versionedSchema: CatchSchemaV1.self)
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: schema, configurations: config)
         XCTAssertEqual(container.schema.entities.count, 4)

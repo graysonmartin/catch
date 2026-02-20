@@ -8,7 +8,7 @@ final class UserProfile {
     var createdAt: Date
     var appleUserID: String?
     var cloudKitRecordName: String?
-    var isPrivate: Bool
+    var isPrivate: Bool = false
 
     @Attribute(.externalStorage)
     var avatarData: Data?
