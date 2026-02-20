@@ -11,7 +11,7 @@ struct catchApp: App {
     init() {
         do {
             let schema = Schema(versionedSchema: CatchSchemaV2.self)
-            let config = ModelConfiguration(schema: schema)
+            let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
             modelContainer = try ModelContainer(
                 for: schema,
                 migrationPlan: CatchMigrationPlan.self,
