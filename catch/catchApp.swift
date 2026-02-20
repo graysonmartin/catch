@@ -8,7 +8,13 @@ struct catchApp: App {
 
     init() {
         do {
-            modelContainer = try ModelContainer(for: Cat.self, UserProfile.self)
+            let schema = Schema(versionedSchema: CatchSchemaV1.self)
+            let config = ModelConfiguration(schema: schema)
+            modelContainer = try ModelContainer(
+                for: schema,
+                migrationPlan: CatchMigrationPlan.self,
+                configurations: config
+            )
         } catch {
             fatalError("Failed to create ModelContainer: \(error)")
         }

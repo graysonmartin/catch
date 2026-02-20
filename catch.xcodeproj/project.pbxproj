@@ -56,6 +56,9 @@
 		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
 		E8A10000000D /* UserProfile.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
 		E8A10000000E /* UserProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000018 /* UserProfileTests.swift */; };
+		E8000001AA000055 /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
+		E8A10000000F /* CatchSchema.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
+		E8A100000025 /* CatchSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000019 /* CatchSchemaTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +107,8 @@
 		E8000001AA000061 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		E8000001AA000062 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		E8A100000018 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
+		E8000001AA000070 /* CatchSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchema.swift; sourceTree = "<group>"; };
+		E8A100000019 /* CatchSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchemaTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +179,7 @@
 				E8000001AA000012 /* CareEntry.swift */,
 				E8000001AA000027 /* Location.swift */,
 				E8000001AA000060 /* UserProfile.swift */,
+				E8000001AA000070 /* CatchSchema.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -242,6 +248,7 @@
 				E8A100000012 /* CatTests.swift */,
 				E8A100000013 /* EncounterTests.swift */,
 				E8A100000018 /* UserProfileTests.swift */,
+				E8A100000019 /* CatchSchemaTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -387,6 +394,7 @@
 				E8000001AA000052 /* UserProfile.swift in Sources */,
 				E8000001AA000053 /* ProfileView.swift in Sources */,
 				E8000001AA000054 /* EditProfileView.swift in Sources */,
+				E8000001AA000055 /* CatchSchema.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,6 +416,8 @@
 				E8A10000000C /* ImageDownsamplerTests.swift in Sources */,
 				E8A10000000D /* UserProfile.swift in Sources (catchTests) */,
 				E8A10000000E /* UserProfileTests.swift in Sources */,
+				E8A10000000F /* CatchSchema.swift in Sources (catchTests) */,
+				E8A100000025 /* CatchSchemaTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
