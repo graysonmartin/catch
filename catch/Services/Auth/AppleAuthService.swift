@@ -60,6 +60,18 @@ final class AppleAuthService: AuthService {
         authState = .signedOut
     }
 
+    #if DEBUG
+    func debugSignIn() {
+        let user = AppleUser(
+            userIdentifier: "debug-user-\(UUID().uuidString.prefix(8))",
+            fullName: "Debug User",
+            email: "debug@catch.test"
+        )
+        Self.persistUser(user)
+        authState = .signedIn(user)
+    }
+    #endif
+
     func checkCredentialState() async {
         guard let user = authState.user else {
             authState = .signedOut

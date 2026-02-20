@@ -14,7 +14,8 @@ final class CKCloudKitService: CloudKitService {
     func saveUserProfile(
         appleUserID: String,
         displayName: String,
-        bio: String
+        bio: String,
+        isPrivate: Bool
     ) async throws -> String {
         let recordID = CKRecord.ID(recordName: appleUserID)
 
@@ -28,6 +29,7 @@ final class CKCloudKitService: CloudKitService {
         record["appleUserID"] = appleUserID
         record["displayName"] = displayName
         record["bio"] = bio
+        record["isPrivate"] = isPrivate ? 1 : 0
 
         let saved = try await database.save(record)
         return saved.recordID.recordName
@@ -49,16 +51,47 @@ final class CKCloudKitService: CloudKitService {
             return nil
         }
 
+        let isPrivate = (record["isPrivate"] as? Int ?? 0) == 1
+
         return CloudUserProfile(
             recordName: record.recordID.recordName,
             appleUserID: appleID,
             displayName: displayName,
-            bio: bio
+            bio: bio,
+            isPrivate: isPrivate
         )
     }
 
     func deleteUserProfile(recordName: String) async throws {
         let recordID = CKRecord.ID(recordName: recordName)
         try await database.deleteRecord(withID: recordID)
+    }
+
+    func searchUsers(query: String) async throws -> [CloudUserProfile] {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return [] }
+
+        let predicate = NSPredicate(format: "displayName BEGINSWITH[cd] %@", trimmed)
+        let ckQuery = CKQuery(recordType: Self.recordType, predicate: predicate)
+        ckQuery.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
+
+        let (results, _) = try await database.records(matching: ckQuery, resultsLimit: 20)
+
+        return results.compactMap { _, result in
+            guard case .success(let record) = result,
+                  let appleID = record["appleUserID"] as? String,
+                  let displayName = record["displayName"] as? String,
+                  let bio = record["bio"] as? String else {
+                return nil
+            }
+            let isPrivate = (record["isPrivate"] as? Int ?? 0) == 1
+            return CloudUserProfile(
+                recordName: record.recordID.recordName,
+                appleUserID: appleID,
+                displayName: displayName,
+                bio: bio,
+                isPrivate: isPrivate
+            )
+        }
     }
 }
