@@ -59,6 +59,17 @@
 		E8000001AA000055 /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
 		E8A10000000F /* CatchSchema.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
 		E8A100000025 /* CatchSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000019 /* CatchSchemaTests.swift */; };
+		E8CE692EDFCE0B5ECDC4C1DD /* AuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CA043BAE1603803A839C0C /* AuthState.swift */; };
+		E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
+		E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */; };
+		E8C5DB4466426FAE9480469A /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CADC30543FE5A6E743849E /* CloudKitService.swift */; };
+		E8C7737EC218A5DCA33037D1 /* CKCloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C63F8101AC616F8FD0BA84 /* CKCloudKitService.swift */; };
+		E8C6A3B73A0CC162F803D7CA /* AuthStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */; };
+		E8CF9FE9B8D8EB743AC8A414 /* MockAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB34FA781359331A3ED13A /* MockAuthService.swift */; };
+		E8C45823BB168636E9BDC605 /* MockCloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */; };
+		E8CCDF6B8933605A62729069 /* AuthState.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8CA043BAE1603803A839C0C /* AuthState.swift */; };
+		E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
+		E8CCF3022A93BC29B1DF104A /* CloudKitService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8CADC30543FE5A6E743849E /* CloudKitService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,6 +120,15 @@
 		E8A100000018 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
 		E8000001AA000070 /* CatchSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchema.swift; sourceTree = "<group>"; };
 		E8A100000019 /* CatchSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchemaTests.swift; sourceTree = "<group>"; };
+		E8CA043BAE1603803A839C0C /* AuthState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthState.swift; sourceTree = "<group>"; };
+		E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthService.swift; sourceTree = "<group>"; };
+		E8CADC30543FE5A6E743849E /* CloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitService.swift; sourceTree = "<group>"; };
+		E8C63F8101AC616F8FD0BA84 /* CKCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCloudKitService.swift; sourceTree = "<group>"; };
+		E8CA167FE482ED4A92C8C805 /* catch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = catch.entitlements; sourceTree = "<group>"; };
+		E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStateTests.swift; sourceTree = "<group>"; };
+		E8CB34FA781359331A3ED13A /* MockAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthService.swift; sourceTree = "<group>"; };
+		E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCloudKitService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +168,8 @@
 				E8000001AA000031 /* Views */,
 				E8000001AA000032 /* Components */,
 				E8000001AA000033 /* Theme */,
+				E8C7643E7D80FDFED273606F /* Services */,
+				E8CA167FE482ED4A92C8C805 /* catch.entitlements */,
 				E80000012B5A00000012 /* Assets.xcassets */,
 				E80000012B5A0000000E /* Preview Content */,
 			);
@@ -235,6 +257,7 @@
 			children = (
 				E8A100000022 /* Models */,
 				E8A100000024 /* Components */,
+				E8C17FF134EEE52DB9FA0D4A /* Services */,
 				E8A100000023 /* TestHelpers */,
 			);
 			path = catchTests;
@@ -268,6 +291,60 @@
 				E8A100000017 /* ImageDownsamplerTests.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		E8C4C76FF8B24F98B098D2F1 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				E8CA043BAE1603803A839C0C /* AuthState.swift */,
+				E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */,
+				E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		E8C29A31E399698E3B36A45C /* CloudKit */ = {
+			isa = PBXGroup;
+			children = (
+				E8CADC30543FE5A6E743849E /* CloudKitService.swift */,
+				E8C63F8101AC616F8FD0BA84 /* CKCloudKitService.swift */,
+			);
+			path = CloudKit;
+			sourceTree = "<group>";
+		};
+		E8C7643E7D80FDFED273606F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E8C4C76FF8B24F98B098D2F1 /* Auth */,
+				E8C29A31E399698E3B36A45C /* CloudKit */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E8CF211849B3A47ED1640CA4 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		E8CB8601EE8D9224ECDE331C /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				E8CB34FA781359331A3ED13A /* MockAuthService.swift */,
+				E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		E8C17FF134EEE52DB9FA0D4A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E8CF211849B3A47ED1640CA4 /* Auth */,
+				E8CB8601EE8D9224ECDE331C /* Mocks */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -395,6 +472,11 @@
 				E8000001AA000053 /* ProfileView.swift in Sources */,
 				E8000001AA000054 /* EditProfileView.swift in Sources */,
 				E8000001AA000055 /* CatchSchema.swift in Sources */,
+				E8CE692EDFCE0B5ECDC4C1DD /* AuthState.swift in Sources */,
+				E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */,
+				E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */,
+				E8C5DB4466426FAE9480469A /* CloudKitService.swift in Sources */,
+				E8C7737EC218A5DCA33037D1 /* CKCloudKitService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +500,12 @@
 				E8A10000000E /* UserProfileTests.swift in Sources */,
 				E8A10000000F /* CatchSchema.swift in Sources (catchTests) */,
 				E8A100000025 /* CatchSchemaTests.swift in Sources */,
+				E8C6A3B73A0CC162F803D7CA /* AuthStateTests.swift in Sources */,
+				E8CF9FE9B8D8EB743AC8A414 /* MockAuthService.swift in Sources */,
+				E8C45823BB168636E9BDC605 /* MockCloudKitService.swift in Sources */,
+				E8CCDF6B8933605A62729069 /* AuthState.swift in Sources (catchTests) */,
+				E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources (catchTests) */,
+				E8CCF3022A93BC29B1DF104A /* CloudKitService.swift in Sources (catchTests) */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -548,6 +636,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = catch/catch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"catch/Preview Content\"";
@@ -578,6 +667,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = catch/catch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"catch/Preview Content\"";

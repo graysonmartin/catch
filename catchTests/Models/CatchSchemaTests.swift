@@ -4,7 +4,9 @@ import SwiftData
 @MainActor
 final class CatchSchemaTests: XCTestCase {
 
-    func test_versionIdentifier_is1_0_0() {
+    // MARK: - V1
+
+    func test_v1VersionIdentifier_is1_0_0() {
         let version = CatchSchemaV1.versionIdentifier
         XCTAssertEqual(version, Schema.Version(1, 0, 0))
     }
@@ -18,24 +20,39 @@ final class CatchSchemaTests: XCTestCase {
         XCTAssertTrue(models.contains(where: { $0 == UserProfile.self }))
     }
 
-    func test_migrationPlanIncludesV1Schema() {
+    // MARK: - V2
+
+    func test_v2VersionIdentifier_is2_0_0() {
+        let version = CatchSchemaV2.versionIdentifier
+        XCTAssertEqual(version, Schema.Version(2, 0, 0))
+    }
+
+    func test_v2DeclaresAllFourModelTypes() {
+        let models = CatchSchemaV2.models
+        XCTAssertEqual(models.count, 4)
+        XCTAssertTrue(models.contains(where: { $0 == Cat.self }))
+        XCTAssertTrue(models.contains(where: { $0 == Encounter.self }))
+        XCTAssertTrue(models.contains(where: { $0 == CareEntry.self }))
+        XCTAssertTrue(models.contains(where: { $0 == UserProfile.self }))
+    }
+
+    // MARK: - Migration Plan
+
+    func test_migrationPlanIncludesBothSchemas() {
         let schemas = CatchMigrationPlan.schemas
-        XCTAssertEqual(schemas.count, 1)
-        XCTAssertTrue(schemas.first == CatchSchemaV1.self)
+        XCTAssertEqual(schemas.count, 2)
+        XCTAssertTrue(schemas[0] == CatchSchemaV1.self)
+        XCTAssertTrue(schemas[1] == CatchSchemaV2.self)
     }
 
-    func test_migrationPlanHasNoStagesYet() {
-        XCTAssertTrue(CatchMigrationPlan.stages.isEmpty)
+    func test_migrationPlanHasOneLightweightStage() {
+        XCTAssertEqual(CatchMigrationPlan.stages.count, 1)
     }
 
-    func test_modelContainerCanBeCreatedWithMigrationPlan() throws {
-        let schema = Schema(versionedSchema: CatchSchemaV1.self)
+    func test_v2ModelContainerCanBeCreated() throws {
+        let schema = Schema(versionedSchema: CatchSchemaV2.self)
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        let container = try ModelContainer(
-            for: schema,
-            migrationPlan: CatchMigrationPlan.self,
-            configurations: config
-        )
+        let container = try ModelContainer(for: schema, configurations: config)
         XCTAssertEqual(container.schema.entities.count, 4)
     }
 }

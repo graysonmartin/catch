@@ -1,14 +1,18 @@
 import SwiftUI
 import SwiftData
+import AuthenticationServices
 
 struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(AppleAuthService.self) private var authService
     @Query private var profiles: [UserProfile]
     @Query private var cats: [Cat]
     @Query private var encounters: [Encounter]
     @Query private var careEntries: [CareEntry]
 
     @State private var isShowingEditSheet = false
+
+    private var cloudKitService: CloudKitService = CKCloudKitService()
 
     private var profile: UserProfile? { profiles.first }
 
@@ -52,6 +56,7 @@ struct ProfileView: View {
                 avatarSection(profile)
                 infoSection(profile)
                 statsSection
+                authSection(profile)
                 joinDateSection(profile)
             }
             .padding(.vertical, 24)
@@ -130,6 +135,74 @@ struct ProfileView: View {
         Text("lurking since \(profile.createdAt.formatted(.dateTime.month(.wide).year()))")
             .font(.caption)
             .foregroundStyle(CatchTheme.textSecondary)
+    }
+
+    // MARK: - Auth Section
+
+    private func authSection(_ profile: UserProfile) -> some View {
+        Group {
+            if authService.authState.isSignedIn {
+                signedInBadge
+            } else {
+                signInPrompt(profile)
+            }
+        }
+        .padding(.horizontal, 20)
+    }
+
+    private var signedInBadge: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "checkmark.seal.fill")
+                .foregroundStyle(CatchTheme.primary)
+            Text("signed in with apple")
+                .font(.subheadline)
+                .foregroundStyle(CatchTheme.textSecondary)
+        }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 20)
+        .background(CatchTheme.cardBackground)
+        .clipShape(Capsule())
+    }
+
+    private func signInPrompt(_ profile: UserProfile) -> some View {
+        VStack(spacing: 10) {
+            SignInWithAppleButton(.signIn) { request in
+                request.requestedScopes = [.fullName, .email]
+            } onCompletion: { result in
+                handleSignIn(result, profile: profile)
+            }
+            .signInWithAppleButtonStyle(.black)
+            .frame(height: 44)
+
+            Text("sign in to back up your profile")
+                .font(.caption)
+                .foregroundStyle(CatchTheme.textSecondary)
+        }
+    }
+
+    private func handleSignIn(_ result: Result<ASAuthorization, any Error>, profile: UserProfile) {
+        do {
+            let user = try authService.processSignInResult(result)
+            profile.appleUserID = user.userIdentifier
+            syncToCloudKit(profile: profile, appleUserID: user.userIdentifier)
+        } catch {
+            // Sign-in cancelled or failed — profile still works locally
+        }
+    }
+
+    private func syncToCloudKit(profile: UserProfile, appleUserID: String) {
+        Task {
+            do {
+                let recordName = try await cloudKitService.saveUserProfile(
+                    appleUserID: appleUserID,
+                    displayName: profile.displayName,
+                    bio: profile.bio
+                )
+                profile.cloudKitRecordName = recordName
+            } catch {
+                // CloudKit sync failure is non-fatal
+            }
+        }
     }
 
     // MARK: - Empty State
