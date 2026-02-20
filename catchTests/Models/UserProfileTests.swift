@@ -22,6 +22,8 @@ final class UserProfileTests: XCTestCase {
         XCTAssertEqual(profile.displayName, "")
         XCTAssertEqual(profile.bio, "")
         XCTAssertNil(profile.avatarData)
+        XCTAssertNil(profile.appleUserID)
+        XCTAssertNil(profile.cloudKitRecordName)
         XCTAssertLessThanOrEqual(profile.createdAt, Date())
     }
 
@@ -66,5 +68,36 @@ final class UserProfileTests: XCTestCase {
         let fetched = try context.fetch(FetchDescriptor<UserProfile>())
         XCTAssertEqual(fetched.first?.displayName, "updated name")
         XCTAssertEqual(fetched.first?.bio, "new bio")
+    }
+
+    // MARK: - Apple Auth Fields
+
+    func test_appleUserID_persistsRoundTrip() throws {
+        Fixtures.userProfile(appleUserID: "apple-123", in: context)
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<UserProfile>())
+        XCTAssertEqual(fetched.first?.appleUserID, "apple-123")
+    }
+
+    func test_cloudKitRecordName_persistsRoundTrip() throws {
+        Fixtures.userProfile(cloudKitRecordName: "ck-record-456", in: context)
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<UserProfile>())
+        XCTAssertEqual(fetched.first?.cloudKitRecordName, "ck-record-456")
+    }
+
+    func test_bothAuthFields_persistTogether() throws {
+        Fixtures.userProfile(
+            appleUserID: "apple-789",
+            cloudKitRecordName: "ck-789",
+            in: context
+        )
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<UserProfile>())
+        XCTAssertEqual(fetched.first?.appleUserID, "apple-789")
+        XCTAssertEqual(fetched.first?.cloudKitRecordName, "ck-789")
     }
 }
