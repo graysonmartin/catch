@@ -70,6 +70,24 @@
 		E8CCDF6B8933605A62729069 /* AuthState.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8CA043BAE1603803A839C0C /* AuthState.swift */; };
 		E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8CCF3022A93BC29B1DF104A /* CloudKitService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8CADC30543FE5A6E743849E /* CloudKitService.swift */; };
+		E8F4B2355F8A11A2EF32CA55 /* FriendRequestStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FE06790F1B22E44E3E75E7 /* FriendRequestStatus.swift */; };
+		E8FF1B9F176A3EAC50DC57F6 /* FriendRequestStatus.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8FE06790F1B22E44E3E75E7 /* FriendRequestStatus.swift */; };
+		E8FE37135FA5B6D1B59E2E21 /* FriendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FB33849BA1CC1608944238 /* FriendRequest.swift */; };
+		E8FDDA3E2472BD41BB1CE104 /* FriendRequest.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8FB33849BA1CC1608944238 /* FriendRequest.swift */; };
+		E8F1BDEFA21144D3F6552E44 /* Friendship.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F0173057DB9F23268D7438 /* Friendship.swift */; };
+		E8FCA6B82881E7F52EB6AA2D /* Friendship.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F0173057DB9F23268D7438 /* Friendship.swift */; };
+		E8F1D71A5EA2EE57E9D0975F /* FriendServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FDE32FC6ADA722EA407B62 /* FriendServiceError.swift */; };
+		E8F43E8F17062CF35C54F595 /* FriendServiceError.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8FDE32FC6ADA722EA407B62 /* FriendServiceError.swift */; };
+		E8FF25196E48F05C46C34F3B /* FriendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FF1EB615B7BDE933BF9DD3 /* FriendService.swift */; };
+		E8F7B40EDFF28250E2700F59 /* FriendService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8FF1EB615B7BDE933BF9DD3 /* FriendService.swift */; };
+		E8F0A9D56C8F7084F8F9983D /* CKFriendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FAC0AB82C0EEE2A7384DDE /* CKFriendService.swift */; };
+		E8F0CABA23B12935849BDBFA /* CKFriendServiceSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F9FA0CD4F79207F099D585 /* CKFriendServiceSubscription.swift */; };
+		E8FBE768AA293E26781FE853 /* MockFriendService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F8E7D94765235B0C4B82FA /* MockFriendService.swift */; };
+		E8FA2E75DD79C1ADD90A77A1 /* FriendRequestStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FA761292389D344E884970 /* FriendRequestStatusTests.swift */; };
+		E8F6A8306F856661EFD59327 /* FriendRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F25CF60C34A1059B91AA6D /* FriendRequestTests.swift */; };
+		E8F46F0EC6EC6306F463E10D /* FriendshipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F9F6F4DBD4580153E4954E /* FriendshipTests.swift */; };
+		E8F2016991CA4A16125050F2 /* FriendServiceErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F17AB88FCF3B80167AC828 /* FriendServiceErrorTests.swift */; };
+		E8FDED7EA28994D373918586 /* MockFriendServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F159C90FC1352252A9F893 /* MockFriendServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -129,6 +147,19 @@
 		E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStateTests.swift; sourceTree = "<group>"; };
 		E8CB34FA781359331A3ED13A /* MockAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthService.swift; sourceTree = "<group>"; };
 		E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCloudKitService.swift; sourceTree = "<group>"; };
+		E8FE06790F1B22E44E3E75E7 /* FriendRequestStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestStatus.swift; sourceTree = "<group>"; };
+		E8FB33849BA1CC1608944238 /* FriendRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequest.swift; sourceTree = "<group>"; };
+		E8F0173057DB9F23268D7438 /* Friendship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friendship.swift; sourceTree = "<group>"; };
+		E8FDE32FC6ADA722EA407B62 /* FriendServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendServiceError.swift; sourceTree = "<group>"; };
+		E8FF1EB615B7BDE933BF9DD3 /* FriendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendService.swift; sourceTree = "<group>"; };
+		E8FAC0AB82C0EEE2A7384DDE /* CKFriendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKFriendService.swift; sourceTree = "<group>"; };
+		E8F9FA0CD4F79207F099D585 /* CKFriendServiceSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKFriendServiceSubscription.swift; sourceTree = "<group>"; };
+		E8F8E7D94765235B0C4B82FA /* MockFriendService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFriendService.swift; sourceTree = "<group>"; };
+		E8FA761292389D344E884970 /* FriendRequestStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestStatusTests.swift; sourceTree = "<group>"; };
+		E8F25CF60C34A1059B91AA6D /* FriendRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestTests.swift; sourceTree = "<group>"; };
+		E8F9F6F4DBD4580153E4954E /* FriendshipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendshipTests.swift; sourceTree = "<group>"; };
+		E8F17AB88FCF3B80167AC828 /* FriendServiceErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendServiceErrorTests.swift; sourceTree = "<group>"; };
+		E8F159C90FC1352252A9F893 /* MockFriendServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFriendServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -317,6 +348,7 @@
 			children = (
 				E8C4C76FF8B24F98B098D2F1 /* Auth */,
 				E8C29A31E399698E3B36A45C /* CloudKit */,
+				E8F315D785930EC29BFE4DFD /* Friends */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -334,6 +366,7 @@
 			children = (
 				E8CB34FA781359331A3ED13A /* MockAuthService.swift */,
 				E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */,
+				E8F8E7D94765235B0C4B82FA /* MockFriendService.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -342,9 +375,36 @@
 			isa = PBXGroup;
 			children = (
 				E8CF211849B3A47ED1640CA4 /* Auth */,
+				E8FA7C37E1C359BD93B84EFD /* Friends */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		E8F315D785930EC29BFE4DFD /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				E8FE06790F1B22E44E3E75E7 /* FriendRequestStatus.swift */,
+				E8FB33849BA1CC1608944238 /* FriendRequest.swift */,
+				E8F0173057DB9F23268D7438 /* Friendship.swift */,
+				E8FDE32FC6ADA722EA407B62 /* FriendServiceError.swift */,
+				E8FF1EB615B7BDE933BF9DD3 /* FriendService.swift */,
+				E8FAC0AB82C0EEE2A7384DDE /* CKFriendService.swift */,
+				E8F9FA0CD4F79207F099D585 /* CKFriendServiceSubscription.swift */,
+			);
+			path = Friends;
+			sourceTree = "<group>";
+		};
+		E8FA7C37E1C359BD93B84EFD /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				E8FA761292389D344E884970 /* FriendRequestStatusTests.swift */,
+				E8F25CF60C34A1059B91AA6D /* FriendRequestTests.swift */,
+				E8F9F6F4DBD4580153E4954E /* FriendshipTests.swift */,
+				E8F17AB88FCF3B80167AC828 /* FriendServiceErrorTests.swift */,
+				E8F159C90FC1352252A9F893 /* MockFriendServiceTests.swift */,
+			);
+			path = Friends;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -477,6 +537,13 @@
 				E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */,
 				E8C5DB4466426FAE9480469A /* CloudKitService.swift in Sources */,
 				E8C7737EC218A5DCA33037D1 /* CKCloudKitService.swift in Sources */,
+				E8F4B2355F8A11A2EF32CA55 /* FriendRequestStatus.swift in Sources */,
+				E8FE37135FA5B6D1B59E2E21 /* FriendRequest.swift in Sources */,
+				E8F1BDEFA21144D3F6552E44 /* Friendship.swift in Sources */,
+				E8F1D71A5EA2EE57E9D0975F /* FriendServiceError.swift in Sources */,
+				E8FF25196E48F05C46C34F3B /* FriendService.swift in Sources */,
+				E8F0A9D56C8F7084F8F9983D /* CKFriendService.swift in Sources */,
+				E8F0CABA23B12935849BDBFA /* CKFriendServiceSubscription.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,6 +573,17 @@
 				E8CCDF6B8933605A62729069 /* AuthState.swift in Sources (catchTests) */,
 				E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources (catchTests) */,
 				E8CCF3022A93BC29B1DF104A /* CloudKitService.swift in Sources (catchTests) */,
+				E8FF1B9F176A3EAC50DC57F6 /* FriendRequestStatus.swift in Sources (catchTests) */,
+				E8FDDA3E2472BD41BB1CE104 /* FriendRequest.swift in Sources (catchTests) */,
+				E8FCA6B82881E7F52EB6AA2D /* Friendship.swift in Sources (catchTests) */,
+				E8F43E8F17062CF35C54F595 /* FriendServiceError.swift in Sources (catchTests) */,
+				E8F7B40EDFF28250E2700F59 /* FriendService.swift in Sources (catchTests) */,
+				E8FBE768AA293E26781FE853 /* MockFriendService.swift in Sources */,
+				E8FA2E75DD79C1ADD90A77A1 /* FriendRequestStatusTests.swift in Sources */,
+				E8F6A8306F856661EFD59327 /* FriendRequestTests.swift in Sources */,
+				E8F46F0EC6EC6306F463E10D /* FriendshipTests.swift in Sources */,
+				E8F2016991CA4A16125050F2 /* FriendServiceErrorTests.swift in Sources */,
+				E8FDED7EA28994D373918586 /* MockFriendServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
