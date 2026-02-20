@@ -5,7 +5,8 @@ struct AddCatView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(AppleAuthService.self) private var authService: AppleAuthService?
-    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
+    @Environment(CKCatRepository.self) private var catRepository: CKCatRepository?
+    @Environment(CKEncounterRepository.self) private var encounterRepository: CKEncounterRepository?
 
     @State private var name = ""
     @State private var estimatedAge = ""
@@ -80,7 +81,7 @@ struct AddCatView: View {
 
     private func syncToCloud(cat: Cat, encounter: Encounter) {
         guard let userID = authService?.authState.user?.userIdentifier,
-              let syncService = catSyncService else { return }
+              let catRepository else { return }
 
         let catPayload = CatSyncPayload(
             recordName: nil,
@@ -96,7 +97,7 @@ struct AddCatView: View {
         )
 
         Task {
-            if let recordName = try? await syncService.saveCat(catPayload, ownerID: userID) {
+            if let recordName = try? await catRepository.save(catPayload, ownerID: userID) {
                 cat.cloudKitRecordName = recordName
 
                 let encPayload = EncounterSyncPayload(
@@ -109,7 +110,7 @@ struct AddCatView: View {
                     notes: encounter.notes,
                     photos: encounter.photos
                 )
-                if let encRecord = try? await syncService.saveEncounter(encPayload, ownerID: userID) {
+                if let encRecord = try? await encounterRepository?.save(encPayload, ownerID: userID) {
                     encounter.cloudKitRecordName = encRecord
                 }
             }

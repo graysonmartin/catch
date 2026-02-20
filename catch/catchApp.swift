@@ -6,7 +6,8 @@ struct catchApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var authService = AppleAuthService()
     @State private var followService = CKFollowService()
-    @State private var catSyncService = CKCatSyncService()
+    @State private var catRepository = CKCatRepository()
+    @State private var encounterRepository = CKEncounterRepository()
     let modelContainer: ModelContainer
 
     init() {
@@ -29,7 +30,8 @@ struct catchApp: App {
                 ContentView()
                     .environment(authService)
                     .environment(followService)
-                    .environment(catSyncService)
+                    .environment(catRepository)
+                    .environment(encounterRepository)
                     .task {
                         await authService.checkCredentialState()
                     }

@@ -3,7 +3,7 @@ import SwiftUI
 struct EditCatView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AppleAuthService.self) private var authService: AppleAuthService?
-    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
+    @Environment(CKCatRepository.self) private var catRepository: CKCatRepository?
     @Bindable var cat: Cat
 
     @State private var name: String
@@ -70,7 +70,7 @@ struct EditCatView: View {
 
     private func syncToCloud() {
         guard let userID = authService?.authState.user?.userIdentifier,
-              let syncService = catSyncService,
+              let catRepository,
               cat.cloudKitRecordName != nil else { return }
 
         let payload = CatSyncPayload(
@@ -87,7 +87,7 @@ struct EditCatView: View {
         )
 
         Task {
-            _ = try? await syncService.saveCat(payload, ownerID: userID)
+            _ = try? await catRepository.save(payload, ownerID: userID)
         }
     }
 }

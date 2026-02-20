@@ -3,7 +3,7 @@ import SwiftUI
 struct EditEncounterView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AppleAuthService.self) private var authService: AppleAuthService?
-    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
+    @Environment(CKEncounterRepository.self) private var encounterRepository: CKEncounterRepository?
     @Bindable var encounter: Encounter
 
     @State private var date: Date
@@ -73,7 +73,7 @@ struct EditEncounterView: View {
 
     private func syncToCloud() {
         guard let userID = authService?.authState.user?.userIdentifier,
-              let syncService = catSyncService,
+              let encounterRepository,
               let encRecordName = encounter.cloudKitRecordName,
               let catRecordName = encounter.cat?.cloudKitRecordName else { return }
 
@@ -89,7 +89,7 @@ struct EditEncounterView: View {
         )
 
         Task {
-            _ = try? await syncService.saveEncounter(payload, ownerID: userID)
+            _ = try? await encounterRepository.save(payload, ownerID: userID)
         }
     }
 }

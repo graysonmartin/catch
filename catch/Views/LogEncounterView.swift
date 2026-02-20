@@ -5,7 +5,7 @@ struct LogEncounterView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(AppleAuthService.self) private var authService: AppleAuthService?
-    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
+    @Environment(CKEncounterRepository.self) private var encounterRepository: CKEncounterRepository?
     @Query(sort: \Cat.name) private var cats: [Cat]
 
     @State private var selectedCat: Cat?
@@ -136,7 +136,7 @@ struct LogEncounterView: View {
 
     private func syncToCloud(encounter: Encounter, cat: Cat) {
         guard let userID = authService?.authState.user?.userIdentifier,
-              let syncService = catSyncService,
+              let encounterRepository,
               let catRecordName = cat.cloudKitRecordName else { return }
 
         let payload = EncounterSyncPayload(
@@ -151,7 +151,7 @@ struct LogEncounterView: View {
         )
 
         Task {
-            if let recordName = try? await syncService.saveEncounter(payload, ownerID: userID) {
+            if let recordName = try? await encounterRepository.save(payload, ownerID: userID) {
                 encounter.cloudKitRecordName = recordName
             }
         }
