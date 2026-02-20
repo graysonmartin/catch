@@ -5,6 +5,7 @@ import SwiftData
 struct catchApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var authService = AppleAuthService()
+    @State private var friendService = CKFriendService()
     let modelContainer: ModelContainer
 
     init() {
@@ -26,6 +27,7 @@ struct catchApp: App {
             if hasCompletedOnboarding {
                 ContentView()
                     .environment(authService)
+                    .environment(friendService)
                     .task {
                         await authService.checkCredentialState()
                     }

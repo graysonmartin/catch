@@ -8,7 +8,8 @@ final class AppleAuthService: AuthService {
 
     private static let userDefaultsKey = "catch.appleUser"
 
-    private var revocationObserver: (any NSObjectProtocol)?
+    @ObservationIgnored
+    private nonisolated(unsafe) var revocationObserver: (any NSObjectProtocol)?
 
     init() {
         if let user = Self.loadPersistedUser() {
