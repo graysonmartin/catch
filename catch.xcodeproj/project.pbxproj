@@ -90,6 +90,19 @@
 		E8E60000000D /* FollowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000D /* FollowTests.swift */; };
 		E8E60000000E /* FollowServiceErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000E /* FollowServiceErrorTests.swift */; };
 		E8E60000000F /* MockFollowServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000F /* MockFollowServiceTests.swift */; };
+		E8F600000001 /* CatSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000001 /* CatSyncService.swift */; };
+		E8F600000002 /* CatSyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000002 /* CatSyncPayload.swift */; };
+		E8F600000003 /* CloudCat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000003 /* CloudCat.swift */; };
+		E8F600000004 /* CatSyncServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000004 /* CatSyncServiceError.swift */; };
+		E8F600000005 /* CKCatSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000005 /* CKCatSyncService.swift */; };
+		E8F600000011 /* CatSyncService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000001 /* CatSyncService.swift */; };
+		E8F600000012 /* CatSyncPayload.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000002 /* CatSyncPayload.swift */; };
+		E8F600000013 /* CloudCat.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000003 /* CloudCat.swift */; };
+		E8F600000014 /* CatSyncServiceError.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000004 /* CatSyncServiceError.swift */; };
+		E8F600000015 /* CKCatSyncService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000005 /* CKCatSyncService.swift */; };
+		E8F60000000B /* MockCatSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000000B /* MockCatSyncService.swift */; };
+		E8F60000000C /* MockCatSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000000C /* MockCatSyncServiceTests.swift */; };
+		E8F60000000D /* CatSyncServiceErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000000D /* CatSyncServiceErrorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -165,6 +178,14 @@
 		E8E50000000D /* FollowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTests.swift; sourceTree = "<group>"; };
 		E8E50000000E /* FollowServiceErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowServiceErrorTests.swift; sourceTree = "<group>"; };
 		E8E50000000F /* MockFollowServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFollowServiceTests.swift; sourceTree = "<group>"; };
+		E8F500000001 /* CatSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSyncService.swift; sourceTree = "<group>"; };
+		E8F500000002 /* CatSyncPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSyncPayload.swift; sourceTree = "<group>"; };
+		E8F500000003 /* CloudCat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudCat.swift; sourceTree = "<group>"; };
+		E8F500000004 /* CatSyncServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSyncServiceError.swift; sourceTree = "<group>"; };
+		E8F500000005 /* CKCatSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatSyncService.swift; sourceTree = "<group>"; };
+		E8F50000000B /* MockCatSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatSyncService.swift; sourceTree = "<group>"; };
+		E8F50000000C /* MockCatSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatSyncServiceTests.swift; sourceTree = "<group>"; };
+		E8F50000000D /* CatSyncServiceErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSyncServiceErrorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -354,6 +375,7 @@
 			children = (
 				E8C4C76FF8B24F98B098D2F1 /* Auth */,
 				E8C29A31E399698E3B36A45C /* CloudKit */,
+				E8F500000020 /* CatSync */,
 				E8E500000020 /* Follow */,
 			);
 			path = Services;
@@ -372,6 +394,7 @@
 			children = (
 				E8CB34FA781359331A3ED13A /* MockAuthService.swift */,
 				E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */,
+				E8F50000000B /* MockCatSyncService.swift */,
 				E8E50000000B /* MockFollowService.swift */,
 			);
 			path = Mocks;
@@ -382,6 +405,7 @@
 			children = (
 				E8CF211849B3A47ED1640CA4 /* Auth */,
 				E8D100000020 /* CloudKit */,
+				E8F500000022 /* CatSync */,
 				E8E500000022 /* Follow */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 			);
@@ -394,6 +418,18 @@
 				E8D100000005 /* CloudKitServiceSearchTests.swift */,
 			);
 			path = CloudKit;
+			sourceTree = "<group>";
+		};
+		E8F500000020 /* CatSync */ = {
+			isa = PBXGroup;
+			children = (
+				E8F500000001 /* CatSyncService.swift */,
+				E8F500000002 /* CatSyncPayload.swift */,
+				E8F500000003 /* CloudCat.swift */,
+				E8F500000004 /* CatSyncServiceError.swift */,
+				E8F500000005 /* CKCatSyncService.swift */,
+			);
+			path = CatSync;
 			sourceTree = "<group>";
 		};
 		E8E500000020 /* Follow */ = {
@@ -418,6 +454,15 @@
 				E8E50000000A /* PendingRequestRowView.swift */,
 			);
 			path = Social;
+			sourceTree = "<group>";
+		};
+		E8F500000022 /* CatSync */ = {
+			isa = PBXGroup;
+			children = (
+				E8F50000000C /* MockCatSyncServiceTests.swift */,
+				E8F50000000D /* CatSyncServiceErrorTests.swift */,
+			);
+			path = CatSync;
 			sourceTree = "<group>";
 		};
 		E8E500000022 /* Follow */ = {
@@ -567,6 +612,11 @@
 				E8E600000004 /* FollowService.swift in Sources */,
 				E8E600000005 /* CKFollowService.swift in Sources */,
 				E8E600000006 /* CKFollowServiceSubscription.swift in Sources */,
+				E8F600000001 /* CatSyncService.swift in Sources */,
+				E8F600000002 /* CatSyncPayload.swift in Sources */,
+				E8F600000003 /* CloudCat.swift in Sources */,
+				E8F600000004 /* CatSyncServiceError.swift in Sources */,
+				E8F600000005 /* CKCatSyncService.swift in Sources */,
 				E8E600000007 /* SocialView.swift in Sources */,
 				E8E600000008 /* FindPeopleView.swift in Sources */,
 				E8E600000009 /* FollowRowView.swift in Sources */,
@@ -610,6 +660,14 @@
 				E8E60000000D /* FollowTests.swift in Sources */,
 				E8E60000000E /* FollowServiceErrorTests.swift in Sources */,
 				E8E60000000F /* MockFollowServiceTests.swift in Sources */,
+				E8F600000011 /* CatSyncService.swift in Sources (catchTests) */,
+				E8F600000012 /* CatSyncPayload.swift in Sources (catchTests) */,
+				E8F600000013 /* CloudCat.swift in Sources (catchTests) */,
+				E8F600000014 /* CatSyncServiceError.swift in Sources (catchTests) */,
+				E8F600000015 /* CKCatSyncService.swift in Sources (catchTests) */,
+				E8F60000000B /* MockCatSyncService.swift in Sources */,
+				E8F60000000C /* MockCatSyncServiceTests.swift in Sources */,
+				E8F60000000D /* CatSyncServiceErrorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

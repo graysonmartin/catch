@@ -13,14 +13,25 @@ extension Location {
 
 @MainActor
 enum Fixtures {
-    static func cat(name: String = "Mr. Whiskers", in context: ModelContext) -> Cat {
+    static func cat(
+        name: String = "Mr. Whiskers",
+        cloudKitRecordName: String? = nil,
+        in context: ModelContext
+    ) -> Cat {
         let cat = Cat(name: name)
+        cat.cloudKitRecordName = cloudKitRecordName
         context.insert(cat)
         return cat
     }
 
-    static func encounter(for cat: Cat, photos: [Data] = [], in context: ModelContext) -> Encounter {
+    static func encounter(
+        for cat: Cat,
+        photos: [Data] = [],
+        cloudKitRecordName: String? = nil,
+        in context: ModelContext
+    ) -> Encounter {
         let encounter = Encounter(cat: cat, photos: photos)
+        encounter.cloudKitRecordName = cloudKitRecordName
         context.insert(encounter)
         return encounter
     }

@@ -6,11 +6,12 @@ struct catchApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var authService = AppleAuthService()
     @State private var followService = CKFollowService()
+    @State private var catSyncService = CKCatSyncService()
     let modelContainer: ModelContainer
 
     init() {
         do {
-            let schema = Schema(versionedSchema: CatchSchemaV1.self)
+            let schema = Schema(versionedSchema: CatchSchemaV2.self)
             let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
             modelContainer = try ModelContainer(
                 for: schema,
@@ -28,6 +29,7 @@ struct catchApp: App {
                 ContentView()
                     .environment(authService)
                     .environment(followService)
+                    .environment(catSyncService)
                     .task {
                         await authService.checkCredentialState()
                     }

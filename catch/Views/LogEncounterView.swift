@@ -4,6 +4,8 @@ import SwiftData
 struct LogEncounterView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(AppleAuthService.self) private var authService: AppleAuthService?
+    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
     @Query(sort: \Cat.name) private var cats: [Cat]
 
     @State private var selectedCat: Cat?
@@ -128,6 +130,30 @@ struct LogEncounterView: View {
             photos: photos
         )
         modelContext.insert(encounter)
+        syncToCloud(encounter: encounter, cat: cat)
         dismiss()
+    }
+
+    private func syncToCloud(encounter: Encounter, cat: Cat) {
+        guard let userID = authService?.authState.user?.userIdentifier,
+              let syncService = catSyncService,
+              let catRecordName = cat.cloudKitRecordName else { return }
+
+        let payload = EncounterSyncPayload(
+            recordName: nil,
+            catRecordName: catRecordName,
+            date: encounter.date,
+            locationName: encounter.location.name,
+            locationLatitude: encounter.location.latitude,
+            locationLongitude: encounter.location.longitude,
+            notes: encounter.notes,
+            photos: encounter.photos
+        )
+
+        Task {
+            if let recordName = try? await syncService.saveEncounter(payload, ownerID: userID) {
+                encounter.cloudKitRecordName = recordName
+            }
+        }
     }
 }
