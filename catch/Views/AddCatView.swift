@@ -5,19 +5,24 @@ struct AddCatView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
+    @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
 
     @State private var name = ""
+    @State private var breed: String?
     @State private var estimatedAge = ""
     @State private var location = Location.empty
     @State private var notes = ""
     @State private var isOwned = false
     @State private var photos: [Data] = []
+    @State private var breedSuggestion: BreedPrediction?
+    @State private var isDismissedSuggestion = false
 
     var body: some View {
         NavigationStack {
             Form {
                 Section("Cat Info") {
                     TextField("Name", text: $name)
+                    BreedPickerView(breed: $breed)
                     TextField("Estimated Age", text: $estimatedAge)
                     LocationPickerView(location: $location)
                     Toggle("I own this cat", isOn: $isOwned)
@@ -25,6 +30,20 @@ struct AddCatView: View {
 
                 Section("Photos") {
                     PhotoPickerView(selectedPhotos: $photos)
+                    if breed == nil && !isDismissedSuggestion {
+                        BreedSuggestionView(
+                            prediction: breedSuggestion,
+                            isClassifying: breedClassifier?.isClassifying ?? false,
+                            onConfirm: { confirmedBreed in
+                                breed = confirmedBreed
+                                breedSuggestion = nil
+                            },
+                            onDismiss: {
+                                isDismissedSuggestion = true
+                                breedSuggestion = nil
+                            }
+                        )
+                    }
                 }
 
                 Section("Notes") {
@@ -50,12 +69,19 @@ struct AddCatView: View {
                         .fontWeight(.semibold)
                 }
             }
+            .onChange(of: photos) {
+                guard breed == nil, !isDismissedSuggestion, !photos.isEmpty else { return }
+                Task {
+                    breedSuggestion = await breedClassifier?.classifyBest(imageDataArray: photos)
+                }
+            }
         }
     }
 
     private func save() {
         let cat = Cat(
             name: name.trimmingCharacters(in: .whitespaces),
+            breed: breed,
             estimatedAge: estimatedAge,
             location: location,
             notes: notes,

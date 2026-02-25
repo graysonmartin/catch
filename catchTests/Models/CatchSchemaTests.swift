@@ -66,18 +66,42 @@ final class CatchSchemaTests: XCTestCase {
         XCTAssertEqual(container.schema.entities.count, 4)
     }
 
+    // MARK: - V4
+
+    func test_v4VersionIdentifier_is4_0_0() {
+        let version = CatchSchemaV4.versionIdentifier
+        XCTAssertEqual(version, Schema.Version(4, 0, 0))
+    }
+
+    func test_v4DeclaresAllFourModelTypes() {
+        let models = CatchSchemaV4.models
+        XCTAssertEqual(models.count, 4)
+        XCTAssertTrue(models.contains(where: { $0 == Cat.self }))
+        XCTAssertTrue(models.contains(where: { $0 == Encounter.self }))
+        XCTAssertTrue(models.contains(where: { $0 == CareEntry.self }))
+        XCTAssertTrue(models.contains(where: { $0 == UserProfile.self }))
+    }
+
+    func test_v4ModelContainerCanBeCreated() throws {
+        let schema = Schema(versionedSchema: CatchSchemaV4.self)
+        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: schema, configurations: config)
+        XCTAssertEqual(container.schema.entities.count, 4)
+    }
+
     // MARK: - Migration Plan
 
-    func test_migrationPlanIncludesThreeSchemas() {
+    func test_migrationPlanIncludesFourSchemas() {
         let schemas = CatchMigrationPlan.schemas
-        XCTAssertEqual(schemas.count, 3)
+        XCTAssertEqual(schemas.count, 4)
         XCTAssertTrue(schemas[0] == CatchSchemaV1.self)
         XCTAssertTrue(schemas[1] == CatchSchemaV2.self)
         XCTAssertTrue(schemas[2] == CatchSchemaV3.self)
+        XCTAssertTrue(schemas[3] == CatchSchemaV4.self)
     }
 
-    func test_migrationPlanHasTwoStages() {
-        XCTAssertEqual(CatchMigrationPlan.stages.count, 2)
+    func test_migrationPlanHasThreeStages() {
+        XCTAssertEqual(CatchMigrationPlan.stages.count, 3)
     }
 
     func test_v1ModelContainerCanBeCreated() throws {

@@ -36,6 +36,7 @@ final class CKCatSyncService: CatSyncService {
         let catPayload = CatSyncPayload(
             recordName: nil,
             name: cat.name,
+            breed: cat.breed,
             estimatedAge: cat.estimatedAge,
             locationName: cat.location.name,
             locationLatitude: cat.location.latitude,
@@ -80,6 +81,7 @@ final class CKCatSyncService: CatSyncService {
         let payload = CatSyncPayload(
             recordName: cat.cloudKitRecordName,
             name: cat.name,
+            breed: cat.breed,
             estimatedAge: cat.estimatedAge,
             locationName: cat.location.name,
             locationLatitude: cat.location.latitude,

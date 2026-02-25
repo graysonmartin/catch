@@ -7,6 +7,7 @@ final class MockCatRepositoryTests: XCTestCase {
         CatSyncPayload(
             recordName: nil,
             name: "Test Cat",
+            breed: nil,
             estimatedAge: "2 years",
             locationName: "Park",
             locationLatitude: 37.0,
@@ -75,9 +76,9 @@ final class MockCatRepositoryTests: XCTestCase {
         mock.fetchAllResult = [
             CloudCat(
                 recordName: "r1", ownerID: "u1", name: "Whiskers",
-                estimatedAge: "", locationName: "", locationLatitude: nil,
-                locationLongitude: nil, notes: "", isOwned: false,
-                createdAt: Date(), photos: []
+                breed: "", estimatedAge: "", locationName: "",
+                locationLatitude: nil, locationLongitude: nil,
+                notes: "", isOwned: false, createdAt: Date(), photos: []
             )
         ]
 

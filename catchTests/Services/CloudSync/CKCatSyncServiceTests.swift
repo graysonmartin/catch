@@ -29,6 +29,17 @@ final class CKCatSyncServiceTests: XCTestCase {
 
     // MARK: - syncNewCat
 
+    func test_syncNewCat_propagatesBreedInPayload() async {
+        let sut = makeSUT()
+        let cat = Fixtures.cat(name: "Fancy", breed: "Persian", in: context)
+        let encounter = Fixtures.encounter(for: cat, in: context)
+
+        await sut.syncNewCat(cat, firstEncounter: encounter)
+
+        XCTAssertEqual(mockCatRepo.saveCalls.count, 1)
+        XCTAssertEqual(mockCatRepo.saveCalls[0].payload.breed, "Persian")
+    }
+
     func test_syncNewCat_savesCatThenEncounterSequentially() async {
         let sut = makeSUT()
         let cat = Fixtures.cat(name: "Mochi", in: context)

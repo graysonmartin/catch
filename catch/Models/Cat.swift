@@ -4,6 +4,7 @@ import SwiftData
 @Model
 final class Cat {
     var name: String
+    var breed: String?
     var estimatedAge: String
     var location: Location
     var notes: String
@@ -22,6 +23,7 @@ final class Cat {
 
     init(
         name: String,
+        breed: String? = nil,
         estimatedAge: String = "",
         location: Location = .empty,
         notes: String = "",
@@ -29,6 +31,7 @@ final class Cat {
         photos: [Data] = []
     ) {
         self.name = name
+        self.breed = breed
         self.estimatedAge = estimatedAge
         self.location = location
         self.notes = notes
