@@ -42,6 +42,7 @@
 		E8000001AA000053 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000061 /* ProfileView.swift */; };
 		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
 		E8000001AA000055 /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
+		E8000001AA000056 /* VisibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000080 /* VisibilitySettings.swift */; };
 		E8000001BB000002 /* DataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001BB000001 /* DataSeeder.swift */; };
 		E8A100000001 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000010 /* LocationTests.swift */; };
 		E8A100000002 /* CareEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000011 /* CareEntryTests.swift */; };
@@ -59,6 +60,8 @@
 		E8A10000000E /* UserProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000018 /* UserProfileTests.swift */; };
 		E8A10000000F /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
 		E8A100000025 /* CatchSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000019 /* CatchSchemaTests.swift */; };
+		E8A100000026 /* VisibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000080 /* VisibilitySettings.swift */; };
+		E8A100000027 /* VisibilitySettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A10000001A /* VisibilitySettingsTests.swift */; };
 		E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */; };
@@ -184,6 +187,7 @@
 		E8000001AA000061 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		E8000001AA000062 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		E8000001AA000070 /* CatchSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchema.swift; sourceTree = "<group>"; };
+		E8000001AA000080 /* VisibilitySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibilitySettings.swift; sourceTree = "<group>"; };
 		E8000001BB000001 /* DataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSeeder.swift; sourceTree = "<group>"; };
 		E8A100000010 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
 		E8A100000011 /* CareEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareEntryTests.swift; sourceTree = "<group>"; };
@@ -195,6 +199,7 @@
 		E8A100000017 /* ImageDownsamplerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownsamplerTests.swift; sourceTree = "<group>"; };
 		E8A100000018 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
 		E8A100000019 /* CatchSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchemaTests.swift; sourceTree = "<group>"; };
+		E8A10000001A /* VisibilitySettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibilitySettingsTests.swift; sourceTree = "<group>"; };
 		E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStateTests.swift; sourceTree = "<group>"; };
 		E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCloudKitService.swift; sourceTree = "<group>"; };
 		E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthService.swift; sourceTree = "<group>"; };
@@ -329,6 +334,7 @@
 				E8000001AA000027 /* Location.swift */,
 				E8000001AA000060 /* UserProfile.swift */,
 				E8000001AA000070 /* CatchSchema.swift */,
+				E8000001AA000080 /* VisibilitySettings.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -400,6 +406,7 @@
 				E8A100000013 /* EncounterTests.swift */,
 				E8A100000018 /* UserProfileTests.swift */,
 				E8A100000019 /* CatchSchemaTests.swift */,
+				E8A10000001A /* VisibilitySettingsTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -721,6 +728,7 @@
 				E8000001AA000053 /* ProfileView.swift in Sources */,
 				E8000001AA000054 /* EditProfileView.swift in Sources */,
 				E8000001AA000055 /* CatchSchema.swift in Sources */,
+				E8000001AA000056 /* VisibilitySettings.swift in Sources */,
 				E8CE692EDFCE0B5ECDC4C1DD /* AuthState.swift in Sources */,
 				E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */,
 				E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */,
@@ -783,6 +791,8 @@
 				E8A10000000E /* UserProfileTests.swift in Sources */,
 				E8A10000000F /* CatchSchema.swift in Sources */,
 				E8A100000025 /* CatchSchemaTests.swift in Sources */,
+				E8A100000026 /* VisibilitySettings.swift in Sources */,
+				E8A100000027 /* VisibilitySettingsTests.swift in Sources */,
 				E8C6A3B73A0CC162F803D7CA /* AuthStateTests.swift in Sources */,
 				E8CF9FE9B8D8EB743AC8A414 /* MockAuthService.swift in Sources */,
 				E8C45823BB168636E9BDC605 /* MockCloudKitService.swift in Sources */,

@@ -122,4 +122,29 @@ final class UserProfileTests: XCTestCase {
         let profile = UserProfile(isPrivate: true)
         XCTAssertTrue(profile.isPrivate)
     }
+
+    // MARK: - Visibility Settings
+
+    func test_visibilitySettings_defaultsToAllTrue() {
+        let profile = UserProfile()
+        XCTAssertEqual(profile.visibilitySettings, .default)
+        XCTAssertTrue(profile.visibilitySettings.showCats)
+        XCTAssertTrue(profile.visibilitySettings.showEncounters)
+        XCTAssertTrue(profile.visibilitySettings.showCareEntries)
+    }
+
+    func test_visibilitySettings_persistsRoundTrip() throws {
+        let custom = VisibilitySettings(showCats: false, showEncounters: true, showCareEntries: false)
+        let profile = Fixtures.userProfile(visibilitySettings: custom, in: context)
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<UserProfile>())
+        XCTAssertEqual(fetched.first?.visibilitySettings, custom)
+    }
+
+    func test_visibilitySettings_canBeSetViaInit() {
+        let custom = VisibilitySettings(showCats: false, showEncounters: false, showCareEntries: true)
+        let profile = UserProfile(visibilitySettings: custom)
+        XCTAssertEqual(profile.visibilitySettings, custom)
+    }
 }

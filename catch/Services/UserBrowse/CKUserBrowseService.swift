@@ -10,6 +10,8 @@ final class CKUserBrowseService: UserBrowseService {
     private let cloudKitService: any CloudKitService
     private let catRepository: any CatRepository
     private let encounterRepository: any EncounterRepository
+    private let followService: any FollowService
+    private let currentUserIDProvider: () -> String?
 
     private var cache: [String: UserBrowseData] = [:]
     private var displayNameCache: [String: String] = [:]
@@ -17,11 +19,15 @@ final class CKUserBrowseService: UserBrowseService {
     init(
         cloudKitService: any CloudKitService,
         catRepository: any CatRepository,
-        encounterRepository: any EncounterRepository
+        encounterRepository: any EncounterRepository,
+        followService: any FollowService,
+        currentUserIDProvider: @escaping () -> String?
     ) {
         self.cloudKitService = cloudKitService
         self.catRepository = catRepository
         self.encounterRepository = encounterRepository
+        self.followService = followService
+        self.currentUserIDProvider = currentUserIDProvider
     }
 
     func fetchUserData(userID: String) async throws -> UserBrowseData {
@@ -40,6 +46,21 @@ final class CKUserBrowseService: UserBrowseService {
         }
 
         displayNameCache[userID] = profile.displayName
+
+        let currentUserID = currentUserIDProvider()
+        let isOwnProfile = currentUserID == userID
+        let isPrivateAndNotFollowing = profile.isPrivate && !isOwnProfile && !followService.isFollowing(userID)
+
+        if isPrivateAndNotFollowing {
+            let data = UserBrowseData(
+                profile: profile,
+                cats: [],
+                encounters: [],
+                fetchedAt: Date()
+            )
+            cache[userID] = data
+            return data
+        }
 
         do {
             async let cats = catRepository.fetchAll(ownerID: userID)

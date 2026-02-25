@@ -44,7 +44,9 @@ struct ProfileView: View {
                 get: { isShowingEditSheet ? profile : nil },
                 set: { _ in isShowingEditSheet = false }
             )) { profile in
-                EditProfileView(profile: profile)
+                EditProfileView(profile: profile) { updatedProfile in
+                    syncProfileToCloudKit(updatedProfile)
+                }
             }
         }
     }
@@ -263,6 +265,11 @@ struct ProfileView: View {
                 // CloudKit sync failure is non-fatal
             }
         }
+    }
+
+    private func syncProfileToCloudKit(_ profile: UserProfile) {
+        guard let appleUserID = profile.appleUserID else { return }
+        syncToCloudKit(profile: profile, appleUserID: appleUserID)
     }
 
     // MARK: - Empty State

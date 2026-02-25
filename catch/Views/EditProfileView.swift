@@ -5,19 +5,24 @@ struct EditProfileView: View {
     @Environment(\.dismiss) private var dismiss
     @Bindable var profile: UserProfile
 
+    var onSave: ((UserProfile) -> Void)?
+
     @State private var displayName: String
     @State private var bio: String
     @State private var avatarData: Data?
     @State private var isPrivate: Bool
+    @State private var visibilitySettings: VisibilitySettings
     @State private var pickerItem: PhotosPickerItem?
     @State private var isShowingPhotoOptions = false
 
-    init(profile: UserProfile) {
+    init(profile: UserProfile, onSave: ((UserProfile) -> Void)? = nil) {
         self.profile = profile
+        self.onSave = onSave
         _displayName = State(initialValue: profile.displayName)
         _bio = State(initialValue: profile.bio)
         _avatarData = State(initialValue: profile.avatarData)
         _isPrivate = State(initialValue: profile.isPrivate)
+        _visibilitySettings = State(initialValue: profile.visibilitySettings)
     }
 
     var body: some View {
@@ -26,6 +31,9 @@ struct EditProfileView: View {
                 avatarSection
                 infoSection
                 privacySection
+                if !isPrivate {
+                    visibilitySection
+                }
             }
             .navigationTitle("edit profile")
             .navigationBarTitleDisplayMode(.inline)
@@ -96,7 +104,19 @@ struct EditProfileView: View {
         Section {
             Toggle("private profile", isOn: $isPrivate)
         } footer: {
-            Text("when private, people have to request to follow you. going private won't auto-approve existing requests.")
+            Text("when private, people have to send a request before they can see your cats. you're basically famous.")
+        }
+    }
+
+    private var visibilitySection: some View {
+        Section {
+            Toggle("show cats", isOn: $visibilitySettings.showCats)
+            Toggle("show encounters", isOn: $visibilitySettings.showEncounters)
+            Toggle("show care log", isOn: $visibilitySettings.showCareEntries)
+        } header: {
+            Text("visibility")
+        } footer: {
+            Text("controls what people see on your public profile. private mode overrides everything.")
         }
     }
 
@@ -107,6 +127,8 @@ struct EditProfileView: View {
         profile.bio = bio.trimmingCharacters(in: .whitespaces)
         profile.avatarData = avatarData
         profile.isPrivate = isPrivate
+        profile.visibilitySettings = visibilitySettings
+        onSave?(profile)
         dismiss()
     }
 

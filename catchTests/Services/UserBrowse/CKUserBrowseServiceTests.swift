@@ -7,16 +7,22 @@ final class CKUserBrowseServiceTests: XCTestCase {
     private var mockCloudKit: MockCloudKitService!
     private var mockCatRepo: MockCatRepository!
     private var mockEncounterRepo: MockEncounterRepository!
+    private var mockFollowService: MockFollowService!
+    private var currentUserID: String?
 
     override func setUp() {
         super.setUp()
         mockCloudKit = MockCloudKitService()
         mockCatRepo = MockCatRepository()
         mockEncounterRepo = MockEncounterRepository()
+        mockFollowService = MockFollowService()
+        currentUserID = "current-user"
         sut = CKUserBrowseService(
             cloudKitService: mockCloudKit,
             catRepository: mockCatRepo,
-            encounterRepository: mockEncounterRepo
+            encounterRepository: mockEncounterRepo,
+            followService: mockFollowService,
+            currentUserIDProvider: { [weak self] in self?.currentUserID }
         )
     }
 
@@ -25,6 +31,8 @@ final class CKUserBrowseServiceTests: XCTestCase {
         mockCloudKit = nil
         mockCatRepo = nil
         mockEncounterRepo = nil
+        mockFollowService = nil
+        currentUserID = nil
         super.tearDown()
     }
 
@@ -115,6 +123,147 @@ final class CKUserBrowseServiceTests: XCTestCase {
         } catch {
             XCTFail("unexpected error: \(error)")
         }
+    }
+
+    // MARK: - Privacy enforcement
+
+    func testPrivateProfileReturnsEmptyDataWhenNotFollowing() async throws {
+        mockCloudKit.fetchResult = CloudUserProfile(
+            recordName: "rec-priv",
+            appleUserID: "private-user",
+            displayName: "shiv",
+            bio: "none of your business",
+            isPrivate: true
+        )
+        mockCatRepo.fetchAllResult = [
+            CloudCat(
+                recordName: "cat-hidden",
+                ownerID: "private-user",
+                name: "Ghost",
+                estimatedAge: "?",
+                locationName: "classified",
+                locationLatitude: nil,
+                locationLongitude: nil,
+                notes: "",
+                isOwned: true,
+                createdAt: Date(),
+                photos: []
+            )
+        ]
+        mockEncounterRepo.fetchAllResult = [
+            CloudEncounter(
+                recordName: "enc-hidden",
+                ownerID: "private-user",
+                catRecordName: "cat-hidden",
+                date: Date(),
+                locationName: "classified",
+                locationLatitude: nil,
+                locationLongitude: nil,
+                notes: "redacted",
+                photos: []
+            )
+        ]
+
+        let data = try await sut.fetchUserData(userID: "private-user")
+
+        XCTAssertEqual(data.profile.displayName, "shiv")
+        XCTAssertTrue(data.profile.isPrivate)
+        XCTAssertTrue(data.cats.isEmpty, "cats should be empty for private profile when not following")
+        XCTAssertTrue(data.encounters.isEmpty, "encounters should be empty for private profile when not following")
+        XCTAssertTrue(mockCatRepo.fetchAllCalls.isEmpty, "should not fetch cats for private profile")
+        XCTAssertTrue(mockEncounterRepo.fetchAllCalls.isEmpty, "should not fetch encounters for private profile")
+    }
+
+    func testPrivateProfileReturnsContentWhenFollowing() async throws {
+        mockFollowService.simulateFollowing(followeeID: "private-user")
+        mockCloudKit.fetchResult = CloudUserProfile(
+            recordName: "rec-priv",
+            appleUserID: "private-user",
+            displayName: "shiv",
+            bio: "you earned this",
+            isPrivate: true
+        )
+        let cat = CloudCat(
+            recordName: "cat-visible",
+            ownerID: "private-user",
+            name: "Ghost",
+            estimatedAge: "?",
+            locationName: "home",
+            locationLatitude: nil,
+            locationLongitude: nil,
+            notes: "",
+            isOwned: true,
+            createdAt: Date(),
+            photos: []
+        )
+        mockCatRepo.fetchAllResult = [cat]
+        mockEncounterRepo.fetchAllResult = []
+
+        let data = try await sut.fetchUserData(userID: "private-user")
+
+        XCTAssertEqual(data.cats.count, 1)
+        XCTAssertEqual(data.cats.first?.name, "Ghost")
+    }
+
+    func testOwnPrivateProfileAlwaysReturnsContent() async throws {
+        currentUserID = "my-user"
+        mockCloudKit.fetchResult = CloudUserProfile(
+            recordName: "rec-me",
+            appleUserID: "my-user",
+            displayName: "me",
+            bio: "my profile",
+            isPrivate: true
+        )
+        let cat = CloudCat(
+            recordName: "cat-mine",
+            ownerID: "my-user",
+            name: "Steven",
+            estimatedAge: "5",
+            locationName: "couch",
+            locationLatitude: nil,
+            locationLongitude: nil,
+            notes: "",
+            isOwned: true,
+            createdAt: Date(),
+            photos: []
+        )
+        mockCatRepo.fetchAllResult = [cat]
+        mockEncounterRepo.fetchAllResult = []
+
+        let data = try await sut.fetchUserData(userID: "my-user")
+
+        XCTAssertEqual(data.cats.count, 1, "own private profile should always return content")
+        XCTAssertEqual(data.cats.first?.name, "Steven")
+    }
+
+    func testPublicProfileAlwaysReturnsContent() async throws {
+        mockCloudKit.fetchResult = CloudUserProfile(
+            recordName: "rec-pub",
+            appleUserID: "public-user",
+            displayName: "tuong",
+            bio: "i see cats",
+            isPrivate: false
+        )
+        let cat = CloudCat(
+            recordName: "cat-pub",
+            ownerID: "public-user",
+            name: "Chairman Meow",
+            estimatedAge: "6",
+            locationName: "fire escape",
+            locationLatitude: nil,
+            locationLongitude: nil,
+            notes: "",
+            isOwned: false,
+            createdAt: Date(),
+            photos: []
+        )
+        mockCatRepo.fetchAllResult = [cat]
+        mockEncounterRepo.fetchAllResult = []
+
+        let data = try await sut.fetchUserData(userID: "public-user")
+
+        XCTAssertEqual(data.cats.count, 1)
+        XCTAssertEqual(data.cats.first?.name, "Chairman Meow")
     }
 
     // MARK: - Caching
