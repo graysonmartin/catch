@@ -129,4 +129,66 @@ final class CKFollowService: FollowService {
             createdAt: record.creationDate ?? Date()
         )
     }
+
+    // MARK: - Debug Seeding
+
+    #if DEBUG
+    func seedFakeFollows(currentUserID: String) {
+        guard following.isEmpty && followers.isEmpty else { return }
+
+        let calendar = Calendar.current
+        let now = Date()
+
+        following = [
+            Follow(
+                id: "\(currentUserID)_fake-user-1",
+                followerID: currentUserID,
+                followeeID: "fake-user-1",
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -20, to: now)!
+            ),
+            Follow(
+                id: "\(currentUserID)_fake-user-2",
+                followerID: currentUserID,
+                followeeID: "fake-user-2",
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -10, to: now)!
+            ),
+            Follow(
+                id: "\(currentUserID)_fake-user-3",
+                followerID: currentUserID,
+                followeeID: "fake-user-3",
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -5, to: now)!
+            )
+        ]
+
+        followers = [
+            Follow(
+                id: "fake-user-1_\(currentUserID)",
+                followerID: "fake-user-1",
+                followeeID: currentUserID,
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -18, to: now)!
+            ),
+            Follow(
+                id: "fake-user-4_\(currentUserID)",
+                followerID: "fake-user-4",
+                followeeID: currentUserID,
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -2, to: now)!
+            )
+        ]
+
+        pendingRequests = [
+            Follow(
+                id: "fake-user-5_\(currentUserID)",
+                followerID: "fake-user-5",
+                followeeID: currentUserID,
+                status: .pending,
+                createdAt: calendar.date(byAdding: .day, value: -1, to: now)!
+            )
+        ]
+    }
+    #endif
 }

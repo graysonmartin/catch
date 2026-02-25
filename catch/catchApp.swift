@@ -86,6 +86,9 @@ struct catchApp: App {
                     #if DEBUG
                     .task {
                         DataSeeder.seedIfEmpty(context: modelContainer.mainContext)
+                        let fakeUserID = authService.authState.user?.userIdentifier ?? "debug-user"
+                        followService.seedFakeFollows(currentUserID: fakeUserID)
+                        userBrowseService?.seedFakeUsers()
                     }
                     #endif
             } else {
