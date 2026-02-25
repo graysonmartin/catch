@@ -47,6 +47,14 @@ final class VisionBreedClassifierService: BreedClassifierService {
     // MARK: - Private
 
     private nonisolated func performClassification(imageData: Data) -> [BreedPrediction] {
+        #if DEBUG && targetEnvironment(simulator)
+        return simulatorFallback()
+        #else
+        return visionClassification(imageData: imageData)
+        #endif
+    }
+
+    private nonisolated func visionClassification(imageData: Data) -> [BreedPrediction] {
         let logger = Logger(subsystem: "com.catch.catch", category: "BreedClassifier")
 
         guard let handler = try? VNImageRequestHandler(data: imageData, options: [:]) else {
@@ -64,6 +72,13 @@ final class VisionBreedClassifierService: BreedClassifierService {
 
         guard let observations = request.results else { return [] }
 
+        #if DEBUG
+        let top = observations.filter { $0.confidence > 0.01 }.prefix(20)
+        for obs in top {
+            logger.debug("vision: \(obs.identifier) — \(String(format: "%.3f", obs.confidence))")
+        }
+        #endif
+
         return observations
             .compactMap { observation -> BreedPrediction? in
                 guard BreedLabelMapper.isCatBreed(observation.identifier),
@@ -79,4 +94,13 @@ final class VisionBreedClassifierService: BreedClassifierService {
             }
             .sorted { $0.confidence > $1.confidence }
     }
+
+    #if DEBUG && targetEnvironment(simulator)
+    private nonisolated func simulatorFallback() -> [BreedPrediction] {
+        let breeds = ["Tabby", "Ragdoll", "Russian Blue", "Maine Coon", "Persian", "Siamese"]
+        let pick = breeds.randomElement() ?? "Tabby"
+        let confidence = Float.random(in: 0.55...0.92)
+        return [BreedPrediction(breed: pick, rawIdentifier: "sim_fallback", confidence: confidence)]
+    }
+    #endif
 }
