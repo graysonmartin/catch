@@ -18,9 +18,6 @@ final class Cat {
     @Relationship(deleteRule: .cascade, inverse: \Encounter.cat)
     var encounters: [Encounter]
 
-    @Relationship(deleteRule: .cascade, inverse: \CareEntry.cat)
-    var careEntries: [CareEntry]
-
     init(
         name: String,
         breed: String? = nil,
@@ -39,7 +36,6 @@ final class Cat {
         self.createdAt = Date()
         self.photos = photos
         self.encounters = []
-        self.careEntries = []
     }
 
     var lastEncounterDate: Date? {

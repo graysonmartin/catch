@@ -9,7 +9,6 @@ struct ProfileView: View {
     @Query private var profiles: [UserProfile]
     @Query private var cats: [Cat]
     @Query private var encounters: [Encounter]
-    @Query private var careEntries: [CareEntry]
 
     @State private var isShowingEditSheet = false
 
@@ -106,7 +105,6 @@ struct ProfileView: View {
         HStack(spacing: 12) {
             statCard(count: cats.count, label: "cats", icon: "cat.fill")
             statCard(count: encounters.count, label: "encounters", icon: "pawprint.fill")
-            statCard(count: totalCareDays, label: "care days", icon: "heart.fill")
         }
         .padding(.horizontal, 20)
     }
@@ -298,17 +296,6 @@ struct ProfileView: View {
     }
 
     // MARK: - Helpers
-
-    private var totalCareDays: Int {
-        careEntries.reduce(0) { total, entry in
-            let days = Calendar.current.dateComponents(
-                [.day],
-                from: entry.startDate,
-                to: entry.endDate
-            ).day ?? 0
-            return total + max(days, 1)
-        }
-    }
 
     private func createProfile() {
         let profile = UserProfile()

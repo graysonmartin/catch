@@ -130,11 +130,10 @@ final class UserProfileTests: XCTestCase {
         XCTAssertEqual(profile.visibilitySettings, .default)
         XCTAssertTrue(profile.visibilitySettings.showCats)
         XCTAssertTrue(profile.visibilitySettings.showEncounters)
-        XCTAssertTrue(profile.visibilitySettings.showCareEntries)
     }
 
     func test_visibilitySettings_persistsRoundTrip() throws {
-        let custom = VisibilitySettings(showCats: false, showEncounters: true, showCareEntries: false)
+        let custom = VisibilitySettings(showCats: false, showEncounters: true)
         let profile = Fixtures.userProfile(visibilitySettings: custom, in: context)
         try context.save()
 
@@ -143,7 +142,7 @@ final class UserProfileTests: XCTestCase {
     }
 
     func test_visibilitySettings_canBeSetViaInit() {
-        let custom = VisibilitySettings(showCats: false, showEncounters: false, showCareEntries: true)
+        let custom = VisibilitySettings(showCats: false, showEncounters: false)
         let profile = UserProfile(visibilitySettings: custom)
         XCTAssertEqual(profile.visibilitySettings, custom)
     }

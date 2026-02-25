@@ -26,7 +26,6 @@ final class CatTests: XCTestCase {
         XCTAssertFalse(cat.isOwned)
         XCTAssertTrue(cat.photos.isEmpty)
         XCTAssertTrue(cat.encounters.isEmpty)
-        XCTAssertTrue(cat.careEntries.isEmpty)
     }
 
     func test_catCreatedAtIsSetOnInit() {
@@ -78,21 +77,6 @@ final class CatTests: XCTestCase {
 
         XCTAssertEqual(try context.fetch(FetchDescriptor<Cat>()).count, 0)
         XCTAssertEqual(try context.fetch(FetchDescriptor<Encounter>()).count, 0)
-    }
-
-    func test_catCascadeDeletesCareEntries() throws {
-        let cat = Fixtures.cat(name: "Doomed", in: context)
-        _ = Fixtures.careEntry(for: cat, in: context)
-        try context.save()
-
-        XCTAssertEqual(try context.fetch(FetchDescriptor<Cat>()).count, 1)
-        XCTAssertEqual(try context.fetch(FetchDescriptor<CareEntry>()).count, 1)
-
-        context.delete(try context.fetch(FetchDescriptor<Cat>())[0])
-        try context.save()
-
-        XCTAssertEqual(try context.fetch(FetchDescriptor<Cat>()).count, 0)
-        XCTAssertEqual(try context.fetch(FetchDescriptor<CareEntry>()).count, 0)
     }
 
     // MARK: - breed
