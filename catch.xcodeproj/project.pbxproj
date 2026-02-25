@@ -181,6 +181,8 @@
 		E8BL00000220 /* BreedCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000020 /* BreedCatalogTests.swift */; };
 		E8BL00000221 /* DefaultBreedLogServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000021 /* DefaultBreedLogServiceTests.swift */; };
 		E8BL00000222 /* MockBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000022 /* MockBreedLogService.swift */; };
+		E8D800000101 /* StevenEasterEggView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D800000001 /* StevenEasterEggView.swift */; };
+		E8D800000201 /* CatStevenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D800000002 /* CatStevenTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -317,6 +319,8 @@
 		E8BL00000020 /* BreedCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalogTests.swift; sourceTree = "<group>"; };
 		E8BL00000021 /* DefaultBreedLogServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBreedLogServiceTests.swift; sourceTree = "<group>"; };
 		E8BL00000022 /* MockBreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedLogService.swift; sourceTree = "<group>"; };
+		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
+		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -434,6 +438,7 @@
 				E8000001AA000026 /* LocationPickerView.swift */,
 				E8000001AA000029 /* CatPickerView.swift */,
 				E8000001AA000050 /* ImageDownsampler.swift */,
+				E8D800000001 /* StevenEasterEggView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -467,6 +472,7 @@
 				E8A100000018 /* UserProfileTests.swift */,
 				E8A100000019 /* CatchSchemaTests.swift */,
 				E8A10000001A /* VisibilitySettingsTests.swift */,
+				E8D800000002 /* CatStevenTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -907,6 +913,7 @@
 				E8B700000104 /* BreedLabelMapper.swift in Sources */,
 				E8B700000105 /* BreedSuggestionView.swift in Sources */,
 				E8B700000106 /* BreedPickerView.swift in Sources */,
+				E8D800000101 /* StevenEasterEggView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -994,6 +1001,7 @@
 				E8B700000204 /* BreedPrediction.swift in Sources */,
 				E8B700000205 /* BreedClassifierService.swift in Sources */,
 				E8B700000206 /* BreedLabelMapper.swift in Sources */,
+				E8D800000201 /* CatStevenTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

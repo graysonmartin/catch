@@ -43,6 +43,11 @@ struct CatProfileView: View {
                     Text(cat.name)
                         .font(.title.weight(.bold))
                         .foregroundStyle(CatchTheme.textPrimary)
+                    if cat.isSteven {
+                        Image(systemName: "crown.fill")
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.primary)
+                    }
                     if cat.isOwned {
                         Image(systemName: "heart.fill")
                             .foregroundStyle(CatchTheme.primary)

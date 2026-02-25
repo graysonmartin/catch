@@ -115,6 +115,11 @@ struct CatCardView: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(CatchTheme.textPrimary)
                         .lineLimit(1)
+                    if cat.isSteven {
+                        Image(systemName: "crown.fill")
+                            .font(.caption2)
+                            .foregroundStyle(CatchTheme.primary)
+                    }
                     if cat.isOwned {
                         Image(systemName: "heart.fill")
                             .font(.caption2)
