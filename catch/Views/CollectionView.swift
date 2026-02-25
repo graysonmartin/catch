@@ -24,7 +24,10 @@ struct CollectionView: View {
         if searchText.isEmpty {
             filtered = cats
         } else {
-            filtered = cats.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+            filtered = cats.filter {
+                $0.name.localizedCaseInsensitiveContains(searchText)
+                || $0.location.name.localizedCaseInsensitiveContains(searchText)
+            }
         }
 
         switch sortOption {
@@ -50,7 +53,7 @@ struct CollectionView: View {
                     EmptyStateView(
                         icon: "magnifyingglass",
                         title: "no matches",
-                        subtitle: "no cats named \"\(searchText)\" in your collection"
+                        subtitle: "nothing matching \"\(searchText)\" in your collection"
                     )
                 } else {
                     ScrollView {
