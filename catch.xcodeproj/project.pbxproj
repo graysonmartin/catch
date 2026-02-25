@@ -57,6 +57,7 @@
 		E8A100000025 /* CatchSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000019 /* CatchSchemaTests.swift */; };
 		E8A100000026 /* VisibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000080 /* VisibilitySettings.swift */; };
 		E8A100000027 /* VisibilitySettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A10000001A /* VisibilitySettingsTests.swift */; };
+		E8A100000029 /* AddCatValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000028 /* AddCatValidationTests.swift */; };
 		E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */; };
@@ -226,6 +227,7 @@
 		E8A100000018 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
 		E8A100000019 /* CatchSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchemaTests.swift; sourceTree = "<group>"; };
 		E8A10000001A /* VisibilitySettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibilitySettingsTests.swift; sourceTree = "<group>"; };
+		E8A100000028 /* AddCatValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCatValidationTests.swift; sourceTree = "<group>"; };
 		E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStateTests.swift; sourceTree = "<group>"; };
 		E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCloudKitService.swift; sourceTree = "<group>"; };
 		E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthService.swift; sourceTree = "<group>"; };
@@ -443,6 +445,7 @@
 			isa = PBXGroup;
 			children = (
 				E8A100000022 /* Models */,
+				E8A10000002A /* Views */,
 				E8A100000024 /* Components */,
 				E8C17FF134EEE52DB9FA0D4A /* Services */,
 				E8A100000023 /* TestHelpers */,
@@ -479,6 +482,14 @@
 				E8A100000017 /* ImageDownsamplerTests.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		E8A10000002A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E8A100000028 /* AddCatValidationTests.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		E8C17FF134EEE52DB9FA0D4A /* Services */ = {
@@ -984,6 +995,7 @@
 				E8B700000205 /* BreedClassifierService.swift in Sources */,
 				E8B700000206 /* BreedLabelMapper.swift in Sources */,
 				E8D800000201 /* CatStevenTests.swift in Sources */,
+				E8A100000029 /* AddCatValidationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

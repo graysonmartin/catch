@@ -31,6 +31,11 @@ struct AddCatView: View {
 
                 Section("Photos") {
                     PhotoPickerView(selectedPhotos: $photos)
+                    if photos.isEmpty {
+                        Text("at least 1 photo required -- no pics no proof")
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.primary)
+                    }
                     if breed == nil && !isDismissedSuggestion {
                         BreedSuggestionView(
                             prediction: breedSuggestion,
@@ -66,7 +71,7 @@ struct AddCatView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") { save() }
-                        .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                        .disabled(!canSave)
                         .fontWeight(.semibold)
                 }
             }
@@ -84,6 +89,10 @@ struct AddCatView: View {
                 }
             }
         }
+    }
+
+    private var canSave: Bool {
+        !name.trimmingCharacters(in: .whitespaces).isEmpty && !photos.isEmpty
     }
 
     private func save() {
