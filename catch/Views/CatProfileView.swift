@@ -4,21 +4,14 @@ struct CatProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Bindable var cat: Cat
-    @State private var showingAddCare = false
     @State private var showingEdit = false
     @State private var showingDeleteCat = false
     @State private var encounterToEdit: Encounter?
     @State private var showingLogEncounter = false
     @State private var encounterToDelete: Encounter?
-    @State private var careEntryToDelete: CareEntry?
-    @State private var careEntryToEdit: CareEntry?
 
     private var sortedEncounters: [Encounter] {
         cat.encounters.sorted { $0.date > $1.date }
-    }
-
-    private var sortedCareEntries: [CareEntry] {
-        cat.careEntries.sorted { $0.startDate > $1.startDate }
     }
 
     var body: some View {
@@ -101,18 +94,6 @@ struct CatProfileView: View {
                             .foregroundStyle(.white)
                             .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
                     }
-
-                    Button {
-                        showingAddCare = true
-                    } label: {
-                        Label("Care", systemImage: "heart.text.square")
-                            .font(.subheadline.weight(.medium))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 12)
-                            .background(CatchTheme.secondary)
-                            .foregroundStyle(CatchTheme.textPrimary)
-                            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
-                    }
                 }
                 .buttonStyle(.plain)
             }
@@ -151,37 +132,6 @@ struct CatProfileView: View {
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
 
-            // Care log section
-            Section {
-                if sortedCareEntries.isEmpty {
-                    Text("No care entries logged.")
-                        .font(.subheadline)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                        .listRowBackground(CatchTheme.background)
-                } else {
-                    ForEach(sortedCareEntries) { entry in
-                        careRow(entry)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                careEntryToEdit = entry
-                            }
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button("Delete", role: .destructive) {
-                                    careEntryToDelete = entry
-                                }
-                            }
-                    }
-                }
-            } header: {
-                Text("Care Log (\(cat.careEntries.count))")
-                    .font(.headline)
-                    .foregroundStyle(CatchTheme.textPrimary)
-                    .textCase(nil)
-            }
-            .listRowBackground(CatchTheme.background)
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-
             // Delete cat
             Section {
                 Button(role: .destructive) {
@@ -205,14 +155,8 @@ struct CatProfileView: View {
         .sheet(item: $encounterToEdit) { encounter in
             EditEncounterView(encounter: encounter)
         }
-        .sheet(isPresented: $showingAddCare) {
-            AddCareEntryView(cat: cat)
-        }
         .sheet(isPresented: $showingEdit) {
             EditCatView(cat: cat)
-        }
-        .sheet(item: $careEntryToEdit) { entry in
-            EditCareEntryView(entry: entry)
         }
         .sheet(isPresented: $showingLogEncounter) {
             LogEncounterView(preselectedCat: cat)
@@ -233,22 +177,6 @@ struct CatProfileView: View {
         } message: {
             Text("gone forever. no take-backs.")
         }
-        .alert("delete care entry?", isPresented: Binding(
-            get: { careEntryToDelete != nil },
-            set: { if !$0 { careEntryToDelete = nil } }
-        )) {
-            Button("Delete", role: .destructive) {
-                if let entry = careEntryToDelete {
-                    modelContext.delete(entry)
-                    careEntryToDelete = nil
-                }
-            }
-            Button("Cancel", role: .cancel) {
-                careEntryToDelete = nil
-            }
-        } message: {
-            Text("gone forever. no take-backs.")
-        }
         .alert("delete \(cat.name)?", isPresented: $showingDeleteCat) {
             Button("Delete", role: .destructive) {
                 modelContext.delete(cat)
@@ -256,7 +184,7 @@ struct CatProfileView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("this deletes all their encounters and care entries too. absolutely no undo.")
+            Text("this deletes all their encounters too. absolutely no undo.")
         }
     }
 
@@ -290,31 +218,6 @@ struct CatProfileView: View {
                 }
                 if !encounter.notes.isEmpty {
                     Text(encounter.notes)
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                }
-            }
-            Spacer()
-            Image(systemName: "pencil")
-                .font(.caption)
-                .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
-        }
-        .padding(12)
-        .background(CatchTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
-    }
-
-    private func careRow(_ entry: CareEntry) -> some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text("\(entry.startDate.formatted(date: .abbreviated, time: .omitted)) - \(entry.endDate.formatted(date: .abbreviated, time: .omitted))")
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(CatchTheme.textPrimary)
-                Text(entry.durationDays == 0 ? "same day" : "\(entry.durationDays) day\(entry.durationDays == 1 ? "" : "s")")
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.primary)
-                if !entry.notes.isEmpty {
-                    Text(entry.notes)
                         .font(.caption)
                         .foregroundStyle(CatchTheme.textSecondary)
                 }

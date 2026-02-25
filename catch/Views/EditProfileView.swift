@@ -112,7 +112,6 @@ struct EditProfileView: View {
         Section {
             Toggle("show cats", isOn: $visibilitySettings.showCats)
             Toggle("show encounters", isOn: $visibilitySettings.showEncounters)
-            Toggle("show care log", isOn: $visibilitySettings.showCareEntries)
         } header: {
             Text("visibility")
         } footer: {

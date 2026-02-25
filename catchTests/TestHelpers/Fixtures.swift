@@ -37,14 +37,6 @@ enum Fixtures {
         return encounter
     }
 
-    static func careEntry(for cat: Cat, durationDays: Int = 3, in context: ModelContext) -> CareEntry {
-        let start = Date()
-        let end = Calendar.current.date(byAdding: .day, value: durationDays, to: start)!
-        let entry = CareEntry(startDate: start, endDate: end, cat: cat)
-        context.insert(entry)
-        return entry
-    }
-
     @discardableResult
     static func userProfile(
         displayName: String = "test user",

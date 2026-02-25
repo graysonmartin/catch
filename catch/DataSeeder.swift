@@ -47,14 +47,6 @@ enum DataSeeder {
         )
         context.insert(garfieldEnc2)
 
-        let garfieldCare = CareEntry(
-            startDate: calendar.date(byAdding: .day, value: -14, to: now)!,
-            endDate: calendar.date(byAdding: .day, value: -7, to: now)!,
-            notes: "stayed home all week. he was thriving. i was his servant.",
-            cat: garfield
-        )
-        context.insert(garfieldCare)
-
         // -- Cat 2: sprinkles (ragdoll in shopping bag) --
         let sprinkles = Cat(
             name: "sprinkles",
@@ -129,14 +121,6 @@ enum DataSeeder {
             cat: missBologna
         )
         context.insert(missBolognaEnc2)
-
-        let missBolognaCare = CareEntry(
-            startDate: calendar.date(byAdding: .day, value: -5, to: now)!,
-            endDate: calendar.date(byAdding: .day, value: -3, to: now)!,
-            notes: "it was raining so she stayed over. she judged my apartment the entire time.",
-            cat: missBologna
-        )
-        context.insert(missBolognaCare)
 
         // -- Cat 5: phantom (bombay sighting) --
         let phantom = Cat(
