@@ -45,4 +45,11 @@ final class Cat {
     var lastEncounterDate: Date? {
         encounters.map(\.date).max()
     }
+
+    var isSteven: Bool {
+        let stevenNames: Set<String> = ["steven", "stephen", "steve"]
+        let tabbyBreeds: Set<String> = ["Tabby", "Tiger Tabby"]
+        return stevenNames.contains(name.trimmingCharacters(in: .whitespaces).lowercased())
+            && tabbyBreeds.contains(breed ?? "")
+    }
 }

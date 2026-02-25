@@ -16,6 +16,7 @@ struct AddCatView: View {
     @State private var photos: [Data] = []
     @State private var breedSuggestion: BreedPrediction?
     @State private var isDismissedSuggestion = false
+    @State private var showStevenEasterEgg = false
 
     var body: some View {
         NavigationStack {
@@ -75,6 +76,13 @@ struct AddCatView: View {
                     breedSuggestion = await breedClassifier?.classifyBest(imageDataArray: photos)
                 }
             }
+            .overlay {
+                if showStevenEasterEgg {
+                    StevenEasterEggView {
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 
@@ -100,6 +108,11 @@ struct AddCatView: View {
         modelContext.insert(encounter)
 
         Task { await catSyncService?.syncNewCat(cat, firstEncounter: encounter) }
-        dismiss()
+
+        if cat.isSteven {
+            showStevenEasterEgg = true
+        } else {
+            dismiss()
+        }
     }
 }
