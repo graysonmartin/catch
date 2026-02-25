@@ -25,12 +25,7 @@ struct BreedDetailView: View {
 
     private var header: some View {
         VStack(spacing: 12) {
-            Image(systemName: entry.catalogEntry.icon)
-                .font(.system(size: 44))
-                .foregroundStyle(entry.catalogEntry.rarity.color)
-                .frame(width: 80, height: 80)
-                .background(entry.catalogEntry.rarity.color.opacity(0.12))
-                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+            headerImage
 
             Text(entry.catalogEntry.displayName.lowercased())
                 .font(.title2.weight(.bold))
@@ -43,6 +38,25 @@ struct BreedDetailView: View {
                 .foregroundStyle(CatchTheme.textSecondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
+        }
+    }
+
+    @ViewBuilder
+    private var headerImage: some View {
+        if let photoData = entry.previewPhotoData,
+           let uiImage = ImageDownsampler.downsample(data: photoData, to: CGSize(width: 160, height: 160)) {
+            Image(uiImage: uiImage)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 100, height: 100)
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+        } else {
+            Image(systemName: entry.catalogEntry.icon)
+                .font(.system(size: 44))
+                .foregroundStyle(entry.catalogEntry.rarity.color)
+                .frame(width: 100, height: 100)
+                .background(entry.catalogEntry.rarity.color.opacity(0.12))
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         }
     }
 
