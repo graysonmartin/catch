@@ -129,4 +129,80 @@ final class CKFollowService: FollowService {
             createdAt: record.creationDate ?? Date()
         )
     }
+
+    // MARK: - Debug Seeding
+
+    #if DEBUG
+    func seedFakeFollows(currentUserID: String) {
+        guard following.isEmpty && followers.isEmpty else { return }
+
+        let calendar = Calendar.current
+        let now = Date()
+
+        following = [
+            Follow(
+                id: "\(currentUserID)_fake-tuong",
+                followerID: currentUserID,
+                followeeID: "fake-tuong",
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -20, to: now)!
+            ),
+            Follow(
+                id: "\(currentUserID)_fake-sophi",
+                followerID: currentUserID,
+                followeeID: "fake-sophi",
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -10, to: now)!
+            ),
+            Follow(
+                id: "\(currentUserID)_fake-shiv",
+                followerID: currentUserID,
+                followeeID: "fake-shiv",
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -5, to: now)!
+            ),
+            Follow(
+                id: "\(currentUserID)_fake-mark",
+                followerID: currentUserID,
+                followeeID: "fake-mark",
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -3, to: now)!
+            )
+        ]
+
+        followers = [
+            Follow(
+                id: "fake-tuong_\(currentUserID)",
+                followerID: "fake-tuong",
+                followeeID: currentUserID,
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -18, to: now)!
+            ),
+            Follow(
+                id: "fake-tatum_\(currentUserID)",
+                followerID: "fake-tatum",
+                followeeID: currentUserID,
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -7, to: now)!
+            ),
+            Follow(
+                id: "fake-mark_\(currentUserID)",
+                followerID: "fake-mark",
+                followeeID: currentUserID,
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -2, to: now)!
+            )
+        ]
+
+        pendingRequests = [
+            Follow(
+                id: "fake-jorge_\(currentUserID)",
+                followerID: "fake-jorge",
+                followeeID: currentUserID,
+                status: .pending,
+                createdAt: calendar.date(byAdding: .day, value: -1, to: now)!
+            )
+        ]
+    }
+    #endif
 }

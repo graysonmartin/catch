@@ -8,6 +8,7 @@ struct catchApp: App {
     @State private var followService = CKFollowService()
     @State private var catSyncService: CKCatSyncService?
     @State private var encounterSyncService: CKEncounterSyncService?
+    @State private var userBrowseService: CKUserBrowseService?
     let modelContainer: ModelContainer
 
     init() {
@@ -57,6 +58,7 @@ struct catchApp: App {
                     .environment(followService)
                     .environment(catSyncService)
                     .environment(encounterSyncService)
+                    .environment(userBrowseService)
                     .task {
                         await authService.checkCredentialState()
                         if catSyncService == nil {
@@ -74,11 +76,19 @@ struct catchApp: App {
                                 encounterRepository: encRepo,
                                 getUserID: getUserID
                             )
+                            userBrowseService = CKUserBrowseService(
+                                cloudKitService: CKCloudKitService(),
+                                catRepository: catRepo,
+                                encounterRepository: encRepo
+                            )
                         }
                     }
                     #if DEBUG
                     .task {
                         DataSeeder.seedIfEmpty(context: modelContainer.mainContext)
+                        let fakeUserID = authService.authState.user?.userIdentifier ?? "debug-user"
+                        followService.seedFakeFollows(currentUserID: fakeUserID)
+                        userBrowseService?.seedFakeUsers()
                     }
                     #endif
             } else {
