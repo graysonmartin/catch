@@ -4,9 +4,7 @@ import SwiftData
 struct AddCatView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(AppleAuthService.self) private var authService: AppleAuthService?
-    @Environment(CKCatRepository.self) private var catRepository: CKCatRepository?
-    @Environment(CKEncounterRepository.self) private var encounterRepository: CKEncounterRepository?
+    @Environment(CKCloudSyncService.self) private var cloudSyncService: CKCloudSyncService?
 
     @State private var name = ""
     @State private var estimatedAge = ""
@@ -75,45 +73,7 @@ struct AddCatView: View {
         )
         modelContext.insert(encounter)
 
-        syncToCloud(cat: cat, encounter: encounter)
+        Task { await cloudSyncService?.syncNewCat(cat, firstEncounter: encounter) }
         dismiss()
-    }
-
-    private func syncToCloud(cat: Cat, encounter: Encounter) {
-        guard let userID = authService?.authState.user?.userIdentifier,
-              let catRepository else { return }
-
-        let catPayload = CatSyncPayload(
-            recordName: nil,
-            name: cat.name,
-            estimatedAge: cat.estimatedAge,
-            locationName: cat.location.name,
-            locationLatitude: cat.location.latitude,
-            locationLongitude: cat.location.longitude,
-            notes: cat.notes,
-            isOwned: cat.isOwned,
-            createdAt: cat.createdAt,
-            photos: cat.photos
-        )
-
-        Task {
-            if let recordName = try? await catRepository.save(catPayload, ownerID: userID) {
-                cat.cloudKitRecordName = recordName
-
-                let encPayload = EncounterSyncPayload(
-                    recordName: nil,
-                    catRecordName: recordName,
-                    date: encounter.date,
-                    locationName: encounter.location.name,
-                    locationLatitude: encounter.location.latitude,
-                    locationLongitude: encounter.location.longitude,
-                    notes: encounter.notes,
-                    photos: encounter.photos
-                )
-                if let encRecord = try? await encounterRepository?.save(encPayload, ownerID: userID) {
-                    encounter.cloudKitRecordName = encRecord
-                }
-            }
-        }
     }
 }

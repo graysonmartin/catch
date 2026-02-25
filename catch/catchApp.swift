@@ -6,23 +6,47 @@ struct catchApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var authService = AppleAuthService()
     @State private var followService = CKFollowService()
-    @State private var catRepository = CKCatRepository()
-    @State private var encounterRepository = CKEncounterRepository()
+    @State private var cloudSyncService: CKCloudSyncService?
     let modelContainer: ModelContainer
 
     init() {
+        let schema = Schema(versionedSchema: CatchSchemaV2.self)
+        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
         do {
-            let schema = Schema(versionedSchema: CatchSchemaV2.self)
-            let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
             modelContainer = try ModelContainer(
                 for: schema,
                 migrationPlan: CatchMigrationPlan.self,
                 configurations: config
             )
         } catch {
+            #if DEBUG
+            Self.deleteStoreFiles(for: config)
+            do {
+                modelContainer = try ModelContainer(
+                    for: schema,
+                    migrationPlan: CatchMigrationPlan.self,
+                    configurations: config
+                )
+                print("[catch] wiped stale store and recovered")
+            } catch {
+                fatalError("Failed to create ModelContainer after wipe: \(error)")
+            }
+            #else
             fatalError("Failed to create ModelContainer: \(error)")
+            #endif
         }
     }
+
+    #if DEBUG
+    private static func deleteStoreFiles(for config: ModelConfiguration) {
+        let url = config.url
+        let fm = FileManager.default
+        for suffix in ["", "-wal", "-shm"] {
+            let path = suffix.isEmpty ? url : URL(fileURLWithPath: url.path + suffix)
+            try? fm.removeItem(at: path)
+        }
+    }
+    #endif
 
     var body: some Scene {
         WindowGroup {
@@ -30,10 +54,18 @@ struct catchApp: App {
                 ContentView()
                     .environment(authService)
                     .environment(followService)
-                    .environment(catRepository)
-                    .environment(encounterRepository)
+                    .environment(cloudSyncService)
                     .task {
                         await authService.checkCredentialState()
+                        if cloudSyncService == nil {
+                            cloudSyncService = CKCloudSyncService(
+                                catRepository: CKCatRepository(),
+                                encounterRepository: CKEncounterRepository(),
+                                getUserID: { [authService] in
+                                    authService.authState.user?.userIdentifier
+                                }
+                            )
+                        }
                     }
                     #if DEBUG
                     .task {

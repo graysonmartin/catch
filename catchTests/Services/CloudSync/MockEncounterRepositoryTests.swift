@@ -30,12 +30,12 @@ final class MockEncounterRepositoryTests: XCTestCase {
 
     func test_save_throwsWhenErrorSet() async {
         let mock = MockEncounterRepository()
-        mock.saveResult = .failure(CatSyncServiceError.notSignedIn)
+        mock.saveResult = .failure(CloudSyncError.notSignedIn)
 
         do {
             _ = try await mock.save(makePayload(), ownerID: "user-1")
             XCTFail("Expected error")
-        } catch let error as CatSyncServiceError {
+        } catch let error as CloudSyncError {
             XCTAssertEqual(error, .notSignedIn)
         } catch {
             XCTFail("Unexpected error type: \(error)")
@@ -75,7 +75,7 @@ final class MockEncounterRepositoryTests: XCTestCase {
     func test_reset_clearsEverything() async throws {
         let mock = MockEncounterRepository()
         _ = try await mock.save(makePayload(), ownerID: "u1")
-        mock.saveResult = .failure(CatSyncServiceError.uploadFailed)
+        mock.saveResult = .failure(CloudSyncError.uploadFailed)
 
         mock.reset()
 

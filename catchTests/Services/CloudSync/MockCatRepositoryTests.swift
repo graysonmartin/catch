@@ -33,12 +33,12 @@ final class MockCatRepositoryTests: XCTestCase {
 
     func test_save_throwsWhenErrorSet() async {
         let mock = MockCatRepository()
-        mock.saveResult = .failure(CatSyncServiceError.uploadFailed)
+        mock.saveResult = .failure(CloudSyncError.uploadFailed)
 
         do {
             _ = try await mock.save(makePayload(), ownerID: "user-1")
             XCTFail("Expected error")
-        } catch let error as CatSyncServiceError {
+        } catch let error as CloudSyncError {
             XCTAssertEqual(error, .uploadFailed)
         } catch {
             XCTFail("Unexpected error type: \(error)")
@@ -56,12 +56,12 @@ final class MockCatRepositoryTests: XCTestCase {
 
     func test_delete_throwsWhenErrorSet() async {
         let mock = MockCatRepository()
-        mock.deleteError = CatSyncServiceError.recordNotFound
+        mock.deleteError = CloudSyncError.recordNotFound
 
         do {
             try await mock.delete(recordName: "nope")
             XCTFail("Expected error")
-        } catch let error as CatSyncServiceError {
+        } catch let error as CloudSyncError {
             XCTAssertEqual(error, .recordNotFound)
         } catch {
             XCTFail("Unexpected error type: \(error)")
@@ -90,12 +90,12 @@ final class MockCatRepositoryTests: XCTestCase {
 
     func test_fetchAll_throwsWhenErrorSet() async {
         let mock = MockCatRepository()
-        mock.fetchAllError = CatSyncServiceError.fetchFailed
+        mock.fetchAllError = CloudSyncError.fetchFailed
 
         do {
             _ = try await mock.fetchAll(ownerID: "u1")
             XCTFail("Expected error")
-        } catch let error as CatSyncServiceError {
+        } catch let error as CloudSyncError {
             XCTAssertEqual(error, .fetchFailed)
         } catch {
             XCTFail("Unexpected error type: \(error)")
@@ -108,7 +108,7 @@ final class MockCatRepositoryTests: XCTestCase {
         let mock = MockCatRepository()
         _ = try await mock.save(makePayload(), ownerID: "u1")
         try await mock.delete(recordName: "r1")
-        mock.saveResult = .failure(CatSyncServiceError.uploadFailed)
+        mock.saveResult = .failure(CloudSyncError.uploadFailed)
 
         mock.reset()
 

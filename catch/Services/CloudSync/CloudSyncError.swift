@@ -1,6 +1,6 @@
 import Foundation
 
-enum CatSyncServiceError: LocalizedError, Equatable {
+enum CloudSyncError: LocalizedError, Equatable {
     case notSignedIn
     case recordNotFound
     case uploadFailed
