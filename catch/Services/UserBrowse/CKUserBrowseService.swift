@@ -91,18 +91,18 @@ final class CKUserBrowseService: UserBrowseService {
         let calendar = Calendar.current
         let now = Date()
 
-        // -- fake-user-1: prolific cat spotter --
-        let user1Profile = CloudUserProfile(
-            recordName: "profile-fake-1",
-            appleUserID: "fake-user-1",
-            displayName: "neighborhood_watch_cat",
+        // -- tuong: prolific cat spotter --
+        let tuongProfile = CloudUserProfile(
+            recordName: "profile-tuong",
+            appleUserID: "fake-tuong",
+            displayName: "tuong",
             bio: "i see cats. i log cats. it is my calling.",
             isPrivate: false
         )
-        let user1Cats = [
+        let tuongCats = [
             CloudCat(
-                recordName: "fu1-cat-1",
-                ownerID: "fake-user-1",
+                recordName: "tuong-cat-1",
+                ownerID: "fake-tuong",
                 name: "Chairman Meow",
                 estimatedAge: "6",
                 locationName: "Fire escape",
@@ -114,8 +114,8 @@ final class CKUserBrowseService: UserBrowseService {
                 photos: []
             ),
             CloudCat(
-                recordName: "fu1-cat-2",
-                ownerID: "fake-user-1",
+                recordName: "tuong-cat-2",
+                ownerID: "fake-tuong",
                 name: "Beans",
                 estimatedAge: "1",
                 locationName: "Coffee shop window",
@@ -127,8 +127,8 @@ final class CKUserBrowseService: UserBrowseService {
                 photos: []
             ),
             CloudCat(
-                recordName: "fu1-cat-3",
-                ownerID: "fake-user-1",
+                recordName: "tuong-cat-3",
+                ownerID: "fake-tuong",
                 name: "The Professor",
                 estimatedAge: "8",
                 locationName: "Library steps",
@@ -140,11 +140,11 @@ final class CKUserBrowseService: UserBrowseService {
                 photos: []
             )
         ]
-        let user1Encounters = [
+        let tuongEncounters = [
             CloudEncounter(
-                recordName: "fu1-enc-1",
-                ownerID: "fake-user-1",
-                catRecordName: "fu1-cat-1",
+                recordName: "tuong-enc-1",
+                ownerID: "fake-tuong",
+                catRecordName: "tuong-cat-1",
                 date: calendar.date(byAdding: .day, value: -60, to: now)!,
                 locationName: "Fire escape",
                 locationLatitude: 37.7800,
@@ -153,9 +153,9 @@ final class CKUserBrowseService: UserBrowseService {
                 photos: []
             ),
             CloudEncounter(
-                recordName: "fu1-enc-2",
-                ownerID: "fake-user-1",
-                catRecordName: "fu1-cat-1",
+                recordName: "tuong-enc-2",
+                ownerID: "fake-tuong",
+                catRecordName: "tuong-cat-1",
                 date: calendar.date(byAdding: .day, value: -3, to: now)!,
                 locationName: "Fire escape",
                 locationLatitude: 37.7800,
@@ -164,9 +164,9 @@ final class CKUserBrowseService: UserBrowseService {
                 photos: []
             ),
             CloudEncounter(
-                recordName: "fu1-enc-3",
-                ownerID: "fake-user-1",
-                catRecordName: "fu1-cat-2",
+                recordName: "tuong-enc-3",
+                ownerID: "fake-tuong",
+                catRecordName: "tuong-cat-2",
                 date: calendar.date(byAdding: .day, value: -30, to: now)!,
                 locationName: "Coffee shop window",
                 locationLatitude: 37.7810,
@@ -175,9 +175,9 @@ final class CKUserBrowseService: UserBrowseService {
                 photos: []
             ),
             CloudEncounter(
-                recordName: "fu1-enc-4",
-                ownerID: "fake-user-1",
-                catRecordName: "fu1-cat-3",
+                recordName: "tuong-enc-4",
+                ownerID: "fake-tuong",
+                catRecordName: "tuong-cat-3",
                 date: calendar.date(byAdding: .day, value: -14, to: now)!,
                 locationName: "Library steps",
                 locationLatitude: 37.7790,
@@ -186,26 +186,26 @@ final class CKUserBrowseService: UserBrowseService {
                 photos: []
             )
         ]
-        cache["fake-user-1"] = UserBrowseData(
-            profile: user1Profile,
-            cats: user1Cats,
-            encounters: user1Encounters,
+        cache["fake-tuong"] = UserBrowseData(
+            profile: tuongProfile,
+            cats: tuongCats,
+            encounters: tuongEncounters,
             fetchedAt: now
         )
-        displayNameCache["fake-user-1"] = user1Profile.displayName
+        displayNameCache["fake-tuong"] = tuongProfile.displayName
 
-        // -- fake-user-2: casual with one cat --
-        let user2Profile = CloudUserProfile(
-            recordName: "profile-fake-2",
-            appleUserID: "fake-user-2",
-            displayName: "just_here_for_cats",
-            bio: "one cat. one dream.",
+        // -- sophi: cat mom energy --
+        let sophiProfile = CloudUserProfile(
+            recordName: "profile-sophi",
+            appleUserID: "fake-sophi",
+            displayName: "sophi",
+            bio: "every cat is my cat. they just don't know it yet.",
             isPrivate: false
         )
-        let user2Cats = [
+        let sophiCats = [
             CloudCat(
-                recordName: "fu2-cat-1",
-                ownerID: "fake-user-2",
+                recordName: "sophi-cat-1",
+                ownerID: "fake-sophi",
                 name: "Noodle",
                 estimatedAge: "2",
                 locationName: "Under the porch",
@@ -215,13 +215,26 @@ final class CKUserBrowseService: UserBrowseService {
                 isOwned: false,
                 createdAt: calendar.date(byAdding: .day, value: -45, to: now)!,
                 photos: []
+            ),
+            CloudCat(
+                recordName: "sophi-cat-2",
+                ownerID: "fake-sophi",
+                name: "Biscuit",
+                estimatedAge: "4",
+                locationName: "Backyard fence",
+                locationLatitude: 37.7710,
+                locationLongitude: -122.4280,
+                notes: "makes biscuits on the fence post. it's her whole personality.",
+                isOwned: true,
+                createdAt: calendar.date(byAdding: .day, value: -20, to: now)!,
+                photos: []
             )
         ]
-        let user2Encounters = [
+        let sophiEncounters = [
             CloudEncounter(
-                recordName: "fu2-enc-1",
-                ownerID: "fake-user-2",
-                catRecordName: "fu2-cat-1",
+                recordName: "sophi-enc-1",
+                ownerID: "fake-sophi",
+                catRecordName: "sophi-cat-1",
                 date: calendar.date(byAdding: .day, value: -45, to: now)!,
                 locationName: "Under the porch",
                 locationLatitude: 37.7700,
@@ -230,37 +243,48 @@ final class CKUserBrowseService: UserBrowseService {
                 photos: []
             ),
             CloudEncounter(
-                recordName: "fu2-enc-2",
-                ownerID: "fake-user-2",
-                catRecordName: "fu2-cat-1",
+                recordName: "sophi-enc-2",
+                ownerID: "fake-sophi",
+                catRecordName: "sophi-cat-1",
                 date: calendar.date(byAdding: .day, value: -8, to: now)!,
                 locationName: "Under the porch",
                 locationLatitude: 37.7700,
                 locationLongitude: -122.4300,
                 notes: "noodle was back. same vibe. unbothered.",
                 photos: []
+            ),
+            CloudEncounter(
+                recordName: "sophi-enc-3",
+                ownerID: "fake-sophi",
+                catRecordName: "sophi-cat-2",
+                date: calendar.date(byAdding: .day, value: -20, to: now)!,
+                locationName: "Backyard fence",
+                locationLatitude: 37.7710,
+                locationLongitude: -122.4280,
+                notes: "she kneaded the fence for 10 minutes straight. dedication.",
+                photos: []
             )
         ]
-        cache["fake-user-2"] = UserBrowseData(
-            profile: user2Profile,
-            cats: user2Cats,
-            encounters: user2Encounters,
+        cache["fake-sophi"] = UserBrowseData(
+            profile: sophiProfile,
+            cats: sophiCats,
+            encounters: sophiEncounters,
             fetchedAt: now
         )
-        displayNameCache["fake-user-2"] = user2Profile.displayName
+        displayNameCache["fake-sophi"] = sophiProfile.displayName
 
-        // -- fake-user-3: private profile --
-        let user3Profile = CloudUserProfile(
-            recordName: "profile-fake-3",
-            appleUserID: "fake-user-3",
-            displayName: "private_cat_acct",
+        // -- shiv: private profile --
+        let shivProfile = CloudUserProfile(
+            recordName: "profile-shiv",
+            appleUserID: "fake-shiv",
+            displayName: "shiv",
             bio: "my cats are none of your business (unless i follow you back)",
             isPrivate: true
         )
-        let user3Cats = [
+        let shivCats = [
             CloudCat(
-                recordName: "fu3-cat-1",
-                ownerID: "fake-user-3",
+                recordName: "shiv-cat-1",
+                ownerID: "fake-shiv",
                 name: "Ghost",
                 estimatedAge: "?",
                 locationName: "Classified",
@@ -272,11 +296,11 @@ final class CKUserBrowseService: UserBrowseService {
                 photos: []
             )
         ]
-        let user3Encounters = [
+        let shivEncounters = [
             CloudEncounter(
-                recordName: "fu3-enc-1",
-                ownerID: "fake-user-3",
-                catRecordName: "fu3-cat-1",
+                recordName: "shiv-enc-1",
+                ownerID: "fake-shiv",
+                catRecordName: "shiv-cat-1",
                 date: calendar.date(byAdding: .day, value: -90, to: now)!,
                 locationName: "Classified",
                 locationLatitude: nil,
@@ -285,17 +309,72 @@ final class CKUserBrowseService: UserBrowseService {
                 photos: []
             )
         ]
-        cache["fake-user-3"] = UserBrowseData(
-            profile: user3Profile,
-            cats: user3Cats,
-            encounters: user3Encounters,
+        cache["fake-shiv"] = UserBrowseData(
+            profile: shivProfile,
+            cats: shivCats,
+            encounters: shivEncounters,
             fetchedAt: now
         )
-        displayNameCache["fake-user-3"] = user3Profile.displayName
+        displayNameCache["fake-shiv"] = shivProfile.displayName
 
-        // -- fake-user-4 & 5: followers only (no profile needed for browse) --
-        displayNameCache["fake-user-4"] = "lurker_supreme"
-        displayNameCache["fake-user-5"] = "cat_tax_collector"
+        // -- mark: also browsable --
+        let markProfile = CloudUserProfile(
+            recordName: "profile-mark",
+            appleUserID: "fake-mark",
+            displayName: "mark",
+            bio: "cats are just small roommates who don't pay rent",
+            isPrivate: false
+        )
+        let markCats = [
+            CloudCat(
+                recordName: "mark-cat-1",
+                ownerID: "fake-mark",
+                name: "Gremlin",
+                estimatedAge: "3",
+                locationName: "Dumpster behind 7-Eleven",
+                locationLatitude: 37.7750,
+                locationLongitude: -122.4250,
+                notes: "chaotic neutral energy. knocked over a trash can and stared at me.",
+                isOwned: false,
+                createdAt: calendar.date(byAdding: .day, value: -25, to: now)!,
+                photos: []
+            )
+        ]
+        let markEncounters = [
+            CloudEncounter(
+                recordName: "mark-enc-1",
+                ownerID: "fake-mark",
+                catRecordName: "mark-cat-1",
+                date: calendar.date(byAdding: .day, value: -25, to: now)!,
+                locationName: "Dumpster behind 7-Eleven",
+                locationLatitude: 37.7750,
+                locationLongitude: -122.4250,
+                notes: "he was standing on the dumpster like a king surveying his domain.",
+                photos: []
+            ),
+            CloudEncounter(
+                recordName: "mark-enc-2",
+                ownerID: "fake-mark",
+                catRecordName: "mark-cat-1",
+                date: calendar.date(byAdding: .day, value: -2, to: now)!,
+                locationName: "Same dumpster",
+                locationLatitude: 37.7750,
+                locationLongitude: -122.4250,
+                notes: "gremlin remembered me. or he just wanted my sandwich. unclear.",
+                photos: []
+            )
+        ]
+        cache["fake-mark"] = UserBrowseData(
+            profile: markProfile,
+            cats: markCats,
+            encounters: markEncounters,
+            fetchedAt: now
+        )
+        displayNameCache["fake-mark"] = markProfile.displayName
+
+        // -- tatum & jorge: followers/pending only --
+        displayNameCache["fake-tatum"] = "tatum"
+        displayNameCache["fake-jorge"] = "jorge"
     }
     #endif
 }

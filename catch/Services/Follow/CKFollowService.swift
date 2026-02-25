@@ -141,39 +141,53 @@ final class CKFollowService: FollowService {
 
         following = [
             Follow(
-                id: "\(currentUserID)_fake-user-1",
+                id: "\(currentUserID)_fake-tuong",
                 followerID: currentUserID,
-                followeeID: "fake-user-1",
+                followeeID: "fake-tuong",
                 status: .active,
                 createdAt: calendar.date(byAdding: .day, value: -20, to: now)!
             ),
             Follow(
-                id: "\(currentUserID)_fake-user-2",
+                id: "\(currentUserID)_fake-sophi",
                 followerID: currentUserID,
-                followeeID: "fake-user-2",
+                followeeID: "fake-sophi",
                 status: .active,
                 createdAt: calendar.date(byAdding: .day, value: -10, to: now)!
             ),
             Follow(
-                id: "\(currentUserID)_fake-user-3",
+                id: "\(currentUserID)_fake-shiv",
                 followerID: currentUserID,
-                followeeID: "fake-user-3",
+                followeeID: "fake-shiv",
                 status: .active,
                 createdAt: calendar.date(byAdding: .day, value: -5, to: now)!
+            ),
+            Follow(
+                id: "\(currentUserID)_fake-mark",
+                followerID: currentUserID,
+                followeeID: "fake-mark",
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -3, to: now)!
             )
         ]
 
         followers = [
             Follow(
-                id: "fake-user-1_\(currentUserID)",
-                followerID: "fake-user-1",
+                id: "fake-tuong_\(currentUserID)",
+                followerID: "fake-tuong",
                 followeeID: currentUserID,
                 status: .active,
                 createdAt: calendar.date(byAdding: .day, value: -18, to: now)!
             ),
             Follow(
-                id: "fake-user-4_\(currentUserID)",
-                followerID: "fake-user-4",
+                id: "fake-tatum_\(currentUserID)",
+                followerID: "fake-tatum",
+                followeeID: currentUserID,
+                status: .active,
+                createdAt: calendar.date(byAdding: .day, value: -7, to: now)!
+            ),
+            Follow(
+                id: "fake-mark_\(currentUserID)",
+                followerID: "fake-mark",
                 followeeID: currentUserID,
                 status: .active,
                 createdAt: calendar.date(byAdding: .day, value: -2, to: now)!
@@ -182,8 +196,8 @@ final class CKFollowService: FollowService {
 
         pendingRequests = [
             Follow(
-                id: "fake-user-5_\(currentUserID)",
-                followerID: "fake-user-5",
+                id: "fake-jorge_\(currentUserID)",
+                followerID: "fake-jorge",
                 followeeID: currentUserID,
                 status: .pending,
                 createdAt: calendar.date(byAdding: .day, value: -1, to: now)!
