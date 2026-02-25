@@ -114,6 +114,13 @@ struct CatCardView: View {
                     }
                 }
 
+                if let breed = cat.breed, !breed.isEmpty {
+                    Text(breed.lowercased())
+                        .font(.caption2)
+                        .foregroundStyle(CatchTheme.primary)
+                        .lineLimit(1)
+                }
+
                 Text("\(cat.encounters.count) encounter\(cat.encounters.count == 1 ? "" : "s")")
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)

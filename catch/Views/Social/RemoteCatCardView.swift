@@ -24,6 +24,13 @@ struct RemoteCatCardView: View {
                     }
                 }
 
+                if !cat.breed.isEmpty {
+                    Text(cat.breed.lowercased())
+                        .font(.caption2)
+                        .foregroundStyle(CatchTheme.primary)
+                        .lineLimit(1)
+                }
+
                 Text("\(encounterCount) encounter\(encounterCount == 1 ? "" : "s")")
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)

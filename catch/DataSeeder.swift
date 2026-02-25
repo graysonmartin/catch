@@ -21,6 +21,7 @@ enum DataSeeder {
         // -- Cat 1: garfield (the main character) --
         let garfield = Cat(
             name: "garfield",
+            breed: "Orange Tabby",
             estimatedAge: "3",
             location: Location(name: "Home", latitude: 37.7749, longitude: -122.4194),
             notes: "the original. the blueprint. simply unmatched.",
@@ -57,6 +58,7 @@ enum DataSeeder {
         // -- Cat 2: sprinkles (ragdoll in shopping bag) --
         let sprinkles = Cat(
             name: "sprinkles",
+            breed: "Ragdoll",
             estimatedAge: "5",
             location: Location(name: "Grocery store parking lot", latitude: 37.7850, longitude: -122.4094),
             notes: "found her sitting in someone's grocery bag like she owned it",
@@ -84,6 +86,7 @@ enum DataSeeder {
         // -- Cat 3: tsuki (russian blue with harness) --
         let tsuki = Cat(
             name: "tsuki",
+            breed: "Russian Blue",
             estimatedAge: "4",
             location: Location(name: "The park", latitude: 37.7694, longitude: -122.4862),
             notes: "walks around in a harness like he's on a mission. respect.",

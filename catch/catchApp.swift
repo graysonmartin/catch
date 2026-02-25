@@ -6,13 +6,14 @@ struct catchApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var authService = AppleAuthService()
     @State private var followService = CKFollowService()
+    @State private var breedClassifier = VisionBreedClassifierService()
     @State private var catSyncService: CKCatSyncService?
     @State private var encounterSyncService: CKEncounterSyncService?
     @State private var userBrowseService: CKUserBrowseService?
     let modelContainer: ModelContainer
 
     init() {
-        let schema = Schema(versionedSchema: CatchSchemaV3.self)
+        let schema = Schema(versionedSchema: CatchSchemaV4.self)
         let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
         do {
             modelContainer = try ModelContainer(
@@ -54,6 +55,7 @@ struct catchApp: App {
         WindowGroup {
             if hasCompletedOnboarding {
                 ContentView()
+                    .environment(breedClassifier)
                     .environment(authService)
                     .environment(followService)
                     .environment(catSyncService)

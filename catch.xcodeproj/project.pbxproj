@@ -148,6 +148,18 @@
 		E8F600000316 /* MockEncounterSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000306 /* MockEncounterSyncService.swift */; };
 		E8F600000317 /* CKCatSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000307 /* CKCatSyncServiceTests.swift */; };
 		E8F600000318 /* CKEncounterSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000308 /* CKEncounterSyncServiceTests.swift */; };
+		E8B700000101 /* BreedPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000001 /* BreedPrediction.swift */; };
+		E8B700000102 /* BreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000002 /* BreedClassifierService.swift */; };
+		E8B700000103 /* VisionBreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000003 /* VisionBreedClassifierService.swift */; };
+		E8B700000104 /* BreedLabelMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000004 /* BreedLabelMapper.swift */; };
+		E8B700000105 /* BreedSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000005 /* BreedSuggestionView.swift */; };
+		E8B700000106 /* BreedPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000006 /* BreedPickerView.swift */; };
+		E8B700000201 /* BreedLabelMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000007 /* BreedLabelMapperTests.swift */; };
+		E8B700000202 /* BreedPredictionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000008 /* BreedPredictionTests.swift */; };
+		E8B700000203 /* MockBreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000009 /* MockBreedClassifierService.swift */; };
+		E8B700000204 /* BreedPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000001 /* BreedPrediction.swift */; };
+		E8B700000205 /* BreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000002 /* BreedClassifierService.swift */; };
+		E8B700000206 /* BreedLabelMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000004 /* BreedLabelMapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -260,6 +272,15 @@
 		E8F500000306 /* MockEncounterSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterSyncService.swift; sourceTree = "<group>"; };
 		E8F500000307 /* CKCatSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatSyncServiceTests.swift; sourceTree = "<group>"; };
 		E8F500000308 /* CKEncounterSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterSyncServiceTests.swift; sourceTree = "<group>"; };
+		E8B700000001 /* BreedPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPrediction.swift; sourceTree = "<group>"; };
+		E8B700000002 /* BreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedClassifierService.swift; sourceTree = "<group>"; };
+		E8B700000003 /* VisionBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionBreedClassifierService.swift; sourceTree = "<group>"; };
+		E8B700000004 /* BreedLabelMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLabelMapper.swift; sourceTree = "<group>"; };
+		E8B700000005 /* BreedSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedSuggestionView.swift; sourceTree = "<group>"; };
+		E8B700000006 /* BreedPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPickerView.swift; sourceTree = "<group>"; };
+		E8B700000007 /* BreedLabelMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLabelMapperTests.swift; sourceTree = "<group>"; };
+		E8B700000008 /* BreedPredictionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPredictionTests.swift; sourceTree = "<group>"; };
+		E8B700000009 /* MockBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedClassifierService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,6 +388,8 @@
 		E8000001AA000032 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				E8B700000006 /* BreedPickerView.swift */,
+				E8B700000005 /* BreedSuggestionView.swift */,
 				E8000001AA000014 /* CatPhotoView.swift */,
 				E8000001AA000028 /* PhotoCarouselView.swift */,
 				E8000001AA000015 /* PhotoPickerView.swift */,
@@ -432,6 +455,7 @@
 			isa = PBXGroup;
 			children = (
 				E8CF211849B3A47ED1640CA4 /* Auth */,
+				E8B700000011 /* BreedClassifier */,
 				E8D100000020 /* CloudKit */,
 				E8F500000022 /* CloudSync */,
 				E8E500000022 /* Follow */,
@@ -464,6 +488,7 @@
 			isa = PBXGroup;
 			children = (
 				E8C4C76FF8B24F98B098D2F1 /* Auth */,
+				E8B700000010 /* BreedClassifier */,
 				E8C29A31E399698E3B36A45C /* CloudKit */,
 				E8F500000020 /* CloudSync */,
 				E8E500000020 /* Follow */,
@@ -476,6 +501,7 @@
 			isa = PBXGroup;
 			children = (
 				E8CB34FA781359331A3ED13A /* MockAuthService.swift */,
+				E8B700000009 /* MockBreedClassifierService.swift */,
 				E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */,
 				E8F50000010B /* MockCatRepository.swift */,
 				E8F50000010C /* MockEncounterRepository.swift */,
@@ -601,6 +627,26 @@
 			children = (
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E8B700000010 /* BreedClassifier */ = {
+			isa = PBXGroup;
+			children = (
+				E8B700000001 /* BreedPrediction.swift */,
+				E8B700000002 /* BreedClassifierService.swift */,
+				E8B700000003 /* VisionBreedClassifierService.swift */,
+				E8B700000004 /* BreedLabelMapper.swift */,
+			);
+			path = BreedClassifier;
+			sourceTree = "<group>";
+		};
+		E8B700000011 /* BreedClassifier */ = {
+			isa = PBXGroup;
+			children = (
+				E8B700000007 /* BreedLabelMapperTests.swift */,
+				E8B700000008 /* BreedPredictionTests.swift */,
+			);
+			path = BreedClassifier;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -768,6 +814,12 @@
 				E8E600000035 /* RemoteCatCardView.swift in Sources */,
 				E8E600000036 /* RemoteCatProfileView.swift in Sources */,
 				E8E600000037 /* RemoteFeedItemView.swift in Sources */,
+				E8B700000101 /* BreedPrediction.swift in Sources */,
+				E8B700000102 /* BreedClassifierService.swift in Sources */,
+				E8B700000103 /* VisionBreedClassifierService.swift in Sources */,
+				E8B700000104 /* BreedLabelMapper.swift in Sources */,
+				E8B700000105 /* BreedSuggestionView.swift in Sources */,
+				E8B700000106 /* BreedPickerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -840,6 +892,12 @@
 				E8E600000043 /* UserBrowseError.swift in Sources */,
 				E8E600000038 /* CKUserBrowseServiceTests.swift in Sources */,
 				E8E600000039 /* MockUserBrowseService.swift in Sources */,
+				E8B700000201 /* BreedLabelMapperTests.swift in Sources */,
+				E8B700000202 /* BreedPredictionTests.swift in Sources */,
+				E8B700000203 /* MockBreedClassifierService.swift in Sources */,
+				E8B700000204 /* BreedPrediction.swift in Sources */,
+				E8B700000205 /* BreedClassifierService.swift in Sources */,
+				E8B700000206 /* BreedLabelMapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

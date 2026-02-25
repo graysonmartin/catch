@@ -4,6 +4,7 @@ struct CloudCat: Sendable {
     let recordName: String
     let ownerID: String
     let name: String
+    let breed: String
     let estimatedAge: String
     let locationName: String
     let locationLatitude: Double?

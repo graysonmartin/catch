@@ -50,6 +50,9 @@ struct CatProfileView: View {
                     Spacer()
                 }
 
+                if let breed = cat.breed, !breed.isEmpty {
+                    infoRow(icon: "pawprint.fill", label: "Breed", value: breed)
+                }
                 if !cat.estimatedAge.isEmpty {
                     infoRow(icon: "calendar", label: "Age", value: cat.estimatedAge)
                 }

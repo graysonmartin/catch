@@ -55,6 +55,9 @@ struct RemoteCatProfileView: View {
                 Spacer()
             }
 
+            if !cat.breed.isEmpty {
+                infoRow(icon: "pawprint.fill", label: "Breed", value: cat.breed)
+            }
             if !cat.estimatedAge.isEmpty {
                 infoRow(icon: "calendar", label: "Age", value: cat.estimatedAge)
             }
