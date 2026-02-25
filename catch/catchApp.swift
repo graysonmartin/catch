@@ -6,7 +6,8 @@ struct catchApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @State private var authService = AppleAuthService()
     @State private var followService = CKFollowService()
-    @State private var cloudSyncService: CKCloudSyncService?
+    @State private var catSyncService: CKCatSyncService?
+    @State private var encounterSyncService: CKEncounterSyncService?
     let modelContainer: ModelContainer
 
     init() {
@@ -32,7 +33,7 @@ struct catchApp: App {
                 fatalError("Failed to create ModelContainer after wipe: \(error)")
             }
             #else
-            fatalError("Failed to create ModelContainer: \(error)")
+            fatalError("Failed to create ModelContainer: \(error)") 
             #endif
         }
     }
@@ -54,16 +55,24 @@ struct catchApp: App {
                 ContentView()
                     .environment(authService)
                     .environment(followService)
-                    .environment(cloudSyncService)
+                    .environment(catSyncService)
+                    .environment(encounterSyncService)
                     .task {
                         await authService.checkCredentialState()
-                        if cloudSyncService == nil {
-                            cloudSyncService = CKCloudSyncService(
-                                catRepository: CKCatRepository(),
-                                encounterRepository: CKEncounterRepository(),
-                                getUserID: { [authService] in
-                                    authService.authState.user?.userIdentifier
-                                }
+                        if catSyncService == nil {
+                            let catRepo = CKCatRepository()
+                            let encRepo = CKEncounterRepository()
+                            let getUserID: () -> String? = { [authService] in
+                                authService.authState.user?.userIdentifier
+                            }
+                            catSyncService = CKCatSyncService(
+                                catRepository: catRepo,
+                                encounterRepository: encRepo,
+                                getUserID: getUserID
+                            )
+                            encounterSyncService = CKEncounterSyncService(
+                                encounterRepository: encRepo,
+                                getUserID: getUserID
                             )
                         }
                     }

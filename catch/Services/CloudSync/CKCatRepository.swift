@@ -1,13 +1,15 @@
 import CloudKit
 import Observation
+import os
 
 @Observable
 @MainActor
 final class CKCatRepository: CatRepository {
-    private static let containerID = "iCloud.com.catch.catch"
+    private let container = CKContainer(identifier: "iCloud.com.catch.catch")
+    private let logger = Logger(subsystem: "com.catch.catch", category: "CKCatRepository")
 
     private var database: CKDatabase {
-        CKContainer(identifier: Self.containerID).publicCloudDatabase
+        container.publicCloudDatabase
     }
 
     func save(_ payload: CatSyncPayload, ownerID: String) async throws -> String {
@@ -45,12 +47,44 @@ final class CKCatRepository: CatRepository {
         let query = CKQuery(recordType: CatRecordMapper.recordType, predicate: predicate)
         query.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
 
-        let (results, _) = try await database.records(matching: query, resultsLimit: 200)
+        var allRecords: [CKRecord] = []
 
-        return await results.asyncCompactMap { _, result -> CloudCat? in
-            guard case .success(let record) = result else { return nil }
+        let (firstResults, firstCursor) = try await database.records(matching: query, resultsLimit: 200)
+        allRecords.append(contentsOf: extractRecords(from: firstResults))
+
+        var cursor = firstCursor
+        while let activeCursor = cursor {
+            let (pageResults, nextCursor) = try await database.records(
+                continuingMatchFrom: activeCursor,
+                resultsLimit: 200
+            )
+            allRecords.append(contentsOf: extractRecords(from: pageResults))
+            cursor = nextCursor
+        }
+
+        var cats: [CloudCat] = []
+        for record in allRecords {
             let photos = await CloudKitAssetManager.loadPhotoData(from: record["photos"] as? [CKAsset])
-            return CatRecordMapper.cloudCat(from: record, photos: photos)
+            if let cat = CatRecordMapper.cloudCat(from: record, photos: photos) {
+                cats.append(cat)
+            } else {
+                logger.warning("skipped cat record \(record.recordID.recordName) — mapper returned nil")
+            }
+        }
+        return cats
+    }
+
+    // MARK: - Private
+
+    private func extractRecords(from results: [(CKRecord.ID, Result<CKRecord, Error>)]) -> [CKRecord] {
+        results.compactMap { recordID, result in
+            switch result {
+            case .success(let record):
+                return record
+            case .failure(let error):
+                logger.error("failed to fetch cat record \(recordID.recordName): \(error.localizedDescription)")
+                return nil
+            }
         }
     }
 }

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct EditCatView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(CKCloudSyncService.self) private var cloudSyncService: CKCloudSyncService?
+    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
     @Bindable var cat: Cat
 
     @State private var name: String
@@ -63,7 +63,7 @@ struct EditCatView: View {
         cat.notes = notes
         cat.isOwned = isOwned
         cat.photos = photos
-        Task { await cloudSyncService?.syncCatUpdate(cat) }
+        Task { await catSyncService?.syncCatUpdate(cat) }
         dismiss()
     }
 }

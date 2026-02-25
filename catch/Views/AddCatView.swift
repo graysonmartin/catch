@@ -4,7 +4,7 @@ import SwiftData
 struct AddCatView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(CKCloudSyncService.self) private var cloudSyncService: CKCloudSyncService?
+    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
 
     @State private var name = ""
     @State private var estimatedAge = ""
@@ -73,7 +73,7 @@ struct AddCatView: View {
         )
         modelContext.insert(encounter)
 
-        Task { await cloudSyncService?.syncNewCat(cat, firstEncounter: encounter) }
+        Task { await catSyncService?.syncNewCat(cat, firstEncounter: encounter) }
         dismiss()
     }
 }

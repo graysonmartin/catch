@@ -1,13 +1,15 @@
 import CloudKit
 import Observation
+import os
 
 @Observable
 @MainActor
 final class CKEncounterRepository: EncounterRepository {
-    private static let containerID = "iCloud.com.catch.catch"
+    private let container = CKContainer(identifier: "iCloud.com.catch.catch")
+    private let logger = Logger(subsystem: "com.catch.catch", category: "CKEncounterRepository")
 
     private var database: CKDatabase {
-        CKContainer(identifier: Self.containerID).publicCloudDatabase
+        container.publicCloudDatabase
     }
 
     func save(_ payload: EncounterSyncPayload, ownerID: String) async throws -> String {
@@ -45,12 +47,44 @@ final class CKEncounterRepository: EncounterRepository {
         let query = CKQuery(recordType: EncounterRecordMapper.recordType, predicate: predicate)
         query.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
 
-        let (results, _) = try await database.records(matching: query, resultsLimit: 200)
+        var allRecords: [CKRecord] = []
 
-        return await results.asyncCompactMap { _, result -> CloudEncounter? in
-            guard case .success(let record) = result else { return nil }
+        let (firstResults, firstCursor) = try await database.records(matching: query, resultsLimit: 200)
+        allRecords.append(contentsOf: extractRecords(from: firstResults))
+
+        var cursor = firstCursor
+        while let activeCursor = cursor {
+            let (pageResults, nextCursor) = try await database.records(
+                continuingMatchFrom: activeCursor,
+                resultsLimit: 200
+            )
+            allRecords.append(contentsOf: extractRecords(from: pageResults))
+            cursor = nextCursor
+        }
+
+        var encounters: [CloudEncounter] = []
+        for record in allRecords {
             let photos = await CloudKitAssetManager.loadPhotoData(from: record["photos"] as? [CKAsset])
-            return EncounterRecordMapper.cloudEncounter(from: record, photos: photos)
+            if let encounter = EncounterRecordMapper.cloudEncounter(from: record, photos: photos) {
+                encounters.append(encounter)
+            } else {
+                logger.warning("skipped encounter record \(record.recordID.recordName) — mapper returned nil")
+            }
+        }
+        return encounters
+    }
+
+    // MARK: - Private
+
+    private func extractRecords(from results: [(CKRecord.ID, Result<CKRecord, Error>)]) -> [CKRecord] {
+        results.compactMap { recordID, result in
+            switch result {
+            case .success(let record):
+                return record
+            case .failure(let error):
+                logger.error("failed to fetch encounter record \(recordID.recordName): \(error.localizedDescription)")
+                return nil
+            }
         }
     }
 }

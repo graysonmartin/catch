@@ -4,13 +4,13 @@ import os
 
 @Observable
 @MainActor
-final class CKCloudSyncService: CloudSyncService {
+final class CKCatSyncService: CatSyncService {
     private(set) var isSyncing = false
 
     private let catRepository: any CatRepository
     private let encounterRepository: any EncounterRepository
     private let getUserID: () -> String?
-    private let logger = Logger(subsystem: "com.catch.catch", category: "CloudSync")
+    private let logger = Logger(subsystem: "com.catch.catch", category: "CatSync")
 
     init(
         catRepository: any CatRepository,
@@ -97,69 +97,9 @@ final class CKCloudSyncService: CloudSyncService {
         }
     }
 
-    // MARK: - Sync New Encounter
-
-    func syncNewEncounter(_ encounter: Encounter, for cat: Cat) async {
-        guard let userID = getUserID() else { return }
-        guard let catRecordName = cat.cloudKitRecordName else { return }
-
-        isSyncing = true
-        defer { isSyncing = false }
-
-        let payload = EncounterSyncPayload(
-            recordName: nil,
-            catRecordName: catRecordName,
-            date: encounter.date,
-            locationName: encounter.location.name,
-            locationLatitude: encounter.location.latitude,
-            locationLongitude: encounter.location.longitude,
-            notes: encounter.notes,
-            photos: encounter.photos
-        )
-
-        do {
-            let recordName = try await encounterRepository.save(payload, ownerID: userID)
-            encounter.cloudKitRecordName = recordName
-        } catch {
-            logger.error("encounter sync failed: \(error.localizedDescription)")
-        }
-    }
-
-    // MARK: - Sync Encounter Update
-
-    func syncEncounterUpdate(_ encounter: Encounter) async {
-        guard let userID = getUserID() else { return }
-        guard let encRecordName = encounter.cloudKitRecordName,
-              let catRecordName = encounter.cat?.cloudKitRecordName else { return }
-
-        isSyncing = true
-        defer { isSyncing = false }
-
-        let payload = EncounterSyncPayload(
-            recordName: encRecordName,
-            catRecordName: catRecordName,
-            date: encounter.date,
-            locationName: encounter.location.name,
-            locationLatitude: encounter.location.latitude,
-            locationLongitude: encounter.location.longitude,
-            notes: encounter.notes,
-            photos: encounter.photos
-        )
-
-        do {
-            _ = try await encounterRepository.save(payload, ownerID: userID)
-        } catch {
-            logger.error("encounter update sync failed: \(error.localizedDescription)")
-        }
-    }
-
     // MARK: - Delete
 
     func deleteCat(recordName: String) async throws {
         try await catRepository.delete(recordName: recordName)
-    }
-
-    func deleteEncounter(recordName: String) async throws {
-        try await encounterRepository.delete(recordName: recordName)
     }
 }

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct EditEncounterView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(CKCloudSyncService.self) private var cloudSyncService: CKCloudSyncService?
+    @Environment(CKEncounterSyncService.self) private var encounterSyncService: CKEncounterSyncService?
     @Bindable var encounter: Encounter
 
     @State private var date: Date
@@ -66,7 +66,7 @@ struct EditEncounterView: View {
         encounter.location = location
         encounter.notes = notes
         encounter.photos = photos
-        Task { await cloudSyncService?.syncEncounterUpdate(encounter) }
+        Task { await encounterSyncService?.syncEncounterUpdate(encounter) }
         dismiss()
     }
 }
