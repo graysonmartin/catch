@@ -133,6 +133,20 @@
 		E8F600000316 /* MockEncounterSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000306 /* MockEncounterSyncService.swift */; };
 		E8F600000317 /* CKCatSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000307 /* CKCatSyncServiceTests.swift */; };
 		E8F600000318 /* CKEncounterSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000308 /* CKEncounterSyncServiceTests.swift */; };
+		E8E600000030 /* UserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000030 /* UserBrowseService.swift */; };
+		E8E600000031 /* CKUserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000031 /* CKUserBrowseService.swift */; };
+		E8E600000032 /* UserBrowseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000032 /* UserBrowseData.swift */; };
+		E8E600000033 /* UserBrowseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000033 /* UserBrowseError.swift */; };
+		E8E600000034 /* UserPublicProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000034 /* UserPublicProfileView.swift */; };
+		E8E600000035 /* RemoteCatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000035 /* RemoteCatCardView.swift */; };
+		E8E600000036 /* RemoteCatProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000036 /* RemoteCatProfileView.swift */; };
+		E8E600000037 /* RemoteFeedItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000037 /* RemoteFeedItemView.swift */; };
+		E8E600000040 /* UserBrowseService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8E500000030 /* UserBrowseService.swift */; };
+		E8E600000041 /* CKUserBrowseService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8E500000031 /* CKUserBrowseService.swift */; };
+		E8E600000042 /* UserBrowseData.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8E500000032 /* UserBrowseData.swift */; };
+		E8E600000043 /* UserBrowseError.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8E500000033 /* UserBrowseError.swift */; };
+		E8E600000038 /* CKUserBrowseServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000038 /* CKUserBrowseServiceTests.swift */; };
+		E8E600000039 /* MockUserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000039 /* MockUserBrowseService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -234,6 +248,16 @@
 		E8F500000306 /* MockEncounterSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterSyncService.swift; sourceTree = "<group>"; };
 		E8F500000307 /* CKCatSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatSyncServiceTests.swift; sourceTree = "<group>"; };
 		E8F500000308 /* CKEncounterSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterSyncServiceTests.swift; sourceTree = "<group>"; };
+		E8E500000030 /* UserBrowseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBrowseService.swift; sourceTree = "<group>"; };
+		E8E500000031 /* CKUserBrowseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUserBrowseService.swift; sourceTree = "<group>"; };
+		E8E500000032 /* UserBrowseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBrowseData.swift; sourceTree = "<group>"; };
+		E8E500000033 /* UserBrowseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBrowseError.swift; sourceTree = "<group>"; };
+		E8E500000034 /* UserPublicProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPublicProfileView.swift; sourceTree = "<group>"; };
+		E8E500000035 /* RemoteCatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCatCardView.swift; sourceTree = "<group>"; };
+		E8E500000036 /* RemoteCatProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCatProfileView.swift; sourceTree = "<group>"; };
+		E8E500000037 /* RemoteFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedItemView.swift; sourceTree = "<group>"; };
+		E8E500000038 /* CKUserBrowseServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUserBrowseServiceTests.swift; sourceTree = "<group>"; };
+		E8E500000039 /* MockUserBrowseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserBrowseService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -426,6 +450,7 @@
 				E8C29A31E399698E3B36A45C /* CloudKit */,
 				E8F500000020 /* CloudSync */,
 				E8E500000020 /* Follow */,
+				E8E500000040 /* UserBrowse */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -448,6 +473,7 @@
 				E8E50000000B /* MockFollowService.swift */,
 				E8F500000305 /* MockCatSyncService.swift */,
 				E8F500000306 /* MockEncounterSyncService.swift */,
+				E8E500000039 /* MockUserBrowseService.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -459,6 +485,7 @@
 				E8D100000020 /* CloudKit */,
 				E8F500000022 /* CloudSync */,
 				E8E500000022 /* Follow */,
+				E8E500000041 /* UserBrowse */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 			);
 			path = Services;
@@ -515,6 +542,10 @@
 				E8E500000008 /* FindPeopleView.swift */,
 				E8E500000009 /* FollowRowView.swift */,
 				E8E50000000A /* PendingRequestRowView.swift */,
+				E8E500000034 /* UserPublicProfileView.swift */,
+				E8E500000035 /* RemoteCatCardView.swift */,
+				E8E500000036 /* RemoteCatProfileView.swift */,
+				E8E500000037 /* RemoteFeedItemView.swift */,
 			);
 			path = Social;
 			sourceTree = "<group>";
@@ -548,6 +579,25 @@
 
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E8E500000040 /* UserBrowse */ = {
+			isa = PBXGroup;
+			children = (
+				E8E500000030 /* UserBrowseService.swift */,
+				E8E500000031 /* CKUserBrowseService.swift */,
+				E8E500000032 /* UserBrowseData.swift */,
+				E8E500000033 /* UserBrowseError.swift */,
+			);
+			path = UserBrowse;
+			sourceTree = "<group>";
+		};
+		E8E500000041 /* UserBrowse */ = {
+			isa = PBXGroup;
+			children = (
+				E8E500000038 /* CKUserBrowseServiceTests.swift */,
+			);
+			path = UserBrowse;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -706,6 +756,14 @@
 				E8F600000302 /* CKCatSyncService.swift in Sources */,
 				E8F600000303 /* EncounterSyncService.swift in Sources */,
 				E8F600000304 /* CKEncounterSyncService.swift in Sources */,
+				E8E600000030 /* UserBrowseService.swift in Sources */,
+				E8E600000031 /* CKUserBrowseService.swift in Sources */,
+				E8E600000032 /* UserBrowseData.swift in Sources */,
+				E8E600000033 /* UserBrowseError.swift in Sources */,
+				E8E600000034 /* UserPublicProfileView.swift in Sources */,
+				E8E600000035 /* RemoteCatCardView.swift in Sources */,
+				E8E600000036 /* RemoteCatProfileView.swift in Sources */,
+				E8E600000037 /* RemoteFeedItemView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -770,6 +828,12 @@
 				E8F600000316 /* MockEncounterSyncService.swift in Sources */,
 				E8F600000317 /* CKCatSyncServiceTests.swift in Sources */,
 				E8F600000318 /* CKEncounterSyncServiceTests.swift in Sources */,
+				E8E600000040 /* UserBrowseService.swift in Sources (catchTests) */,
+				E8E600000041 /* CKUserBrowseService.swift in Sources (catchTests) */,
+				E8E600000042 /* UserBrowseData.swift in Sources (catchTests) */,
+				E8E600000043 /* UserBrowseError.swift in Sources (catchTests) */,
+				E8E600000038 /* CKUserBrowseServiceTests.swift in Sources */,
+				E8E600000039 /* MockUserBrowseService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
