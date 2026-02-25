@@ -416,6 +416,7 @@
 				E8000001AA00002A /* OnboardingView.swift */,
 				E8000001AA000061 /* ProfileView.swift */,
 				E8000001AA000062 /* EditProfileView.swift */,
+				E8BL0000F002 /* BreedLog */,
 				E8E500000021 /* Social */,
 			);
 			path = Views;
@@ -425,7 +426,6 @@
 			isa = PBXGroup;
 			children = (
 				E8B700000006 /* BreedPickerView.swift */,
-				E8BL0000F002 /* BreedLog */,
 				E8B700000005 /* BreedSuggestionView.swift */,
 				E8000001AA000014 /* CatPhotoView.swift */,
 				E8000001AA000028 /* PhotoCarouselView.swift */,
