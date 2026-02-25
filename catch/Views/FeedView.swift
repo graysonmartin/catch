@@ -16,11 +16,13 @@ enum FeedSortOption: String, CaseIterable, Identifiable {
 }
 
 struct FeedView: View {
+    @Environment(\.modelContext) private var modelContext
     @Query(sort: \Encounter.date, order: .reverse) private var encounters: [Encounter]
     @Query private var cats: [Cat]
     @Binding var scrollToTop: Bool
     @State private var searchText = ""
     @State private var sortOption: FeedSortOption = .newest
+    @State private var encounterToDelete: Encounter?
 
     private var filteredEncounters: [Encounter] {
         let filtered: [Encounter]
@@ -71,6 +73,16 @@ struct FeedView: View {
                                         .buttonStyle(.plain)
                                     } else {
                                         FeedItemView(encounter: encounter)
+                                            .overlay(alignment: .topTrailing) {
+                                                Button {
+                                                    encounterToDelete = encounter
+                                                } label: {
+                                                    Image(systemName: "xmark.circle.fill")
+                                                        .font(.title3)
+                                                        .foregroundStyle(.white, CatchTheme.textSecondary)
+                                                }
+                                                .padding(8)
+                                            }
                                     }
                                 }
                             }
@@ -108,6 +120,22 @@ struct FeedView: View {
             }
             .navigationDestination(for: Cat.self) { cat in
                 CatProfileView(cat: cat)
+            }
+            .alert(CatchStrings.Feed.orphanedAlertTitle, isPresented: Binding(
+                get: { encounterToDelete != nil },
+                set: { if !$0 { encounterToDelete = nil } }
+            )) {
+                Button(CatchStrings.Common.delete, role: .destructive) {
+                    if let encounter = encounterToDelete {
+                        modelContext.delete(encounter)
+                        encounterToDelete = nil
+                    }
+                }
+                Button(CatchStrings.Common.cancel, role: .cancel) {
+                    encounterToDelete = nil
+                }
+            } message: {
+                Text(CatchStrings.Feed.orphanedAlertMessage)
             }
         }
     }

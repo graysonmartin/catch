@@ -16,5 +16,9 @@ extension CatchStrings {
         static func searchEmptySubtitle(_ query: String) -> String {
             String(localized: "no encounters matching \"\(query)\"")
         }
+
+        // Orphaned encounters
+        static let orphanedAlertTitle = String(localized: "delete orphaned encounter?")
+        static let orphanedAlertMessage = String(localized: "this encounter lost its cat. let it go.")
     }
 }

@@ -8,8 +8,14 @@ struct CatMapView: View {
     @State private var selectedCat: Cat?
     @State private var showProfile = false
     @State private var clusterSelection: ClusterSelection?
+    @State private var showMissingLocationSheet = false
+
     private var catsWithLocation: [Cat] {
         cats.filter { $0.location.hasCoordinates }
+    }
+
+    private var catsWithoutLocation: [Cat] {
+        cats.filter { !$0.location.hasCoordinates }
     }
 
     var body: some View {
@@ -22,16 +28,38 @@ struct CatMapView: View {
                         subtitle: CatchStrings.Map.emptySubtitle
                     )
                 } else {
-                    ClusterMapView(
-                        cats: catsWithLocation,
-                        onSelectCat: { cat in
-                            selectedCat = cat
-                            showProfile = true
-                        },
-                        onSelectCluster: { cats in
-                            clusterSelection = ClusterSelection(cats: cats)
+                    ZStack(alignment: .top) {
+                        ClusterMapView(
+                            cats: catsWithLocation,
+                            onSelectCat: { cat in
+                                selectedCat = cat
+                                showProfile = true
+                            },
+                            onSelectCluster: { cats in
+                                clusterSelection = ClusterSelection(cats: cats)
+                            }
+                        )
+
+                        if !catsWithoutLocation.isEmpty {
+                            Button {
+                                showMissingLocationSheet = true
+                            } label: {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "eye.slash")
+                                        .font(.caption2)
+                                    Text(CatchStrings.Map.catsNotShown(catsWithoutLocation.count))
+                                        .font(.caption.weight(.medium))
+                                }
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(.ultraThinMaterial)
+                                .clipShape(Capsule())
+                                .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.top, 8)
                         }
-                    )
+                    }
                 }
             }
             .navigationTitle(CatchStrings.Tabs.map)
@@ -48,7 +76,74 @@ struct CatMapView: View {
                     showProfile = true
                 }
             }
+            .sheet(isPresented: $showMissingLocationSheet) {
+                MissingLocationSheet(cats: catsWithoutLocation) { cat in
+                    showMissingLocationSheet = false
+                    selectedCat = cat
+                    showProfile = true
+                }
+            }
         }
+    }
+}
+
+// MARK: - Missing location sheet
+
+struct MissingLocationSheet: View {
+    let cats: [Cat]
+    let onSelect: (Cat) -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List(cats) { cat in
+                Button {
+                    onSelect(cat)
+                } label: {
+                    HStack(spacing: 12) {
+                        if let photoData = cat.photos.first,
+                           let uiImage = ImageDownsampler.downsample(data: photoData, to: CGSize(width: 44, height: 44)) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 44, height: 44)
+                                .clipShape(Circle())
+                        } else {
+                            Image(systemName: "cat.fill")
+                                .font(.system(size: 20))
+                                .foregroundStyle(.white)
+                                .frame(width: 44, height: 44)
+                                .background(CatchTheme.primary)
+                                .clipShape(Circle())
+                        }
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(cat.name)
+                                .font(.headline)
+                                .foregroundStyle(CatchTheme.textPrimary)
+                            Text(CatchStrings.Map.noLocationSet)
+                                .font(.caption)
+                                .foregroundStyle(CatchTheme.textSecondary)
+                        }
+
+                        Spacer()
+
+                        Text(CatchStrings.Common.edit.lowercased())
+                            .font(.caption.weight(.medium))
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                }
+                .buttonStyle(.plain)
+            }
+            .navigationTitle(CatchStrings.Map.missingLocationsTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(CatchStrings.Common.close) { dismiss() }
+                }
+            }
+        }
+        .presentationDetents([.medium])
     }
 }
 
