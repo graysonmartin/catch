@@ -5,6 +5,13 @@ enum SocialTab: String, CaseIterable, Identifiable {
     case following
 
     var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .followers: CatchStrings.Social.followersTab
+        case .following: CatchStrings.Social.followingTab
+        }
+    }
 }
 
 struct SocialView: View {
@@ -17,7 +24,7 @@ struct SocialView: View {
         VStack(spacing: 0) {
             Picker("", selection: $selectedTab) {
                 ForEach(SocialTab.allCases) { tab in
-                    Text(tab.rawValue).tag(tab)
+                    Text(tab.displayName).tag(tab)
                 }
             }
             .pickerStyle(.segmented)
@@ -40,14 +47,14 @@ struct SocialView: View {
             }
         }
         .background(CatchTheme.background)
-        .navigationTitle(selectedTab.rawValue)
+        .navigationTitle(selectedTab.displayName)
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     isShowingFindPeople = true
                 } label: {
-                    Label("find people", systemImage: "magnifyingglass")
+                    Label(CatchStrings.Social.findPeople, systemImage: "magnifyingglass")
                 }
             }
         }
@@ -84,7 +91,7 @@ struct SocialView: View {
     // MARK: - Sections
 
     private var requestsSection: some View {
-        Section("requests") {
+        Section(CatchStrings.Social.requests) {
             ForEach(followService.pendingRequests) { follow in
                 PendingRequestRowView(
                     follow: follow,
@@ -96,7 +103,7 @@ struct SocialView: View {
     }
 
     private var followersSection: some View {
-        Section("followers") {
+        Section(CatchStrings.Social.followersTab) {
             ForEach(followService.followers) { follow in
                 FollowRowView(
                     follow: follow,
@@ -109,7 +116,7 @@ struct SocialView: View {
     }
 
     private var followingSection: some View {
-        Section("following") {
+        Section(CatchStrings.Social.followingTab) {
             ForEach(followService.following) { follow in
                 FollowRowView(
                     follow: follow,
@@ -143,14 +150,14 @@ struct SocialView: View {
             case .followers:
                 EmptyStateView(
                     icon: "person.2.slash",
-                    title: "no followers yet",
-                    subtitle: "your adoring public hasn't arrived"
+                    title: CatchStrings.Social.noFollowersTitle,
+                    subtitle: CatchStrings.Social.noFollowersSubtitle
                 )
             case .following:
                 EmptyStateView(
                     icon: "person.2.slash",
-                    title: "not following anyone",
-                    subtitle: "find some people to follow and start building your circle"
+                    title: CatchStrings.Social.notFollowingTitle,
+                    subtitle: CatchStrings.Social.notFollowingSubtitle
                 )
             }
         }

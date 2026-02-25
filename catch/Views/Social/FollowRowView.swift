@@ -19,7 +19,7 @@ struct FollowRowView: View {
     }
 
     private var actionLabel: String {
-        isFollowerRow ? "remove follower" : "unfollow"
+        isFollowerRow ? CatchStrings.Social.removeFollower : CatchStrings.Social.unfollow
     }
 
     var body: some View {
@@ -40,7 +40,7 @@ struct FollowRowView: View {
                         .foregroundStyle(CatchTheme.textPrimary)
                         .lineLimit(1)
 
-                    Text("since \(follow.createdAt.formatted(.dateTime.month(.abbreviated).year()))")
+                    Text(CatchStrings.Social.since(follow.createdAt))
                         .font(.caption)
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
@@ -62,7 +62,7 @@ struct FollowRowView: View {
                 Task { try? await onAction() }
             }
         } message: {
-            Text("are you sure?")
+            Text(CatchStrings.Social.areYouSure)
         }
         .task {
             resolvedName = await browseService?.fetchDisplayName(userID: targetUserID)

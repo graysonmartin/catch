@@ -17,6 +17,13 @@ struct UserPublicProfileView: View {
         case activity
 
         var id: String { rawValue }
+
+        var displayName: String {
+            switch self {
+            case .cats: CatchStrings.Social.catsTab
+            case .activity: CatchStrings.Social.activityTab
+            }
+        }
     }
 
     private let columns = [
@@ -54,7 +61,7 @@ struct UserPublicProfileView: View {
         VStack(spacing: 12) {
             ProgressView()
                 .tint(CatchTheme.primary)
-            Text("loading profile...")
+            Text(CatchStrings.Social.loadingProfile)
                 .font(.subheadline)
                 .foregroundStyle(CatchTheme.textSecondary)
         }
@@ -69,7 +76,7 @@ struct UserPublicProfileView: View {
             Text(error.localizedDescription)
                 .font(.subheadline)
                 .foregroundStyle(CatchTheme.textSecondary)
-            Button("try again") {
+            Button(CatchStrings.Social.tryAgain) {
                 Task { await loadData() }
             }
             .font(.subheadline.weight(.medium))
@@ -87,10 +94,10 @@ struct UserPublicProfileView: View {
                 Image(systemName: "lock.fill")
                     .font(.title)
                     .foregroundStyle(CatchTheme.textSecondary)
-                Text("this profile is private")
+                Text(CatchStrings.Social.profileIsPrivate)
                     .font(.subheadline)
                     .foregroundStyle(CatchTheme.textSecondary)
-                Text("follow them to see their cats")
+                Text(CatchStrings.Social.followToSee)
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }
@@ -134,8 +141,8 @@ struct UserPublicProfileView: View {
 
             if let data {
                 HStack(spacing: 24) {
-                    statBadge(count: isPrivateHidden ? nil : data.cats.count, label: "cats")
-                    statBadge(count: isPrivateHidden ? nil : data.encounters.count, label: "encounters")
+                    statBadge(count: isPrivateHidden ? nil : data.cats.count, label: CatchStrings.Profile.cats)
+                    statBadge(count: isPrivateHidden ? nil : data.encounters.count, label: CatchStrings.Profile.encounters)
                 }
                 .padding(.top, 4)
             }
@@ -144,7 +151,7 @@ struct UserPublicProfileView: View {
 
     private func statBadge(count: Int?, label: String) -> some View {
         VStack(spacing: 2) {
-            Text(count.map { "\($0)" } ?? "--")
+            Text(count.map { "\($0)" } ?? CatchStrings.Social.statPlaceholder)
                 .font(.headline)
                 .foregroundStyle(CatchTheme.textPrimary)
             Text(label)
@@ -158,7 +165,7 @@ struct UserPublicProfileView: View {
         let currentUserID = authService.authState.user?.userIdentifier ?? ""
         if userID != currentUserID {
             if followService.isFollowing(userID) {
-                Button("following") {
+                Button(CatchStrings.Social.followingStatus) {
                     Task {
                         try? await followService.unfollow(targetID: userID, by: currentUserID)
                     }
@@ -170,7 +177,7 @@ struct UserPublicProfileView: View {
                 .background(CatchTheme.secondary)
                 .clipShape(Capsule())
             } else if followService.pendingRequestTo(userID) != nil {
-                Text("requested")
+                Text(CatchStrings.Social.requestedStatus)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.textSecondary)
                     .padding(.horizontal, 24)
@@ -178,7 +185,7 @@ struct UserPublicProfileView: View {
                     .background(CatchTheme.textSecondary.opacity(0.1))
                     .clipShape(Capsule())
             } else {
-                Button("follow") {
+                Button(CatchStrings.Social.follow) {
                     Task {
                         let isPrivate = data?.profile.isPrivate ?? false
                         try? await followService.follow(
@@ -201,7 +208,7 @@ struct UserPublicProfileView: View {
     private var tabPicker: some View {
         Picker("", selection: $selectedTab) {
             ForEach(ProfileTab.allCases) { tab in
-                Text(tab.rawValue).tag(tab)
+                Text(tab.displayName).tag(tab)
             }
         }
         .pickerStyle(.segmented)
@@ -222,8 +229,8 @@ struct UserPublicProfileView: View {
             if data.cats.isEmpty {
                 EmptyStateView(
                     icon: "square.grid.2x2",
-                    title: "no cats yet",
-                    subtitle: "this person hasn't logged any cats"
+                    title: CatchStrings.Social.noCatsYetTitle,
+                    subtitle: CatchStrings.Social.noCatsYetSubtitle
                 )
                 .padding(.top, 32)
             } else {
@@ -251,8 +258,8 @@ struct UserPublicProfileView: View {
             if data.encounters.isEmpty {
                 EmptyStateView(
                     icon: "clock",
-                    title: "no activity yet",
-                    subtitle: "no encounters to show"
+                    title: CatchStrings.Social.noActivityTitle,
+                    subtitle: CatchStrings.Social.noActivitySubtitle
                 )
                 .padding(.top, 32)
             } else {
@@ -270,7 +277,7 @@ struct UserPublicProfileView: View {
     // MARK: - Helpers
 
     private var displayName: String {
-        data?.profile.displayName ?? initialDisplayName ?? "profile"
+        data?.profile.displayName ?? initialDisplayName ?? CatchStrings.Social.profileFallbackTitle
     }
 
     private var isFollowingUser: Bool {

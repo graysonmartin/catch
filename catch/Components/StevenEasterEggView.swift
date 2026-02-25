@@ -34,7 +34,7 @@ struct StevenEasterEggView: View {
     }
 
     private var toastView: some View {
-        Text("you found him.")
+        Text(CatchStrings.Components.youFoundHim)
             .font(.title2.weight(.bold))
             .foregroundStyle(CatchTheme.textPrimary)
             .padding(.horizontal, 24)

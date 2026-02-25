@@ -37,7 +37,7 @@ struct OnboardingView: View {
                             hasCompletedOnboarding = true
                         }
                     } label: {
-                        Text(currentPage == 2 ? "let's go" : "next")
+                        Text(currentPage == 2 ? CatchStrings.Onboarding.letsGo : CatchStrings.Onboarding.next)
                             .font(.headline)
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity)
@@ -50,7 +50,7 @@ struct OnboardingView: View {
                         Button {
                             hasCompletedOnboarding = true
                         } label: {
-                            Text("skip")
+                            Text(CatchStrings.Onboarding.skip)
                                 .font(.subheadline)
                                 .foregroundStyle(CatchTheme.textSecondary)
                         }
@@ -73,15 +73,15 @@ struct OnboardingView: View {
                 .foregroundStyle(CatchTheme.primary)
 
             VStack(spacing: 12) {
-                Text("catch")
+                Text(CatchStrings.Onboarding.appName)
                     .font(.system(size: 42, weight: .bold, design: .rounded))
                     .foregroundStyle(CatchTheme.textPrimary)
 
-                Text("track every cat you meet.")
+                Text(CatchStrings.Onboarding.subtitle)
                     .font(.title3)
                     .foregroundStyle(CatchTheme.textSecondary)
 
-                Text("log sightings. remember names.\nbecome the neighborhood cat census.")
+                Text(CatchStrings.Onboarding.detail)
                     .font(.subheadline)
                     .foregroundStyle(CatchTheme.textSecondary)
                     .multilineTextAlignment(.center)
@@ -100,30 +100,30 @@ struct OnboardingView: View {
         VStack(spacing: 32) {
             Spacer()
 
-            Text("here's the rundown")
+            Text(CatchStrings.Onboarding.tourTitle)
                 .font(.title2.weight(.bold))
                 .foregroundStyle(CatchTheme.textPrimary)
 
             VStack(alignment: .leading, spacing: 20) {
                 tourRow(
                     icon: "pawprint.fill",
-                    title: "feed",
-                    detail: "your timeline of every cat encounter"
+                    title: CatchStrings.Onboarding.tourFeed,
+                    detail: CatchStrings.Onboarding.tourFeedDetail
                 )
                 tourRow(
                     icon: "plus.circle.fill",
-                    title: "log",
-                    detail: "register new cats or log re-sightings"
+                    title: CatchStrings.Onboarding.tourLog,
+                    detail: CatchStrings.Onboarding.tourLogDetail
                 )
                 tourRow(
                     icon: "map.fill",
-                    title: "map",
-                    detail: "see where all your cats hang out"
+                    title: CatchStrings.Onboarding.tourMap,
+                    detail: CatchStrings.Onboarding.tourMapDetail
                 )
                 tourRow(
                     icon: "square.grid.2x2.fill",
-                    title: "collection",
-                    detail: "your personal cat index"
+                    title: CatchStrings.Onboarding.tourCollection,
+                    detail: CatchStrings.Onboarding.tourCollectionDetail
                 )
             }
             .padding(.horizontal, 8)
@@ -163,17 +163,17 @@ struct OnboardingView: View {
                 .foregroundStyle(CatchTheme.primary)
 
             VStack(spacing: 12) {
-                Text("one more thing")
+                Text(CatchStrings.Onboarding.locationTitle)
                     .font(.title2.weight(.bold))
                     .foregroundStyle(CatchTheme.textPrimary)
 
-                Text("catch uses your location to pin\nwhere you spot cats on the map.")
+                Text(CatchStrings.Onboarding.locationDescription)
                     .font(.subheadline)
                     .foregroundStyle(CatchTheme.textSecondary)
                     .multilineTextAlignment(.center)
                     .lineSpacing(4)
 
-                Text("you can always skip this per-encounter.\nwe're not tracking you, promise.")
+                Text(CatchStrings.Onboarding.locationReassurance)
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary.opacity(0.7))
                     .multilineTextAlignment(.center)
@@ -187,7 +187,7 @@ struct OnboardingView: View {
                 } label: {
                     HStack {
                         Image(systemName: "location.fill")
-                        Text("enable location")
+                        Text(CatchStrings.Onboarding.enableLocation)
                     }
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.primary)
@@ -200,7 +200,7 @@ struct OnboardingView: View {
                 HStack(spacing: 6) {
                     Image(systemName: locationManager.wasGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
                         .foregroundStyle(locationManager.wasGranted ? .green : CatchTheme.textSecondary)
-                    Text(locationManager.wasGranted ? "location enabled" : "no worries, you can change this in settings")
+                    Text(locationManager.wasGranted ? CatchStrings.Onboarding.locationEnabled : CatchStrings.Onboarding.locationDenied)
                         .font(.caption)
                         .foregroundStyle(CatchTheme.textSecondary)
                 }

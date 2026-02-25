@@ -17,7 +17,7 @@ struct PendingRequestRowView: View {
                     .foregroundStyle(CatchTheme.textPrimary)
                     .lineLimit(1)
 
-                Text("wants to follow you")
+                Text(CatchStrings.Social.wantsToFollowYou)
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }

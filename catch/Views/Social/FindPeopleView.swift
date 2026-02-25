@@ -21,9 +21,9 @@ struct FindPeopleView: View {
             List {
                 if results.isEmpty && !searchText.isEmpty && !isSearching {
                     ContentUnavailableView(
-                        "no one found",
+                        CatchStrings.Social.noOneFound,
                         systemImage: "person.slash",
-                        description: Text("try a different name")
+                        description: Text(CatchStrings.Social.tryDifferentName)
                     )
                 } else {
                     ForEach(results, id: \.recordName) { user in
@@ -36,17 +36,17 @@ struct FindPeopleView: View {
                 if searchText.isEmpty && results.isEmpty {
                     EmptyStateView(
                         icon: "magnifyingglass",
-                        title: "find your people",
-                        subtitle: "search by name to discover other cat spotters"
+                        title: CatchStrings.Social.findYourPeople,
+                        subtitle: CatchStrings.Social.findPeopleSubtitle
                     )
                 }
             }
-            .searchable(text: $searchText, prompt: "search by name")
-            .navigationTitle("find people")
+            .searchable(text: $searchText, prompt: CatchStrings.Social.searchByName)
+            .navigationTitle(CatchStrings.Social.findPeople)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") { dismiss() }
+                    Button(CatchStrings.Common.done) { dismiss() }
                 }
             }
             .task(id: searchText) {
@@ -64,7 +64,7 @@ struct FindPeopleView: View {
                 .foregroundStyle(CatchTheme.secondary)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(user.displayName.isEmpty ? "anonymous" : user.displayName)
+                Text(user.displayName.isEmpty ? CatchStrings.Social.anonymous : user.displayName)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.textPrimary)
 
@@ -87,22 +87,22 @@ struct FindPeopleView: View {
         let targetID = user.appleUserID
 
         if targetID == currentUserID {
-            Text("you")
+            Text(CatchStrings.Social.you)
                 .font(.caption.weight(.medium))
                 .foregroundStyle(CatchTheme.textSecondary)
         } else if followService.isFollowing(targetID) {
-            Text("following")
+            Text(CatchStrings.Social.followingStatus)
                 .font(.caption.weight(.medium))
                 .foregroundStyle(CatchTheme.textSecondary)
         } else if followService.pendingRequestTo(targetID) != nil || sentFollowIDs.contains(targetID) {
-            Text("requested")
+            Text(CatchStrings.Social.requestedStatus)
                 .font(.caption.weight(.medium))
                 .foregroundStyle(CatchTheme.textSecondary)
         } else {
             Button {
                 performFollow(targetID: targetID, isPrivate: user.isPrivate)
             } label: {
-                Text(user.isPrivate ? "request" : "follow")
+                Text(user.isPrivate ? CatchStrings.Social.request : CatchStrings.Social.follow)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 12)

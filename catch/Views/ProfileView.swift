@@ -26,7 +26,7 @@ struct ProfileView: View {
                 }
             }
             .background(CatchTheme.background)
-            .navigationTitle("profile")
+            .navigationTitle(CatchStrings.Profile.profileTitle)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 if profile != nil {
@@ -88,12 +88,12 @@ struct ProfileView: View {
 
     private func infoSection(_ profile: UserProfile) -> some View {
         VStack(spacing: 6) {
-            Text(profile.displayName.isEmpty ? "mysterious stranger" : profile.displayName)
+            Text(profile.displayName.isEmpty ? CatchStrings.Profile.mysteriousStranger : profile.displayName)
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundStyle(CatchTheme.textPrimary)
 
-            Text(profile.bio.isEmpty ? "too cool for a bio" : profile.bio)
+            Text(profile.bio.isEmpty ? CatchStrings.Profile.tooCoolForBio : profile.bio)
                 .font(.subheadline)
                 .foregroundStyle(CatchTheme.textSecondary)
                 .multilineTextAlignment(.center)
@@ -103,8 +103,8 @@ struct ProfileView: View {
 
     private var statsSection: some View {
         HStack(spacing: 12) {
-            statCard(count: cats.count, label: "cats", icon: "cat.fill")
-            statCard(count: encounters.count, label: "encounters", icon: "pawprint.fill")
+            statCard(count: cats.count, label: CatchStrings.Profile.cats, icon: "cat.fill")
+            statCard(count: encounters.count, label: CatchStrings.Profile.encounters, icon: "pawprint.fill")
         }
         .padding(.horizontal, 20)
     }
@@ -142,7 +142,7 @@ struct ProfileView: View {
             } label: {
                 statCard(
                     count: followService.followers.count,
-                    label: "followers",
+                    label: CatchStrings.Profile.followers,
                     icon: "person.2.fill"
                 )
                 .overlay(alignment: .topTrailing) {
@@ -163,7 +163,7 @@ struct ProfileView: View {
             } label: {
                 statCard(
                     count: followService.following.count,
-                    label: "following",
+                    label: CatchStrings.Profile.following,
                     icon: "person.badge.plus"
                 )
             }
@@ -173,7 +173,7 @@ struct ProfileView: View {
     }
 
     private func joinDateSection(_ profile: UserProfile) -> some View {
-        Text("lurking since \(profile.createdAt.formatted(.dateTime.month(.wide).year()))")
+        Text(CatchStrings.Profile.lurkingSince(profile.createdAt))
             .font(.caption)
             .foregroundStyle(CatchTheme.textSecondary)
     }
@@ -195,7 +195,7 @@ struct ProfileView: View {
         HStack(spacing: 8) {
             Image(systemName: "checkmark.seal.fill")
                 .foregroundStyle(CatchTheme.primary)
-            Text("signed in with apple")
+            Text(CatchStrings.Profile.signedInWithApple)
                 .font(.subheadline)
                 .foregroundStyle(CatchTheme.textSecondary)
         }
@@ -215,7 +215,7 @@ struct ProfileView: View {
             .signInWithAppleButtonStyle(.black)
             .frame(height: 44)
 
-            Text("sign in to back up your profile")
+            Text(CatchStrings.Profile.signInPrompt)
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
 
@@ -226,7 +226,7 @@ struct ProfileView: View {
                     profile.appleUserID = userID
                 }
             } label: {
-                Text("fake sign in (debug)")
+                Text(CatchStrings.Profile.fakeSignIn)
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(.white)
@@ -277,13 +277,13 @@ struct ProfileView: View {
             Spacer()
             EmptyStateView(
                 icon: "person.crop.circle.badge.questionmark",
-                title: "who even are you",
-                subtitle: "set up your profile so the cats know who they're dealing with"
+                title: CatchStrings.Profile.emptyTitle,
+                subtitle: CatchStrings.Profile.emptySubtitle
             )
             Button {
                 createProfile()
             } label: {
-                Text("set up profile")
+                Text(CatchStrings.Profile.setUpProfile)
                     .fontWeight(.semibold)
                     .foregroundStyle(.white)
                     .padding(.horizontal, 24)

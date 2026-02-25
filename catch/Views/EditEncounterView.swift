@@ -22,7 +22,7 @@ struct EditEncounterView: View {
         NavigationStack {
             Form {
                 if let cat = encounter.cat {
-                    Section("cat") {
+                    Section(CatchStrings.Log.catSection) {
                         HStack(spacing: 12) {
                             CatPhotoView(photoData: cat.photos.first, size: 40)
                             Text(cat.name)
@@ -33,28 +33,28 @@ struct EditEncounterView: View {
                     }
                 }
 
-                Section("details") {
-                    DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                Section(CatchStrings.Log.detailsSection) {
+                    DatePicker(CatchStrings.Common.date, selection: $date, displayedComponents: [.date, .hourAndMinute])
                     LocationPickerView(location: $location)
                 }
 
-                Section("photos") {
+                Section(CatchStrings.Log.photosSection) {
                     PhotoPickerView(selectedPhotos: $photos)
                 }
 
-                Section("notes") {
-                    TextField("what happened?", text: $notes, axis: .vertical)
+                Section(CatchStrings.Log.notesSection) {
+                    TextField(CatchStrings.Log.whatHappenedLower, text: $notes, axis: .vertical)
                         .lineLimit(3...6)
                 }
             }
-            .navigationTitle("Edit Encounter")
+            .navigationTitle(CatchStrings.Log.editEncounterTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(CatchStrings.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { save() }
+                    Button(CatchStrings.Common.save) { save() }
                         .fontWeight(.semibold)
                 }
             }

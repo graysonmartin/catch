@@ -31,10 +31,10 @@ struct FeedItemView: View {
 
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 4) {
-                        Text(encounter.cat?.name ?? "Unknown Cat")
+                        Text(encounter.cat?.name ?? CatchStrings.Feed.unknownCat)
                             .font(.headline)
                             .foregroundStyle(CatchTheme.textPrimary)
-                        Text(isFirstEncounter ? "NEW" : "REPEAT")
+                        Text(isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat)
                             .font(.system(size: PillLayout.fontSize, weight: .bold))
                             .foregroundStyle(isFirstEncounter ? CatchTheme.primary : CatchTheme.textSecondary)
                             .padding(.horizontal, PillLayout.horizontalPadding)

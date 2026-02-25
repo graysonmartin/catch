@@ -21,18 +21,18 @@ struct AddCatView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Cat Info") {
-                    TextField("Name", text: $name)
+                Section(CatchStrings.Common.catInfo) {
+                    TextField(CatchStrings.Common.name, text: $name)
                     BreedPickerView(breed: $breed)
-                    TextField("Estimated Age", text: $estimatedAge)
+                    TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
                     LocationPickerView(location: $location)
-                    Toggle("I own this cat", isOn: $isOwned)
+                    Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
                 }
 
-                Section("Photos") {
+                Section(CatchStrings.Common.photos) {
                     PhotoPickerView(selectedPhotos: $photos)
                     if photos.isEmpty {
-                        Text("at least 1 photo required -- no pics no proof")
+                        Text(CatchStrings.Log.photoRequired)
                             .font(.caption)
                             .foregroundStyle(CatchTheme.primary)
                     }
@@ -52,25 +52,25 @@ struct AddCatView: View {
                     }
                 }
 
-                Section("Notes") {
-                    TextField("Notes about this cat...", text: $notes, axis: .vertical)
+                Section(CatchStrings.Common.notes) {
+                    TextField(CatchStrings.Common.notesPlaceholder, text: $notes, axis: .vertical)
                         .lineLimit(3...6)
                 }
 
-                Section("First Encounter") {
-                    Text("A first encounter will be logged automatically with today's date and the location above.")
+                Section(CatchStrings.Log.firstEncounter) {
+                    Text(CatchStrings.Log.firstEncounterHint)
                         .font(.caption)
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
             }
-            .navigationTitle("New Cat")
+            .navigationTitle(CatchStrings.Log.newCat)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(CatchStrings.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { save() }
+                    Button(CatchStrings.Common.save) { save() }
                         .disabled(!canSave)
                         .fontWeight(.semibold)
                 }

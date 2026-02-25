@@ -31,7 +31,7 @@ struct PhotoPickerView: View {
                     .padding(.horizontal)
                 }
 
-                Text("drag to reorder -- first photo is your profile pic")
+                Text(CatchStrings.Components.dragToReorder)
                     .font(.caption2)
                     .foregroundStyle(CatchTheme.textSecondary)
                     .padding(.horizontal)
@@ -42,7 +42,7 @@ struct PhotoPickerView: View {
                 maxSelectionCount: CatchTheme.maxPhotoSelection,
                 matching: .images
             ) {
-                Label("Add Photos", systemImage: "photo.on.rectangle.angled")
+                Label(CatchStrings.Components.addPhotos, systemImage: "photo.on.rectangle.angled")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.primary)
             }
@@ -81,7 +81,7 @@ struct PhotoPickerView: View {
     }
 
     private var primaryBadge: some View {
-        Text("profile pic")
+        Text(CatchStrings.Components.profilePic)
             .font(.system(size: 8, weight: .bold))
             .foregroundStyle(.white)
             .padding(.horizontal, 5)

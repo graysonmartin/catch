@@ -16,8 +16,8 @@ class LocationFetcher: NSObject, CLLocationManagerDelegate {
 
         var errorDescription: String? {
             switch self {
-            case .denied: return "Location access denied. Enable it in Settings."
-            case .timeout: return "Location request timed out. Try again."
+            case .denied: return CatchStrings.Components.locationDenied
+            case .timeout: return CatchStrings.Components.locationTimeout
             }
         }
     }
@@ -100,7 +100,7 @@ struct LocationPickerView: View {
             } label: {
                 HStack {
                     Image(systemName: "location.fill")
-                    Text(fetcher.isLoading ? "Getting Location..." : "Use Current Location")
+                    Text(fetcher.isLoading ? CatchStrings.Components.gettingLocation : CatchStrings.Components.useCurrentLocation)
                 }
                 .font(.subheadline)
                 .foregroundStyle(CatchTheme.primary)
@@ -111,7 +111,7 @@ struct LocationPickerView: View {
                 HStack {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(.green)
-                    Text(location.name.isEmpty ? "Coordinates saved" : location.name)
+                    Text(location.name.isEmpty ? CatchStrings.Components.coordinatesSaved : location.name)
                         .font(.caption)
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
@@ -128,7 +128,7 @@ struct LocationPickerView: View {
                                 UIApplication.shared.open(url)
                             }
                         } label: {
-                            Text("Open Settings")
+                            Text(CatchStrings.Components.openSettings)
                                 .font(.caption.weight(.medium))
                                 .foregroundStyle(CatchTheme.primary)
                         }
@@ -136,7 +136,7 @@ struct LocationPickerView: View {
                 }
             }
 
-            TextField("Or type location name", text: $location.name)
+            TextField(CatchStrings.Components.typeLocationName, text: $location.name)
                 .onChange(of: location.name) {
                     if !hasUsedGPS {
                         location.latitude = nil
