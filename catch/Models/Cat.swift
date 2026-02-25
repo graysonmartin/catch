@@ -46,10 +46,11 @@ final class Cat {
         encounters.map(\.date).max()
     }
 
+    private static let stevenNames: Set<String> = ["steven", "stephen", "steve"]
+    private static let stevenBreeds: Set<String> = ["Tabby", "Tiger Tabby"]
+
     var isSteven: Bool {
-        let stevenNames: Set<String> = ["steven", "stephen", "steve"]
-        let tabbyBreeds: Set<String> = ["Tabby", "Tiger Tabby"]
-        return stevenNames.contains(name.trimmingCharacters(in: .whitespaces).lowercased())
-            && tabbyBreeds.contains(breed ?? "")
+        Self.stevenNames.contains(name.trimmingCharacters(in: .whitespaces).lowercased())
+            && Self.stevenBreeds.contains(breed ?? "")
     }
 }
