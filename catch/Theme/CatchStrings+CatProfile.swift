@@ -4,7 +4,8 @@ extension CatchStrings {
 
     enum CatProfile {
         static let spotted = String(localized: "Spotted")
-        static let noEncountersLogged = String(localized: "No encounters logged.")
+        static let noEncountersLogged = String(localized: "no encounters logged")
+        static let logSighting = String(localized: "log a sighting")
         static let deleteThisCat = String(localized: "delete this cat")
         static let deleteEncounterTitle = String(localized: "delete encounter?")
         static let deleteEncounterMessage = String(localized: "gone forever. no take-backs.")

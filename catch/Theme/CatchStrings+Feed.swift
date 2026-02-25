@@ -3,8 +3,9 @@ import Foundation
 extension CatchStrings {
 
     enum Feed {
-        static let emptyTitle = String(localized: "No Encounters Yet")
-        static let emptySubtitle = String(localized: "Log your first cat encounter using the Log tab.")
+        static let emptyTitle = String(localized: "no encounters yet")
+        static let emptySubtitle = String(localized: "go outside. find a cat. report back.")
+        static let emptyAction = String(localized: "log your first cat")
         static let searchEmptyTitle = String(localized: "nothing here")
         static let searchPrompt = String(localized: "search encounters")
         static let unknownCat = String(localized: "Unknown Cat")

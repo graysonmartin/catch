@@ -3,8 +3,9 @@ import Foundation
 extension CatchStrings {
 
     enum Collection {
-        static let emptyTitle = String(localized: "No Cats Collected")
-        static let emptySubtitle = String(localized: "Cats you encounter will appear here.")
+        static let emptyTitle = String(localized: "no cats yet")
+        static let emptySubtitle = String(localized: "your collection is tragically empty.")
+        static let emptyAction = String(localized: "log a cat")
         static let searchEmptyTitle = String(localized: "no matches")
         static let searchPrompt = String(localized: "find a cat")
         static let sortName = String(localized: "name")

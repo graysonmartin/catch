@@ -5,6 +5,7 @@ import SwiftData
 
 struct CatMapView: View {
     @Query(sort: \Cat.name) private var cats: [Cat]
+    @Binding var selectedTab: Int
     @State private var selectedCat: Cat?
     @State private var showProfile = false
     @State private var clusterSelection: ClusterSelection?
@@ -25,7 +26,9 @@ struct CatMapView: View {
                     EmptyStateView(
                         icon: "map",
                         title: CatchStrings.Map.emptyTitle,
-                        subtitle: CatchStrings.Map.emptySubtitle
+                        subtitle: CatchStrings.Map.emptySubtitle,
+                        actionLabel: CatchStrings.Map.emptyAction,
+                        action: { selectedTab = 1 }
                     )
                 } else {
                     ZStack(alignment: .top) {

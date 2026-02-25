@@ -19,6 +19,7 @@ enum CatSortOption: String, CaseIterable, Identifiable {
 
 struct CollectionView: View {
     @Query(sort: \Cat.name) private var cats: [Cat]
+    @Binding var selectedTab: Int
     @State private var searchText = ""
     @State private var sortOption: CatSortOption = .name
 
@@ -55,7 +56,9 @@ struct CollectionView: View {
                     EmptyStateView(
                         icon: "square.grid.2x2",
                         title: CatchStrings.Collection.emptyTitle,
-                        subtitle: CatchStrings.Collection.emptySubtitle
+                        subtitle: CatchStrings.Collection.emptySubtitle,
+                        actionLabel: CatchStrings.Collection.emptyAction,
+                        action: { selectedTab = 1 }
                     )
                 } else if filteredCats.isEmpty {
                     EmptyStateView(

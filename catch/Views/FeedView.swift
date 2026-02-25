@@ -20,6 +20,7 @@ struct FeedView: View {
     @Query(sort: \Encounter.date, order: .reverse) private var encounters: [Encounter]
     @Query private var cats: [Cat]
     @Binding var scrollToTop: Bool
+    @Binding var selectedTab: Int
     @State private var searchText = ""
     @State private var sortOption: FeedSortOption = .newest
     @State private var encounterToDelete: Encounter?
@@ -53,7 +54,9 @@ struct FeedView: View {
                     EmptyStateView(
                         icon: "pawprint.circle",
                         title: CatchStrings.Feed.emptyTitle,
-                        subtitle: CatchStrings.Feed.emptySubtitle
+                        subtitle: CatchStrings.Feed.emptySubtitle,
+                        actionLabel: CatchStrings.Feed.emptyAction,
+                        action: { selectedTab = 1 }
                     )
                 } else if filteredEncounters.isEmpty {
                     EmptyStateView(
