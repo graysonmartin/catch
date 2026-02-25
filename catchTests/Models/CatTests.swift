@@ -20,12 +20,12 @@ final class CatTests: XCTestCase {
     func test_catInitDefaults() {
         let cat = Cat(name: "Steven")
         XCTAssertEqual(cat.name, "Steven")
+        XCTAssertNil(cat.breed)
         XCTAssertEqual(cat.estimatedAge, "")
         XCTAssertEqual(cat.notes, "")
         XCTAssertFalse(cat.isOwned)
         XCTAssertTrue(cat.photos.isEmpty)
         XCTAssertTrue(cat.encounters.isEmpty)
-        XCTAssertTrue(cat.careEntries.isEmpty)
     }
 
     func test_catCreatedAtIsSetOnInit() {
@@ -79,19 +79,20 @@ final class CatTests: XCTestCase {
         XCTAssertEqual(try context.fetch(FetchDescriptor<Encounter>()).count, 0)
     }
 
-    func test_catCascadeDeletesCareEntries() throws {
-        let cat = Fixtures.cat(name: "Doomed", in: context)
-        _ = Fixtures.careEntry(for: cat, in: context)
+    // MARK: - breed
+
+    func test_catBreed_defaultsToNil() {
+        let cat = Cat(name: "Mystery")
+        XCTAssertNil(cat.breed)
+    }
+
+    func test_catBreed_canBeSetAndPersisted() throws {
+        let cat = Cat(name: "Fancy", breed: "Persian")
+        context.insert(cat)
         try context.save()
 
-        XCTAssertEqual(try context.fetch(FetchDescriptor<Cat>()).count, 1)
-        XCTAssertEqual(try context.fetch(FetchDescriptor<CareEntry>()).count, 1)
-
-        context.delete(try context.fetch(FetchDescriptor<Cat>())[0])
-        try context.save()
-
-        XCTAssertEqual(try context.fetch(FetchDescriptor<Cat>()).count, 0)
-        XCTAssertEqual(try context.fetch(FetchDescriptor<CareEntry>()).count, 0)
+        let fetched = try context.fetch(FetchDescriptor<Cat>())
+        XCTAssertEqual(fetched.first?.breed, "Persian")
     }
 
     // MARK: - lastEncounterDate

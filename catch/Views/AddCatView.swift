@@ -4,57 +4,101 @@ import SwiftData
 struct AddCatView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
+    @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
 
     @State private var name = ""
+    @State private var breed: String?
     @State private var estimatedAge = ""
     @State private var location = Location.empty
     @State private var notes = ""
     @State private var isOwned = false
     @State private var photos: [Data] = []
+    @State private var breedSuggestion: BreedPrediction?
+    @State private var isDismissedSuggestion = false
+    @State private var showStevenEasterEgg = false
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("Cat Info") {
-                    TextField("Name", text: $name)
-                    TextField("Estimated Age", text: $estimatedAge)
+                Section(CatchStrings.Common.catInfo) {
+                    TextField(CatchStrings.Common.name, text: $name)
+                    BreedPickerView(breed: $breed)
+                    TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
                     LocationPickerView(location: $location)
-                    Toggle("I own this cat", isOn: $isOwned)
+                    Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
                 }
 
-                Section("Photos") {
+                Section(CatchStrings.Common.photos) {
                     PhotoPickerView(selectedPhotos: $photos)
+                    if photos.isEmpty {
+                        Text(CatchStrings.Log.photoRequired)
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                    if breed == nil && !isDismissedSuggestion {
+                        BreedSuggestionView(
+                            prediction: breedSuggestion,
+                            isClassifying: breedClassifier?.isClassifying ?? false,
+                            onConfirm: { confirmedBreed in
+                                breed = confirmedBreed
+                                breedSuggestion = nil
+                            },
+                            onDismiss: {
+                                isDismissedSuggestion = true
+                                breedSuggestion = nil
+                            }
+                        )
+                    }
                 }
 
-                Section("Notes") {
-                    TextField("Notes about this cat...", text: $notes, axis: .vertical)
+                Section(CatchStrings.Common.notes) {
+                    TextField(CatchStrings.Common.notesPlaceholder, text: $notes, axis: .vertical)
                         .lineLimit(3...6)
                 }
 
-                Section("First Encounter") {
-                    Text("A first encounter will be logged automatically with today's date and the location above.")
+                Section(CatchStrings.Log.firstEncounter) {
+                    Text(CatchStrings.Log.firstEncounterHint)
                         .font(.caption)
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
             }
-            .navigationTitle("New Cat")
+            .navigationTitle(CatchStrings.Log.newCat)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(CatchStrings.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { save() }
-                        .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                    Button(CatchStrings.Common.save) { save() }
+                        .disabled(!canSave)
                         .fontWeight(.semibold)
+                }
+            }
+            .onChange(of: photos) {
+                guard breed == nil, !isDismissedSuggestion, !photos.isEmpty else { return }
+                Task {
+                    breedSuggestion = await breedClassifier?.classifyBest(imageDataArray: photos)
+                }
+            }
+            .overlay {
+                if showStevenEasterEgg {
+                    StevenEasterEggView {
+                        dismiss()
+                    }
                 }
             }
         }
     }
 
+    private var canSave: Bool {
+        !name.trimmingCharacters(in: .whitespaces).isEmpty && !photos.isEmpty
+    }
+
     private func save() {
         let cat = Cat(
             name: name.trimmingCharacters(in: .whitespaces),
+            breed: breed,
             estimatedAge: estimatedAge,
             location: location,
             notes: notes,
@@ -72,6 +116,12 @@ struct AddCatView: View {
         )
         modelContext.insert(encounter)
 
-        dismiss()
+        Task { await catSyncService?.syncNewCat(cat, firstEncounter: encounter) }
+
+        if cat.isSteven {
+            showStevenEasterEgg = true
+        } else {
+            dismiss()
+        }
     }
 }

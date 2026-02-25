@@ -13,8 +13,29 @@
 		E80000012B5A00000004 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E80000012B5A00000013 /* Preview Assets.xcassets */; };
 		E8000001AA000001 /* Cat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000010 /* Cat.swift */; };
 		E8000001AA000002 /* Encounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000011 /* Encounter.swift */; };
-		E8000001AA000003 /* CareEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000012 /* CareEntry.swift */; };
 		E8000001AA000004 /* CatchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000013 /* CatchTheme.swift */; };
+		E8CS00000101 /* CatchStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000001 /* CatchStrings.swift */; };
+		E8CS00000102 /* CatchStrings+Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000002 /* CatchStrings+Feed.swift */; };
+		E8CS00000103 /* CatchStrings+CatProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000003 /* CatchStrings+CatProfile.swift */; };
+		E8CS00000104 /* CatchStrings+Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000004 /* CatchStrings+Collection.swift */; };
+		E8CS00000105 /* CatchStrings+Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000005 /* CatchStrings+Log.swift */; };
+		E8CS00000106 /* CatchStrings+Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000006 /* CatchStrings+Map.swift */; };
+		E8CS00000107 /* CatchStrings+Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000007 /* CatchStrings+Onboarding.swift */; };
+		E8CS00000108 /* CatchStrings+Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000008 /* CatchStrings+Profile.swift */; };
+		E8CS00000109 /* CatchStrings+Social.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000009 /* CatchStrings+Social.swift */; };
+		E8CS0000010A /* CatchStrings+BreedLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000A /* CatchStrings+BreedLog.swift */; };
+		E8CS0000010B /* CatchStrings+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000B /* CatchStrings+Components.swift */; };
+		E8CS00000301 /* CatchStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000001 /* CatchStrings.swift */; };
+		E8CS00000302 /* CatchStrings+Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000002 /* CatchStrings+Feed.swift */; };
+		E8CS00000303 /* CatchStrings+CatProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000003 /* CatchStrings+CatProfile.swift */; };
+		E8CS00000304 /* CatchStrings+Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000004 /* CatchStrings+Collection.swift */; };
+		E8CS00000305 /* CatchStrings+Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000005 /* CatchStrings+Log.swift */; };
+		E8CS00000306 /* CatchStrings+Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000006 /* CatchStrings+Map.swift */; };
+		E8CS00000307 /* CatchStrings+Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000007 /* CatchStrings+Onboarding.swift */; };
+		E8CS00000308 /* CatchStrings+Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000008 /* CatchStrings+Profile.swift */; };
+		E8CS00000309 /* CatchStrings+Social.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000009 /* CatchStrings+Social.swift */; };
+		E8CS0000030A /* CatchStrings+BreedLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000A /* CatchStrings+BreedLog.swift */; };
+		E8CS0000030B /* CatchStrings+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000B /* CatchStrings+Components.swift */; };
 		E8000001AA000005 /* CatPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000014 /* CatPhotoView.swift */; };
 		E8000001AA000006 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000015 /* PhotoPickerView.swift */; };
 		E8000001AA000007 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000016 /* EmptyStateView.swift */; };
@@ -25,24 +46,161 @@
 		E8000001AA00000C /* AddEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001B /* AddEncounterView.swift */; };
 		E8000001AA00000D /* AddCatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001C /* AddCatView.swift */; };
 		E8000001AA00000E /* LogEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001D /* LogEncounterView.swift */; };
-		E8000001AA00000F /* AddCareEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001E /* AddCareEntryView.swift */; };
 		E8000001AA000020 /* EditCatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001F /* EditCatView.swift */; };
 		E8000001AA000021 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000025 /* MapView.swift */; };
 		E8000001AA000022 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000026 /* LocationPickerView.swift */; };
 		E8000001AA000023 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000027 /* Location.swift */; };
 		E8000001AA000024 /* PhotoCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000028 /* PhotoCarouselView.swift */; };
-		E8000001BB000002 /* DataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001BB000001 /* DataSeeder.swift */; };
 		E8000001AA000035 /* CatPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000029 /* CatPickerView.swift */; };
+		E8000001AA000036 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002A /* OnboardingView.swift */; };
+		E8000001AA000038 /* EditEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002C /* EditEncounterView.swift */; };
+		E8000001AA00003A /* ClusterMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002E /* ClusterMapView.swift */; };
+		E8000001AA00003B /* MapAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002F /* MapAnnotations.swift */; };
+		E8000001AA000051 /* ImageDownsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000050 /* ImageDownsampler.swift */; };
+		E8000001AA000052 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
+		E8000001AA000053 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000061 /* ProfileView.swift */; };
+		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
+		E8000001AA000055 /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
+		E8000001AA000056 /* VisibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000080 /* VisibilitySettings.swift */; };
+		E8000001BB000002 /* DataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001BB000001 /* DataSeeder.swift */; };
 		E8A100000001 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000010 /* LocationTests.swift */; };
-		E8A100000002 /* CareEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000011 /* CareEntryTests.swift */; };
 		E8A100000003 /* CatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000012 /* CatTests.swift */; };
 		E8A100000004 /* EncounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000013 /* EncounterTests.swift */; };
 		E8A100000005 /* ModelContainerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000014 /* ModelContainerFactory.swift */; };
 		E8A100000006 /* Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000015 /* Fixtures.swift */; };
-		E8A100000007 /* Cat.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000010 /* Cat.swift */; };
-		E8A100000008 /* Encounter.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000011 /* Encounter.swift */; };
-		E8A100000009 /* CareEntry.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000012 /* CareEntry.swift */; };
-		E8A10000000A /* Location.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8000001AA000027 /* Location.swift */; };
+		E8A100000007 /* Cat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000010 /* Cat.swift */; };
+		E8A100000008 /* Encounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000011 /* Encounter.swift */; };
+		E8A10000000A /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000027 /* Location.swift */; };
+		E8A10000000B /* ImageDownsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000050 /* ImageDownsampler.swift */; };
+		E8A10000000C /* ImageDownsamplerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000017 /* ImageDownsamplerTests.swift */; };
+		E8A10000000D /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
+		E8A10000000E /* UserProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000018 /* UserProfileTests.swift */; };
+		E8A10000000F /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
+		E8A100000025 /* CatchSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000019 /* CatchSchemaTests.swift */; };
+		E8A100000026 /* VisibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000080 /* VisibilitySettings.swift */; };
+		E8A100000027 /* VisibilitySettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A10000001A /* VisibilitySettingsTests.swift */; };
+		E8A100000029 /* AddCatValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000028 /* AddCatValidationTests.swift */; };
+		E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
+		E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
+		E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */; };
+		E8C45823BB168636E9BDC605 /* MockCloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */; };
+		E8C5DB4466426FAE9480469A /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CADC30543FE5A6E743849E /* CloudKitService.swift */; };
+		E8C6A3B73A0CC162F803D7CA /* AuthStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */; };
+		E8C7737EC218A5DCA33037D1 /* CKCloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C63F8101AC616F8FD0BA84 /* CKCloudKitService.swift */; };
+		E8CCDF6B8933605A62729069 /* AuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CA043BAE1603803A839C0C /* AuthState.swift */; };
+		E8CCF3022A93BC29B1DF104A /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CADC30543FE5A6E743849E /* CloudKitService.swift */; };
+		E8CE692EDFCE0B5ECDC4C1DD /* AuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CA043BAE1603803A839C0C /* AuthState.swift */; };
+		E8CF9FE9B8D8EB743AC8A414 /* MockAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB34FA781359331A3ED13A /* MockAuthService.swift */; };
+		E8D200000005 /* CloudKitServiceSearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D100000005 /* CloudKitServiceSearchTests.swift */; };
+		E8E600000001 /* FollowStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000001 /* FollowStatus.swift */; };
+		E8E600000002 /* Follow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000002 /* Follow.swift */; };
+		E8E600000003 /* FollowServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000003 /* FollowServiceError.swift */; };
+		E8E600000004 /* FollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000004 /* FollowService.swift */; };
+		E8E600000005 /* CKFollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000005 /* CKFollowService.swift */; };
+		E8E600000006 /* CKFollowServiceSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000006 /* CKFollowServiceSubscription.swift */; };
+		E8E600000007 /* SocialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000007 /* SocialView.swift */; };
+		E8E600000008 /* FindPeopleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000008 /* FindPeopleView.swift */; };
+		E8E600000009 /* FollowRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000009 /* FollowRowView.swift */; };
+		E8E60000000A /* PendingRequestRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000A /* PendingRequestRowView.swift */; };
+		E8E60000000B /* MockFollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000B /* MockFollowService.swift */; };
+		E8E60000000C /* FollowStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000C /* FollowStatusTests.swift */; };
+		E8E60000000D /* FollowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000D /* FollowTests.swift */; };
+		E8E60000000E /* FollowServiceErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000E /* FollowServiceErrorTests.swift */; };
+		E8E60000000F /* MockFollowServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000F /* MockFollowServiceTests.swift */; };
+		E8E600000011 /* FollowStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000001 /* FollowStatus.swift */; };
+		E8E600000012 /* Follow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000002 /* Follow.swift */; };
+		E8E600000013 /* FollowServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000003 /* FollowServiceError.swift */; };
+		E8E600000014 /* FollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000004 /* FollowService.swift */; };
+		E8E600000030 /* UserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000030 /* UserBrowseService.swift */; };
+		E8E600000031 /* CKUserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000031 /* CKUserBrowseService.swift */; };
+		E8E600000032 /* UserBrowseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000032 /* UserBrowseData.swift */; };
+		E8E600000033 /* UserBrowseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000033 /* UserBrowseError.swift */; };
+		E8E600000034 /* UserPublicProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000034 /* UserPublicProfileView.swift */; };
+		E8E600000035 /* RemoteCatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000035 /* RemoteCatCardView.swift */; };
+		E8E600000036 /* RemoteCatProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000036 /* RemoteCatProfileView.swift */; };
+		E8E600000037 /* RemoteFeedItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000037 /* RemoteFeedItemView.swift */; };
+		E8E600000038 /* CKUserBrowseServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000038 /* CKUserBrowseServiceTests.swift */; };
+		E8E600000039 /* MockUserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000039 /* MockUserBrowseService.swift */; };
+		E8E600000040 /* UserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000030 /* UserBrowseService.swift */; };
+		E8E600000041 /* CKUserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000031 /* CKUserBrowseService.swift */; };
+		E8E600000042 /* UserBrowseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000032 /* UserBrowseData.swift */; };
+		E8E600000043 /* UserBrowseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000033 /* UserBrowseError.swift */; };
+		E8F600000002 /* CatSyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000002 /* CatSyncPayload.swift */; };
+		E8F600000003 /* CloudCat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000003 /* CloudCat.swift */; };
+		E8F600000004 /* CloudSyncError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000004 /* CloudSyncError.swift */; };
+		E8F60000000D /* CloudSyncErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000000D /* CloudSyncErrorTests.swift */; };
+		E8F600000012 /* CatSyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000002 /* CatSyncPayload.swift */; };
+		E8F600000013 /* CloudCat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000003 /* CloudCat.swift */; };
+		E8F600000014 /* CloudSyncError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000004 /* CloudSyncError.swift */; };
+		E8F600000101 /* CatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000101 /* CatRepository.swift */; };
+		E8F600000102 /* EncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000102 /* EncounterRepository.swift */; };
+		E8F600000103 /* CloudKitAssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000103 /* CloudKitAssetManager.swift */; };
+		E8F600000104 /* CKCatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000104 /* CKCatRepository.swift */; };
+		E8F600000105 /* CKEncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000105 /* CKEncounterRepository.swift */; };
+		E8F60000010B /* MockCatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010B /* MockCatRepository.swift */; };
+		E8F60000010C /* MockEncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010C /* MockEncounterRepository.swift */; };
+		E8F60000010D /* MockCatRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010D /* MockCatRepositoryTests.swift */; };
+		E8F60000010E /* MockEncounterRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010E /* MockEncounterRepositoryTests.swift */; };
+		E8F600000111 /* CatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000101 /* CatRepository.swift */; };
+		E8F600000112 /* EncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000102 /* EncounterRepository.swift */; };
+		E8F600000113 /* CloudKitAssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000103 /* CloudKitAssetManager.swift */; };
+		E8F600000114 /* CKCatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000104 /* CKCatRepository.swift */; };
+		E8F600000115 /* CKEncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000105 /* CKEncounterRepository.swift */; };
+		E8F600000201 /* EncounterSyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000201 /* EncounterSyncPayload.swift */; };
+		E8F600000202 /* CloudEncounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000202 /* CloudEncounter.swift */; };
+		E8F600000205 /* CatRecordMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000205 /* CatRecordMapper.swift */; };
+		E8F600000206 /* EncounterRecordMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000206 /* EncounterRecordMapper.swift */; };
+		E8F600000211 /* EncounterSyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000201 /* EncounterSyncPayload.swift */; };
+		E8F600000212 /* CloudEncounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000202 /* CloudEncounter.swift */; };
+		E8F600000215 /* CatRecordMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000205 /* CatRecordMapper.swift */; };
+		E8F600000216 /* EncounterRecordMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000206 /* EncounterRecordMapper.swift */; };
+		E8F600000301 /* CatSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000301 /* CatSyncService.swift */; };
+		E8F600000302 /* CKCatSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000302 /* CKCatSyncService.swift */; };
+		E8F600000303 /* EncounterSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000303 /* EncounterSyncService.swift */; };
+		E8F600000304 /* CKEncounterSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000304 /* CKEncounterSyncService.swift */; };
+		E8F600000311 /* CatSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000301 /* CatSyncService.swift */; };
+		E8F600000312 /* CKCatSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000302 /* CKCatSyncService.swift */; };
+		E8F600000313 /* EncounterSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000303 /* EncounterSyncService.swift */; };
+		E8F600000314 /* CKEncounterSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000304 /* CKEncounterSyncService.swift */; };
+		E8F600000315 /* MockCatSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000305 /* MockCatSyncService.swift */; };
+		E8F600000316 /* MockEncounterSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000306 /* MockEncounterSyncService.swift */; };
+		E8F600000317 /* CKCatSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000307 /* CKCatSyncServiceTests.swift */; };
+		E8F600000318 /* CKEncounterSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000308 /* CKEncounterSyncServiceTests.swift */; };
+		E8B700000101 /* BreedPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000001 /* BreedPrediction.swift */; };
+		E8B700000102 /* BreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000002 /* BreedClassifierService.swift */; };
+		E8B700000103 /* VisionBreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000003 /* VisionBreedClassifierService.swift */; };
+		E8B700000104 /* BreedLabelMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000004 /* BreedLabelMapper.swift */; };
+		E8B700000105 /* BreedSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000005 /* BreedSuggestionView.swift */; };
+		E8B700000106 /* BreedPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000006 /* BreedPickerView.swift */; };
+		E8B700000201 /* BreedLabelMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000007 /* BreedLabelMapperTests.swift */; };
+		E8B700000202 /* BreedPredictionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000008 /* BreedPredictionTests.swift */; };
+		E8B700000203 /* MockBreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000009 /* MockBreedClassifierService.swift */; };
+		E8B700000204 /* BreedPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000001 /* BreedPrediction.swift */; };
+		E8B700000205 /* BreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000002 /* BreedClassifierService.swift */; };
+		E8B700000206 /* BreedLabelMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000004 /* BreedLabelMapper.swift */; };
+		E8BL00000101 /* BreedRarity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000001 /* BreedRarity.swift */; };
+		E8BL00000201 /* BreedRarity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000001 /* BreedRarity.swift */; };
+		E8BL00000102 /* BreedCatalogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000002 /* BreedCatalogEntry.swift */; };
+		E8BL00000202 /* BreedCatalogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000002 /* BreedCatalogEntry.swift */; };
+		E8BL00000103 /* BreedCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000003 /* BreedCatalog.swift */; };
+		E8BL00000203 /* BreedCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000003 /* BreedCatalog.swift */; };
+		E8BL00000104 /* BreedLogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000004 /* BreedLogEntry.swift */; };
+		E8BL00000204 /* BreedLogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000004 /* BreedLogEntry.swift */; };
+		E8BL00000105 /* BreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000005 /* BreedLogService.swift */; };
+		E8BL00000205 /* BreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000005 /* BreedLogService.swift */; };
+		E8BL00000106 /* DefaultBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000006 /* DefaultBreedLogService.swift */; };
+		E8BL00000206 /* DefaultBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000006 /* DefaultBreedLogService.swift */; };
+		E8BL00000110 /* BreedLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000010 /* BreedLogView.swift */; };
+		E8BL00000111 /* BreedLogProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000011 /* BreedLogProgressView.swift */; };
+		E8BL00000112 /* BreedLogCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000012 /* BreedLogCardView.swift */; };
+		E8BL00000113 /* BreedRarityBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000013 /* BreedRarityBadge.swift */; };
+		E8BL00000114 /* BreedDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000014 /* BreedDetailView.swift */; };
+		E8BL00000115 /* BreedLogSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000015 /* BreedLogSortOption.swift */; };
+		E8BL00000220 /* BreedCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000020 /* BreedCatalogTests.swift */; };
+		E8BL00000221 /* DefaultBreedLogServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000021 /* DefaultBreedLogServiceTests.swift */; };
+		E8BL00000222 /* MockBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000022 /* MockBreedLogService.swift */; };
+		E8D800000101 /* StevenEasterEggView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D800000001 /* StevenEasterEggView.swift */; };
+		E8D800000201 /* CatStevenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D800000002 /* CatStevenTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,8 +211,18 @@
 		E80000012B5A00000013 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E8000001AA000010 /* Cat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cat.swift; sourceTree = "<group>"; };
 		E8000001AA000011 /* Encounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encounter.swift; sourceTree = "<group>"; };
-		E8000001AA000012 /* CareEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareEntry.swift; sourceTree = "<group>"; };
 		E8000001AA000013 /* CatchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchTheme.swift; sourceTree = "<group>"; };
+		E8CS00000001 /* CatchStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchStrings.swift; sourceTree = "<group>"; };
+		E8CS00000002 /* CatchStrings+Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Feed.swift"; sourceTree = "<group>"; };
+		E8CS00000003 /* CatchStrings+CatProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+CatProfile.swift"; sourceTree = "<group>"; };
+		E8CS00000004 /* CatchStrings+Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Collection.swift"; sourceTree = "<group>"; };
+		E8CS00000005 /* CatchStrings+Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Log.swift"; sourceTree = "<group>"; };
+		E8CS00000006 /* CatchStrings+Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Map.swift"; sourceTree = "<group>"; };
+		E8CS00000007 /* CatchStrings+Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Onboarding.swift"; sourceTree = "<group>"; };
+		E8CS00000008 /* CatchStrings+Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Profile.swift"; sourceTree = "<group>"; };
+		E8CS00000009 /* CatchStrings+Social.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Social.swift"; sourceTree = "<group>"; };
+		E8CS0000000A /* CatchStrings+BreedLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+BreedLog.swift"; sourceTree = "<group>"; };
+		E8CS0000000B /* CatchStrings+Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Components.swift"; sourceTree = "<group>"; };
 		E8000001AA000014 /* CatPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatPhotoView.swift; sourceTree = "<group>"; };
 		E8000001AA000015 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		E8000001AA000016 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
@@ -65,21 +233,120 @@
 		E8000001AA00001B /* AddEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEncounterView.swift; sourceTree = "<group>"; };
 		E8000001AA00001C /* AddCatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCatView.swift; sourceTree = "<group>"; };
 		E8000001AA00001D /* LogEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogEncounterView.swift; sourceTree = "<group>"; };
-		E8000001AA00001E /* AddCareEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCareEntryView.swift; sourceTree = "<group>"; };
 		E8000001AA00001F /* EditCatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCatView.swift; sourceTree = "<group>"; };
 		E8000001AA000025 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		E8000001AA000026 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
 		E8000001AA000027 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		E8000001AA000028 /* PhotoCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCarouselView.swift; sourceTree = "<group>"; };
-		E8000001BB000001 /* DataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSeeder.swift; sourceTree = "<group>"; };
 		E8000001AA000029 /* CatPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatPickerView.swift; sourceTree = "<group>"; };
+		E8000001AA00002A /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		E8000001AA00002C /* EditEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEncounterView.swift; sourceTree = "<group>"; };
+		E8000001AA00002E /* ClusterMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterMapView.swift; sourceTree = "<group>"; };
+		E8000001AA00002F /* MapAnnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotations.swift; sourceTree = "<group>"; };
+		E8000001AA000050 /* ImageDownsampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownsampler.swift; sourceTree = "<group>"; };
+		E8000001AA000060 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		E8000001AA000061 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		E8000001AA000062 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		E8000001AA000070 /* CatchSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchema.swift; sourceTree = "<group>"; };
+		E8000001AA000080 /* VisibilitySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibilitySettings.swift; sourceTree = "<group>"; };
+		E8000001BB000001 /* DataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSeeder.swift; sourceTree = "<group>"; };
 		E8A100000010 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
-		E8A100000011 /* CareEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CareEntryTests.swift; sourceTree = "<group>"; };
 		E8A100000012 /* CatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatTests.swift; sourceTree = "<group>"; };
 		E8A100000013 /* EncounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterTests.swift; sourceTree = "<group>"; };
 		E8A100000014 /* ModelContainerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerFactory.swift; sourceTree = "<group>"; };
 		E8A100000015 /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
 		E8A100000016 /* catchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = catchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8A100000017 /* ImageDownsamplerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownsamplerTests.swift; sourceTree = "<group>"; };
+		E8A100000018 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
+		E8A100000019 /* CatchSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchemaTests.swift; sourceTree = "<group>"; };
+		E8A10000001A /* VisibilitySettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibilitySettingsTests.swift; sourceTree = "<group>"; };
+		E8A100000028 /* AddCatValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCatValidationTests.swift; sourceTree = "<group>"; };
+		E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStateTests.swift; sourceTree = "<group>"; };
+		E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCloudKitService.swift; sourceTree = "<group>"; };
+		E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthService.swift; sourceTree = "<group>"; };
+		E8C63F8101AC616F8FD0BA84 /* CKCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCloudKitService.swift; sourceTree = "<group>"; };
+		E8CA043BAE1603803A839C0C /* AuthState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthState.swift; sourceTree = "<group>"; };
+		E8CA167FE482ED4A92C8C805 /* catch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = catch.entitlements; sourceTree = "<group>"; };
+		E8CADC30543FE5A6E743849E /* CloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitService.swift; sourceTree = "<group>"; };
+		E8CB34FA781359331A3ED13A /* MockAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthService.swift; sourceTree = "<group>"; };
+		E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		E8D100000005 /* CloudKitServiceSearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitServiceSearchTests.swift; sourceTree = "<group>"; };
+		E8E500000001 /* FollowStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowStatus.swift; sourceTree = "<group>"; };
+		E8E500000002 /* Follow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follow.swift; sourceTree = "<group>"; };
+		E8E500000003 /* FollowServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowServiceError.swift; sourceTree = "<group>"; };
+		E8E500000004 /* FollowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowService.swift; sourceTree = "<group>"; };
+		E8E500000005 /* CKFollowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKFollowService.swift; sourceTree = "<group>"; };
+		E8E500000006 /* CKFollowServiceSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKFollowServiceSubscription.swift; sourceTree = "<group>"; };
+		E8E500000007 /* SocialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialView.swift; sourceTree = "<group>"; };
+		E8E500000008 /* FindPeopleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPeopleView.swift; sourceTree = "<group>"; };
+		E8E500000009 /* FollowRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowRowView.swift; sourceTree = "<group>"; };
+		E8E50000000A /* PendingRequestRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingRequestRowView.swift; sourceTree = "<group>"; };
+		E8E50000000B /* MockFollowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFollowService.swift; sourceTree = "<group>"; };
+		E8E50000000C /* FollowStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowStatusTests.swift; sourceTree = "<group>"; };
+		E8E50000000D /* FollowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTests.swift; sourceTree = "<group>"; };
+		E8E50000000E /* FollowServiceErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowServiceErrorTests.swift; sourceTree = "<group>"; };
+		E8E50000000F /* MockFollowServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFollowServiceTests.swift; sourceTree = "<group>"; };
+		E8E500000030 /* UserBrowseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBrowseService.swift; sourceTree = "<group>"; };
+		E8E500000031 /* CKUserBrowseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUserBrowseService.swift; sourceTree = "<group>"; };
+		E8E500000032 /* UserBrowseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBrowseData.swift; sourceTree = "<group>"; };
+		E8E500000033 /* UserBrowseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBrowseError.swift; sourceTree = "<group>"; };
+		E8E500000034 /* UserPublicProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPublicProfileView.swift; sourceTree = "<group>"; };
+		E8E500000035 /* RemoteCatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCatCardView.swift; sourceTree = "<group>"; };
+		E8E500000036 /* RemoteCatProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCatProfileView.swift; sourceTree = "<group>"; };
+		E8E500000037 /* RemoteFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedItemView.swift; sourceTree = "<group>"; };
+		E8E500000038 /* CKUserBrowseServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUserBrowseServiceTests.swift; sourceTree = "<group>"; };
+		E8E500000039 /* MockUserBrowseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserBrowseService.swift; sourceTree = "<group>"; };
+		E8F500000002 /* CatSyncPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSyncPayload.swift; sourceTree = "<group>"; };
+		E8F500000003 /* CloudCat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudCat.swift; sourceTree = "<group>"; };
+		E8F500000004 /* CloudSyncError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncError.swift; sourceTree = "<group>"; };
+		E8F50000000D /* CloudSyncErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncErrorTests.swift; sourceTree = "<group>"; };
+		E8F500000101 /* CatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatRepository.swift; sourceTree = "<group>"; };
+		E8F500000102 /* EncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterRepository.swift; sourceTree = "<group>"; };
+		E8F500000103 /* CloudKitAssetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitAssetManager.swift; sourceTree = "<group>"; };
+		E8F500000104 /* CKCatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatRepository.swift; sourceTree = "<group>"; };
+		E8F500000105 /* CKEncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterRepository.swift; sourceTree = "<group>"; };
+		E8F50000010B /* MockCatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatRepository.swift; sourceTree = "<group>"; };
+		E8F50000010C /* MockEncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterRepository.swift; sourceTree = "<group>"; };
+		E8F50000010D /* MockCatRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatRepositoryTests.swift; sourceTree = "<group>"; };
+		E8F50000010E /* MockEncounterRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterRepositoryTests.swift; sourceTree = "<group>"; };
+		E8F500000201 /* EncounterSyncPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterSyncPayload.swift; sourceTree = "<group>"; };
+		E8F500000202 /* CloudEncounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudEncounter.swift; sourceTree = "<group>"; };
+		E8F500000205 /* CatRecordMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatRecordMapper.swift; sourceTree = "<group>"; };
+		E8F500000206 /* EncounterRecordMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterRecordMapper.swift; sourceTree = "<group>"; };
+		E8F500000301 /* CatSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSyncService.swift; sourceTree = "<group>"; };
+		E8F500000302 /* CKCatSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatSyncService.swift; sourceTree = "<group>"; };
+		E8F500000303 /* EncounterSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterSyncService.swift; sourceTree = "<group>"; };
+		E8F500000304 /* CKEncounterSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterSyncService.swift; sourceTree = "<group>"; };
+		E8F500000305 /* MockCatSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatSyncService.swift; sourceTree = "<group>"; };
+		E8F500000306 /* MockEncounterSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterSyncService.swift; sourceTree = "<group>"; };
+		E8F500000307 /* CKCatSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatSyncServiceTests.swift; sourceTree = "<group>"; };
+		E8F500000308 /* CKEncounterSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterSyncServiceTests.swift; sourceTree = "<group>"; };
+		E8B700000001 /* BreedPrediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPrediction.swift; sourceTree = "<group>"; };
+		E8B700000002 /* BreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedClassifierService.swift; sourceTree = "<group>"; };
+		E8B700000003 /* VisionBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionBreedClassifierService.swift; sourceTree = "<group>"; };
+		E8B700000004 /* BreedLabelMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLabelMapper.swift; sourceTree = "<group>"; };
+		E8B700000005 /* BreedSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedSuggestionView.swift; sourceTree = "<group>"; };
+		E8B700000006 /* BreedPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPickerView.swift; sourceTree = "<group>"; };
+		E8B700000007 /* BreedLabelMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLabelMapperTests.swift; sourceTree = "<group>"; };
+		E8B700000008 /* BreedPredictionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPredictionTests.swift; sourceTree = "<group>"; };
+		E8B700000009 /* MockBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedClassifierService.swift; sourceTree = "<group>"; };
+		E8BL00000001 /* BreedRarity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedRarity.swift; sourceTree = "<group>"; };
+		E8BL00000002 /* BreedCatalogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalogEntry.swift; sourceTree = "<group>"; };
+		E8BL00000003 /* BreedCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalog.swift; sourceTree = "<group>"; };
+		E8BL00000004 /* BreedLogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogEntry.swift; sourceTree = "<group>"; };
+		E8BL00000005 /* BreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogService.swift; sourceTree = "<group>"; };
+		E8BL00000006 /* DefaultBreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBreedLogService.swift; sourceTree = "<group>"; };
+		E8BL00000010 /* BreedLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogView.swift; sourceTree = "<group>"; };
+		E8BL00000011 /* BreedLogProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogProgressView.swift; sourceTree = "<group>"; };
+		E8BL00000012 /* BreedLogCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogCardView.swift; sourceTree = "<group>"; };
+		E8BL00000013 /* BreedRarityBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedRarityBadge.swift; sourceTree = "<group>"; };
+		E8BL00000014 /* BreedDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedDetailView.swift; sourceTree = "<group>"; };
+		E8BL00000015 /* BreedLogSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogSortOption.swift; sourceTree = "<group>"; };
+		E8BL00000020 /* BreedCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalogTests.swift; sourceTree = "<group>"; };
+		E8BL00000021 /* DefaultBreedLogServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBreedLogServiceTests.swift; sourceTree = "<group>"; };
+		E8BL00000022 /* MockBreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedLogService.swift; sourceTree = "<group>"; };
+		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
+		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +357,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E8A100000020 /* Frameworks (catchTests) */ = {
+		E8A100000020 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -100,7 +367,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E80000012B5A00000007 /* root */ = {
+		E80000012B5A00000007 = {
 			isa = PBXGroup;
 			children = (
 				E80000012B5A00000008 /* catch */,
@@ -119,6 +386,9 @@
 				E8000001AA000031 /* Views */,
 				E8000001AA000032 /* Components */,
 				E8000001AA000033 /* Theme */,
+				E8C7643E7D80FDFED273606F /* Services */,
+				E8F500000300 /* Extensions */,
+				E8CA167FE482ED4A92C8C805 /* catch.entitlements */,
 				E80000012B5A00000012 /* Assets.xcassets */,
 				E80000012B5A0000000E /* Preview Content */,
 			);
@@ -147,8 +417,10 @@
 			children = (
 				E8000001AA000010 /* Cat.swift */,
 				E8000001AA000011 /* Encounter.swift */,
-				E8000001AA000012 /* CareEntry.swift */,
 				E8000001AA000027 /* Location.swift */,
+				E8000001AA000060 /* UserProfile.swift */,
+				E8000001AA000070 /* CatchSchema.swift */,
+				E8000001AA000080 /* VisibilitySettings.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -163,9 +435,16 @@
 				E8000001AA00001B /* AddEncounterView.swift */,
 				E8000001AA00001C /* AddCatView.swift */,
 				E8000001AA00001D /* LogEncounterView.swift */,
-				E8000001AA00001E /* AddCareEntryView.swift */,
 				E8000001AA00001F /* EditCatView.swift */,
+				E8000001AA00002C /* EditEncounterView.swift */,
 				E8000001AA000025 /* MapView.swift */,
+				E8000001AA00002E /* ClusterMapView.swift */,
+				E8000001AA00002F /* MapAnnotations.swift */,
+				E8000001AA00002A /* OnboardingView.swift */,
+				E8000001AA000061 /* ProfileView.swift */,
+				E8000001AA000062 /* EditProfileView.swift */,
+				E8BL0000F002 /* BreedLog */,
+				E8E500000021 /* Social */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -173,12 +452,16 @@
 		E8000001AA000032 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				E8B700000006 /* BreedPickerView.swift */,
+				E8B700000005 /* BreedSuggestionView.swift */,
 				E8000001AA000014 /* CatPhotoView.swift */,
 				E8000001AA000028 /* PhotoCarouselView.swift */,
 				E8000001AA000015 /* PhotoPickerView.swift */,
 				E8000001AA000016 /* EmptyStateView.swift */,
 				E8000001AA000026 /* LocationPickerView.swift */,
 				E8000001AA000029 /* CatPickerView.swift */,
+				E8000001AA000050 /* ImageDownsampler.swift */,
+				E8D800000001 /* StevenEasterEggView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -187,6 +470,17 @@
 			isa = PBXGroup;
 			children = (
 				E8000001AA000013 /* CatchTheme.swift */,
+				E8CS00000001 /* CatchStrings.swift */,
+				E8CS00000002 /* CatchStrings+Feed.swift */,
+				E8CS00000003 /* CatchStrings+CatProfile.swift */,
+				E8CS00000004 /* CatchStrings+Collection.swift */,
+				E8CS00000005 /* CatchStrings+Log.swift */,
+				E8CS00000006 /* CatchStrings+Map.swift */,
+				E8CS00000007 /* CatchStrings+Onboarding.swift */,
+				E8CS00000008 /* CatchStrings+Profile.swift */,
+				E8CS00000009 /* CatchStrings+Social.swift */,
+				E8CS0000000A /* CatchStrings+BreedLog.swift */,
+				E8CS0000000B /* CatchStrings+Components.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -195,6 +489,9 @@
 			isa = PBXGroup;
 			children = (
 				E8A100000022 /* Models */,
+				E8A10000002A /* Views */,
+				E8A100000024 /* Components */,
+				E8C17FF134EEE52DB9FA0D4A /* Services */,
 				E8A100000023 /* TestHelpers */,
 			);
 			path = catchTests;
@@ -204,9 +501,12 @@
 			isa = PBXGroup;
 			children = (
 				E8A100000010 /* LocationTests.swift */,
-				E8A100000011 /* CareEntryTests.swift */,
 				E8A100000012 /* CatTests.swift */,
 				E8A100000013 /* EncounterTests.swift */,
+				E8A100000018 /* UserProfileTests.swift */,
+				E8A100000019 /* CatchSchemaTests.swift */,
+				E8A10000001A /* VisibilitySettingsTests.swift */,
+				E8D800000002 /* CatStevenTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -218,6 +518,258 @@
 				E8A100000015 /* Fixtures.swift */,
 			);
 			path = TestHelpers;
+			sourceTree = "<group>";
+		};
+		E8A100000024 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E8A100000017 /* ImageDownsamplerTests.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		E8A10000002A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E8A100000028 /* AddCatValidationTests.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E8C17FF134EEE52DB9FA0D4A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E8CF211849B3A47ED1640CA4 /* Auth */,
+				E8B700000011 /* BreedClassifier */,
+				E8BL0000F003 /* BreedLog */,
+				E8D100000020 /* CloudKit */,
+				E8F500000022 /* CloudSync */,
+				E8E500000022 /* Follow */,
+				E8E500000041 /* UserBrowse */,
+				E8CB8601EE8D9224ECDE331C /* Mocks */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E8C29A31E399698E3B36A45C /* CloudKit */ = {
+			isa = PBXGroup;
+			children = (
+				E8CADC30543FE5A6E743849E /* CloudKitService.swift */,
+				E8C63F8101AC616F8FD0BA84 /* CKCloudKitService.swift */,
+			);
+			path = CloudKit;
+			sourceTree = "<group>";
+		};
+		E8C4C76FF8B24F98B098D2F1 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				E8CA043BAE1603803A839C0C /* AuthState.swift */,
+				E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */,
+				E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		E8C7643E7D80FDFED273606F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E8C4C76FF8B24F98B098D2F1 /* Auth */,
+				E8B700000010 /* BreedClassifier */,
+				E8BL0000F001 /* BreedLog */,
+				E8C29A31E399698E3B36A45C /* CloudKit */,
+				E8F500000020 /* CloudSync */,
+				E8E500000020 /* Follow */,
+				E8E500000040 /* UserBrowse */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E8CB8601EE8D9224ECDE331C /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				E8CB34FA781359331A3ED13A /* MockAuthService.swift */,
+				E8B700000009 /* MockBreedClassifierService.swift */,
+				E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */,
+				E8F50000010B /* MockCatRepository.swift */,
+				E8F50000010C /* MockEncounterRepository.swift */,
+				E8E50000000B /* MockFollowService.swift */,
+				E8F500000305 /* MockCatSyncService.swift */,
+				E8F500000306 /* MockEncounterSyncService.swift */,
+				E8E500000039 /* MockUserBrowseService.swift */,
+				E8BL00000022 /* MockBreedLogService.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		E8CF211849B3A47ED1640CA4 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		E8D100000020 /* CloudKit */ = {
+			isa = PBXGroup;
+			children = (
+				E8D100000005 /* CloudKitServiceSearchTests.swift */,
+			);
+			path = CloudKit;
+			sourceTree = "<group>";
+		};
+		E8E500000020 /* Follow */ = {
+			isa = PBXGroup;
+			children = (
+				E8E500000001 /* FollowStatus.swift */,
+				E8E500000002 /* Follow.swift */,
+				E8E500000003 /* FollowServiceError.swift */,
+				E8E500000004 /* FollowService.swift */,
+				E8E500000005 /* CKFollowService.swift */,
+				E8E500000006 /* CKFollowServiceSubscription.swift */,
+			);
+			path = Follow;
+			sourceTree = "<group>";
+		};
+		E8E500000021 /* Social */ = {
+			isa = PBXGroup;
+			children = (
+				E8E500000007 /* SocialView.swift */,
+				E8E500000008 /* FindPeopleView.swift */,
+				E8E500000009 /* FollowRowView.swift */,
+				E8E50000000A /* PendingRequestRowView.swift */,
+				E8E500000034 /* UserPublicProfileView.swift */,
+				E8E500000035 /* RemoteCatCardView.swift */,
+				E8E500000036 /* RemoteCatProfileView.swift */,
+				E8E500000037 /* RemoteFeedItemView.swift */,
+			);
+			path = Social;
+			sourceTree = "<group>";
+		};
+		E8E500000022 /* Follow */ = {
+			isa = PBXGroup;
+			children = (
+				E8E50000000C /* FollowStatusTests.swift */,
+				E8E50000000D /* FollowTests.swift */,
+				E8E50000000E /* FollowServiceErrorTests.swift */,
+				E8E50000000F /* MockFollowServiceTests.swift */,
+			);
+			path = Follow;
+			sourceTree = "<group>";
+		};
+		E8E500000040 /* UserBrowse */ = {
+			isa = PBXGroup;
+			children = (
+				E8E500000030 /* UserBrowseService.swift */,
+				E8E500000031 /* CKUserBrowseService.swift */,
+				E8E500000032 /* UserBrowseData.swift */,
+				E8E500000033 /* UserBrowseError.swift */,
+			);
+			path = UserBrowse;
+			sourceTree = "<group>";
+		};
+		E8E500000041 /* UserBrowse */ = {
+			isa = PBXGroup;
+			children = (
+				E8E500000038 /* CKUserBrowseServiceTests.swift */,
+			);
+			path = UserBrowse;
+			sourceTree = "<group>";
+		};
+		E8F500000020 /* CloudSync */ = {
+			isa = PBXGroup;
+			children = (
+				E8F500000004 /* CloudSyncError.swift */,
+				E8F500000101 /* CatRepository.swift */,
+				E8F500000104 /* CKCatRepository.swift */,
+				E8F500000205 /* CatRecordMapper.swift */,
+				E8F500000002 /* CatSyncPayload.swift */,
+				E8F500000003 /* CloudCat.swift */,
+				E8F500000102 /* EncounterRepository.swift */,
+				E8F500000105 /* CKEncounterRepository.swift */,
+				E8F500000206 /* EncounterRecordMapper.swift */,
+				E8F500000201 /* EncounterSyncPayload.swift */,
+				E8F500000202 /* CloudEncounter.swift */,
+				E8F500000103 /* CloudKitAssetManager.swift */,
+				E8F500000301 /* CatSyncService.swift */,
+				E8F500000302 /* CKCatSyncService.swift */,
+				E8F500000303 /* EncounterSyncService.swift */,
+				E8F500000304 /* CKEncounterSyncService.swift */,
+			);
+			path = CloudSync;
+			sourceTree = "<group>";
+		};
+		E8F500000022 /* CloudSync */ = {
+			isa = PBXGroup;
+			children = (
+				E8F50000000D /* CloudSyncErrorTests.swift */,
+				E8F50000010D /* MockCatRepositoryTests.swift */,
+				E8F50000010E /* MockEncounterRepositoryTests.swift */,
+				E8F500000307 /* CKCatSyncServiceTests.swift */,
+				E8F500000308 /* CKEncounterSyncServiceTests.swift */,
+			);
+			path = CloudSync;
+			sourceTree = "<group>";
+		};
+		E8F500000300 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E8B700000010 /* BreedClassifier */ = {
+			isa = PBXGroup;
+			children = (
+				E8B700000001 /* BreedPrediction.swift */,
+				E8B700000002 /* BreedClassifierService.swift */,
+				E8B700000003 /* VisionBreedClassifierService.swift */,
+				E8B700000004 /* BreedLabelMapper.swift */,
+			);
+			path = BreedClassifier;
+			sourceTree = "<group>";
+		};
+		E8B700000011 /* BreedClassifier */ = {
+			isa = PBXGroup;
+			children = (
+				E8B700000007 /* BreedLabelMapperTests.swift */,
+				E8B700000008 /* BreedPredictionTests.swift */,
+			);
+			path = BreedClassifier;
+			sourceTree = "<group>";
+		};
+		E8BL0000F001 /* BreedLog */ = {
+			isa = PBXGroup;
+			children = (
+				E8BL00000001 /* BreedRarity.swift */,
+				E8BL00000002 /* BreedCatalogEntry.swift */,
+				E8BL00000003 /* BreedCatalog.swift */,
+				E8BL00000004 /* BreedLogEntry.swift */,
+				E8BL00000005 /* BreedLogService.swift */,
+				E8BL00000006 /* DefaultBreedLogService.swift */,
+			);
+			path = BreedLog;
+			sourceTree = "<group>";
+		};
+		E8BL0000F002 /* BreedLog */ = {
+			isa = PBXGroup;
+			children = (
+				E8BL00000010 /* BreedLogView.swift */,
+				E8BL00000011 /* BreedLogProgressView.swift */,
+				E8BL00000012 /* BreedLogCardView.swift */,
+				E8BL00000013 /* BreedRarityBadge.swift */,
+				E8BL00000014 /* BreedDetailView.swift */,
+				E8BL00000015 /* BreedLogSortOption.swift */,
+			);
+			path = BreedLog;
+			sourceTree = "<group>";
+		};
+		E8BL0000F003 /* BreedLog */ = {
+			isa = PBXGroup;
+			children = (
+				E8BL00000020 /* BreedCatalogTests.swift */,
+				E8BL00000021 /* DefaultBreedLogServiceTests.swift */,
+			);
+			path = BreedLog;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -283,7 +835,7 @@
 				en,
 				Base,
 			);
-			mainGroup = E80000012B5A00000007 /* root */;
+			mainGroup = E80000012B5A00000007;
 			productRefGroup = E80000012B5A00000009 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -313,10 +865,32 @@
 			files = (
 				E80000012B5A00000002 /* ContentView.swift in Sources */,
 				E80000012B5A00000001 /* catchApp.swift in Sources */,
+				E8BL00000101 /* BreedRarity.swift in Sources */,
+				E8BL00000102 /* BreedCatalogEntry.swift in Sources */,
+				E8BL00000103 /* BreedCatalog.swift in Sources */,
+				E8BL00000104 /* BreedLogEntry.swift in Sources */,
+				E8BL00000105 /* BreedLogService.swift in Sources */,
+				E8BL00000106 /* DefaultBreedLogService.swift in Sources */,
+				E8BL00000110 /* BreedLogView.swift in Sources */,
+				E8BL00000111 /* BreedLogProgressView.swift in Sources */,
+				E8BL00000112 /* BreedLogCardView.swift in Sources */,
+				E8BL00000113 /* BreedRarityBadge.swift in Sources */,
+				E8BL00000114 /* BreedDetailView.swift in Sources */,
+				E8BL00000115 /* BreedLogSortOption.swift in Sources */,
 				E8000001AA000001 /* Cat.swift in Sources */,
 				E8000001AA000002 /* Encounter.swift in Sources */,
-				E8000001AA000003 /* CareEntry.swift in Sources */,
 				E8000001AA000004 /* CatchTheme.swift in Sources */,
+				E8CS00000101 /* CatchStrings.swift in Sources */,
+				E8CS00000102 /* CatchStrings+Feed.swift in Sources */,
+				E8CS00000103 /* CatchStrings+CatProfile.swift in Sources */,
+				E8CS00000104 /* CatchStrings+Collection.swift in Sources */,
+				E8CS00000105 /* CatchStrings+Log.swift in Sources */,
+				E8CS00000106 /* CatchStrings+Map.swift in Sources */,
+				E8CS00000107 /* CatchStrings+Onboarding.swift in Sources */,
+				E8CS00000108 /* CatchStrings+Profile.swift in Sources */,
+				E8CS00000109 /* CatchStrings+Social.swift in Sources */,
+				E8CS0000010A /* CatchStrings+BreedLog.swift in Sources */,
+				E8CS0000010B /* CatchStrings+Components.swift in Sources */,
 				E8000001AA000005 /* CatPhotoView.swift in Sources */,
 				E8000001AA000006 /* PhotoPickerView.swift in Sources */,
 				E8000001AA000007 /* EmptyStateView.swift in Sources */,
@@ -327,31 +901,167 @@
 				E8000001AA00000C /* AddEncounterView.swift in Sources */,
 				E8000001AA00000D /* AddCatView.swift in Sources */,
 				E8000001AA00000E /* LogEncounterView.swift in Sources */,
-				E8000001AA00000F /* AddCareEntryView.swift in Sources */,
 				E8000001AA000020 /* EditCatView.swift in Sources */,
+				E8000001AA000038 /* EditEncounterView.swift in Sources */,
 				E8000001AA000021 /* MapView.swift in Sources */,
+				E8000001AA00003A /* ClusterMapView.swift in Sources */,
+				E8000001AA00003B /* MapAnnotations.swift in Sources */,
 				E8000001AA000022 /* LocationPickerView.swift in Sources */,
 				E8000001AA000023 /* Location.swift in Sources */,
 				E8000001AA000024 /* PhotoCarouselView.swift in Sources */,
 				E8000001BB000002 /* DataSeeder.swift in Sources */,
 				E8000001AA000035 /* CatPickerView.swift in Sources */,
+				E8000001AA000036 /* OnboardingView.swift in Sources */,
+				E8000001AA000051 /* ImageDownsampler.swift in Sources */,
+				E8000001AA000052 /* UserProfile.swift in Sources */,
+				E8000001AA000053 /* ProfileView.swift in Sources */,
+				E8000001AA000054 /* EditProfileView.swift in Sources */,
+				E8000001AA000055 /* CatchSchema.swift in Sources */,
+				E8000001AA000056 /* VisibilitySettings.swift in Sources */,
+				E8CE692EDFCE0B5ECDC4C1DD /* AuthState.swift in Sources */,
+				E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */,
+				E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */,
+				E8C5DB4466426FAE9480469A /* CloudKitService.swift in Sources */,
+				E8C7737EC218A5DCA33037D1 /* CKCloudKitService.swift in Sources */,
+				E8E600000001 /* FollowStatus.swift in Sources */,
+				E8E600000002 /* Follow.swift in Sources */,
+				E8E600000003 /* FollowServiceError.swift in Sources */,
+				E8E600000004 /* FollowService.swift in Sources */,
+				E8E600000005 /* CKFollowService.swift in Sources */,
+				E8E600000006 /* CKFollowServiceSubscription.swift in Sources */,
+				E8F600000101 /* CatRepository.swift in Sources */,
+				E8F600000102 /* EncounterRepository.swift in Sources */,
+				E8F600000103 /* CloudKitAssetManager.swift in Sources */,
+				E8F600000104 /* CKCatRepository.swift in Sources */,
+				E8F600000105 /* CKEncounterRepository.swift in Sources */,
+				E8F600000002 /* CatSyncPayload.swift in Sources */,
+				E8F600000003 /* CloudCat.swift in Sources */,
+				E8F600000004 /* CloudSyncError.swift in Sources */,
+				E8E600000007 /* SocialView.swift in Sources */,
+				E8E600000008 /* FindPeopleView.swift in Sources */,
+				E8E600000009 /* FollowRowView.swift in Sources */,
+				E8E60000000A /* PendingRequestRowView.swift in Sources */,
+				E8F600000201 /* EncounterSyncPayload.swift in Sources */,
+				E8F600000202 /* CloudEncounter.swift in Sources */,
+				E8F600000205 /* CatRecordMapper.swift in Sources */,
+				E8F600000206 /* EncounterRecordMapper.swift in Sources */,
+				E8F600000301 /* CatSyncService.swift in Sources */,
+				E8F600000302 /* CKCatSyncService.swift in Sources */,
+				E8F600000303 /* EncounterSyncService.swift in Sources */,
+				E8F600000304 /* CKEncounterSyncService.swift in Sources */,
+				E8E600000030 /* UserBrowseService.swift in Sources */,
+				E8E600000031 /* CKUserBrowseService.swift in Sources */,
+				E8E600000032 /* UserBrowseData.swift in Sources */,
+				E8E600000033 /* UserBrowseError.swift in Sources */,
+				E8E600000034 /* UserPublicProfileView.swift in Sources */,
+				E8E600000035 /* RemoteCatCardView.swift in Sources */,
+				E8E600000036 /* RemoteCatProfileView.swift in Sources */,
+				E8E600000037 /* RemoteFeedItemView.swift in Sources */,
+				E8B700000101 /* BreedPrediction.swift in Sources */,
+				E8B700000102 /* BreedClassifierService.swift in Sources */,
+				E8B700000103 /* VisionBreedClassifierService.swift in Sources */,
+				E8B700000104 /* BreedLabelMapper.swift in Sources */,
+				E8B700000105 /* BreedSuggestionView.swift in Sources */,
+				E8B700000106 /* BreedPickerView.swift in Sources */,
+				E8D800000101 /* StevenEasterEggView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E8A100000031 /* Sources (catchTests) */ = {
+		E8A100000031 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				E8A100000001 /* LocationTests.swift in Sources */,
-				E8A100000002 /* CareEntryTests.swift in Sources */,
 				E8A100000003 /* CatTests.swift in Sources */,
 				E8A100000004 /* EncounterTests.swift in Sources */,
 				E8A100000005 /* ModelContainerFactory.swift in Sources */,
 				E8A100000006 /* Fixtures.swift in Sources */,
-				E8A100000007 /* Cat.swift in Sources (catchTests) */,
-				E8A100000008 /* Encounter.swift in Sources (catchTests) */,
-				E8A100000009 /* CareEntry.swift in Sources (catchTests) */,
-				E8A10000000A /* Location.swift in Sources (catchTests) */,
+				E8BL00000201 /* BreedRarity.swift in Sources */,
+				E8BL00000202 /* BreedCatalogEntry.swift in Sources */,
+				E8BL00000203 /* BreedCatalog.swift in Sources */,
+				E8BL00000204 /* BreedLogEntry.swift in Sources */,
+				E8BL00000205 /* BreedLogService.swift in Sources */,
+				E8BL00000206 /* DefaultBreedLogService.swift in Sources */,
+				E8BL00000220 /* BreedCatalogTests.swift in Sources */,
+				E8BL00000221 /* DefaultBreedLogServiceTests.swift in Sources */,
+				E8BL00000222 /* MockBreedLogService.swift in Sources */,
+				E8A100000007 /* Cat.swift in Sources */,
+				E8A100000008 /* Encounter.swift in Sources */,
+				E8A10000000A /* Location.swift in Sources */,
+				E8A10000000B /* ImageDownsampler.swift in Sources */,
+				E8A10000000C /* ImageDownsamplerTests.swift in Sources */,
+				E8A10000000D /* UserProfile.swift in Sources */,
+				E8A10000000E /* UserProfileTests.swift in Sources */,
+				E8A10000000F /* CatchSchema.swift in Sources */,
+				E8A100000025 /* CatchSchemaTests.swift in Sources */,
+				E8A100000026 /* VisibilitySettings.swift in Sources */,
+				E8A100000027 /* VisibilitySettingsTests.swift in Sources */,
+				E8C6A3B73A0CC162F803D7CA /* AuthStateTests.swift in Sources */,
+				E8CF9FE9B8D8EB743AC8A414 /* MockAuthService.swift in Sources */,
+				E8C45823BB168636E9BDC605 /* MockCloudKitService.swift in Sources */,
+				E8CCDF6B8933605A62729069 /* AuthState.swift in Sources */,
+				E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources */,
+				E8CCF3022A93BC29B1DF104A /* CloudKitService.swift in Sources */,
+				E8D200000005 /* CloudKitServiceSearchTests.swift in Sources */,
+				E8E600000011 /* FollowStatus.swift in Sources */,
+				E8E600000012 /* Follow.swift in Sources */,
+				E8E600000013 /* FollowServiceError.swift in Sources */,
+				E8E600000014 /* FollowService.swift in Sources */,
+				E8E60000000B /* MockFollowService.swift in Sources */,
+				E8E60000000C /* FollowStatusTests.swift in Sources */,
+				E8E60000000D /* FollowTests.swift in Sources */,
+				E8E60000000E /* FollowServiceErrorTests.swift in Sources */,
+				E8E60000000F /* MockFollowServiceTests.swift in Sources */,
+				E8F600000111 /* CatRepository.swift in Sources */,
+				E8F600000112 /* EncounterRepository.swift in Sources */,
+				E8F600000113 /* CloudKitAssetManager.swift in Sources */,
+				E8F600000114 /* CKCatRepository.swift in Sources */,
+				E8F600000115 /* CKEncounterRepository.swift in Sources */,
+				E8F600000012 /* CatSyncPayload.swift in Sources */,
+				E8F600000013 /* CloudCat.swift in Sources */,
+				E8F600000014 /* CloudSyncError.swift in Sources */,
+				E8F60000010B /* MockCatRepository.swift in Sources */,
+				E8F60000010C /* MockEncounterRepository.swift in Sources */,
+				E8F60000010D /* MockCatRepositoryTests.swift in Sources */,
+				E8F60000010E /* MockEncounterRepositoryTests.swift in Sources */,
+				E8F60000000D /* CloudSyncErrorTests.swift in Sources */,
+				E8F600000211 /* EncounterSyncPayload.swift in Sources */,
+				E8F600000212 /* CloudEncounter.swift in Sources */,
+				E8F600000215 /* CatRecordMapper.swift in Sources */,
+				E8F600000216 /* EncounterRecordMapper.swift in Sources */,
+				E8F600000311 /* CatSyncService.swift in Sources */,
+				E8F600000312 /* CKCatSyncService.swift in Sources */,
+				E8F600000313 /* EncounterSyncService.swift in Sources */,
+				E8F600000314 /* CKEncounterSyncService.swift in Sources */,
+				E8F600000315 /* MockCatSyncService.swift in Sources */,
+				E8F600000316 /* MockEncounterSyncService.swift in Sources */,
+				E8F600000317 /* CKCatSyncServiceTests.swift in Sources */,
+				E8F600000318 /* CKEncounterSyncServiceTests.swift in Sources */,
+				E8E600000040 /* UserBrowseService.swift in Sources */,
+				E8E600000041 /* CKUserBrowseService.swift in Sources */,
+				E8E600000042 /* UserBrowseData.swift in Sources */,
+				E8E600000043 /* UserBrowseError.swift in Sources */,
+				E8E600000038 /* CKUserBrowseServiceTests.swift in Sources */,
+				E8E600000039 /* MockUserBrowseService.swift in Sources */,
+				E8B700000201 /* BreedLabelMapperTests.swift in Sources */,
+				E8B700000202 /* BreedPredictionTests.swift in Sources */,
+				E8B700000203 /* MockBreedClassifierService.swift in Sources */,
+				E8B700000204 /* BreedPrediction.swift in Sources */,
+				E8B700000205 /* BreedClassifierService.swift in Sources */,
+				E8B700000206 /* BreedLabelMapper.swift in Sources */,
+				E8D800000201 /* CatStevenTests.swift in Sources */,
+				E8A100000029 /* AddCatValidationTests.swift in Sources */,
+				E8CS00000301 /* CatchStrings.swift in Sources */,
+				E8CS00000302 /* CatchStrings+Feed.swift in Sources */,
+				E8CS00000303 /* CatchStrings+CatProfile.swift in Sources */,
+				E8CS00000304 /* CatchStrings+Collection.swift in Sources */,
+				E8CS00000305 /* CatchStrings+Log.swift in Sources */,
+				E8CS00000306 /* CatchStrings+Map.swift in Sources */,
+				E8CS00000307 /* CatchStrings+Onboarding.swift in Sources */,
+				E8CS00000308 /* CatchStrings+Profile.swift in Sources */,
+				E8CS00000309 /* CatchStrings+Social.swift in Sources */,
+				E8CS0000030A /* CatchStrings+BreedLog.swift in Sources */,
+				E8CS0000030B /* CatchStrings+Components.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,9 +1192,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = catch/catch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"catch/Preview Content\"";
+				DEVELOPMENT_TEAM = SZC3MJ9V7Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Catch uses your location to record where you spotted a cat.";
@@ -512,9 +1224,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = catch/catch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"catch/Preview Content\"";
+				DEVELOPMENT_TEAM = SZC3MJ9V7Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Catch uses your location to record where you spotted a cat.";
@@ -537,7 +1251,7 @@
 			};
 			name = Release;
 		};
-		E8A100000040 /* Debug (catchTests) */ = {
+		E8A100000040 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -553,7 +1267,7 @@
 			};
 			name = Debug;
 		};
-		E8A100000041 /* Release (catchTests) */ = {
+		E8A100000041 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -572,20 +1286,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E80000012B5A00000014 /* Build configuration list for PBXProject "catch" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E80000012B5A00000015 /* Debug */,
-				E80000012B5A00000016 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		E80000012B5A0000000D /* Build configuration list for PBXNativeTarget "catch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E80000012B5A00000017 /* Debug */,
 				E80000012B5A00000018 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E80000012B5A00000014 /* Build configuration list for PBXProject "catch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E80000012B5A00000015 /* Debug */,
+				E80000012B5A00000016 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -600,7 +1314,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
 	};
 	rootObject = E80000012B5A0000000F /* Project object */;
 }

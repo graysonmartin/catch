@@ -7,6 +7,14 @@ enum CatSortOption: String, CaseIterable, Identifiable {
     case recent = "recently seen"
 
     var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .name: CatchStrings.Collection.sortName
+        case .encounters: CatchStrings.Collection.sortMostSeen
+        case .recent: CatchStrings.Collection.sortRecentlySeen
+        }
+    }
 }
 
 struct CollectionView: View {
@@ -24,7 +32,10 @@ struct CollectionView: View {
         if searchText.isEmpty {
             filtered = cats
         } else {
-            filtered = cats.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+            filtered = cats.filter {
+                $0.name.localizedCaseInsensitiveContains(searchText)
+                || $0.location.name.localizedCaseInsensitiveContains(searchText)
+            }
         }
 
         switch sortOption {
@@ -43,14 +54,14 @@ struct CollectionView: View {
                 if cats.isEmpty {
                     EmptyStateView(
                         icon: "square.grid.2x2",
-                        title: "No Cats Collected",
-                        subtitle: "Cats you encounter will appear here."
+                        title: CatchStrings.Collection.emptyTitle,
+                        subtitle: CatchStrings.Collection.emptySubtitle
                     )
                 } else if filteredCats.isEmpty {
                     EmptyStateView(
                         icon: "magnifyingglass",
-                        title: "no matches",
-                        subtitle: "no cats named \"\(searchText)\" in your collection"
+                        title: CatchStrings.Collection.searchEmptyTitle,
+                        subtitle: CatchStrings.Collection.searchEmptySubtitle(searchText)
                     )
                 } else {
                     ScrollView {
@@ -68,14 +79,22 @@ struct CollectionView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(CatchTheme.background)
-            .navigationTitle("Collection")
-            .searchable(text: $searchText, prompt: "find a cat")
+            .navigationTitle(CatchStrings.Tabs.collection)
+            .searchable(text: $searchText, prompt: CatchStrings.Collection.searchPrompt)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink {
+                        BreedLogView()
+                    } label: {
+                        Image(systemName: "book.closed.fill")
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
-                        Picker("sort by", selection: $sortOption) {
+                        Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
                             ForEach(CatSortOption.allCases) { option in
-                                Text(option.rawValue).tag(option)
+                                Text(option.displayName).tag(option)
                             }
                         }
                     } label: {
@@ -99,7 +118,7 @@ struct CatCardView: View {
             CatPhotoView(photoData: cat.photos.first, size: 120)
                 .frame(maxWidth: .infinity)
                 .frame(height: 120)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
 
             VStack(spacing: 4) {
                 HStack {
@@ -107,6 +126,11 @@ struct CatCardView: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(CatchTheme.textPrimary)
                         .lineLimit(1)
+                    if cat.isSteven {
+                        Image(systemName: "crown.fill")
+                            .font(.caption2)
+                            .foregroundStyle(CatchTheme.primary)
+                    }
                     if cat.isOwned {
                         Image(systemName: "heart.fill")
                             .font(.caption2)
@@ -114,14 +138,21 @@ struct CatCardView: View {
                     }
                 }
 
-                Text("\(cat.encounters.count) encounter\(cat.encounters.count == 1 ? "" : "s")")
+                if let breed = cat.breed, !breed.isEmpty {
+                    Text(breed.lowercased())
+                        .font(.caption2)
+                        .foregroundStyle(CatchTheme.primary)
+                        .lineLimit(1)
+                }
+
+                Text(CatchStrings.Common.encounterCount(cat.encounters.count))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }
         }
         .padding(12)
         .background(CatchTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.05), radius: 4, y: 2)
+        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+        .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
     }
 }

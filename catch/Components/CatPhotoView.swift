@@ -6,7 +6,8 @@ struct CatPhotoView: View {
 
     var body: some View {
         Group {
-            if let data = photoData, let uiImage = UIImage(data: data) {
+            if let data = photoData,
+               let uiImage = ImageDownsampler.downsample(data: data, to: CGSize(width: size, height: size)) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()
@@ -19,6 +20,6 @@ struct CatPhotoView: View {
             }
         }
         .frame(width: size, height: size)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
     }
 }

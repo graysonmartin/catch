@@ -82,7 +82,7 @@ struct PhotoCarouselView: View {
 
     private func photoImage(_ data: Data) -> some View {
         Group {
-            if let uiImage = UIImage(data: data) {
+            if let uiImage = ImageDownsampler.downsample(data: data, to: CGSize(width: height * 1.5, height: height)) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()

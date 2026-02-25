@@ -21,6 +21,7 @@ enum DataSeeder {
         // -- Cat 1: garfield (the main character) --
         let garfield = Cat(
             name: "garfield",
+            breed: "Tabby",
             estimatedAge: "3",
             location: Location(name: "Home", latitude: 37.7749, longitude: -122.4194),
             notes: "the original. the blueprint. simply unmatched.",
@@ -46,17 +47,10 @@ enum DataSeeder {
         )
         context.insert(garfieldEnc2)
 
-        let garfieldCare = CareEntry(
-            startDate: calendar.date(byAdding: .day, value: -14, to: now)!,
-            endDate: calendar.date(byAdding: .day, value: -7, to: now)!,
-            notes: "stayed home all week. he was thriving. i was his servant.",
-            cat: garfield
-        )
-        context.insert(garfieldCare)
-
         // -- Cat 2: sprinkles (ragdoll in shopping bag) --
         let sprinkles = Cat(
             name: "sprinkles",
+            breed: "Ragdoll",
             estimatedAge: "5",
             location: Location(name: "Grocery store parking lot", latitude: 37.7850, longitude: -122.4094),
             notes: "found her sitting in someone's grocery bag like she owned it",
@@ -84,6 +78,7 @@ enum DataSeeder {
         // -- Cat 3: tsuki (russian blue with harness) --
         let tsuki = Cat(
             name: "tsuki",
+            breed: "Russian Blue",
             estimatedAge: "4",
             location: Location(name: "The park", latitude: 37.7694, longitude: -122.4862),
             notes: "walks around in a harness like he's on a mission. respect.",
@@ -127,18 +122,56 @@ enum DataSeeder {
         )
         context.insert(missBolognaEnc2)
 
-        let missBolognaCare = CareEntry(
-            startDate: calendar.date(byAdding: .day, value: -5, to: now)!,
-            endDate: calendar.date(byAdding: .day, value: -3, to: now)!,
-            notes: "it was raining so she stayed over. she judged my apartment the entire time.",
-            cat: missBologna
+        // -- Cat 5: phantom (bombay sighting) --
+        let phantom = Cat(
+            name: "phantom",
+            breed: "Bombay",
+            estimatedAge: "6",
+            location: Location(name: "Alley behind the ramen place", latitude: 37.7760, longitude: -122.4180),
+            notes: "all black. appeared out of nowhere. might be a glitch in the matrix."
         )
-        context.insert(missBolognaCare)
+        context.insert(phantom)
+
+        let phantomEnc = Encounter(
+            date: calendar.date(byAdding: .day, value: -12, to: now)!,
+            location: Location(name: "Alley behind the ramen place", latitude: 37.7760, longitude: -122.4180),
+            notes: "made eye contact for exactly 3 seconds then vanished. classic.",
+            cat: phantom
+        )
+        context.insert(phantomEnc)
+
+        // -- Cat 6: professor beans (maine coon at cafe) --
+        let professorBeans = Cat(
+            name: "professor beans",
+            breed: "Maine Coon",
+            estimatedAge: "7",
+            location: Location(name: "Coffee shop on 3rd", latitude: 37.7845, longitude: -122.4000),
+            notes: "enormous. sits on the cafe windowsill like a tenured professor. regulars know him."
+        )
+        context.insert(professorBeans)
+
+        let professorBeansEnc = Encounter(
+            date: calendar.date(byAdding: .day, value: -5, to: now)!,
+            location: Location(name: "Coffee shop on 3rd", latitude: 37.7845, longitude: -122.4000),
+            notes: "he was sitting next to someone's laptop. contributing, probably.",
+            cat: professorBeans
+        )
+        context.insert(professorBeansEnc)
+
+        // -- User Profile --
+        let profileCount = (try? context.fetchCount(FetchDescriptor<UserProfile>())) ?? 0
+        if profileCount == 0 {
+            let profile = UserProfile(
+                displayName: "cat enthusiast",
+                bio: "just out here cataloging every cat i see. it's not weird, you're weird."
+            )
+            context.insert(profile)
+        }
     }
 
     private static func jpegData(named assetName: String) -> [Data] {
         guard let image = UIImage(named: assetName),
-              let data = image.jpegData(compressionQuality: 0.7) else {
+              let data = image.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) else {
             return []
         }
         return [data]

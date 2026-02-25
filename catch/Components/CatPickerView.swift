@@ -43,8 +43,8 @@ struct CatPickerView: View {
                 ContentUnavailableView.search(text: searchText)
             }
         }
-        .searchable(text: $searchText, prompt: "name or location")
-        .navigationTitle("pick a cat")
+        .searchable(text: $searchText, prompt: CatchStrings.Components.nameOrLocation)
+        .navigationTitle(CatchStrings.Components.pickACat)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
@@ -94,10 +94,10 @@ private struct CatPickerRow: View {
 
     private var lastSeenText: String {
         guard let lastDate = cat.lastEncounterDate else {
-            return "never seen"
+            return CatchStrings.Components.neverSeen
         }
         let formatter = RelativeDateTimeFormatter()
         formatter.unitsStyle = .short
-        return "last seen " + formatter.localizedString(for: lastDate, relativeTo: Date())
+        return CatchStrings.Components.lastSeenPrefix + formatter.localizedString(for: lastDate, relativeTo: Date())
     }
 }

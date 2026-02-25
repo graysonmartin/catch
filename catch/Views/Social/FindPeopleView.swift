@@ -1,0 +1,151 @@
+import SwiftUI
+
+struct FindPeopleView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(CKFollowService.self) private var followService
+    @Environment(AppleAuthService.self) private var authService
+
+    @State private var searchText = ""
+    @State private var results: [CloudUserProfile] = []
+    @State private var isSearching = false
+    @State private var sentFollowIDs: Set<String> = []
+
+    private var cloudKitService: CloudKitService = CKCloudKitService()
+
+    private var currentUserID: String {
+        authService.authState.user?.userIdentifier ?? ""
+    }
+
+    var body: some View {
+        NavigationStack {
+            List {
+                if results.isEmpty && !searchText.isEmpty && !isSearching {
+                    ContentUnavailableView(
+                        CatchStrings.Social.noOneFound,
+                        systemImage: "person.slash",
+                        description: Text(CatchStrings.Social.tryDifferentName)
+                    )
+                } else {
+                    ForEach(results, id: \.recordName) { user in
+                        resultRow(for: user)
+                    }
+                }
+            }
+            .listStyle(.insetGrouped)
+            .overlay {
+                if searchText.isEmpty && results.isEmpty {
+                    EmptyStateView(
+                        icon: "magnifyingglass",
+                        title: CatchStrings.Social.findYourPeople,
+                        subtitle: CatchStrings.Social.findPeopleSubtitle
+                    )
+                }
+            }
+            .searchable(text: $searchText, prompt: CatchStrings.Social.searchByName)
+            .navigationTitle(CatchStrings.Social.findPeople)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(CatchStrings.Common.done) { dismiss() }
+                }
+            }
+            .task(id: searchText) {
+                await search()
+            }
+        }
+    }
+
+    // MARK: - Row
+
+    private func resultRow(for user: CloudUserProfile) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: "person.crop.circle.fill")
+                .font(.title2)
+                .foregroundStyle(CatchTheme.secondary)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(user.displayName.isEmpty ? CatchStrings.Social.anonymous : user.displayName)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(CatchTheme.textPrimary)
+
+                if !user.bio.isEmpty {
+                    Text(user.bio)
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                        .lineLimit(1)
+                }
+            }
+
+            Spacer()
+
+            actionButton(for: user)
+        }
+    }
+
+    @ViewBuilder
+    private func actionButton(for user: CloudUserProfile) -> some View {
+        let targetID = user.appleUserID
+
+        if targetID == currentUserID {
+            Text(CatchStrings.Social.you)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(CatchTheme.textSecondary)
+        } else if followService.isFollowing(targetID) {
+            Text(CatchStrings.Social.followingStatus)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(CatchTheme.textSecondary)
+        } else if followService.pendingRequestTo(targetID) != nil || sentFollowIDs.contains(targetID) {
+            Text(CatchStrings.Social.requestedStatus)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(CatchTheme.textSecondary)
+        } else {
+            Button {
+                performFollow(targetID: targetID, isPrivate: user.isPrivate)
+            } label: {
+                Text(user.isPrivate ? CatchStrings.Social.request : CatchStrings.Social.follow)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(CatchTheme.primary)
+                    .clipShape(Capsule())
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    // MARK: - Actions
+
+    private func search() async {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty else {
+            results = []
+            return
+        }
+
+        try? await Task.sleep(for: .milliseconds(500))
+        guard !Task.isCancelled else { return }
+
+        isSearching = true
+        defer { isSearching = false }
+
+        results = (try? await cloudKitService.searchUsers(query: query)) ?? []
+    }
+
+    private func performFollow(targetID: String, isPrivate: Bool) {
+        Task {
+            do {
+                try await followService.follow(
+                    targetID: targetID,
+                    by: currentUserID,
+                    isTargetPrivate: isPrivate
+                )
+                if isPrivate {
+                    sentFollowIDs.insert(targetID)
+                }
+            } catch {
+                // Follow failed — button stays visible so user can retry
+            }
+        }
+    }
+}
