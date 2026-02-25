@@ -47,7 +47,7 @@ struct CatMapView: View {
                                 HStack(spacing: 6) {
                                     Image(systemName: "eye.slash")
                                         .font(.caption2)
-                                    Text("\(catsWithoutLocation.count) cat\(catsWithoutLocation.count == 1 ? "" : "s") not shown")
+                                    Text(CatchStrings.Map.catsNotShown(catsWithoutLocation.count))
                                         .font(.caption.weight(.medium))
                                 }
                                 .padding(.horizontal, 12)
@@ -101,7 +101,8 @@ struct MissingLocationSheet: View {
                     onSelect(cat)
                 } label: {
                     HStack(spacing: 12) {
-                        if let photoData = cat.photos.first, let uiImage = UIImage(data: photoData) {
+                        if let photoData = cat.photos.first,
+                           let uiImage = ImageDownsampler.downsample(data: photoData, to: CGSize(width: 44, height: 44)) {
                             Image(uiImage: uiImage)
                                 .resizable()
                                 .scaledToFill()
@@ -120,25 +121,25 @@ struct MissingLocationSheet: View {
                             Text(cat.name)
                                 .font(.headline)
                                 .foregroundStyle(CatchTheme.textPrimary)
-                            Text("no location set")
+                            Text(CatchStrings.Map.noLocationSet)
                                 .font(.caption)
                                 .foregroundStyle(CatchTheme.textSecondary)
                         }
 
                         Spacer()
 
-                        Text("edit")
+                        Text(CatchStrings.Common.edit.lowercased())
                             .font(.caption.weight(.medium))
                             .foregroundStyle(CatchTheme.primary)
                     }
                 }
                 .buttonStyle(.plain)
             }
-            .navigationTitle("missing locations")
+            .navigationTitle(CatchStrings.Map.missingLocationsTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") { dismiss() }
+                    Button(CatchStrings.Common.close) { dismiss() }
                 }
             }
         }

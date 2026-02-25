@@ -121,21 +121,21 @@ struct FeedView: View {
             .navigationDestination(for: Cat.self) { cat in
                 CatProfileView(cat: cat)
             }
-            .alert("delete orphaned encounter?", isPresented: Binding(
+            .alert(CatchStrings.Feed.orphanedAlertTitle, isPresented: Binding(
                 get: { encounterToDelete != nil },
                 set: { if !$0 { encounterToDelete = nil } }
             )) {
-                Button("Delete", role: .destructive) {
+                Button(CatchStrings.Common.delete, role: .destructive) {
                     if let encounter = encounterToDelete {
                         modelContext.delete(encounter)
                         encounterToDelete = nil
                     }
                 }
-                Button("Cancel", role: .cancel) {
+                Button(CatchStrings.Common.cancel, role: .cancel) {
                     encounterToDelete = nil
                 }
             } message: {
-                Text("this encounter lost its cat. let it go.")
+                Text(CatchStrings.Feed.orphanedAlertMessage)
             }
         }
     }
