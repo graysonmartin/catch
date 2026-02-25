@@ -12,7 +12,7 @@ struct catchApp: App {
     let modelContainer: ModelContainer
 
     init() {
-        let schema = Schema(versionedSchema: CatchSchemaV2.self)
+        let schema = Schema(versionedSchema: CatchSchemaV3.self)
         let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
         do {
             modelContainer = try ModelContainer(
@@ -79,7 +79,9 @@ struct catchApp: App {
                             userBrowseService = CKUserBrowseService(
                                 cloudKitService: CKCloudKitService(),
                                 catRepository: catRepo,
-                                encounterRepository: encRepo
+                                encounterRepository: encRepo,
+                                followService: followService,
+                                currentUserIDProvider: getUserID
                             )
                         }
                     }

@@ -134,17 +134,17 @@ struct UserPublicProfileView: View {
 
             if let data {
                 HStack(spacing: 24) {
-                    statBadge(count: data.cats.count, label: "cats")
-                    statBadge(count: data.encounters.count, label: "encounters")
+                    statBadge(count: isPrivateHidden ? nil : data.cats.count, label: "cats")
+                    statBadge(count: isPrivateHidden ? nil : data.encounters.count, label: "encounters")
                 }
                 .padding(.top, 4)
             }
         }
     }
 
-    private func statBadge(count: Int, label: String) -> some View {
+    private func statBadge(count: Int?, label: String) -> some View {
         VStack(spacing: 2) {
-            Text("\(count)")
+            Text(count.map { "\($0)" } ?? "--")
                 .font(.headline)
                 .foregroundStyle(CatchTheme.textPrimary)
             Text(label)
@@ -275,6 +275,11 @@ struct UserPublicProfileView: View {
 
     private var isFollowingUser: Bool {
         followService.isFollowing(userID)
+    }
+
+    private var isPrivateHidden: Bool {
+        guard let data else { return false }
+        return data.profile.isPrivate && !isFollowingUser
     }
 
     private func loadData() async {
