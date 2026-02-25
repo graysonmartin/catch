@@ -7,6 +7,7 @@ final class Encounter {
     var location: Location
     var notes: String
     var cat: Cat?
+    var cloudKitRecordName: String?
 
     @Attribute(.externalStorage)
     var photos: [Data]

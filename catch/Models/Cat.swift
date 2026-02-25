@@ -9,6 +9,7 @@ final class Cat {
     var notes: String
     var isOwned: Bool
     var createdAt: Date
+    var cloudKitRecordName: String?
 
     @Attribute(.externalStorage)
     var photos: [Data]

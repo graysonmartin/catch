@@ -4,6 +4,7 @@ import SwiftData
 struct LogEncounterView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(CKEncounterSyncService.self) private var encounterSyncService: CKEncounterSyncService?
     @Query(sort: \Cat.name) private var cats: [Cat]
 
     @State private var selectedCat: Cat?
@@ -128,6 +129,7 @@ struct LogEncounterView: View {
             photos: photos
         )
         modelContext.insert(encounter)
+        Task { await encounterSyncService?.syncNewEncounter(encounter, for: cat) }
         dismiss()
     }
 }

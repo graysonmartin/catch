@@ -90,6 +90,49 @@
 		E8E60000000D /* FollowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000D /* FollowTests.swift */; };
 		E8E60000000E /* FollowServiceErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000E /* FollowServiceErrorTests.swift */; };
 		E8E60000000F /* MockFollowServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000F /* MockFollowServiceTests.swift */; };
+		E8F600000101 /* CatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000101 /* CatRepository.swift */; };
+		E8F600000102 /* EncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000102 /* EncounterRepository.swift */; };
+		E8F600000103 /* CloudKitAssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000103 /* CloudKitAssetManager.swift */; };
+		E8F600000104 /* CKCatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000104 /* CKCatRepository.swift */; };
+		E8F600000105 /* CKEncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000105 /* CKEncounterRepository.swift */; };
+		E8F600000002 /* CatSyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000002 /* CatSyncPayload.swift */; };
+		E8F600000003 /* CloudCat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000003 /* CloudCat.swift */; };
+		E8F600000004 /* CloudSyncError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000004 /* CloudSyncError.swift */; };
+		E8F600000111 /* CatRepository.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000101 /* CatRepository.swift */; };
+		E8F600000112 /* EncounterRepository.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000102 /* EncounterRepository.swift */; };
+		E8F600000113 /* CloudKitAssetManager.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000103 /* CloudKitAssetManager.swift */; };
+		E8F600000114 /* CKCatRepository.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000104 /* CKCatRepository.swift */; };
+		E8F600000115 /* CKEncounterRepository.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000105 /* CKEncounterRepository.swift */; };
+		E8F600000012 /* CatSyncPayload.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000002 /* CatSyncPayload.swift */; };
+		E8F600000013 /* CloudCat.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000003 /* CloudCat.swift */; };
+		E8F600000014 /* CloudSyncError.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000004 /* CloudSyncError.swift */; };
+		E8F60000010B /* MockCatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010B /* MockCatRepository.swift */; };
+		E8F60000010C /* MockEncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010C /* MockEncounterRepository.swift */; };
+		E8F60000010D /* MockCatRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010D /* MockCatRepositoryTests.swift */; };
+		E8F60000010E /* MockEncounterRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010E /* MockEncounterRepositoryTests.swift */; };
+		E8F60000000D /* CloudSyncErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000000D /* CloudSyncErrorTests.swift */; };
+		E8F600000201 /* EncounterSyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000201 /* EncounterSyncPayload.swift */; };
+		E8F600000202 /* CloudEncounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000202 /* CloudEncounter.swift */; };
+		E8F600000205 /* CatRecordMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000205 /* CatRecordMapper.swift */; };
+		E8F600000206 /* EncounterRecordMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000206 /* EncounterRecordMapper.swift */; };
+
+		E8F600000211 /* EncounterSyncPayload.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000201 /* EncounterSyncPayload.swift */; };
+		E8F600000212 /* CloudEncounter.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000202 /* CloudEncounter.swift */; };
+		E8F600000215 /* CatRecordMapper.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000205 /* CatRecordMapper.swift */; };
+		E8F600000216 /* EncounterRecordMapper.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000206 /* EncounterRecordMapper.swift */; };
+
+		E8F600000301 /* CatSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000301 /* CatSyncService.swift */; };
+		E8F600000302 /* CKCatSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000302 /* CKCatSyncService.swift */; };
+		E8F600000303 /* EncounterSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000303 /* EncounterSyncService.swift */; };
+		E8F600000304 /* CKEncounterSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000304 /* CKEncounterSyncService.swift */; };
+		E8F600000311 /* CatSyncService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000301 /* CatSyncService.swift */; };
+		E8F600000312 /* CKCatSyncService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000302 /* CKCatSyncService.swift */; };
+		E8F600000313 /* EncounterSyncService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000303 /* EncounterSyncService.swift */; };
+		E8F600000314 /* CKEncounterSyncService.swift in Sources (catchTests) */ = {isa = PBXBuildFile; fileRef = E8F500000304 /* CKEncounterSyncService.swift */; };
+		E8F600000315 /* MockCatSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000305 /* MockCatSyncService.swift */; };
+		E8F600000316 /* MockEncounterSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000306 /* MockEncounterSyncService.swift */; };
+		E8F600000317 /* CKCatSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000307 /* CKCatSyncServiceTests.swift */; };
+		E8F600000318 /* CKEncounterSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000308 /* CKEncounterSyncServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -165,6 +208,32 @@
 		E8E50000000D /* FollowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTests.swift; sourceTree = "<group>"; };
 		E8E50000000E /* FollowServiceErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowServiceErrorTests.swift; sourceTree = "<group>"; };
 		E8E50000000F /* MockFollowServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFollowServiceTests.swift; sourceTree = "<group>"; };
+		E8F500000101 /* CatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatRepository.swift; sourceTree = "<group>"; };
+		E8F500000102 /* EncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterRepository.swift; sourceTree = "<group>"; };
+		E8F500000103 /* CloudKitAssetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitAssetManager.swift; sourceTree = "<group>"; };
+		E8F500000104 /* CKCatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatRepository.swift; sourceTree = "<group>"; };
+		E8F500000105 /* CKEncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterRepository.swift; sourceTree = "<group>"; };
+		E8F500000002 /* CatSyncPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSyncPayload.swift; sourceTree = "<group>"; };
+		E8F500000003 /* CloudCat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudCat.swift; sourceTree = "<group>"; };
+		E8F500000004 /* CloudSyncError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncError.swift; sourceTree = "<group>"; };
+		E8F50000010B /* MockCatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatRepository.swift; sourceTree = "<group>"; };
+		E8F50000010C /* MockEncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterRepository.swift; sourceTree = "<group>"; };
+		E8F50000010D /* MockCatRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatRepositoryTests.swift; sourceTree = "<group>"; };
+		E8F50000010E /* MockEncounterRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterRepositoryTests.swift; sourceTree = "<group>"; };
+		E8F50000000D /* CloudSyncErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncErrorTests.swift; sourceTree = "<group>"; };
+		E8F500000201 /* EncounterSyncPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterSyncPayload.swift; sourceTree = "<group>"; };
+		E8F500000202 /* CloudEncounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudEncounter.swift; sourceTree = "<group>"; };
+		E8F500000205 /* CatRecordMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatRecordMapper.swift; sourceTree = "<group>"; };
+		E8F500000206 /* EncounterRecordMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterRecordMapper.swift; sourceTree = "<group>"; };
+
+		E8F500000301 /* CatSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSyncService.swift; sourceTree = "<group>"; };
+		E8F500000302 /* CKCatSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatSyncService.swift; sourceTree = "<group>"; };
+		E8F500000303 /* EncounterSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterSyncService.swift; sourceTree = "<group>"; };
+		E8F500000304 /* CKEncounterSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterSyncService.swift; sourceTree = "<group>"; };
+		E8F500000305 /* MockCatSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatSyncService.swift; sourceTree = "<group>"; };
+		E8F500000306 /* MockEncounterSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterSyncService.swift; sourceTree = "<group>"; };
+		E8F500000307 /* CKCatSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatSyncServiceTests.swift; sourceTree = "<group>"; };
+		E8F500000308 /* CKEncounterSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterSyncServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +274,7 @@
 				E8000001AA000032 /* Components */,
 				E8000001AA000033 /* Theme */,
 				E8C7643E7D80FDFED273606F /* Services */,
+				E8F500000300 /* Extensions */,
 				E8CA167FE482ED4A92C8C805 /* catch.entitlements */,
 				E80000012B5A00000012 /* Assets.xcassets */,
 				E80000012B5A0000000E /* Preview Content */,
@@ -354,6 +424,7 @@
 			children = (
 				E8C4C76FF8B24F98B098D2F1 /* Auth */,
 				E8C29A31E399698E3B36A45C /* CloudKit */,
+				E8F500000020 /* CloudSync */,
 				E8E500000020 /* Follow */,
 			);
 			path = Services;
@@ -372,7 +443,11 @@
 			children = (
 				E8CB34FA781359331A3ED13A /* MockAuthService.swift */,
 				E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */,
+				E8F50000010B /* MockCatRepository.swift */,
+				E8F50000010C /* MockEncounterRepository.swift */,
 				E8E50000000B /* MockFollowService.swift */,
+				E8F500000305 /* MockCatSyncService.swift */,
+				E8F500000306 /* MockEncounterSyncService.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -382,6 +457,7 @@
 			children = (
 				E8CF211849B3A47ED1640CA4 /* Auth */,
 				E8D100000020 /* CloudKit */,
+				E8F500000022 /* CloudSync */,
 				E8E500000022 /* Follow */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 			);
@@ -394,6 +470,29 @@
 				E8D100000005 /* CloudKitServiceSearchTests.swift */,
 			);
 			path = CloudKit;
+			sourceTree = "<group>";
+		};
+		E8F500000020 /* CloudSync */ = {
+			isa = PBXGroup;
+			children = (
+				E8F500000004 /* CloudSyncError.swift */,
+				E8F500000101 /* CatRepository.swift */,
+				E8F500000104 /* CKCatRepository.swift */,
+				E8F500000205 /* CatRecordMapper.swift */,
+				E8F500000002 /* CatSyncPayload.swift */,
+				E8F500000003 /* CloudCat.swift */,
+				E8F500000102 /* EncounterRepository.swift */,
+				E8F500000105 /* CKEncounterRepository.swift */,
+				E8F500000206 /* EncounterRecordMapper.swift */,
+				E8F500000201 /* EncounterSyncPayload.swift */,
+				E8F500000202 /* CloudEncounter.swift */,
+				E8F500000103 /* CloudKitAssetManager.swift */,
+				E8F500000301 /* CatSyncService.swift */,
+				E8F500000302 /* CKCatSyncService.swift */,
+				E8F500000303 /* EncounterSyncService.swift */,
+				E8F500000304 /* CKEncounterSyncService.swift */,
+			);
+			path = CloudSync;
 			sourceTree = "<group>";
 		};
 		E8E500000020 /* Follow */ = {
@@ -420,6 +519,18 @@
 			path = Social;
 			sourceTree = "<group>";
 		};
+		E8F500000022 /* CloudSync */ = {
+			isa = PBXGroup;
+			children = (
+				E8F50000000D /* CloudSyncErrorTests.swift */,
+				E8F50000010D /* MockCatRepositoryTests.swift */,
+				E8F50000010E /* MockEncounterRepositoryTests.swift */,
+				E8F500000307 /* CKCatSyncServiceTests.swift */,
+				E8F500000308 /* CKEncounterSyncServiceTests.swift */,
+			);
+			path = CloudSync;
+			sourceTree = "<group>";
+		};
 		E8E500000022 /* Follow */ = {
 			isa = PBXGroup;
 			children = (
@@ -429,6 +540,14 @@
 				E8E50000000F /* MockFollowServiceTests.swift */,
 			);
 			path = Follow;
+			sourceTree = "<group>";
+		};
+		E8F500000300 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -567,10 +686,26 @@
 				E8E600000004 /* FollowService.swift in Sources */,
 				E8E600000005 /* CKFollowService.swift in Sources */,
 				E8E600000006 /* CKFollowServiceSubscription.swift in Sources */,
+				E8F600000101 /* CatRepository.swift in Sources */,
+				E8F600000102 /* EncounterRepository.swift in Sources */,
+				E8F600000103 /* CloudKitAssetManager.swift in Sources */,
+				E8F600000104 /* CKCatRepository.swift in Sources */,
+				E8F600000105 /* CKEncounterRepository.swift in Sources */,
+				E8F600000002 /* CatSyncPayload.swift in Sources */,
+				E8F600000003 /* CloudCat.swift in Sources */,
+				E8F600000004 /* CloudSyncError.swift in Sources */,
 				E8E600000007 /* SocialView.swift in Sources */,
 				E8E600000008 /* FindPeopleView.swift in Sources */,
 				E8E600000009 /* FollowRowView.swift in Sources */,
 				E8E60000000A /* PendingRequestRowView.swift in Sources */,
+				E8F600000201 /* EncounterSyncPayload.swift in Sources */,
+				E8F600000202 /* CloudEncounter.swift in Sources */,
+				E8F600000205 /* CatRecordMapper.swift in Sources */,
+				E8F600000206 /* EncounterRecordMapper.swift in Sources */,
+				E8F600000301 /* CatSyncService.swift in Sources */,
+				E8F600000302 /* CKCatSyncService.swift in Sources */,
+				E8F600000303 /* EncounterSyncService.swift in Sources */,
+				E8F600000304 /* CKEncounterSyncService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,6 +745,31 @@
 				E8E60000000D /* FollowTests.swift in Sources */,
 				E8E60000000E /* FollowServiceErrorTests.swift in Sources */,
 				E8E60000000F /* MockFollowServiceTests.swift in Sources */,
+				E8F600000111 /* CatRepository.swift in Sources (catchTests) */,
+				E8F600000112 /* EncounterRepository.swift in Sources (catchTests) */,
+				E8F600000113 /* CloudKitAssetManager.swift in Sources (catchTests) */,
+				E8F600000114 /* CKCatRepository.swift in Sources (catchTests) */,
+				E8F600000115 /* CKEncounterRepository.swift in Sources (catchTests) */,
+				E8F600000012 /* CatSyncPayload.swift in Sources (catchTests) */,
+				E8F600000013 /* CloudCat.swift in Sources (catchTests) */,
+				E8F600000014 /* CloudSyncError.swift in Sources (catchTests) */,
+				E8F60000010B /* MockCatRepository.swift in Sources */,
+				E8F60000010C /* MockEncounterRepository.swift in Sources */,
+				E8F60000010D /* MockCatRepositoryTests.swift in Sources */,
+				E8F60000010E /* MockEncounterRepositoryTests.swift in Sources */,
+				E8F60000000D /* CloudSyncErrorTests.swift in Sources */,
+				E8F600000211 /* EncounterSyncPayload.swift in Sources (catchTests) */,
+				E8F600000212 /* CloudEncounter.swift in Sources (catchTests) */,
+				E8F600000215 /* CatRecordMapper.swift in Sources (catchTests) */,
+				E8F600000216 /* EncounterRecordMapper.swift in Sources (catchTests) */,
+				E8F600000311 /* CatSyncService.swift in Sources (catchTests) */,
+				E8F600000312 /* CKCatSyncService.swift in Sources (catchTests) */,
+				E8F600000313 /* EncounterSyncService.swift in Sources (catchTests) */,
+				E8F600000314 /* CKEncounterSyncService.swift in Sources (catchTests) */,
+				E8F600000315 /* MockCatSyncService.swift in Sources */,
+				E8F600000316 /* MockEncounterSyncService.swift in Sources */,
+				E8F600000317 /* CKCatSyncServiceTests.swift in Sources */,
+				E8F600000318 /* CKEncounterSyncServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
