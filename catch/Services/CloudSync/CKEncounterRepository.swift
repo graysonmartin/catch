@@ -62,10 +62,11 @@ final class CKEncounterRepository: EncounterRepository {
             cursor = nextCursor
         }
 
+        let photoSets = await CloudKitAssetManager.loadAllPhotos(from: allRecords)
+
         var encounters: [CloudEncounter] = []
-        for record in allRecords {
-            let photos = await CloudKitAssetManager.loadPhotoData(from: record["photos"] as? [CKAsset])
-            if let encounter = EncounterRecordMapper.cloudEncounter(from: record, photos: photos) {
+        for (index, record) in allRecords.enumerated() {
+            if let encounter = EncounterRecordMapper.cloudEncounter(from: record, photos: photoSets[index]) {
                 encounters.append(encounter)
             } else {
                 logger.warning("skipped encounter record \(record.recordID.recordName) — mapper returned nil")

@@ -62,10 +62,11 @@ final class CKCatRepository: CatRepository {
             cursor = nextCursor
         }
 
+        let photoSets = await CloudKitAssetManager.loadAllPhotos(from: allRecords)
+
         var cats: [CloudCat] = []
-        for record in allRecords {
-            let photos = await CloudKitAssetManager.loadPhotoData(from: record["photos"] as? [CKAsset])
-            if let cat = CatRecordMapper.cloudCat(from: record, photos: photos) {
+        for (index, record) in allRecords.enumerated() {
+            if let cat = CatRecordMapper.cloudCat(from: record, photos: photoSets[index]) {
                 cats.append(cat)
             } else {
                 logger.warning("skipped cat record \(record.recordID.recordName) — mapper returned nil")

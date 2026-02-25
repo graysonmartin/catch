@@ -25,4 +25,20 @@ enum CloudKitAssetManager {
             return try? Data(contentsOf: url)
         }
     }
+
+    static func loadAllPhotos(from records: [CKRecord]) async -> [[Data]] {
+        await withTaskGroup(of: (Int, [Data]).self, returning: [[Data]].self) { group in
+            for (index, record) in records.enumerated() {
+                let assets = record["photos"] as? [CKAsset]
+                group.addTask {
+                    (index, await loadPhotoData(from: assets))
+                }
+            }
+            var results = Array(repeating: [Data](), count: records.count)
+            for await (index, photos) in group {
+                results[index] = photos
+            }
+            return results
+        }
+    }
 }
