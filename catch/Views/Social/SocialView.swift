@@ -1,33 +1,46 @@
 import SwiftUI
 
+enum SocialTab: String, CaseIterable, Identifiable {
+    case followers
+    case following
+
+    var id: String { rawValue }
+}
+
 struct SocialView: View {
     @Environment(CKFollowService.self) private var followService
     @Environment(AppleAuthService.self) private var authService
     @State private var isShowingFindPeople = false
+    @State var selectedTab: SocialTab
 
     var body: some View {
-        List {
-            if !followService.pendingRequests.isEmpty {
-                requestsSection
+        VStack(spacing: 0) {
+            Picker("", selection: $selectedTab) {
+                ForEach(SocialTab.allCases) { tab in
+                    Text(tab.rawValue).tag(tab)
+                }
             }
-            if !followService.followers.isEmpty {
-                followersSection
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+
+            List {
+                switch selectedTab {
+                case .followers:
+                    followersContent
+                case .following:
+                    followingContent
+                }
             }
-            if !followService.following.isEmpty {
-                followingSection
+            .listStyle(.insetGrouped)
+            .overlay {
+                if isCurrentTabEmpty {
+                    emptyState
+                }
             }
         }
-        .listStyle(.insetGrouped)
-        .overlay {
-            if isEmpty {
-                EmptyStateView(
-                    icon: "person.2.slash",
-                    title: "no one here yet",
-                    subtitle: "find some people to follow and start building your circle"
-                )
-            }
-        }
-        .navigationTitle("social")
+        .background(CatchTheme.background)
+        .navigationTitle(selectedTab.rawValue)
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -46,6 +59,25 @@ struct SocialView: View {
         }
         .task {
             await refresh()
+        }
+    }
+
+    // MARK: - Tab Content
+
+    @ViewBuilder
+    private var followersContent: some View {
+        if !followService.pendingRequests.isEmpty {
+            requestsSection
+        }
+        if !followService.followers.isEmpty {
+            followersSection
+        }
+    }
+
+    @ViewBuilder
+    private var followingContent: some View {
+        if !followService.following.isEmpty {
+            followingSection
         }
     }
 
@@ -94,13 +126,37 @@ struct SocialView: View {
         }
     }
 
-    // MARK: - Helpers
+    // MARK: - Empty States
 
-    private var isEmpty: Bool {
-        followService.pendingRequests.isEmpty
-            && followService.followers.isEmpty
-            && followService.following.isEmpty
+    private var isCurrentTabEmpty: Bool {
+        switch selectedTab {
+        case .followers:
+            return followService.pendingRequests.isEmpty && followService.followers.isEmpty
+        case .following:
+            return followService.following.isEmpty
+        }
     }
+
+    private var emptyState: some View {
+        Group {
+            switch selectedTab {
+            case .followers:
+                EmptyStateView(
+                    icon: "person.2.slash",
+                    title: "no followers yet",
+                    subtitle: "your adoring public hasn't arrived"
+                )
+            case .following:
+                EmptyStateView(
+                    icon: "person.2.slash",
+                    title: "not following anyone",
+                    subtitle: "find some people to follow and start building your circle"
+                )
+            }
+        }
+    }
+
+    // MARK: - Helpers
 
     private var currentUserID: String {
         authService.authState.user?.userIdentifier ?? ""

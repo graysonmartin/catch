@@ -136,10 +136,10 @@ struct ProfileView: View {
     }
 
     private var socialSection: some View {
-        NavigationLink {
-            SocialView()
-        } label: {
-            HStack(spacing: 12) {
+        HStack(spacing: 12) {
+            NavigationLink {
+                SocialView(selectedTab: .followers)
+            } label: {
                 statCard(
                     count: followService.followers.count,
                     label: "followers",
@@ -156,16 +156,20 @@ struct ProfileView: View {
                             .offset(x: -4, y: 4)
                     }
                 }
+            }
 
+            NavigationLink {
+                SocialView(selectedTab: .following)
+            } label: {
                 statCard(
                     count: followService.following.count,
                     label: "following",
                     icon: "person.badge.plus"
                 )
             }
-            .padding(.horizontal, 20)
         }
         .buttonStyle(.plain)
+        .padding(.horizontal, 20)
     }
 
     private func joinDateSection(_ profile: UserProfile) -> some View {
