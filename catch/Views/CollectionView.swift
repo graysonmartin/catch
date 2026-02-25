@@ -71,6 +71,14 @@ struct CollectionView: View {
             .navigationTitle("Collection")
             .searchable(text: $searchText, prompt: "find a cat")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink {
+                        BreedLogView()
+                    } label: {
+                        Image(systemName: "book.closed.fill")
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Picker("sort by", selection: $sortOption) {

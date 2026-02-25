@@ -160,6 +160,27 @@
 		E8B700000204 /* BreedPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000001 /* BreedPrediction.swift */; };
 		E8B700000205 /* BreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000002 /* BreedClassifierService.swift */; };
 		E8B700000206 /* BreedLabelMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000004 /* BreedLabelMapper.swift */; };
+		E8BL00000101 /* BreedRarity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000001 /* BreedRarity.swift */; };
+		E8BL00000201 /* BreedRarity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000001 /* BreedRarity.swift */; };
+		E8BL00000102 /* BreedCatalogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000002 /* BreedCatalogEntry.swift */; };
+		E8BL00000202 /* BreedCatalogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000002 /* BreedCatalogEntry.swift */; };
+		E8BL00000103 /* BreedCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000003 /* BreedCatalog.swift */; };
+		E8BL00000203 /* BreedCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000003 /* BreedCatalog.swift */; };
+		E8BL00000104 /* BreedLogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000004 /* BreedLogEntry.swift */; };
+		E8BL00000204 /* BreedLogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000004 /* BreedLogEntry.swift */; };
+		E8BL00000105 /* BreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000005 /* BreedLogService.swift */; };
+		E8BL00000205 /* BreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000005 /* BreedLogService.swift */; };
+		E8BL00000106 /* DefaultBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000006 /* DefaultBreedLogService.swift */; };
+		E8BL00000206 /* DefaultBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000006 /* DefaultBreedLogService.swift */; };
+		E8BL00000110 /* BreedLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000010 /* BreedLogView.swift */; };
+		E8BL00000111 /* BreedLogProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000011 /* BreedLogProgressView.swift */; };
+		E8BL00000112 /* BreedLogCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000012 /* BreedLogCardView.swift */; };
+		E8BL00000113 /* BreedRarityBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000013 /* BreedRarityBadge.swift */; };
+		E8BL00000114 /* BreedDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000014 /* BreedDetailView.swift */; };
+		E8BL00000115 /* BreedLogSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000015 /* BreedLogSortOption.swift */; };
+		E8BL00000220 /* BreedCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000020 /* BreedCatalogTests.swift */; };
+		E8BL00000221 /* DefaultBreedLogServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000021 /* DefaultBreedLogServiceTests.swift */; };
+		E8BL00000222 /* MockBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000022 /* MockBreedLogService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -281,6 +302,21 @@
 		E8B700000007 /* BreedLabelMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLabelMapperTests.swift; sourceTree = "<group>"; };
 		E8B700000008 /* BreedPredictionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPredictionTests.swift; sourceTree = "<group>"; };
 		E8B700000009 /* MockBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedClassifierService.swift; sourceTree = "<group>"; };
+		E8BL00000001 /* BreedRarity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedRarity.swift; sourceTree = "<group>"; };
+		E8BL00000002 /* BreedCatalogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalogEntry.swift; sourceTree = "<group>"; };
+		E8BL00000003 /* BreedCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalog.swift; sourceTree = "<group>"; };
+		E8BL00000004 /* BreedLogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogEntry.swift; sourceTree = "<group>"; };
+		E8BL00000005 /* BreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogService.swift; sourceTree = "<group>"; };
+		E8BL00000006 /* DefaultBreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBreedLogService.swift; sourceTree = "<group>"; };
+		E8BL00000010 /* BreedLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogView.swift; sourceTree = "<group>"; };
+		E8BL00000011 /* BreedLogProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogProgressView.swift; sourceTree = "<group>"; };
+		E8BL00000012 /* BreedLogCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogCardView.swift; sourceTree = "<group>"; };
+		E8BL00000013 /* BreedRarityBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedRarityBadge.swift; sourceTree = "<group>"; };
+		E8BL00000014 /* BreedDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedDetailView.swift; sourceTree = "<group>"; };
+		E8BL00000015 /* BreedLogSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogSortOption.swift; sourceTree = "<group>"; };
+		E8BL00000020 /* BreedCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalogTests.swift; sourceTree = "<group>"; };
+		E8BL00000021 /* DefaultBreedLogServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBreedLogServiceTests.swift; sourceTree = "<group>"; };
+		E8BL00000022 /* MockBreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedLogService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -389,6 +425,7 @@
 			isa = PBXGroup;
 			children = (
 				E8B700000006 /* BreedPickerView.swift */,
+				E8BL0000F002 /* BreedLog */,
 				E8B700000005 /* BreedSuggestionView.swift */,
 				E8000001AA000014 /* CatPhotoView.swift */,
 				E8000001AA000028 /* PhotoCarouselView.swift */,
@@ -456,6 +493,7 @@
 			children = (
 				E8CF211849B3A47ED1640CA4 /* Auth */,
 				E8B700000011 /* BreedClassifier */,
+				E8BL0000F003 /* BreedLog */,
 				E8D100000020 /* CloudKit */,
 				E8F500000022 /* CloudSync */,
 				E8E500000022 /* Follow */,
@@ -489,6 +527,7 @@
 			children = (
 				E8C4C76FF8B24F98B098D2F1 /* Auth */,
 				E8B700000010 /* BreedClassifier */,
+				E8BL0000F001 /* BreedLog */,
 				E8C29A31E399698E3B36A45C /* CloudKit */,
 				E8F500000020 /* CloudSync */,
 				E8E500000020 /* Follow */,
@@ -509,6 +548,7 @@
 				E8F500000305 /* MockCatSyncService.swift */,
 				E8F500000306 /* MockEncounterSyncService.swift */,
 				E8E500000039 /* MockUserBrowseService.swift */,
+				E8BL00000022 /* MockBreedLogService.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -649,6 +689,41 @@
 			path = BreedClassifier;
 			sourceTree = "<group>";
 		};
+		E8BL0000F001 /* BreedLog */ = {
+			isa = PBXGroup;
+			children = (
+				E8BL00000001 /* BreedRarity.swift */,
+				E8BL00000002 /* BreedCatalogEntry.swift */,
+				E8BL00000003 /* BreedCatalog.swift */,
+				E8BL00000004 /* BreedLogEntry.swift */,
+				E8BL00000005 /* BreedLogService.swift */,
+				E8BL00000006 /* DefaultBreedLogService.swift */,
+			);
+			path = BreedLog;
+			sourceTree = "<group>";
+		};
+		E8BL0000F002 /* BreedLog */ = {
+			isa = PBXGroup;
+			children = (
+				E8BL00000010 /* BreedLogView.swift */,
+				E8BL00000011 /* BreedLogProgressView.swift */,
+				E8BL00000012 /* BreedLogCardView.swift */,
+				E8BL00000013 /* BreedRarityBadge.swift */,
+				E8BL00000014 /* BreedDetailView.swift */,
+				E8BL00000015 /* BreedLogSortOption.swift */,
+			);
+			path = BreedLog;
+			sourceTree = "<group>";
+		};
+		E8BL0000F003 /* BreedLog */ = {
+			isa = PBXGroup;
+			children = (
+				E8BL00000020 /* BreedCatalogTests.swift */,
+				E8BL00000021 /* DefaultBreedLogServiceTests.swift */,
+			);
+			path = BreedLog;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -742,6 +817,18 @@
 			files = (
 				E80000012B5A00000002 /* ContentView.swift in Sources */,
 				E80000012B5A00000001 /* catchApp.swift in Sources */,
+				E8BL00000101 /* BreedRarity.swift in Sources */,
+				E8BL00000102 /* BreedCatalogEntry.swift in Sources */,
+				E8BL00000103 /* BreedCatalog.swift in Sources */,
+				E8BL00000104 /* BreedLogEntry.swift in Sources */,
+				E8BL00000105 /* BreedLogService.swift in Sources */,
+				E8BL00000106 /* DefaultBreedLogService.swift in Sources */,
+				E8BL00000110 /* BreedLogView.swift in Sources */,
+				E8BL00000111 /* BreedLogProgressView.swift in Sources */,
+				E8BL00000112 /* BreedLogCardView.swift in Sources */,
+				E8BL00000113 /* BreedRarityBadge.swift in Sources */,
+				E8BL00000114 /* BreedDetailView.swift in Sources */,
+				E8BL00000115 /* BreedLogSortOption.swift in Sources */,
 				E8000001AA000001 /* Cat.swift in Sources */,
 				E8000001AA000002 /* Encounter.swift in Sources */,
 				E8000001AA000003 /* CareEntry.swift in Sources */,
@@ -833,6 +920,15 @@
 				E8A100000004 /* EncounterTests.swift in Sources */,
 				E8A100000005 /* ModelContainerFactory.swift in Sources */,
 				E8A100000006 /* Fixtures.swift in Sources */,
+				E8BL00000201 /* BreedRarity.swift in Sources */,
+				E8BL00000202 /* BreedCatalogEntry.swift in Sources */,
+				E8BL00000203 /* BreedCatalog.swift in Sources */,
+				E8BL00000204 /* BreedLogEntry.swift in Sources */,
+				E8BL00000205 /* BreedLogService.swift in Sources */,
+				E8BL00000206 /* DefaultBreedLogService.swift in Sources */,
+				E8BL00000220 /* BreedCatalogTests.swift in Sources */,
+				E8BL00000221 /* DefaultBreedLogServiceTests.swift in Sources */,
+				E8BL00000222 /* MockBreedLogService.swift in Sources */,
 				E8A100000007 /* Cat.swift in Sources */,
 				E8A100000008 /* Encounter.swift in Sources */,
 				E8A100000009 /* CareEntry.swift in Sources */,

@@ -21,7 +21,7 @@ enum DataSeeder {
         // -- Cat 1: garfield (the main character) --
         let garfield = Cat(
             name: "garfield",
-            breed: "Orange Tabby",
+            breed: "Tabby",
             estimatedAge: "3",
             location: Location(name: "Home", latitude: 37.7749, longitude: -122.4194),
             notes: "the original. the blueprint. simply unmatched.",
@@ -137,6 +137,42 @@ enum DataSeeder {
             cat: missBologna
         )
         context.insert(missBolognaCare)
+
+        // -- Cat 5: phantom (bombay sighting) --
+        let phantom = Cat(
+            name: "phantom",
+            breed: "Bombay",
+            estimatedAge: "6",
+            location: Location(name: "Alley behind the ramen place", latitude: 37.7760, longitude: -122.4180),
+            notes: "all black. appeared out of nowhere. might be a glitch in the matrix."
+        )
+        context.insert(phantom)
+
+        let phantomEnc = Encounter(
+            date: calendar.date(byAdding: .day, value: -12, to: now)!,
+            location: Location(name: "Alley behind the ramen place", latitude: 37.7760, longitude: -122.4180),
+            notes: "made eye contact for exactly 3 seconds then vanished. classic.",
+            cat: phantom
+        )
+        context.insert(phantomEnc)
+
+        // -- Cat 6: professor beans (maine coon at cafe) --
+        let professorBeans = Cat(
+            name: "professor beans",
+            breed: "Maine Coon",
+            estimatedAge: "7",
+            location: Location(name: "Coffee shop on 3rd", latitude: 37.7845, longitude: -122.4000),
+            notes: "enormous. sits on the cafe windowsill like a tenured professor. regulars know him."
+        )
+        context.insert(professorBeans)
+
+        let professorBeansEnc = Encounter(
+            date: calendar.date(byAdding: .day, value: -5, to: now)!,
+            location: Location(name: "Coffee shop on 3rd", latitude: 37.7845, longitude: -122.4000),
+            notes: "he was sitting next to someone's laptop. contributing, probably.",
+            cat: professorBeans
+        )
+        context.insert(professorBeansEnc)
 
         // -- User Profile --
         let profileCount = (try? context.fetchCount(FetchDescriptor<UserProfile>())) ?? 0
