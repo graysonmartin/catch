@@ -64,9 +64,9 @@ struct BreedDetailView: View {
 
     private var statsSection: some View {
         HStack(spacing: 16) {
-            statCard(value: "\(entry.catCount)", label: "cats found")
+            statCard(value: "\(entry.catCount)", label: CatchStrings.BreedLog.catsFound)
             if let date = entry.firstDiscoveredDate {
-                statCard(value: date.formatted(.dateTime.month(.abbreviated).day()), label: "first seen")
+                statCard(value: date.formatted(.dateTime.month(.abbreviated).day()), label: CatchStrings.BreedLog.firstSeen)
             }
         }
     }
@@ -91,7 +91,7 @@ struct BreedDetailView: View {
 
     private var funFactSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("fun fact")
+            Text(CatchStrings.BreedLog.funFact)
                 .font(.caption.weight(.bold))
                 .textCase(.uppercase)
                 .foregroundStyle(CatchTheme.textSecondary)
@@ -111,7 +111,7 @@ struct BreedDetailView: View {
 
     private var catsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("your \(entry.catalogEntry.displayName.lowercased()) cats")
+            Text(CatchStrings.BreedLog.yourBreedCats(entry.catalogEntry.displayName.lowercased()))
                 .font(.caption.weight(.bold))
                 .textCase(.uppercase)
                 .foregroundStyle(CatchTheme.textSecondary)
@@ -124,7 +124,7 @@ struct BreedDetailView: View {
                         Text(cat.name)
                             .font(.subheadline.weight(.medium))
                             .foregroundStyle(CatchTheme.textPrimary)
-                        Text("\(cat.encounters.count) encounter\(cat.encounters.count == 1 ? "" : "s")")
+                        Text(CatchStrings.Common.encounterCount(cat.encounters.count))
                             .font(.caption)
                             .foregroundStyle(CatchTheme.textSecondary)
                     }

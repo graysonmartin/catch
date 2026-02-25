@@ -15,7 +15,7 @@ struct AddEncounterView: View {
                     .font(.system(size: 48))
                     .foregroundStyle(CatchTheme.primary)
 
-                Text("Log a Cat Encounter")
+                Text(CatchStrings.Log.logCatEncounter)
                     .font(.title2.weight(.semibold))
                     .foregroundStyle(CatchTheme.textPrimary)
 
@@ -23,7 +23,7 @@ struct AddEncounterView: View {
                     Button {
                         showingAddCat = true
                     } label: {
-                        Label("New Cat", systemImage: "plus.circle.fill")
+                        Label(CatchStrings.Log.newCat, systemImage: "plus.circle.fill")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 20)
@@ -35,7 +35,7 @@ struct AddEncounterView: View {
                     Button {
                         showingLogEncounter = true
                     } label: {
-                        Label("Seen Again", systemImage: "eye.fill")
+                        Label(CatchStrings.Log.seenAgain, systemImage: "eye.fill")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 20)
@@ -50,7 +50,7 @@ struct AddEncounterView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(CatchTheme.background)
-            .navigationTitle("Log")
+            .navigationTitle(CatchStrings.Tabs.log)
             .sheet(isPresented: $showingAddCat, onDismiss: switchToFeed) {
                 AddCatView()
             }

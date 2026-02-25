@@ -12,14 +12,14 @@ struct BreedPickerView: View {
     var body: some View {
         if isCustomEntry {
             HStack {
-                TextField("breed name", text: $customBreed)
+                TextField(CatchStrings.Components.breedName, text: $customBreed)
                     .textInputAutocapitalization(.words)
                     .onSubmit {
                         let trimmed = customBreed.trimmingCharacters(in: .whitespaces)
                         breed = trimmed.isEmpty ? nil : trimmed
                         isCustomEntry = false
                     }
-                Button("done") {
+                Button(CatchStrings.Common.done) {
                     let trimmed = customBreed.trimmingCharacters(in: .whitespaces)
                     breed = trimmed.isEmpty ? nil : trimmed
                     isCustomEntry = false
@@ -37,23 +37,23 @@ struct BreedPickerView: View {
 
                 Divider()
 
-                Button("something else...") {
+                Button(CatchStrings.Components.somethingElse) {
                     customBreed = breed ?? ""
                     isCustomEntry = true
                 }
 
                 if breed != nil {
                     Divider()
-                    Button("clear", role: .destructive) {
+                    Button(CatchStrings.Components.clear, role: .destructive) {
                         breed = nil
                     }
                 }
             } label: {
                 HStack {
-                    Text("Breed")
+                    Text(CatchStrings.Common.breed)
                         .foregroundStyle(CatchTheme.textPrimary)
                     Spacer()
-                    Text(breed ?? "unknown")
+                    Text(breed ?? CatchStrings.Components.unknown)
                         .foregroundStyle(breed != nil ? CatchTheme.textPrimary : CatchTheme.textSecondary)
                     Image(systemName: "chevron.up.chevron.down")
                         .font(.caption2)

@@ -8,10 +8,10 @@ enum BreedRarity: Int, CaseIterable, Comparable {
 
     var label: String {
         switch self {
-        case .common: "common"
-        case .uncommon: "uncommon"
-        case .rare: "rare"
-        case .legendary: "legendary"
+        case .common: CatchStrings.BreedLog.rarityCommon
+        case .uncommon: CatchStrings.BreedLog.rarityUncommon
+        case .rare: CatchStrings.BreedLog.rarityRare
+        case .legendary: CatchStrings.BreedLog.rarityLegendary
         }
     }
 

@@ -6,6 +6,13 @@ enum FeedSortOption: String, CaseIterable, Identifiable {
     case oldest = "oldest first"
 
     var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .newest: CatchStrings.Feed.newestFirst
+        case .oldest: CatchStrings.Feed.oldestFirst
+        }
+    }
 }
 
 struct FeedView: View {
@@ -43,14 +50,14 @@ struct FeedView: View {
                 if encounters.isEmpty {
                     EmptyStateView(
                         icon: "pawprint.circle",
-                        title: "No Encounters Yet",
-                        subtitle: "Log your first cat encounter using the Log tab."
+                        title: CatchStrings.Feed.emptyTitle,
+                        subtitle: CatchStrings.Feed.emptySubtitle
                     )
                 } else if filteredEncounters.isEmpty {
                     EmptyStateView(
                         icon: "magnifyingglass",
-                        title: "nothing here",
-                        subtitle: "no encounters matching \"\(searchText)\""
+                        title: CatchStrings.Feed.searchEmptyTitle,
+                        subtitle: CatchStrings.Feed.searchEmptySubtitle(searchText)
                     )
                 } else {
                     ScrollViewReader { proxy in
@@ -83,14 +90,14 @@ struct FeedView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(CatchTheme.background)
-            .navigationTitle("Feed")
-            .searchable(text: $searchText, prompt: "search encounters")
+            .navigationTitle(CatchStrings.Tabs.feed)
+            .searchable(text: $searchText, prompt: CatchStrings.Feed.searchPrompt)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
-                        Picker("sort by", selection: $sortOption) {
+                        Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
                             ForEach(FeedSortOption.allCases) { option in
-                                Text(option.rawValue).tag(option)
+                                Text(option.displayName).tag(option)
                             }
                         }
                     } label: {

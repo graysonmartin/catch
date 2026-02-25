@@ -18,8 +18,8 @@ struct CatMapView: View {
                 if catsWithLocation.isEmpty {
                     EmptyStateView(
                         icon: "map",
-                        title: "no locations yet",
-                        subtitle: "cats with GPS coordinates will appear here. use the location button when logging encounters."
+                        title: CatchStrings.Map.emptyTitle,
+                        subtitle: CatchStrings.Map.emptySubtitle
                     )
                 } else {
                     ClusterMapView(
@@ -34,7 +34,7 @@ struct CatMapView: View {
                     )
                 }
             }
-            .navigationTitle("Map")
+            .navigationTitle(CatchStrings.Tabs.map)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(isPresented: $showProfile) {
                 if let cat = selectedCat {
@@ -107,11 +107,11 @@ struct ClusterListSheet: View {
                 }
                 .buttonStyle(.plain)
             }
-            .navigationTitle("\(cats.count) Cats Here")
+            .navigationTitle(CatchStrings.Map.catsHere(cats.count))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") { dismiss() }
+                    Button(CatchStrings.Common.close) { dismiss() }
                 }
             }
         }

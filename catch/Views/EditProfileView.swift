@@ -35,14 +35,14 @@ struct EditProfileView: View {
                     visibilitySection
                 }
             }
-            .navigationTitle("edit profile")
+            .navigationTitle(CatchStrings.Profile.editProfileTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(CatchStrings.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { save() }
+                    Button(CatchStrings.Common.save) { save() }
                         .fontWeight(.semibold)
                 }
             }
@@ -60,12 +60,12 @@ struct EditProfileView: View {
                 .frame(maxWidth: .infinity)
                 .contentShape(Circle())
                 .onTapGesture { isShowingPhotoOptions = true }
-                .confirmationDialog("profile photo", isPresented: $isShowingPhotoOptions) {
+                .confirmationDialog(CatchStrings.Profile.profilePhoto, isPresented: $isShowingPhotoOptions) {
                     PhotosPicker(selection: $pickerItem, matching: .images) {
-                        Text("choose photo")
+                        Text(CatchStrings.Profile.choosePhoto)
                     }
                     if avatarData != nil {
-                        Button("remove photo", role: .destructive) {
+                        Button(CatchStrings.Profile.removePhoto, role: .destructive) {
                             avatarData = nil
                             pickerItem = nil
                         }
@@ -93,29 +93,29 @@ struct EditProfileView: View {
     }
 
     private var infoSection: some View {
-        Section("info") {
-            TextField("display name", text: $displayName)
-            TextField("bio", text: $bio, axis: .vertical)
+        Section(CatchStrings.Profile.info) {
+            TextField(CatchStrings.Profile.displayName, text: $displayName)
+            TextField(CatchStrings.Profile.bio, text: $bio, axis: .vertical)
                 .lineLimit(3...6)
         }
     }
 
     private var privacySection: some View {
         Section {
-            Toggle("private profile", isOn: $isPrivate)
+            Toggle(CatchStrings.Profile.privateProfile, isOn: $isPrivate)
         } footer: {
-            Text("when private, people have to send a request before they can see your cats. you're basically famous.")
+            Text(CatchStrings.Profile.privateFooter)
         }
     }
 
     private var visibilitySection: some View {
         Section {
-            Toggle("show cats", isOn: $visibilitySettings.showCats)
-            Toggle("show encounters", isOn: $visibilitySettings.showEncounters)
+            Toggle(CatchStrings.Profile.showCats, isOn: $visibilitySettings.showCats)
+            Toggle(CatchStrings.Profile.showEncounters, isOn: $visibilitySettings.showEncounters)
         } header: {
-            Text("visibility")
+            Text(CatchStrings.Profile.visibility)
         } footer: {
-            Text("controls what people see on your public profile. private mode overrides everything.")
+            Text(CatchStrings.Profile.visibilityFooter)
         }
     }
 

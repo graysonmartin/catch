@@ -6,4 +6,12 @@ enum BreedLogSortOption: String, CaseIterable, Identifiable {
     case discoveredFirst = "discovered first"
 
     var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .rarity: CatchStrings.BreedLog.sortRarity
+        case .alphabetical: CatchStrings.BreedLog.sortAlphabetical
+        case .discoveredFirst: CatchStrings.BreedLog.sortDiscoveredFirst
+        }
+    }
 }

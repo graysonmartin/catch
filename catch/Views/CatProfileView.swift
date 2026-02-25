@@ -49,19 +49,19 @@ struct CatProfileView: View {
                 }
 
                 if let breed = cat.breed, !breed.isEmpty {
-                    infoRow(icon: "pawprint.fill", label: "Breed", value: breed)
+                    infoRow(icon: "pawprint.fill", label: CatchStrings.Common.breed, value: breed)
                 }
                 if !cat.estimatedAge.isEmpty {
-                    infoRow(icon: "calendar", label: "Age", value: cat.estimatedAge)
+                    infoRow(icon: "calendar", label: CatchStrings.Common.age, value: cat.estimatedAge)
                 }
                 if !cat.location.name.isEmpty {
-                    infoRow(icon: "mappin.circle.fill", label: "Location", value: cat.location.name)
+                    infoRow(icon: "mappin.circle.fill", label: CatchStrings.Common.location, value: cat.location.name)
                 }
                 if !cat.notes.isEmpty {
-                    infoRow(icon: "note.text", label: "Notes", value: cat.notes)
+                    infoRow(icon: "note.text", label: CatchStrings.Common.notes, value: cat.notes)
                 }
 
-                Text("First seen \(cat.createdAt.formatted(date: .abbreviated, time: .omitted))")
+                Text(CatchStrings.CatProfile.firstSeen(cat.createdAt))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }
@@ -74,7 +74,7 @@ struct CatProfileView: View {
                     Button {
                         showingEdit = true
                     } label: {
-                        Label("Edit", systemImage: "pencil")
+                        Label(CatchStrings.Common.edit, systemImage: "pencil")
                             .font(.subheadline.weight(.medium))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 12)
@@ -86,7 +86,7 @@ struct CatProfileView: View {
                     Button {
                         showingLogEncounter = true
                     } label: {
-                        Label("Spotted", systemImage: "eye.fill")
+                        Label(CatchStrings.CatProfile.spotted, systemImage: "eye.fill")
                             .font(.subheadline.weight(.medium))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 12)
@@ -104,7 +104,7 @@ struct CatProfileView: View {
             // Encounters section
             Section {
                 if sortedEncounters.isEmpty {
-                    Text("No encounters logged.")
+                    Text(CatchStrings.CatProfile.noEncountersLogged)
                         .font(.subheadline)
                         .foregroundStyle(CatchTheme.textSecondary)
                         .listRowBackground(CatchTheme.background)
@@ -116,14 +116,14 @@ struct CatProfileView: View {
                                 encounterToEdit = encounter
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button("Delete", role: .destructive) {
+                                Button(CatchStrings.Common.delete, role: .destructive) {
                                     encounterToDelete = encounter
                                 }
                             }
                     }
                 }
             } header: {
-                Text("Encounters (\(cat.encounters.count))")
+                Text(CatchStrings.CatProfile.encountersHeader(cat.encounters.count))
                     .font(.headline)
                     .foregroundStyle(CatchTheme.textPrimary)
                     .textCase(nil)
@@ -139,7 +139,7 @@ struct CatProfileView: View {
                 } label: {
                     HStack {
                         Spacer()
-                        Label("delete this cat", systemImage: "trash")
+                        Label(CatchStrings.CatProfile.deleteThisCat, systemImage: "trash")
                             .font(.subheadline.weight(.medium))
                         Spacer()
                     }
@@ -161,30 +161,30 @@ struct CatProfileView: View {
         .sheet(isPresented: $showingLogEncounter) {
             LogEncounterView(preselectedCat: cat)
         }
-        .alert("delete encounter?", isPresented: Binding(
+        .alert(CatchStrings.CatProfile.deleteEncounterTitle, isPresented: Binding(
             get: { encounterToDelete != nil },
             set: { if !$0 { encounterToDelete = nil } }
         )) {
-            Button("Delete", role: .destructive) {
+            Button(CatchStrings.Common.delete, role: .destructive) {
                 if let encounter = encounterToDelete {
                     modelContext.delete(encounter)
                     encounterToDelete = nil
                 }
             }
-            Button("Cancel", role: .cancel) {
+            Button(CatchStrings.Common.cancel, role: .cancel) {
                 encounterToDelete = nil
             }
         } message: {
-            Text("gone forever. no take-backs.")
+            Text(CatchStrings.CatProfile.deleteEncounterMessage)
         }
-        .alert("delete \(cat.name)?", isPresented: $showingDeleteCat) {
-            Button("Delete", role: .destructive) {
+        .alert(CatchStrings.CatProfile.deleteCatTitle(name: cat.name), isPresented: $showingDeleteCat) {
+            Button(CatchStrings.Common.delete, role: .destructive) {
                 modelContext.delete(cat)
                 dismiss()
             }
-            Button("Cancel", role: .cancel) {}
+            Button(CatchStrings.Common.cancel, role: .cancel) {}
         } message: {
-            Text("this deletes all their encounters too. absolutely no undo.")
+            Text(CatchStrings.CatProfile.deleteCatMessage)
         }
     }
 

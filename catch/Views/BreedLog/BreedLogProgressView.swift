@@ -12,21 +12,21 @@ struct BreedLogProgressView: View {
     private var flavorText: String {
         switch discoveredCount {
         case 0:
-            return "steven is judging you"
+            return CatchStrings.BreedLog.flavorZero
         case 1...3:
-            return "barely scratching the surface"
+            return CatchStrings.BreedLog.flavorLow
         case 4...8:
-            return "you're getting out more. proud of you"
+            return CatchStrings.BreedLog.flavorMedLow
         case 9...15:
-            return "okay cat whisperer, we see you"
+            return CatchStrings.BreedLog.flavorMedium
         case 16...22:
-            return "this is becoming a whole thing huh"
+            return CatchStrings.BreedLog.flavorMedHigh
         case 23...26:
-            return "so close. don't sleep now"
+            return CatchStrings.BreedLog.flavorHigh
         case 27:
-            return "touch grass maybe?"
+            return CatchStrings.BreedLog.flavorMax
         default:
-            return "how did you even get here"
+            return CatchStrings.BreedLog.flavorDefault
         }
     }
 
@@ -37,7 +37,7 @@ struct BreedLogProgressView: View {
                     .font(.title2.weight(.bold).monospacedDigit())
                     .foregroundStyle(CatchTheme.textPrimary)
 
-                Text("breeds discovered")
+                Text(CatchStrings.BreedLog.breedsDiscovered)
                     .font(.subheadline)
                     .foregroundStyle(CatchTheme.textSecondary)
 

@@ -48,13 +48,13 @@ struct BreedLogView: View {
             .padding()
         }
         .background(CatchTheme.background)
-        .navigationTitle("breed log")
+        .navigationTitle(CatchStrings.BreedLog.title)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
-                    Picker("sort by", selection: $sortOption) {
+                    Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
                         ForEach(BreedLogSortOption.allCases) { option in
-                            Text(option.rawValue).tag(option)
+                            Text(option.displayName).tag(option)
                         }
                     }
                 } label: {

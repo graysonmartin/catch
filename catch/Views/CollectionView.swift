@@ -7,6 +7,14 @@ enum CatSortOption: String, CaseIterable, Identifiable {
     case recent = "recently seen"
 
     var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .name: CatchStrings.Collection.sortName
+        case .encounters: CatchStrings.Collection.sortMostSeen
+        case .recent: CatchStrings.Collection.sortRecentlySeen
+        }
+    }
 }
 
 struct CollectionView: View {
@@ -46,14 +54,14 @@ struct CollectionView: View {
                 if cats.isEmpty {
                     EmptyStateView(
                         icon: "square.grid.2x2",
-                        title: "No Cats Collected",
-                        subtitle: "Cats you encounter will appear here."
+                        title: CatchStrings.Collection.emptyTitle,
+                        subtitle: CatchStrings.Collection.emptySubtitle
                     )
                 } else if filteredCats.isEmpty {
                     EmptyStateView(
                         icon: "magnifyingglass",
-                        title: "no matches",
-                        subtitle: "nothing matching \"\(searchText)\" in your collection"
+                        title: CatchStrings.Collection.searchEmptyTitle,
+                        subtitle: CatchStrings.Collection.searchEmptySubtitle(searchText)
                     )
                 } else {
                     ScrollView {
@@ -71,8 +79,8 @@ struct CollectionView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(CatchTheme.background)
-            .navigationTitle("Collection")
-            .searchable(text: $searchText, prompt: "find a cat")
+            .navigationTitle(CatchStrings.Tabs.collection)
+            .searchable(text: $searchText, prompt: CatchStrings.Collection.searchPrompt)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     NavigationLink {
@@ -84,9 +92,9 @@ struct CollectionView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
-                        Picker("sort by", selection: $sortOption) {
+                        Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
                             ForEach(CatSortOption.allCases) { option in
-                                Text(option.rawValue).tag(option)
+                                Text(option.displayName).tag(option)
                             }
                         }
                     } label: {
@@ -137,7 +145,7 @@ struct CatCardView: View {
                         .lineLimit(1)
                 }
 
-                Text("\(cat.encounters.count) encounter\(cat.encounters.count == 1 ? "" : "s")")
+                Text(CatchStrings.Common.encounterCount(cat.encounters.count))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }

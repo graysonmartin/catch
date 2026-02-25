@@ -17,7 +17,7 @@ struct BreedLogCardView: View {
                     .multilineTextAlignment(.center)
                     .frame(height: 28)
             } else {
-                Text("???")
+                Text(CatchStrings.BreedLog.undiscoveredPlaceholder)
                     .font(.caption2.weight(.semibold))
                     .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
                     .frame(height: 28)

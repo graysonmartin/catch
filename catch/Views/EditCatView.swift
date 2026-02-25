@@ -30,15 +30,15 @@ struct EditCatView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Cat Info") {
-                    TextField("Name", text: $name)
+                Section(CatchStrings.Common.catInfo) {
+                    TextField(CatchStrings.Common.name, text: $name)
                     BreedPickerView(breed: $breed)
-                    TextField("Estimated Age", text: $estimatedAge)
+                    TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
                     LocationPickerView(location: $location)
-                    Toggle("I own this cat", isOn: $isOwned)
+                    Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
                 }
 
-                Section("Photos") {
+                Section(CatchStrings.Common.photos) {
                     PhotoPickerView(selectedPhotos: $photos)
                     if breed == nil && !isDismissedSuggestion {
                         BreedSuggestionView(
@@ -56,19 +56,19 @@ struct EditCatView: View {
                     }
                 }
 
-                Section("Notes") {
-                    TextField("Notes about this cat...", text: $notes, axis: .vertical)
+                Section(CatchStrings.Common.notes) {
+                    TextField(CatchStrings.Common.notesPlaceholder, text: $notes, axis: .vertical)
                         .lineLimit(3...6)
                 }
             }
-            .navigationTitle("Edit Cat")
+            .navigationTitle(CatchStrings.Log.editCatTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(CatchStrings.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { save() }
+                    Button(CatchStrings.Common.save) { save() }
                         .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
                         .fontWeight(.semibold)
                 }

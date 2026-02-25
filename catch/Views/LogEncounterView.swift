@@ -26,7 +26,7 @@ struct LogEncounterView: View {
                                 CatPhotoView(photoData: cat.photos.first, size: 40)
 
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text("logging for")
+                                    Text(CatchStrings.Log.loggingFor)
                                         .font(.caption)
                                         .foregroundStyle(CatchTheme.textSecondary)
                                     Text(cat.name)
@@ -38,15 +38,15 @@ struct LogEncounterView: View {
                         }
                     }
                 } else {
-                    Section("which cat?") {
+                    Section(CatchStrings.Log.whichCat) {
                         if cats.isEmpty {
                             VStack(alignment: .leading, spacing: 8) {
-                                Text("no cats registered yet")
+                                Text(CatchStrings.Log.noCatsRegistered)
                                     .foregroundStyle(CatchTheme.textSecondary)
                                 Button {
                                     showingAddCat = true
                                 } label: {
-                                    Label("register one now", systemImage: "plus.circle.fill")
+                                    Label(CatchStrings.Log.registerOneNow, systemImage: "plus.circle.fill")
                                         .font(.subheadline.weight(.medium))
                                         .foregroundStyle(CatchTheme.primary)
                                 }
@@ -72,7 +72,7 @@ struct LogEncounterView: View {
                                         }
                                     }
                                 } else {
-                                    Text("pick a cat")
+                                    Text(CatchStrings.Log.pickACat)
                                         .foregroundStyle(CatchTheme.textSecondary)
                                 }
                             }
@@ -80,28 +80,28 @@ struct LogEncounterView: View {
                     }
                 }
 
-                Section("Encounter Details") {
-                    DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                Section(CatchStrings.Log.encounterDetails) {
+                    DatePicker(CatchStrings.Common.date, selection: $date, displayedComponents: [.date, .hourAndMinute])
                     LocationPickerView(location: $location)
                 }
 
-                Section("Photos") {
+                Section(CatchStrings.Common.photos) {
                     PhotoPickerView(selectedPhotos: $photos)
                 }
 
-                Section("Notes") {
-                    TextField("What happened?", text: $notes, axis: .vertical)
+                Section(CatchStrings.Common.notes) {
+                    TextField(CatchStrings.Log.whatHappened, text: $notes, axis: .vertical)
                         .lineLimit(3...6)
                 }
             }
-            .navigationTitle("Log Encounter")
+            .navigationTitle(CatchStrings.Log.logEncounterTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(CatchStrings.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { save() }
+                    Button(CatchStrings.Common.save) { save() }
                         .disabled(selectedCat == nil)
                         .fontWeight(.semibold)
                 }

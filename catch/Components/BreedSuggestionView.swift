@@ -22,7 +22,7 @@ struct BreedSuggestionView: View {
         HStack(spacing: 8) {
             ProgressView()
                 .tint(CatchTheme.primary)
-            Text("analyzing this creature...")
+            Text(CatchStrings.Components.analyzingCreature)
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
         }
@@ -36,11 +36,11 @@ struct BreedSuggestionView: View {
                 .foregroundStyle(CatchTheme.primary)
 
             if prediction.confidence >= 0.6 {
-                Text("looks like a \(prediction.breed.lowercased())")
+                Text(CatchStrings.Components.looksLike(prediction.breed.lowercased()))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textPrimary)
             } else {
-                Text("maybe a \(prediction.breed.lowercased())? honestly not sure")
+                Text(CatchStrings.Components.maybeLike(prediction.breed.lowercased()))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }
@@ -50,7 +50,7 @@ struct BreedSuggestionView: View {
             Button {
                 onConfirm(prediction.breed)
             } label: {
-                Text("yep")
+                Text(CatchStrings.Components.yep)
                     .font(.caption.weight(.semibold))
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)

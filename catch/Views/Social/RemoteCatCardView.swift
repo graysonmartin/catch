@@ -31,7 +31,7 @@ struct RemoteCatCardView: View {
                         .lineLimit(1)
                 }
 
-                Text("\(encounterCount) encounter\(encounterCount == 1 ? "" : "s")")
+                Text(CatchStrings.Common.encounterCount(encounterCount))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }

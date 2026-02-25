@@ -56,19 +56,19 @@ struct RemoteCatProfileView: View {
             }
 
             if !cat.breed.isEmpty {
-                infoRow(icon: "pawprint.fill", label: "Breed", value: cat.breed)
+                infoRow(icon: "pawprint.fill", label: CatchStrings.Common.breed, value: cat.breed)
             }
             if !cat.estimatedAge.isEmpty {
-                infoRow(icon: "calendar", label: "Age", value: cat.estimatedAge)
+                infoRow(icon: "calendar", label: CatchStrings.Common.age, value: cat.estimatedAge)
             }
             if !cat.locationName.isEmpty {
-                infoRow(icon: "mappin.circle.fill", label: "Location", value: cat.locationName)
+                infoRow(icon: "mappin.circle.fill", label: CatchStrings.Common.location, value: cat.locationName)
             }
             if !cat.notes.isEmpty {
-                infoRow(icon: "note.text", label: "Notes", value: cat.notes)
+                infoRow(icon: "note.text", label: CatchStrings.Common.notes, value: cat.notes)
             }
 
-            Text("First seen \(cat.createdAt.formatted(date: .abbreviated, time: .omitted))")
+            Text(CatchStrings.CatProfile.firstSeen(cat.createdAt))
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
         }
@@ -93,7 +93,7 @@ struct RemoteCatProfileView: View {
     private var encountersSection: some View {
         Section {
             if sortedEncounters.isEmpty {
-                Text("no encounters logged")
+                Text(CatchStrings.CatProfile.noEncountersLoggedRemote)
                     .font(.subheadline)
                     .foregroundStyle(CatchTheme.textSecondary)
             } else {
@@ -102,7 +102,7 @@ struct RemoteCatProfileView: View {
                 }
             }
         } header: {
-            Text("Encounters (\(sortedEncounters.count))")
+            Text(CatchStrings.CatProfile.encountersHeader(sortedEncounters.count))
                 .font(.headline)
                 .foregroundStyle(CatchTheme.textPrimary)
                 .textCase(nil)
