@@ -123,6 +123,12 @@ extension ProfileView {
                 BreedLogView()
             } label: {
                 statCard(count: breedCount, label: CatchStrings.Profile.breedLog, icon: "book.closed.fill")
+                    .overlay(alignment: .bottomTrailing) {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundStyle(CatchTheme.textSecondary)
+                            .padding(8)
+                    }
             }
             .buttonStyle(.plain)
         }
