@@ -99,7 +99,7 @@ struct EditProfileView: View {
     }
 
     private var infoSection: some View {
-        Section(CatchStrings.Profile.info) {
+        Section {
             TextField(CatchStrings.Profile.displayName, text: $displayName)
             VStack(alignment: .leading, spacing: CatchSpacing.space4) {
                 HStack {
@@ -117,6 +117,8 @@ struct EditProfileView: View {
             }
             TextField(CatchStrings.Profile.bio, text: $bio, axis: .vertical)
                 .lineLimit(3...6)
+        } header: {
+            Text(CatchStrings.Profile.info)
         } footer: {
             if !username.isEmpty {
                 Text(CatchStrings.Profile.usernameFooter)
