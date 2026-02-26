@@ -53,7 +53,6 @@ struct ProfileView: View {
                         profileHeader(profile)
                     } else {
                         setupBanner
-                        breedLogCard
                     }
 
                     collectionSection

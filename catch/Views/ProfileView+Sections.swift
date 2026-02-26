@@ -10,7 +10,6 @@ extension ProfileView {
             avatarWithSocial(profile)
             infoSection(profile)
             statsSection
-            breedLogCard
         }
     }
 
@@ -90,6 +89,15 @@ extension ProfileView {
                 .foregroundStyle(CatchTheme.textSecondary)
         }
         .frame(minWidth: 60)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 4)
+        .background(CatchTheme.cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+        .shadow(
+            color: .black.opacity(CatchTheme.cardShadowOpacity),
+            radius: CatchTheme.cardShadowRadius,
+            y: CatchTheme.cardShadowY
+        )
     }
 
     // MARK: - Info
@@ -112,11 +120,21 @@ extension ProfileView {
     // MARK: - Stats
 
     private var statsSection: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 10) {
             statCard(count: cats.count, label: CatchStrings.Profile.cats, icon: "cat.fill")
             statCard(count: encounters.count, label: CatchStrings.Profile.encounters, icon: "pawprint.fill")
+            NavigationLink {
+                BreedLogView()
+            } label: {
+                statCard(count: breedCount, label: CatchStrings.Profile.breedLog, icon: "book.closed.fill")
+            }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, 20)
+    }
+
+    private var breedCount: Int {
+        Set(cats.compactMap(\.breed)).count
     }
 
     func statCard(count: Int, label: String, icon: String) -> some View {
@@ -143,40 +161,6 @@ extension ProfileView {
             radius: CatchTheme.cardShadowRadius,
             y: CatchTheme.cardShadowY
         )
-    }
-
-    // MARK: - Breed Log Card
-
-    var breedLogCard: some View {
-        NavigationLink {
-            BreedLogView()
-        } label: {
-            HStack(spacing: 12) {
-                Image(systemName: "book.closed.fill")
-                    .font(.title3)
-                    .foregroundStyle(CatchTheme.primary)
-
-                Text(CatchStrings.Profile.breedLog)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(CatchTheme.textPrimary)
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(CatchTheme.textSecondary)
-            }
-            .padding(16)
-            .background(CatchTheme.cardBackground)
-            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
-            .shadow(
-                color: .black.opacity(CatchTheme.cardShadowOpacity),
-                radius: CatchTheme.cardShadowRadius,
-                y: CatchTheme.cardShadowY
-            )
-        }
-        .buttonStyle(.plain)
-        .padding(.horizontal, 20)
     }
 
     // MARK: - Auth
