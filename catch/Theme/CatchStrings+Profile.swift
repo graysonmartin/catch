@@ -3,6 +3,9 @@ import Foundation
 extension CatchStrings {
 
     enum Profile {
+        // Navigation titles
+        static let collectionTab = String(localized: "collection")
+
         // Profile view
         static let profileTitle = String(localized: "profile")
         static let mysteriousStranger = String(localized: "mysterious stranger")

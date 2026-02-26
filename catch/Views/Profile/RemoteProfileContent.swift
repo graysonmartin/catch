@@ -11,21 +11,7 @@ struct RemoteProfileContent: View {
 
     @State private var data: UserBrowseData?
     @State private var loadError: UserBrowseError?
-    @State private var selectedTab: ProfileTab = .cats
-
-    private enum ProfileTab: String, CaseIterable, Identifiable {
-        case cats
-        case activity
-
-        var id: String { rawValue }
-
-        var displayName: String {
-            switch self {
-            case .cats: CatchStrings.Social.catsTab
-            case .activity: CatchStrings.Social.activityTab
-            }
-        }
-    }
+    @State private var isShowingCollection = false
 
     private let columns = [
         GridItem(.flexible(), spacing: CatchSpacing.space16),
@@ -127,8 +113,7 @@ struct RemoteProfileContent: View {
                 }
 
                 followButton
-                tabPicker
-                tabContent(data: data)
+                diaryFeed(data: data)
             }
             .padding()
         }
@@ -136,10 +121,24 @@ struct RemoteProfileContent: View {
 
     private func statBadges(data: UserBrowseData) -> some View {
         HStack(spacing: CatchSpacing.space24) {
-            statBadge(count: data.cats.count, label: CatchStrings.Profile.cats)
+            Button {
+                isShowingCollection = true
+            } label: {
+                HStack(spacing: CatchSpacing.space4) {
+                    statBadge(count: data.cats.count, label: CatchStrings.Profile.cats)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(CatchTheme.textSecondary)
+                }
+            }
+            .buttonStyle(.plain)
+
             statBadge(count: data.encounters.count, label: CatchStrings.Profile.encounters)
         }
         .padding(.top, CatchSpacing.space4)
+        .navigationDestination(isPresented: $isShowingCollection) {
+            remoteCatsGrid(data: data)
+        }
     }
 
     private func statBadge(count: Int, label: String) -> some View {
@@ -198,27 +197,8 @@ struct RemoteProfileContent: View {
         }
     }
 
-    private var tabPicker: some View {
-        Picker("", selection: $selectedTab) {
-            ForEach(ProfileTab.allCases) { tab in
-                Text(tab.displayName).tag(tab)
-            }
-        }
-        .pickerStyle(.segmented)
-    }
-
-    @ViewBuilder
-    private func tabContent(data: UserBrowseData) -> some View {
-        switch selectedTab {
-        case .cats:
-            catsGrid(data: data)
-        case .activity:
-            activityFeed(data: data)
-        }
-    }
-
-    private func catsGrid(data: UserBrowseData) -> some View {
-        Group {
+    private func remoteCatsGrid(data: UserBrowseData) -> some View {
+        ScrollView {
             if data.cats.isEmpty {
                 EmptyStateView(
                     icon: "square.grid.2x2",
@@ -242,32 +222,61 @@ struct RemoteProfileContent: View {
                         .buttonStyle(.plain)
                     }
                 }
+                .padding(.horizontal)
+                .padding(.top, CatchSpacing.space8)
+            }
+        }
+        .background(CatchTheme.background)
+        .navigationTitle(CatchStrings.Profile.collectionTab)
+        .navigationBarTitleDisplayMode(.large)
+    }
+
+    private func diaryFeed(data: UserBrowseData) -> some View {
+        Group {
+            if data.encounters.isEmpty {
+                EmptyStateView(
+                    icon: "book.closed",
+                    title: CatchStrings.Diary.noDiaryTitle,
+                    subtitle: CatchStrings.Diary.noDiarySubtitle
+                )
+                .padding(.top, CatchSpacing.space32)
+            } else {
+                let grouped = groupedEncounters(data.encounters)
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    ForEach(grouped, id: \.date) { group in
+                        Section {
+                            ForEach(group.encounters, id: \.recordName) { encounter in
+                                let cat = data.cats.first { $0.recordName == encounter.catRecordName }
+                                RemoteDiaryEntryRow(encounter: encounter, cat: cat)
+                            }
+                        } header: {
+                            Text(formattedDateHeader(group.date))
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(CatchTheme.textSecondary)
+                                .padding(.top, CatchSpacing.space16)
+                                .padding(.bottom, CatchSpacing.space4)
+                        }
+                    }
+                }
             }
         }
     }
 
-    private func activityFeed(data: UserBrowseData) -> some View {
-        Group {
-            if data.encounters.isEmpty {
-                EmptyStateView(
-                    icon: "clock",
-                    title: CatchStrings.Social.noActivityTitle,
-                    subtitle: CatchStrings.Social.noActivitySubtitle
-                )
-                .padding(.top, CatchSpacing.space32)
-            } else {
-                let sorted = data.encounters.sorted { $0.date > $1.date }
-                LazyVStack(spacing: CatchSpacing.space12) {
-                    ForEach(sorted, id: \.recordName) { encounter in
-                        let cat = data.cats.first { $0.recordName == encounter.catRecordName }
-                        RemoteFeedItemView(encounter: encounter, cat: cat)
-                    }
-                }
-                .task {
-                    let recordNames = data.encounters.map(\.recordName)
-                    try? await socialService?.loadInteractionData(for: recordNames)
-                }
-            }
+    private func groupedEncounters(_ encounters: [CloudEncounter]) -> [(date: Date, encounters: [CloudEncounter])] {
+        let grouped = Dictionary(grouping: encounters) { encounter in
+            Calendar.current.startOfDay(for: encounter.date)
+        }
+        return grouped
+            .sorted { $0.key > $1.key }
+            .map { (date: $0.key, encounters: $0.value.sorted { $0.date > $1.date }) }
+    }
+
+    private func formattedDateHeader(_ date: Date) -> String {
+        let calendar = Calendar.current
+        if calendar.isDate(date, equalTo: Date(), toGranularity: .year) {
+            return date.formatted(.dateTime.month(.abbreviated).day()).lowercased()
+        } else {
+            return date.formatted(.dateTime.month(.abbreviated).day().year()).lowercased()
         }
     }
 
