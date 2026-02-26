@@ -10,6 +10,7 @@ struct catchApp: App {
     @State private var catSyncService: CKCatSyncService?
     @State private var encounterSyncService: CKEncounterSyncService?
     @State private var userBrowseService: CKUserBrowseService?
+    @State private var socialInteractionService: CKSocialInteractionService?
     let modelContainer: ModelContainer
 
     init() {
@@ -61,6 +62,7 @@ struct catchApp: App {
                     .environment(catSyncService)
                     .environment(encounterSyncService)
                     .environment(userBrowseService)
+                    .environment(socialInteractionService)
                     .task {
                         await authService.checkCredentialState()
                         if catSyncService == nil {
@@ -85,6 +87,9 @@ struct catchApp: App {
                                 followService: followService,
                                 currentUserIDProvider: getUserID
                             )
+                            socialInteractionService = CKSocialInteractionService(
+                                getCurrentUserID: getUserID
+                            )
                         }
                     }
                     #if DEBUG
@@ -93,6 +98,10 @@ struct catchApp: App {
                         let fakeUserID = authService.authState.user?.userIdentifier ?? "debug-user"
                         followService.seedFakeFollows(currentUserID: fakeUserID)
                         userBrowseService?.seedFakeUsers()
+                        socialInteractionService?.seedFakeInteractions(encounterRecordNames: [
+                            "tuong-enc-1", "tuong-enc-2", "tuong-enc-3", "tuong-enc-4",
+                            "sophi-enc-1", "sophi-enc-2"
+                        ])
                     }
                     #endif
             } else {
