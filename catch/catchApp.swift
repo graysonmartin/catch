@@ -11,6 +11,7 @@ struct catchApp: App {
     @State private var encounterSyncService: CKEncounterSyncService?
     @State private var userBrowseService: CKUserBrowseService?
     @State private var socialInteractionService: CKSocialInteractionService?
+    @State private var socialFeedService: CKSocialFeedService?
     let modelContainer: ModelContainer
 
     init() {
@@ -63,6 +64,7 @@ struct catchApp: App {
                     .environment(encounterSyncService)
                     .environment(userBrowseService)
                     .environment(socialInteractionService)
+                    .environment(socialFeedService)
                     .task {
                         await authService.checkCredentialState()
                         if catSyncService == nil {
@@ -89,6 +91,10 @@ struct catchApp: App {
                             )
                             socialInteractionService = CKSocialInteractionService(
                                 getCurrentUserID: getUserID
+                            )
+                            socialFeedService = CKSocialFeedService(
+                                followService: followService,
+                                userBrowseService: userBrowseService!
                             )
                         }
                     }

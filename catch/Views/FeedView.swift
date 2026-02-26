@@ -18,6 +18,7 @@ enum FeedSortOption: String, CaseIterable, Identifiable {
 struct FeedView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+    @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
     @Query(sort: \Encounter.date, order: .reverse) private var encounters: [Encounter]
     @Query private var cats: [Cat]
     @Binding var scrollToTop: Bool
@@ -26,32 +27,42 @@ struct FeedView: View {
     @State private var sortOption: FeedSortOption = .newest
     @State private var encounterToDelete: Encounter?
 
-    private var filteredEncounters: [Encounter] {
-        let filtered: [Encounter]
-        if searchText.isEmpty {
-            filtered = encounters
-        } else {
-            filtered = encounters.filter { encounter in
-                let matchesCatName = encounter.cat?.displayName.localizedCaseInsensitiveContains(searchText) ?? false
-                let matchesNotes = encounter.notes.localizedCaseInsensitiveContains(searchText)
-                let matchesLocation = encounter.location.name.localizedCaseInsensitiveContains(searchText)
-                return matchesCatName || matchesNotes || matchesLocation
+    private var unifiedFeedItems: [FeedItem] {
+        let localItems = encounters.map { FeedItem.local($0) }
+        let remoteItems = socialFeedService?.remoteEncounters ?? []
+        var all = localItems + remoteItems
+
+        if !searchText.isEmpty {
+            all = all.filter { item in
+                switch item {
+                case .local(let encounter):
+                    let matchesCatName = encounter.cat?.displayName.localizedCaseInsensitiveContains(searchText) ?? false
+                    let matchesNotes = encounter.notes.localizedCaseInsensitiveContains(searchText)
+                    let matchesLocation = encounter.location.name.localizedCaseInsensitiveContains(searchText)
+                    return matchesCatName || matchesNotes || matchesLocation
+                case .remote(let encounter, let cat, let owner):
+                    let matchesCatName = cat?.displayName.localizedCaseInsensitiveContains(searchText) ?? false
+                    let matchesNotes = encounter.notes.localizedCaseInsensitiveContains(searchText)
+                    let matchesLocation = encounter.locationName.localizedCaseInsensitiveContains(searchText)
+                    let matchesOwner = owner.displayName.localizedCaseInsensitiveContains(searchText)
+                    return matchesCatName || matchesNotes || matchesLocation || matchesOwner
+                }
             }
         }
 
         switch sortOption {
         case .newest:
-            return filtered.sorted { $0.date > $1.date }
+            return all.sorted { $0.date > $1.date }
         case .oldest:
-            return filtered.sorted { $0.date < $1.date }
+            return all.sorted { $0.date < $1.date }
         }
     }
 
     var body: some View {
-        let _ = cats // Observe cat changes so feed items refresh after edits
+        let _ = cats
         NavigationStack {
             Group {
-                if encounters.isEmpty {
+                if encounters.isEmpty && (socialFeedService?.remoteEncounters.isEmpty ?? true) {
                     EmptyStateView(
                         icon: "pawprint.circle",
                         title: CatchStrings.Feed.emptyTitle,
@@ -59,7 +70,7 @@ struct FeedView: View {
                         actionLabel: CatchStrings.Feed.emptyAction,
                         action: { selectedTab = 1 }
                     )
-                } else if filteredEncounters.isEmpty {
+                } else if unifiedFeedItems.isEmpty {
                     EmptyStateView(
                         icon: "magnifyingglass",
                         title: CatchStrings.Feed.searchEmptyTitle,
@@ -69,25 +80,8 @@ struct FeedView: View {
                     ScrollViewReader { proxy in
                         ScrollView {
                             LazyVStack(spacing: CatchSpacing.space16) {
-                                ForEach(filteredEncounters) { encounter in
-                                    if let cat = encounter.cat {
-                                        NavigationLink(value: cat) {
-                                            FeedItemView(encounter: encounter)
-                                        }
-                                        .buttonStyle(.plain)
-                                    } else {
-                                        FeedItemView(encounter: encounter)
-                                            .overlay(alignment: .topTrailing) {
-                                                Button {
-                                                    encounterToDelete = encounter
-                                                } label: {
-                                                    Image(systemName: "xmark.circle.fill")
-                                                        .font(.title3)
-                                                        .foregroundStyle(.white, CatchTheme.textSecondary)
-                                                }
-                                                .padding(CatchSpacing.space8)
-                                            }
-                                    }
+                                ForEach(unifiedFeedItems) { item in
+                                    feedItemView(for: item)
                                 }
                             }
                             .padding()
@@ -141,16 +135,53 @@ struct FeedView: View {
             } message: {
                 Text(CatchStrings.Feed.orphanedAlertMessage)
             }
+            .refreshable {
+                await socialFeedService?.refresh()
+            }
             .task {
                 await loadInteractionData()
+                await socialFeedService?.refresh()
             }
         }
     }
 
+    // MARK: - Feed Item Routing
+
+    @ViewBuilder
+    private func feedItemView(for item: FeedItem) -> some View {
+        switch item {
+        case .local(let encounter):
+            if let cat = encounter.cat {
+                NavigationLink(value: cat) {
+                    FeedItemView(encounter: encounter)
+                }
+                .buttonStyle(.plain)
+            } else {
+                FeedItemView(encounter: encounter)
+                    .overlay(alignment: .topTrailing) {
+                        Button {
+                            encounterToDelete = encounter
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.title3)
+                                .foregroundStyle(.white, CatchTheme.textSecondary)
+                        }
+                        .padding(CatchSpacing.space8)
+                    }
+            }
+        case .remote(let encounter, let cat, let owner):
+            SocialFeedItemView(encounter: encounter, cat: cat, owner: owner)
+        }
+    }
+
+    // MARK: - Data Loading
+
     private func loadInteractionData() async {
         guard let socialService else { return }
-        let recordNames = encounters.compactMap(\.cloudKitRecordName)
-        guard !recordNames.isEmpty else { return }
-        try? await socialService.loadInteractionData(for: recordNames)
+        let localRecordNames = encounters.compactMap(\.cloudKitRecordName)
+        let remoteRecordNames = socialFeedService?.remoteEncounters.compactMap(\.encounterRecordName) ?? []
+        let allRecordNames = localRecordNames + remoteRecordNames
+        guard !allRecordNames.isEmpty else { return }
+        try? await socialService.loadInteractionData(for: allRecordNames)
     }
 }

@@ -19,6 +19,13 @@ extension CatchStrings {
             String(localized: "no encounters matching \"\(query)\"")
         }
 
+        // Social feed
+        static let pillFriend = String(localized: "FRIEND")
+
+        static func spottedBy(_ name: String) -> String {
+            String(localized: "spotted by \(name)")
+        }
+
         // Orphaned encounters
         static let orphanedAlertTitle = String(localized: "delete orphaned encounter?")
         static let orphanedAlertMessage = String(localized: "this encounter lost its cat. let it go.")
