@@ -35,14 +35,10 @@ extension CatchStrings {
         static let followToSee = String(localized: "follow them to see their cats")
         static let noCatsYetTitle = String(localized: "no cats yet")
         static let noCatsYetSubtitle = String(localized: "this person hasn't logged any cats")
-        static let noActivityTitle = String(localized: "no activity yet")
-        static let noActivitySubtitle = String(localized: "no encounters to show")
+        static let noActivityTitle = String(localized: "no diary entries")
+        static let noActivitySubtitle = String(localized: "they haven't written anything down yet")
         static let profileFallbackTitle = String(localized: "profile")
         static let statPlaceholder = String(localized: "--")
-
-        // ProfileTab display names
-        static let catsTab = String(localized: "cats")
-        static let activityTab = String(localized: "activity")
 
         // FollowRowView
         static let removeFollower = String(localized: "remove follower")
