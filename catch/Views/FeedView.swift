@@ -131,6 +131,7 @@ struct FeedView: View {
                 Button(CatchStrings.Common.delete, role: .destructive) {
                     if let encounter = encounterToDelete {
                         modelContext.delete(encounter)
+                        try? modelContext.save()
                         encounterToDelete = nil
                     }
                 }

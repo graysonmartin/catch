@@ -123,6 +123,7 @@ struct AddCatView: View {
             photos: photos
         )
         modelContext.insert(encounter)
+        try? modelContext.save()
 
         Task { await catSyncService?.syncNewCat(cat, firstEncounter: encounter) }
 

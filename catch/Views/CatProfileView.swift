@@ -184,6 +184,7 @@ struct CatProfileView: View {
             Button(CatchStrings.Common.delete, role: .destructive) {
                 if let encounter = encounterToDelete {
                     modelContext.delete(encounter)
+                    try? modelContext.save()
                     encounterToDelete = nil
                 }
             }
@@ -196,6 +197,7 @@ struct CatProfileView: View {
         .alert(CatchStrings.CatProfile.deleteCatTitle(name: cat.displayName), isPresented: $showingDeleteCat) {
             Button(CatchStrings.Common.delete, role: .destructive) {
                 modelContext.delete(cat)
+                try? modelContext.save()
                 dismiss()
             }
             Button(CatchStrings.Common.cancel, role: .cancel) {}
