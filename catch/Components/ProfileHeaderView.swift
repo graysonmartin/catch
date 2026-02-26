@@ -3,15 +3,19 @@ import SwiftUI
 struct ProfileHeaderView: View {
     let data: ProfileDisplayData
     let avatarSize: CGFloat
+    private let showAvatar: Bool
 
-    init(data: ProfileDisplayData, avatarSize: CGFloat = 120) {
+    init(data: ProfileDisplayData, avatarSize: CGFloat = 120, showAvatar: Bool = true) {
         self.data = data
         self.avatarSize = avatarSize
+        self.showAvatar = showAvatar
     }
 
     var body: some View {
         VStack(spacing: CatchSpacing.space8) {
-            avatarImage
+            if showAvatar {
+                avatarImage
+            }
 
             Text(data.displayName.isEmpty ? CatchStrings.Profile.mysteriousStranger : data.displayName)
                 .font(.title2.weight(.bold))

@@ -114,7 +114,8 @@ struct OwnProfileContent: View {
                     local: profile,
                     catCount: cats.count,
                     encounterCount: encounters.count
-                )
+                ),
+                showAvatar: false
             )
 
             statsSection
