@@ -25,9 +25,9 @@ struct EditEncounterView: View {
                     Section(CatchStrings.Log.catSection) {
                         HStack(spacing: CatchSpacing.space12) {
                             CatPhotoView(photoData: cat.photos.first, size: 40)
-                            Text(cat.name)
+                            Text(cat.displayName)
                                 .font(.body.weight(.semibold))
-                                .foregroundStyle(CatchTheme.textPrimary)
+                                .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                             Spacer()
                         }
                     }

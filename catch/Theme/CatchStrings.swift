@@ -23,6 +23,8 @@ enum CatchStrings {
         static let iOwnThisCat = String(localized: "I own this cat")
         static let notesPlaceholder = String(localized: "Notes about this cat...")
         static let sortBy = String(localized: "sort by")
+        static let unnamedCatFallback = String(localized: "mystery cat")
+        static let unnamedStray = String(localized: "stray / unnamed")
 
         static func encounterCount(_ count: Int) -> String {
             String(localized: "\(count) encounter\(count == 1 ? "" : "s")")

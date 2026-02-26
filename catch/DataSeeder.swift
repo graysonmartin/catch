@@ -145,7 +145,24 @@ enum DataSeeder {
         )
         context.insert(phantomEnc)
 
-        // -- Cat 6: professor beans (maine coon at cafe) --
+        // -- Cat 6: unnamed stray --
+        let stray = Cat(
+            estimatedAge: "1",
+            location: Location(name: "Under the dumpster", latitude: 37.7710, longitude: -122.4250),
+            notes: "no collar, no name, no fear. just vibes.",
+            photos: photo4
+        )
+        context.insert(stray)
+
+        let strayEnc = Encounter(
+            date: calendar.date(byAdding: .day, value: -2, to: now)!,
+            location: Location(name: "Under the dumpster", latitude: 37.7710, longitude: -122.4250),
+            notes: "appeared from the void. stared at me. disappeared back into the void.",
+            cat: stray
+        )
+        context.insert(strayEnc)
+
+        // -- Cat 7: professor beans (maine coon at cafe) --
         let professorBeans = Cat(
             name: "professor beans",
             breed: "Maine Coon",
@@ -169,7 +186,8 @@ enum DataSeeder {
         if profileCount == 0 {
             let profile = UserProfile(
                 displayName: "cat enthusiast",
-                bio: "just out here cataloging every cat i see. it's not weird, you're weird."
+                bio: "just out here cataloging every cat i see. it's not weird, you're weird.",
+                username: "catlord42"
             )
             context.insert(profile)
         }

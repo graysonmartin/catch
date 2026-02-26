@@ -121,9 +121,9 @@ struct MissingLocationSheet: View {
                         }
 
                         VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                            Text(cat.name)
+                            Text(cat.displayName)
                                 .font(.headline)
-                                .foregroundStyle(CatchTheme.textPrimary)
+                                .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                             Text(CatchStrings.Map.noLocationSet)
                                 .font(.caption)
                                 .foregroundStyle(CatchTheme.textSecondary)
@@ -186,9 +186,9 @@ struct ClusterListSheet: View {
                         }
 
                         VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                            Text(cat.name)
+                            Text(cat.displayName)
                                 .font(.headline)
-                                .foregroundStyle(CatchTheme.textPrimary)
+                                .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                             if !cat.location.name.isEmpty {
                                 Text(cat.location.name)
                                     .font(.caption)

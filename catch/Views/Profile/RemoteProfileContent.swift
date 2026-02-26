@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct UserPublicProfileView: View {
+struct RemoteProfileContent: View {
     let userID: String
     let initialDisplayName: String?
 
@@ -37,7 +37,7 @@ struct UserPublicProfileView: View {
                 loadingState
             } else if let data {
                 if data.profile.isPrivate && !isFollowingUser {
-                    privateProfileState(profile: data.profile)
+                    privateProfileState(data: data)
                 } else {
                     profileContent(data: data)
                 }
@@ -48,7 +48,7 @@ struct UserPublicProfileView: View {
             }
         }
         .background(CatchTheme.background)
-        .navigationTitle(displayName)
+        .navigationTitle(displayTitle)
         .navigationBarTitleDisplayMode(.inline)
         .task {
             await loadData()
@@ -85,9 +85,12 @@ struct UserPublicProfileView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
-    private func privateProfileState(profile: CloudUserProfile) -> some View {
+    private func privateProfileState(data: UserBrowseData) -> some View {
         VStack(spacing: CatchSpacing.space16) {
-            profileHeader(profile: profile)
+            ProfileHeaderView(
+                data: ProfileDisplayData(remote: data),
+                avatarSize: 64
+            )
             followButton
 
             VStack(spacing: CatchSpacing.space8) {
@@ -113,7 +116,15 @@ struct UserPublicProfileView: View {
     private func profileContent(data: UserBrowseData) -> some View {
         ScrollView {
             VStack(spacing: CatchSpacing.space16) {
-                profileHeader(profile: data.profile)
+                ProfileHeaderView(
+                    data: ProfileDisplayData(remote: data),
+                    avatarSize: 64
+                )
+
+                if !isPrivateHidden {
+                    statBadges(data: data)
+                }
+
                 followButton
                 tabPicker
                 tabContent(data: data)
@@ -122,36 +133,17 @@ struct UserPublicProfileView: View {
         }
     }
 
-    private func profileHeader(profile: CloudUserProfile) -> some View {
-        VStack(spacing: CatchSpacing.space8) {
-            Image(systemName: "person.crop.circle.fill")
-                .font(.system(size: 64))
-                .foregroundStyle(CatchTheme.secondary)
-
-            Text(profile.displayName)
-                .font(.title2.weight(.bold))
-                .foregroundStyle(CatchTheme.textPrimary)
-
-            if !profile.bio.isEmpty {
-                Text(profile.bio)
-                    .font(.subheadline)
-                    .foregroundStyle(CatchTheme.textSecondary)
-                    .multilineTextAlignment(.center)
-            }
-
-            if let data {
-                HStack(spacing: CatchSpacing.space24) {
-                    statBadge(count: isPrivateHidden ? nil : data.cats.count, label: CatchStrings.Profile.cats)
-                    statBadge(count: isPrivateHidden ? nil : data.encounters.count, label: CatchStrings.Profile.encounters)
-                }
-                .padding(.top, CatchSpacing.space4)
-            }
+    private func statBadges(data: UserBrowseData) -> some View {
+        HStack(spacing: CatchSpacing.space24) {
+            statBadge(count: data.cats.count, label: CatchStrings.Profile.cats)
+            statBadge(count: data.encounters.count, label: CatchStrings.Profile.encounters)
         }
+        .padding(.top, CatchSpacing.space4)
     }
 
-    private func statBadge(count: Int?, label: String) -> some View {
+    private func statBadge(count: Int, label: String) -> some View {
         VStack(spacing: CatchSpacing.space2) {
-            Text(count.map { "\($0)" } ?? CatchStrings.Social.statPlaceholder)
+            Text("\(count)")
                 .font(.headline)
                 .foregroundStyle(CatchTheme.textPrimary)
             Text(label)
@@ -244,7 +236,7 @@ struct UserPublicProfileView: View {
                                 ownerName: data.profile.displayName
                             )
                         } label: {
-                            RemoteCatCardView(cat: cat, encounterCount: encounterCount)
+                            CatCardView(data: CatDisplayData(remote: cat, encounterCount: encounterCount))
                         }
                         .buttonStyle(.plain)
                     }
@@ -276,7 +268,7 @@ struct UserPublicProfileView: View {
 
     // MARK: - Helpers
 
-    private var displayName: String {
+    private var displayTitle: String {
         data?.profile.displayName ?? initialDisplayName ?? CatchStrings.Social.profileFallbackTitle
     }
 

@@ -58,8 +58,17 @@
 		E8000001AA00003B /* MapAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002F /* MapAnnotations.swift */; };
 		E8000001AA000051 /* ImageDownsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000050 /* ImageDownsampler.swift */; };
 		E8000001AA000052 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
-		E8000001AA000053 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000061 /* ProfileView.swift */; };
-		E8000001AA000057 /* ProfileView+Sections.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000063 /* ProfileView+Sections.swift */; };
+		E8DM00000101 /* CatDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000001 /* CatDisplayData.swift */; };
+		E8DM00000102 /* ProfileDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000002 /* ProfileDisplayData.swift */; };
+		E8DM00000201 /* CatDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000001 /* CatDisplayData.swift */; };
+		E8DM00000202 /* ProfileDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000002 /* ProfileDisplayData.swift */; };
+		E8DM00000301 /* CatDisplayDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000011 /* CatDisplayDataTests.swift */; };
+		E8DM00000302 /* ProfileDisplayDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000012 /* ProfileDisplayDataTests.swift */; };
+		E8PF00000101 /* ProfileMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000001 /* ProfileMode.swift */; };
+		E8PF00000102 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000002 /* ProfileView.swift */; };
+		E8PF00000103 /* OwnProfileContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000003 /* OwnProfileContent.swift */; };
+		E8PF00000104 /* RemoteProfileContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000004 /* RemoteProfileContent.swift */; };
+		E8PF00000105 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000005 /* ProfileHeaderView.swift */; };
 		E8000001AA000058 /* CatSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000064 /* CatSortOption.swift */; };
 		E8000001AA000059 /* CatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000065 /* CatCardView.swift */; };
 		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
@@ -118,8 +127,6 @@
 		E8E600000031 /* CKUserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000031 /* CKUserBrowseService.swift */; };
 		E8E600000032 /* UserBrowseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000032 /* UserBrowseData.swift */; };
 		E8E600000033 /* UserBrowseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000033 /* UserBrowseError.swift */; };
-		E8E600000034 /* UserPublicProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000034 /* UserPublicProfileView.swift */; };
-		E8E600000035 /* RemoteCatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000035 /* RemoteCatCardView.swift */; };
 		E8E600000036 /* RemoteCatProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000036 /* RemoteCatProfileView.swift */; };
 		E8E600000037 /* RemoteFeedItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000037 /* RemoteFeedItemView.swift */; };
 		E8E600000038 /* CKUserBrowseServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000038 /* CKUserBrowseServiceTests.swift */; };
@@ -211,6 +218,9 @@
 		E8PL00000105 /* CatchStrings+PersonalityLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000005 /* CatchStrings+PersonalityLabels.swift */; };
 		E8PL00000201 /* PersonalityLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000001 /* PersonalityLabel.swift */; };
 		E8PL00000202 /* PersonalityLabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000006 /* PersonalityLabelTests.swift */; };
+		E8UV00000101 /* UsernameValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000001 /* UsernameValidator.swift */; };
+		E8UV00000102 /* UsernameValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000001 /* UsernameValidator.swift */; };
+		E8UV00000103 /* UsernameValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000002 /* UsernameValidatorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -255,8 +265,15 @@
 		E8000001AA00002F /* MapAnnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotations.swift; sourceTree = "<group>"; };
 		E8000001AA000050 /* ImageDownsampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownsampler.swift; sourceTree = "<group>"; };
 		E8000001AA000060 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
-		E8000001AA000061 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		E8000001AA000063 /* ProfileView+Sections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileView+Sections.swift"; sourceTree = "<group>"; };
+		E8DM00000001 /* CatDisplayData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDisplayData.swift; sourceTree = "<group>"; };
+		E8DM00000002 /* ProfileDisplayData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDisplayData.swift; sourceTree = "<group>"; };
+		E8DM00000011 /* CatDisplayDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDisplayDataTests.swift; sourceTree = "<group>"; };
+		E8DM00000012 /* ProfileDisplayDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDisplayDataTests.swift; sourceTree = "<group>"; };
+		E8PF00000001 /* ProfileMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMode.swift; sourceTree = "<group>"; };
+		E8PF00000002 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		E8PF00000003 /* OwnProfileContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnProfileContent.swift; sourceTree = "<group>"; };
+		E8PF00000004 /* RemoteProfileContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteProfileContent.swift; sourceTree = "<group>"; };
+		E8PF00000005 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		E8000001AA000064 /* CatSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSortOption.swift; sourceTree = "<group>"; };
 		E8000001AA000065 /* CatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatCardView.swift; sourceTree = "<group>"; };
 		E8000001AA000062 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
@@ -303,8 +320,6 @@
 		E8E500000031 /* CKUserBrowseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUserBrowseService.swift; sourceTree = "<group>"; };
 		E8E500000032 /* UserBrowseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBrowseData.swift; sourceTree = "<group>"; };
 		E8E500000033 /* UserBrowseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBrowseError.swift; sourceTree = "<group>"; };
-		E8E500000034 /* UserPublicProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPublicProfileView.swift; sourceTree = "<group>"; };
-		E8E500000035 /* RemoteCatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCatCardView.swift; sourceTree = "<group>"; };
 		E8E500000036 /* RemoteCatProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCatProfileView.swift; sourceTree = "<group>"; };
 		E8E500000037 /* RemoteFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedItemView.swift; sourceTree = "<group>"; };
 		E8E500000038 /* CKUserBrowseServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUserBrowseServiceTests.swift; sourceTree = "<group>"; };
@@ -366,6 +381,8 @@
 		E8PL00000004 /* PersonalityLabelListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityLabelListView.swift; sourceTree = "<group>"; };
 		E8PL00000005 /* CatchStrings+PersonalityLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+PersonalityLabels.swift"; sourceTree = "<group>"; };
 		E8PL00000006 /* PersonalityLabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityLabelTests.swift; sourceTree = "<group>"; };
+		E8UV00000001 /* UsernameValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameValidator.swift; sourceTree = "<group>"; };
+		E8UV00000002 /* UsernameValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameValidatorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -441,6 +458,7 @@
 				E8000001AA000060 /* UserProfile.swift */,
 				E8000001AA000070 /* CatchSchema.swift */,
 				E8000001AA000080 /* VisibilitySettings.swift */,
+				E8DM0000F001 /* DisplayModels */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -460,10 +478,9 @@
 				E8000001AA00002E /* ClusterMapView.swift */,
 				E8000001AA00002F /* MapAnnotations.swift */,
 				E8000001AA00002A /* OnboardingView.swift */,
-				E8000001AA000061 /* ProfileView.swift */,
-				E8000001AA000063 /* ProfileView+Sections.swift */,
 				E8000001AA000064 /* CatSortOption.swift */,
 				E8000001AA000062 /* EditProfileView.swift */,
+				E8PF0000F001 /* Profile */,
 				E8BL0000F002 /* BreedLog */,
 				E8E500000021 /* Social */,
 			);
@@ -486,6 +503,7 @@
 				E8PL00000002 /* PersonalityLabelBadgeView.swift */,
 				E8PL00000003 /* PersonalityLabelPickerView.swift */,
 				E8PL00000004 /* PersonalityLabelListView.swift */,
+				E8PF00000005 /* ProfileHeaderView.swift */,
 				E8D800000001 /* StevenEasterEggView.swift */,
 			);
 			path = Components;
@@ -535,6 +553,8 @@
 				E8A100000019 /* CatchSchemaTests.swift */,
 				E8A10000001A /* VisibilitySettingsTests.swift */,
 				E8D800000002 /* CatStevenTests.swift */,
+				E8DM00000011 /* CatDisplayDataTests.swift */,
+				E8DM00000012 /* ProfileDisplayDataTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -574,6 +594,7 @@
 				E8F500000022 /* CloudSync */,
 				E8E500000022 /* Follow */,
 				E8E500000041 /* UserBrowse */,
+				E8UV0000F002 /* Username */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 			);
 			path = Services;
@@ -608,6 +629,7 @@
 				E8F500000020 /* CloudSync */,
 				E8E500000020 /* Follow */,
 				E8E500000040 /* UserBrowse */,
+				E8UV0000F001 /* Username */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -665,8 +687,6 @@
 				E8E500000008 /* FindPeopleView.swift */,
 				E8E500000009 /* FollowRowView.swift */,
 				E8E50000000A /* PendingRequestRowView.swift */,
-				E8E500000034 /* UserPublicProfileView.swift */,
-				E8E500000035 /* RemoteCatCardView.swift */,
 				E8E500000036 /* RemoteCatProfileView.swift */,
 				E8E500000037 /* RemoteFeedItemView.swift */,
 			);
@@ -798,6 +818,42 @@
 				E8BL00000021 /* DefaultBreedLogServiceTests.swift */,
 			);
 			path = BreedLog;
+			sourceTree = "<group>";
+		};
+		E8UV0000F001 /* Username */ = {
+			isa = PBXGroup;
+			children = (
+				E8UV00000001 /* UsernameValidator.swift */,
+			);
+			path = Username;
+			sourceTree = "<group>";
+		};
+		E8UV0000F002 /* Username */ = {
+			isa = PBXGroup;
+			children = (
+				E8UV00000002 /* UsernameValidatorTests.swift */,
+			);
+			path = Username;
+			sourceTree = "<group>";
+		};
+		E8DM0000F001 /* DisplayModels */ = {
+			isa = PBXGroup;
+			children = (
+				E8DM00000001 /* CatDisplayData.swift */,
+				E8DM00000002 /* ProfileDisplayData.swift */,
+			);
+			path = DisplayModels;
+			sourceTree = "<group>";
+		};
+		E8PF0000F001 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				E8PF00000001 /* ProfileMode.swift */,
+				E8PF00000002 /* ProfileView.swift */,
+				E8PF00000003 /* OwnProfileContent.swift */,
+				E8PF00000004 /* RemoteProfileContent.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -942,8 +998,6 @@
 				E8000001AA000036 /* OnboardingView.swift in Sources */,
 				E8000001AA000051 /* ImageDownsampler.swift in Sources */,
 				E8000001AA000052 /* UserProfile.swift in Sources */,
-				E8000001AA000053 /* ProfileView.swift in Sources */,
-				E8000001AA000057 /* ProfileView+Sections.swift in Sources */,
 				E8000001AA000058 /* CatSortOption.swift in Sources */,
 				E8000001AA000059 /* CatCardView.swift in Sources */,
 				E8000001AA000054 /* EditProfileView.swift in Sources */,
@@ -984,8 +1038,6 @@
 				E8E600000031 /* CKUserBrowseService.swift in Sources */,
 				E8E600000032 /* UserBrowseData.swift in Sources */,
 				E8E600000033 /* UserBrowseError.swift in Sources */,
-				E8E600000034 /* UserPublicProfileView.swift in Sources */,
-				E8E600000035 /* RemoteCatCardView.swift in Sources */,
 				E8E600000036 /* RemoteCatProfileView.swift in Sources */,
 				E8E600000037 /* RemoteFeedItemView.swift in Sources */,
 				E8B700000101 /* BreedPrediction.swift in Sources */,
@@ -1000,6 +1052,14 @@
 				E8PL00000103 /* PersonalityLabelPickerView.swift in Sources */,
 				E8PL00000104 /* PersonalityLabelListView.swift in Sources */,
 				E8PL00000105 /* CatchStrings+PersonalityLabels.swift in Sources */,
+				E8UV00000101 /* UsernameValidator.swift in Sources */,
+				E8DM00000101 /* CatDisplayData.swift in Sources */,
+				E8DM00000102 /* ProfileDisplayData.swift in Sources */,
+				E8PF00000101 /* ProfileMode.swift in Sources */,
+				E8PF00000102 /* ProfileView.swift in Sources */,
+				E8PF00000103 /* OwnProfileContent.swift in Sources */,
+				E8PF00000104 /* RemoteProfileContent.swift in Sources */,
+				E8PF00000105 /* ProfileHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1100,6 +1160,12 @@
 				E8CS0000030B /* CatchStrings+Components.swift in Sources */,
 				E8PL00000201 /* PersonalityLabel.swift in Sources */,
 				E8PL00000202 /* PersonalityLabelTests.swift in Sources */,
+				E8UV00000102 /* UsernameValidator.swift in Sources */,
+				E8UV00000103 /* UsernameValidatorTests.swift in Sources */,
+				E8DM00000201 /* CatDisplayData.swift in Sources */,
+				E8DM00000202 /* ProfileDisplayData.swift in Sources */,
+				E8DM00000301 /* CatDisplayDataTests.swift in Sources */,
+				E8DM00000302 /* ProfileDisplayDataTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

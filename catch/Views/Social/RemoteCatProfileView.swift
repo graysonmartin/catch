@@ -21,7 +21,7 @@ struct RemoteCatProfileView: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .background(CatchTheme.background)
-        .navigationTitle(cat.name)
+        .navigationTitle(cat.displayName)
         .navigationBarTitleDisplayMode(.inline)
     }
 
@@ -45,9 +45,9 @@ struct RemoteCatProfileView: View {
     private var infoSection: some View {
         Section {
             HStack {
-                Text(cat.name)
+                Text(cat.displayName)
                     .font(.title.weight(.bold))
-                    .foregroundStyle(CatchTheme.textPrimary)
+                    .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                 if cat.isOwned {
                     Image(systemName: "heart.fill")
                         .foregroundStyle(CatchTheme.primary)

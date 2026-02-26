@@ -9,6 +9,7 @@ struct FollowRowView: View {
     @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
     @State private var isShowingConfirmation = false
     @State private var resolvedName: String?
+    @State private var resolvedUsername: String?
 
     private var targetUserID: String {
         isFollowerRow ? follow.followerID : follow.followeeID
@@ -24,7 +25,7 @@ struct FollowRowView: View {
 
     var body: some View {
         NavigationLink {
-            UserPublicProfileView(
+            RemoteProfileContent(
                 userID: targetUserID,
                 initialDisplayName: resolvedName
             )
@@ -39,6 +40,12 @@ struct FollowRowView: View {
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(CatchTheme.textPrimary)
                         .lineLimit(1)
+
+                    if let username = resolvedUsername, !username.isEmpty {
+                        Text(UsernameValidator.formatDisplay(username))
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.primary)
+                    }
 
                     Text(CatchStrings.Social.since(follow.createdAt))
                         .font(.caption)
@@ -65,7 +72,9 @@ struct FollowRowView: View {
             Text(CatchStrings.Social.areYouSure)
         }
         .task {
-            resolvedName = await browseService?.fetchDisplayName(userID: targetUserID)
+            let profile = await browseService?.fetchProfile(userID: targetUserID)
+            resolvedName = profile?.displayName
+            resolvedUsername = profile?.username
         }
     }
 }

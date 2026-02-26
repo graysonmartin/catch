@@ -15,6 +15,7 @@ final class CKCloudKitService: CloudKitService {
         appleUserID: String,
         displayName: String,
         bio: String,
+        username: String?,
         isPrivate: Bool
     ) async throws -> String {
         let recordID = CKRecord.ID(recordName: appleUserID)
@@ -29,6 +30,7 @@ final class CKCloudKitService: CloudKitService {
         record["appleUserID"] = appleUserID
         record["displayName"] = displayName
         record["bio"] = bio
+        record["username"] = username
         record["isPrivate"] = isPrivate ? 1 : 0
 
         let saved = try await database.save(record)
@@ -52,12 +54,14 @@ final class CKCloudKitService: CloudKitService {
         }
 
         let isPrivate = (record["isPrivate"] as? Int ?? 0) == 1
+        let username = record["username"] as? String
 
         return CloudUserProfile(
             recordName: record.recordID.recordName,
             appleUserID: appleID,
             displayName: displayName,
             bio: bio,
+            username: username,
             isPrivate: isPrivate
         )
     }
@@ -71,7 +75,10 @@ final class CKCloudKitService: CloudKitService {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return [] }
 
-        let predicate = NSPredicate(format: "displayName BEGINSWITH[cd] %@", trimmed)
+        let namePredicate = NSPredicate(format: "displayName BEGINSWITH[cd] %@", trimmed)
+        let usernamePredicate = NSPredicate(format: "username BEGINSWITH[cd] %@", trimmed.lowercased())
+        let predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [namePredicate, usernamePredicate])
+
         let ckQuery = CKQuery(recordType: Self.recordType, predicate: predicate)
         ckQuery.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
 
@@ -85,13 +92,22 @@ final class CKCloudKitService: CloudKitService {
                 return nil
             }
             let isPrivate = (record["isPrivate"] as? Int ?? 0) == 1
+            let username = record["username"] as? String
             return CloudUserProfile(
                 recordName: record.recordID.recordName,
                 appleUserID: appleID,
                 displayName: displayName,
                 bio: bio,
+                username: username,
                 isPrivate: isPrivate
             )
         }
+    }
+
+    func checkUsernameAvailability(_ username: String) async throws -> Bool {
+        let predicate = NSPredicate(format: "username == %@", username.lowercased())
+        let ckQuery = CKQuery(recordType: Self.recordType, predicate: predicate)
+        let (results, _) = try await database.records(matching: ckQuery, resultsLimit: 1)
+        return results.isEmpty
     }
 }

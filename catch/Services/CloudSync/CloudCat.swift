@@ -3,7 +3,7 @@ import Foundation
 struct CloudCat: Sendable {
     let recordName: String
     let ownerID: String
-    let name: String
+    let name: String?
     let breed: String
     let estimatedAge: String
     let locationName: String
@@ -14,4 +14,15 @@ struct CloudCat: Sendable {
     let createdAt: Date
     let photos: [Data]
     var personalityLabels: [String] = []
+
+    var isUnnamed: Bool {
+        name?.isEmpty ?? true
+    }
+
+    var displayName: String {
+        if let name, !name.isEmpty {
+            return name
+        }
+        return CatchStrings.Common.unnamedCatFallback
+    }
 }
