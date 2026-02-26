@@ -27,11 +27,14 @@ enum Fixtures {
 
     static func encounter(
         for cat: Cat,
+        date: Date = Date(),
+        location: Location = .empty,
+        notes: String = "",
         photos: [Data] = [],
         cloudKitRecordName: String? = nil,
         in context: ModelContext
     ) -> Encounter {
-        let encounter = Encounter(cat: cat, photos: photos)
+        let encounter = Encounter(date: date, location: location, notes: notes, cat: cat, photos: photos)
         encounter.cloudKitRecordName = cloudKitRecordName
         context.insert(encounter)
         return encounter

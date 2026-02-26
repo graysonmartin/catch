@@ -214,6 +214,16 @@
 		E8UV00000101 /* UsernameValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000001 /* UsernameValidator.swift */; };
 		E8UV00000102 /* UsernameValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000001 /* UsernameValidator.swift */; };
 		E8UV00000103 /* UsernameValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000002 /* UsernameValidatorTests.swift */; };
+		E8PT00000101 /* ProfileTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000001 /* ProfileTab.swift */; };
+		E8PT00000102 /* ProfileCollectionTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000002 /* ProfileCollectionTab.swift */; };
+		E8PT00000103 /* ProfileDiaryTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000003 /* ProfileDiaryTab.swift */; };
+		E8DR00000101 /* DiaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DR00000001 /* DiaryEntryRow.swift */; };
+		E8DR00000102 /* RemoteDiaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DR00000002 /* RemoteDiaryEntryRow.swift */; };
+		E8CS0000010C /* CatchStrings+Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000C /* CatchStrings+Diary.swift */; };
+		E8CS0000030C /* CatchStrings+Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000C /* CatchStrings+Diary.swift */; };
+		E8PT00000201 /* ProfileTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000001 /* ProfileTab.swift */; };
+		E8PT00000211 /* ProfileTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000011 /* ProfileTabTests.swift */; };
+		E8PT00000212 /* ProfileDiaryTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000012 /* ProfileDiaryTabTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -370,6 +380,14 @@
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
 		E8UV00000001 /* UsernameValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameValidator.swift; sourceTree = "<group>"; };
 		E8UV00000002 /* UsernameValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameValidatorTests.swift; sourceTree = "<group>"; };
+		E8PT00000001 /* ProfileTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTab.swift; sourceTree = "<group>"; };
+		E8PT00000002 /* ProfileCollectionTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionTab.swift; sourceTree = "<group>"; };
+		E8PT00000003 /* ProfileDiaryTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDiaryTab.swift; sourceTree = "<group>"; };
+		E8DR00000001 /* DiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEntryRow.swift; sourceTree = "<group>"; };
+		E8DR00000002 /* RemoteDiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDiaryEntryRow.swift; sourceTree = "<group>"; };
+		E8CS0000000C /* CatchStrings+Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Diary.swift"; sourceTree = "<group>"; };
+		E8PT00000011 /* ProfileTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTabTests.swift; sourceTree = "<group>"; };
+		E8PT00000012 /* ProfileDiaryTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDiaryTabTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -479,6 +497,7 @@
 				E8B700000006 /* BreedPickerView.swift */,
 				E8B700000005 /* BreedSuggestionView.swift */,
 				E8000001AA000014 /* CatPhotoView.swift */,
+				E8DR00000001 /* DiaryEntryRow.swift */,
 				E8000001AA000028 /* PhotoCarouselView.swift */,
 				E8000001AA000015 /* PhotoPickerView.swift */,
 				E8000001AA000016 /* EmptyStateView.swift */,
@@ -487,6 +506,7 @@
 				E8000001AA000029 /* CatPickerView.swift */,
 				E8000001AA000050 /* ImageDownsampler.swift */,
 				E8PF00000005 /* ProfileHeaderView.swift */,
+				E8DR00000002 /* RemoteDiaryEntryRow.swift */,
 				E8D800000001 /* StevenEasterEggView.swift */,
 			);
 			path = Components;
@@ -508,6 +528,7 @@
 				E8CS00000009 /* CatchStrings+Social.swift */,
 				E8CS0000000A /* CatchStrings+BreedLog.swift */,
 				E8CS0000000B /* CatchStrings+Components.swift */,
+				E8CS0000000C /* CatchStrings+Diary.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -561,8 +582,18 @@
 			isa = PBXGroup;
 			children = (
 				E8A100000028 /* AddCatValidationTests.swift */,
+				E8PT0000F001 /* Profile */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		E8PT0000F001 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				E8PT00000011 /* ProfileTabTests.swift */,
+				E8PT00000012 /* ProfileDiaryTabTests.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		E8C17FF134EEE52DB9FA0D4A /* Services */ = {
@@ -830,9 +861,12 @@
 			isa = PBXGroup;
 			children = (
 				E8PF00000001 /* ProfileMode.swift */,
+				E8PT00000001 /* ProfileTab.swift */,
 				E8PF00000002 /* ProfileView.swift */,
 				E8PF00000003 /* OwnProfileContent.swift */,
 				E8PF00000004 /* RemoteProfileContent.swift */,
+				E8PT00000002 /* ProfileCollectionTab.swift */,
+				E8PT00000003 /* ProfileDiaryTab.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -1036,6 +1070,12 @@
 				E8PF00000103 /* OwnProfileContent.swift in Sources */,
 				E8PF00000104 /* RemoteProfileContent.swift in Sources */,
 				E8PF00000105 /* ProfileHeaderView.swift in Sources */,
+				E8PT00000101 /* ProfileTab.swift in Sources */,
+				E8PT00000102 /* ProfileCollectionTab.swift in Sources */,
+				E8PT00000103 /* ProfileDiaryTab.swift in Sources */,
+				E8DR00000101 /* DiaryEntryRow.swift in Sources */,
+				E8DR00000102 /* RemoteDiaryEntryRow.swift in Sources */,
+				E8CS0000010C /* CatchStrings+Diary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1140,6 +1180,10 @@
 				E8DM00000202 /* ProfileDisplayData.swift in Sources */,
 				E8DM00000301 /* CatDisplayDataTests.swift in Sources */,
 				E8DM00000302 /* ProfileDisplayDataTests.swift in Sources */,
+				E8PT00000201 /* ProfileTab.swift in Sources */,
+				E8PT00000211 /* ProfileTabTests.swift in Sources */,
+				E8PT00000212 /* ProfileDiaryTabTests.swift in Sources */,
+				E8CS0000030C /* CatchStrings+Diary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -14,15 +14,11 @@ struct OwnProfileContent: View {
     @State private var isShowingEditSheet = false
     @State private var searchText = ""
     @State private var sortOption: CatSortOption = .name
+    @State private var selectedProfileTab: ProfileTab = .collection
 
     var cloudKitService: CloudKitService = CKCloudKitService()
 
     private var profile: UserProfile? { profiles.first }
-
-    private let columns = [
-        GridItem(.flexible(), spacing: CatchSpacing.space16),
-        GridItem(.flexible(), spacing: CatchSpacing.space16)
-    ]
 
     private var encounterStatsByCat: [PersistentIdentifier: (count: Int, lastDate: Date)] {
         var stats: [PersistentIdentifier: (count: Int, lastDate: Date)] = [:]
@@ -73,7 +69,8 @@ struct OwnProfileContent: View {
                     setupBanner
                 }
 
-                collectionSection
+                profileTabPicker
+                profileTabContent
 
                 if let profile {
                     authSection(profile)
@@ -86,18 +83,25 @@ struct OwnProfileContent: View {
         .background(CatchTheme.background)
         .navigationTitle(CatchStrings.Profile.profileTitle)
         .navigationBarTitleDisplayMode(.large)
-        .searchable(text: $searchText, prompt: CatchStrings.Collection.searchPrompt)
+        .searchable(
+            text: $searchText,
+            prompt: selectedProfileTab == .collection
+                ? CatchStrings.Collection.searchPrompt
+                : CatchStrings.Diary.searchPrompt
+        )
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
-                Menu {
-                    Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
-                        ForEach(CatSortOption.allCases) { option in
-                            Text(option.displayName).tag(option)
+                if selectedProfileTab == .collection {
+                    Menu {
+                        Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
+                            ForEach(CatSortOption.allCases) { option in
+                                Text(option.displayName).tag(option)
+                            }
                         }
+                    } label: {
+                        Image(systemName: "arrow.up.arrow.down")
+                            .foregroundStyle(CatchTheme.primary)
                     }
-                } label: {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .foregroundStyle(CatchTheme.primary)
                 }
                 if profile != nil {
                     Button {
@@ -276,34 +280,34 @@ struct OwnProfileContent: View {
         )
     }
 
-    // MARK: - Collection Section
+    // MARK: - Profile Tabs
+
+    private var profileTabPicker: some View {
+        Picker("", selection: $selectedProfileTab) {
+            ForEach(ProfileTab.allCases) { tab in
+                Text(tab.displayName).tag(tab)
+            }
+        }
+        .pickerStyle(.segmented)
+        .padding(.horizontal, CatchSpacing.space20)
+    }
 
     @ViewBuilder
-    private var collectionSection: some View {
-        if cats.isEmpty {
-            EmptyStateView(
-                icon: "square.grid.2x2",
-                title: CatchStrings.Collection.emptyTitle,
-                subtitle: CatchStrings.Collection.emptySubtitle,
-                actionLabel: CatchStrings.Collection.emptyAction,
-                action: { selectedTab = 1 }
+    private var profileTabContent: some View {
+        switch selectedProfileTab {
+        case .collection:
+            ProfileCollectionTab(
+                cats: cats,
+                filteredCats: filteredCats,
+                searchText: searchText,
+                encounterCount: { encounterCount(for: $0) },
+                selectedTab: $selectedTab
             )
-        } else if filteredCats.isEmpty {
-            EmptyStateView(
-                icon: "magnifyingglass",
-                title: CatchStrings.Collection.searchEmptyTitle,
-                subtitle: CatchStrings.Collection.searchEmptySubtitle(searchText)
+        case .diary:
+            ProfileDiaryTab(
+                encounters: encounters,
+                searchText: searchText
             )
-        } else {
-            LazyVGrid(columns: columns, spacing: CatchSpacing.space16) {
-                ForEach(filteredCats) { cat in
-                    NavigationLink(value: cat) {
-                        CatCardView(data: CatDisplayData(local: cat, encounterCount: encounterCount(for: cat)))
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            .padding(.horizontal)
         }
     }
 

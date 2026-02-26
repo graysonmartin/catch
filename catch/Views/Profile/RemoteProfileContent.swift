@@ -10,21 +10,7 @@ struct RemoteProfileContent: View {
 
     @State private var data: UserBrowseData?
     @State private var loadError: UserBrowseError?
-    @State private var selectedTab: ProfileTab = .cats
-
-    private enum ProfileTab: String, CaseIterable, Identifiable {
-        case cats
-        case activity
-
-        var id: String { rawValue }
-
-        var displayName: String {
-            switch self {
-            case .cats: CatchStrings.Social.catsTab
-            case .activity: CatchStrings.Social.activityTab
-            }
-        }
-    }
+    @State private var selectedTab: ProfileTab = .collection
 
     private let columns = [
         GridItem(.flexible(), spacing: CatchSpacing.space16),
@@ -209,10 +195,10 @@ struct RemoteProfileContent: View {
     @ViewBuilder
     private func tabContent(data: UserBrowseData) -> some View {
         switch selectedTab {
-        case .cats:
+        case .collection:
             catsGrid(data: data)
-        case .activity:
-            activityFeed(data: data)
+        case .diary:
+            diaryFeed(data: data)
         }
     }
 
@@ -245,24 +231,52 @@ struct RemoteProfileContent: View {
         }
     }
 
-    private func activityFeed(data: UserBrowseData) -> some View {
+    private func diaryFeed(data: UserBrowseData) -> some View {
         Group {
             if data.encounters.isEmpty {
                 EmptyStateView(
-                    icon: "clock",
-                    title: CatchStrings.Social.noActivityTitle,
-                    subtitle: CatchStrings.Social.noActivitySubtitle
+                    icon: "book.closed",
+                    title: CatchStrings.Diary.noDiaryTitle,
+                    subtitle: CatchStrings.Diary.noDiarySubtitle
                 )
                 .padding(.top, CatchSpacing.space32)
             } else {
-                let sorted = data.encounters.sorted { $0.date > $1.date }
-                LazyVStack(spacing: CatchSpacing.space12) {
-                    ForEach(sorted, id: \.recordName) { encounter in
-                        let cat = data.cats.first { $0.recordName == encounter.catRecordName }
-                        RemoteFeedItemView(encounter: encounter, cat: cat)
+                let grouped = groupedEncounters(data.encounters)
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    ForEach(grouped, id: \.date) { group in
+                        Section {
+                            ForEach(group.encounters, id: \.recordName) { encounter in
+                                let cat = data.cats.first { $0.recordName == encounter.catRecordName }
+                                RemoteDiaryEntryRow(encounter: encounter, cat: cat)
+                            }
+                        } header: {
+                            Text(formattedDateHeader(group.date))
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(CatchTheme.textSecondary)
+                                .padding(.top, CatchSpacing.space16)
+                                .padding(.bottom, CatchSpacing.space4)
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private func groupedEncounters(_ encounters: [CloudEncounter]) -> [(date: Date, encounters: [CloudEncounter])] {
+        let grouped = Dictionary(grouping: encounters) { encounter in
+            Calendar.current.startOfDay(for: encounter.date)
+        }
+        return grouped
+            .sorted { $0.key > $1.key }
+            .map { (date: $0.key, encounters: $0.value.sorted { $0.date > $1.date }) }
+    }
+
+    private func formattedDateHeader(_ date: Date) -> String {
+        let calendar = Calendar.current
+        if calendar.isDate(date, equalTo: Date(), toGranularity: .year) {
+            return date.formatted(.dateTime.month(.abbreviated).day()).lowercased()
+        } else {
+            return date.formatted(.dateTime.month(.abbreviated).day().year()).lowercased()
         }
     }
 
