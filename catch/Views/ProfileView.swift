@@ -53,9 +53,15 @@ struct ProfileView: View {
                         profileHeader(profile)
                     } else {
                         setupBanner
+                        breedLogCard
                     }
 
                     collectionSection
+
+                    if let profile {
+                        authSection(profile)
+                        joinDateSection(profile)
+                    }
                 }
                 .padding(.vertical, 24)
             }
@@ -65,14 +71,6 @@ struct ProfileView: View {
             .navigationBarTitleDisplayMode(.large)
             .searchable(text: $searchText, prompt: CatchStrings.Collection.searchPrompt)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    NavigationLink {
-                        BreedLogView()
-                    } label: {
-                        Image(systemName: "book.closed.fill")
-                            .foregroundStyle(CatchTheme.primary)
-                    }
-                }
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Menu {
                         Picker(CatchStrings.Common.sortBy, selection: $sortOption) {

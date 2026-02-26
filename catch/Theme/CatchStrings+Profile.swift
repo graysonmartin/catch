@@ -17,6 +17,7 @@ extension CatchStrings {
         static let emptyTitle = String(localized: "who even are you")
         static let emptySubtitle = String(localized: "set up your profile so the cats know who they're dealing with")
         static let setUpProfile = String(localized: "set up profile")
+        static let breedLog = String(localized: "breed log")
 
         static func lurkingSince(_ date: Date) -> String {
             let formatted = date.formatted(.dateTime.month(.wide).year())

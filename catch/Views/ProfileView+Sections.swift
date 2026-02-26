@@ -7,20 +7,62 @@ extension ProfileView {
 
     func profileHeader(_ profile: UserProfile) -> some View {
         VStack(spacing: 24) {
-            avatarSection(profile)
+            avatarWithSocial(profile)
             infoSection(profile)
             statsSection
-            if authService.authState.isSignedIn {
-                socialSection
-            }
-            authSection(profile)
-            joinDateSection(profile)
+            breedLogCard
         }
     }
 
-    // MARK: - Avatar
+    // MARK: - Avatar with Social
 
-    private func avatarSection(_ profile: UserProfile) -> some View {
+    private func avatarWithSocial(_ profile: UserProfile) -> some View {
+        HStack(alignment: .center, spacing: 24) {
+            if authService.authState.isSignedIn {
+                NavigationLink {
+                    SocialView(selectedTab: .followers)
+                } label: {
+                    compactSocialStat(
+                        count: followService.followers.count,
+                        label: CatchStrings.Profile.followers
+                    )
+                    .overlay(alignment: .topTrailing) {
+                        if followService.pendingRequests.count > 0 {
+                            Text("\(followService.pendingRequests.count)")
+                                .font(.caption2.weight(.bold))
+                                .foregroundStyle(.white)
+                                .frame(minWidth: 16, minHeight: 16)
+                                .background(Color.red)
+                                .clipShape(Circle())
+                                .offset(x: 6, y: -6)
+                        }
+                    }
+                }
+                .buttonStyle(.plain)
+            } else {
+                Spacer()
+            }
+
+            avatarImage(profile)
+
+            if authService.authState.isSignedIn {
+                NavigationLink {
+                    SocialView(selectedTab: .following)
+                } label: {
+                    compactSocialStat(
+                        count: followService.following.count,
+                        label: CatchStrings.Profile.following
+                    )
+                }
+                .buttonStyle(.plain)
+            } else {
+                Spacer()
+            }
+        }
+        .padding(.horizontal, 20)
+    }
+
+    private func avatarImage(_ profile: UserProfile) -> some View {
         Group {
             if let data = profile.avatarData, let uiImage = UIImage(data: data) {
                 Image(uiImage: uiImage)
@@ -36,6 +78,18 @@ extension ProfileView {
                     .foregroundStyle(CatchTheme.secondary)
             }
         }
+    }
+
+    private func compactSocialStat(count: Int, label: String) -> some View {
+        VStack(spacing: 2) {
+            Text("\(count)")
+                .font(.title3.weight(.bold))
+                .foregroundStyle(CatchTheme.textPrimary)
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(CatchTheme.textSecondary)
+        }
+        .frame(minWidth: 60)
     }
 
     // MARK: - Info
@@ -91,40 +145,35 @@ extension ProfileView {
         )
     }
 
-    // MARK: - Social
+    // MARK: - Breed Log Card
 
-    private var socialSection: some View {
-        HStack(spacing: 12) {
-            NavigationLink {
-                SocialView(selectedTab: .followers)
-            } label: {
-                statCard(
-                    count: followService.followers.count,
-                    label: CatchStrings.Profile.followers,
-                    icon: "person.2.fill"
-                )
-                .overlay(alignment: .topTrailing) {
-                    if followService.pendingRequests.count > 0 {
-                        Text("\(followService.pendingRequests.count)")
-                            .font(.caption2.weight(.bold))
-                            .foregroundStyle(.white)
-                            .frame(minWidth: 18, minHeight: 18)
-                            .background(Color.red)
-                            .clipShape(Circle())
-                            .offset(x: -4, y: 4)
-                    }
-                }
-            }
+    var breedLogCard: some View {
+        NavigationLink {
+            BreedLogView()
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "book.closed.fill")
+                    .font(.title3)
+                    .foregroundStyle(CatchTheme.primary)
 
-            NavigationLink {
-                SocialView(selectedTab: .following)
-            } label: {
-                statCard(
-                    count: followService.following.count,
-                    label: CatchStrings.Profile.following,
-                    icon: "person.badge.plus"
-                )
+                Text(CatchStrings.Profile.breedLog)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(CatchTheme.textPrimary)
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(CatchTheme.textSecondary)
             }
+            .padding(16)
+            .background(CatchTheme.cardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+            .shadow(
+                color: .black.opacity(CatchTheme.cardShadowOpacity),
+                radius: CatchTheme.cardShadowRadius,
+                y: CatchTheme.cardShadowY
+            )
         }
         .buttonStyle(.plain)
         .padding(.horizontal, 20)
@@ -132,7 +181,7 @@ extension ProfileView {
 
     // MARK: - Auth
 
-    private func authSection(_ profile: UserProfile) -> some View {
+    func authSection(_ profile: UserProfile) -> some View {
         Group {
             if authService.authState.isSignedIn {
                 signedInBadge
@@ -193,7 +242,7 @@ extension ProfileView {
 
     // MARK: - Join Date
 
-    private func joinDateSection(_ profile: UserProfile) -> some View {
+    func joinDateSection(_ profile: UserProfile) -> some View {
         Text(CatchStrings.Profile.lurkingSince(profile.createdAt))
             .font(.caption)
             .foregroundStyle(CatchTheme.textSecondary)
