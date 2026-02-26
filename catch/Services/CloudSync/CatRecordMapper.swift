@@ -21,6 +21,7 @@ enum CatRecordMapper {
         record["notes"] = payload.notes
         record["isOwned"] = payload.isOwned ? 1 : 0
         record["createdAt"] = payload.createdAt
+        record["personalityLabels"] = payload.personalityLabels as CKRecordValue
 
         return record
     }
@@ -43,7 +44,8 @@ enum CatRecordMapper {
             notes: record["notes"] as? String ?? "",
             isOwned: (record["isOwned"] as? Int ?? 0) == 1,
             createdAt: record["createdAt"] as? Date ?? record.creationDate ?? Date(),
-            photos: photos
+            photos: photos,
+            personalityLabels: record["personalityLabels"] as? [String] ?? []
         )
     }
 }

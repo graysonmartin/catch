@@ -14,6 +14,7 @@ struct AddCatView: View {
     @State private var notes = ""
     @State private var isOwned = false
     @State private var photos: [Data] = []
+    @State private var personalityLabels: [String] = []
     @State private var breedSuggestion: BreedPrediction?
     @State private var isDismissedSuggestion = false
     @State private var showStevenEasterEgg = false
@@ -50,6 +51,10 @@ struct AddCatView: View {
                             }
                         )
                     }
+                }
+
+                Section(CatchStrings.PersonalityLabels.sectionHeader) {
+                    PersonalityLabelPickerView(selectedLabels: $personalityLabels)
                 }
 
                 Section(CatchStrings.Common.notes) {
@@ -103,7 +108,8 @@ struct AddCatView: View {
             location: location,
             notes: notes,
             isOwned: isOwned,
-            photos: photos
+            photos: photos,
+            personalityLabels: personalityLabels
         )
         modelContext.insert(cat)
 

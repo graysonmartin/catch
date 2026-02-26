@@ -16,10 +16,11 @@ enum Fixtures {
     static func cat(
         name: String = "Mr. Whiskers",
         breed: String? = nil,
+        personalityLabels: [String] = [],
         cloudKitRecordName: String? = nil,
         in context: ModelContext
     ) -> Cat {
-        let cat = Cat(name: name, breed: breed)
+        let cat = Cat(name: name, breed: breed, personalityLabels: personalityLabels)
         cat.cloudKitRecordName = cloudKitRecordName
         context.insert(cat)
         return cat

@@ -68,6 +68,15 @@ struct RemoteCatProfileView: View {
                 infoRow(icon: "note.text", label: CatchStrings.Common.notes, value: cat.notes)
             }
 
+            if !cat.personalityLabels.isEmpty {
+                VStack(alignment: .leading, spacing: CatchSpacing.space6) {
+                    Text(CatchStrings.PersonalityLabels.sectionHeader)
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                    PersonalityLabelListView(labels: cat.personalityLabels)
+                }
+            }
+
             Text(CatchStrings.CatProfile.firstSeen(cat.createdAt))
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)

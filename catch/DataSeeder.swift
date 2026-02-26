@@ -26,7 +26,8 @@ enum DataSeeder {
             location: Location(name: "Home", latitude: 37.7749, longitude: -122.4194),
             notes: "the original. the blueprint. simply unmatched.",
             isOwned: true,
-            photos: photo3
+            photos: photo3,
+            personalityLabels: ["lazy", "freeloading", "large"]
         )
         context.insert(garfield)
 
@@ -54,7 +55,8 @@ enum DataSeeder {
             estimatedAge: "5",
             location: Location(name: "Grocery store parking lot", latitude: 37.7850, longitude: -122.4094),
             notes: "found her sitting in someone's grocery bag like she owned it",
-            photos: photo1
+            photos: photo1,
+            personalityLabels: ["cozy", "suspiciously polite", "plotting something"]
         )
         context.insert(sprinkles)
 
@@ -82,7 +84,8 @@ enum DataSeeder {
             estimatedAge: "4",
             location: Location(name: "The park", latitude: 37.7694, longitude: -122.4862),
             notes: "walks around in a harness like he's on a mission. respect.",
-            photos: photo2
+            photos: photo2,
+            personalityLabels: ["chaotic", "built different"]
         )
         context.insert(tsuki)
 
@@ -101,7 +104,8 @@ enum DataSeeder {
             estimatedAge: "2",
             location: Location(name: "Back door", latitude: 37.7730, longitude: -122.4310),
             notes: "screams at the sliding door every single morning. iconic.",
-            photos: photo4
+            photos: photo4,
+            personalityLabels: ["screams for no reason", "menace", "chaotic"]
         )
         context.insert(missBologna)
 
@@ -128,7 +132,8 @@ enum DataSeeder {
             breed: "Bombay",
             estimatedAge: "6",
             location: Location(name: "Alley behind the ramen place", latitude: 37.7760, longitude: -122.4180),
-            notes: "all black. appeared out of nowhere. might be a glitch in the matrix."
+            notes: "all black. appeared out of nowhere. might be a glitch in the matrix.",
+            personalityLabels: ["haunted", "emotionally unavailable", "shy"]
         )
         context.insert(phantom)
 
@@ -146,7 +151,8 @@ enum DataSeeder {
             breed: "Maine Coon",
             estimatedAge: "7",
             location: Location(name: "Coffee shop on 3rd", latitude: 37.7845, longitude: -122.4000),
-            notes: "enormous. sits on the cafe windowsill like a tenured professor. regulars know him."
+            notes: "enormous. sits on the cafe windowsill like a tenured professor. regulars know him.",
+            personalityLabels: ["large", "friendly", "one brain cell"]
         )
         context.insert(professorBeans)
 

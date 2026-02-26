@@ -58,6 +58,20 @@ struct FeedItemView: View {
                 }
             }
 
+            // Personality labels
+            if let labels = encounter.cat?.personalityLabels, !labels.isEmpty {
+                HStack(spacing: CatchSpacing.space4) {
+                    ForEach(labels.prefix(3), id: \.self) { label in
+                        PersonalityLabelBadgeView(label, compact: true)
+                    }
+                    if labels.count > 3 {
+                        Text("+\(labels.count - 3)")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(CatchTheme.textSecondary)
+                    }
+                }
+            }
+
             // Photos — prefer encounter-specific photos, fall back to cat's photos
             if let photos = (!encounter.photos.isEmpty ? encounter.photos : encounter.cat?.photos),
                !photos.isEmpty {

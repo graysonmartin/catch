@@ -13,6 +13,7 @@ struct EditCatView: View {
     @State private var notes: String
     @State private var isOwned: Bool
     @State private var photos: [Data]
+    @State private var personalityLabels: [String]
     @State private var breedSuggestion: BreedPrediction?
     @State private var isDismissedSuggestion = false
 
@@ -25,6 +26,7 @@ struct EditCatView: View {
         _notes = State(initialValue: cat.notes)
         _isOwned = State(initialValue: cat.isOwned)
         _photos = State(initialValue: cat.photos)
+        _personalityLabels = State(initialValue: cat.personalityLabels)
     }
 
     var body: some View {
@@ -54,6 +56,10 @@ struct EditCatView: View {
                             }
                         )
                     }
+                }
+
+                Section(CatchStrings.PersonalityLabels.sectionHeader) {
+                    PersonalityLabelPickerView(selectedLabels: $personalityLabels)
                 }
 
                 Section(CatchStrings.Common.notes) {
@@ -90,6 +96,7 @@ struct EditCatView: View {
         cat.notes = notes
         cat.isOwned = isOwned
         cat.photos = photos
+        cat.personalityLabels = personalityLabels
         Task { await catSyncService?.syncCatUpdate(cat) }
         dismiss()
     }

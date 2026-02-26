@@ -12,4 +12,5 @@ struct CatSyncPayload: Sendable {
     let isOwned: Bool
     let createdAt: Date
     let photos: [Data]
+    var personalityLabels: [String] = []
 }

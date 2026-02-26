@@ -44,7 +44,8 @@ final class CKCatSyncService: CatSyncService {
             notes: cat.notes,
             isOwned: cat.isOwned,
             createdAt: cat.createdAt,
-            photos: cat.photos
+            photos: cat.photos,
+            personalityLabels: cat.personalityLabels
         )
 
         do {
@@ -89,7 +90,8 @@ final class CKCatSyncService: CatSyncService {
             notes: cat.notes,
             isOwned: cat.isOwned,
             createdAt: cat.createdAt,
-            photos: cat.photos
+            photos: cat.photos,
+            personalityLabels: cat.personalityLabels
         )
 
         do {

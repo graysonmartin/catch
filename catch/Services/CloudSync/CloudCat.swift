@@ -13,4 +13,5 @@ struct CloudCat: Sendable {
     let isOwned: Bool
     let createdAt: Date
     let photos: [Data]
+    var personalityLabels: [String] = []
 }

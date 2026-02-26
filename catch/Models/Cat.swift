@@ -12,6 +12,8 @@ final class Cat {
     var createdAt: Date
     var cloudKitRecordName: String?
 
+    var personalityLabels: [String]
+
     @Attribute(.externalStorage)
     var photos: [Data]
 
@@ -25,7 +27,8 @@ final class Cat {
         location: Location = .empty,
         notes: String = "",
         isOwned: Bool = false,
-        photos: [Data] = []
+        photos: [Data] = [],
+        personalityLabels: [String] = []
     ) {
         self.name = name
         self.breed = breed
@@ -35,6 +38,7 @@ final class Cat {
         self.isOwned = isOwned
         self.createdAt = Date()
         self.photos = photos
+        self.personalityLabels = personalityLabels
         self.encounters = []
     }
 

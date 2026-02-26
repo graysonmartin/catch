@@ -204,6 +204,13 @@
 		E8BL00000222 /* MockBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000022 /* MockBreedLogService.swift */; };
 		E8D800000101 /* StevenEasterEggView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D800000001 /* StevenEasterEggView.swift */; };
 		E8D800000201 /* CatStevenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D800000002 /* CatStevenTests.swift */; };
+		E8PL00000101 /* PersonalityLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000001 /* PersonalityLabel.swift */; };
+		E8PL00000102 /* PersonalityLabelBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000002 /* PersonalityLabelBadgeView.swift */; };
+		E8PL00000103 /* PersonalityLabelPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000003 /* PersonalityLabelPickerView.swift */; };
+		E8PL00000104 /* PersonalityLabelListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000004 /* PersonalityLabelListView.swift */; };
+		E8PL00000105 /* CatchStrings+PersonalityLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000005 /* CatchStrings+PersonalityLabels.swift */; };
+		E8PL00000201 /* PersonalityLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000001 /* PersonalityLabel.swift */; };
+		E8PL00000202 /* PersonalityLabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000006 /* PersonalityLabelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -353,6 +360,12 @@
 		E8BL00000022 /* MockBreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedLogService.swift; sourceTree = "<group>"; };
 		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
+		E8PL00000001 /* PersonalityLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityLabel.swift; sourceTree = "<group>"; };
+		E8PL00000002 /* PersonalityLabelBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityLabelBadgeView.swift; sourceTree = "<group>"; };
+		E8PL00000003 /* PersonalityLabelPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityLabelPickerView.swift; sourceTree = "<group>"; };
+		E8PL00000004 /* PersonalityLabelListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityLabelListView.swift; sourceTree = "<group>"; };
+		E8PL00000005 /* CatchStrings+PersonalityLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+PersonalityLabels.swift"; sourceTree = "<group>"; };
+		E8PL00000006 /* PersonalityLabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityLabelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -424,6 +437,7 @@
 				E8000001AA000010 /* Cat.swift */,
 				E8000001AA000011 /* Encounter.swift */,
 				E8000001AA000027 /* Location.swift */,
+				E8PL00000001 /* PersonalityLabel.swift */,
 				E8000001AA000060 /* UserProfile.swift */,
 				E8000001AA000070 /* CatchSchema.swift */,
 				E8000001AA000080 /* VisibilitySettings.swift */,
@@ -469,6 +483,9 @@
 				E8000001AA000026 /* LocationPickerView.swift */,
 				E8000001AA000029 /* CatPickerView.swift */,
 				E8000001AA000050 /* ImageDownsampler.swift */,
+				E8PL00000002 /* PersonalityLabelBadgeView.swift */,
+				E8PL00000003 /* PersonalityLabelPickerView.swift */,
+				E8PL00000004 /* PersonalityLabelListView.swift */,
 				E8D800000001 /* StevenEasterEggView.swift */,
 			);
 			path = Components;
@@ -490,6 +507,7 @@
 				E8CS00000009 /* CatchStrings+Social.swift */,
 				E8CS0000000A /* CatchStrings+BreedLog.swift */,
 				E8CS0000000B /* CatchStrings+Components.swift */,
+				E8PL00000005 /* CatchStrings+PersonalityLabels.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -512,6 +530,7 @@
 				E8A100000010 /* LocationTests.swift */,
 				E8A100000012 /* CatTests.swift */,
 				E8A100000013 /* EncounterTests.swift */,
+				E8PL00000006 /* PersonalityLabelTests.swift */,
 				E8A100000018 /* UserProfileTests.swift */,
 				E8A100000019 /* CatchSchemaTests.swift */,
 				E8A10000001A /* VisibilitySettingsTests.swift */,
@@ -976,6 +995,11 @@
 				E8B700000105 /* BreedSuggestionView.swift in Sources */,
 				E8B700000106 /* BreedPickerView.swift in Sources */,
 				E8D800000101 /* StevenEasterEggView.swift in Sources */,
+				E8PL00000101 /* PersonalityLabel.swift in Sources */,
+				E8PL00000102 /* PersonalityLabelBadgeView.swift in Sources */,
+				E8PL00000103 /* PersonalityLabelPickerView.swift in Sources */,
+				E8PL00000104 /* PersonalityLabelListView.swift in Sources */,
+				E8PL00000105 /* CatchStrings+PersonalityLabels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1074,6 +1098,8 @@
 				E8CS00000309 /* CatchStrings+Social.swift in Sources */,
 				E8CS0000030A /* CatchStrings+BreedLog.swift in Sources */,
 				E8CS0000030B /* CatchStrings+Components.swift in Sources */,
+				E8PL00000201 /* PersonalityLabel.swift in Sources */,
+				E8PL00000202 /* PersonalityLabelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
