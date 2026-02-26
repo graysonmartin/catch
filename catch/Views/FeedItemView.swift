@@ -23,6 +23,10 @@ struct FeedItemView: View {
         return earliest.id == encounter.id
     }
 
+    private var isUnnamed: Bool {
+        encounter.cat?.isUnnamed ?? false
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
             // Header: photo + name + date
@@ -31,9 +35,9 @@ struct FeedItemView: View {
 
                 VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                     HStack(spacing: CatchSpacing.space4) {
-                        Text(encounter.cat?.name ?? CatchStrings.Feed.unknownCat)
+                        Text(encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat)
                             .font(.headline)
-                            .foregroundStyle(CatchTheme.textPrimary)
+                            .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                         Text(isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat)
                             .font(.system(size: PillLayout.fontSize, weight: .bold))
                             .foregroundStyle(isFirstEncounter ? CatchTheme.primary : CatchTheme.textSecondary)
@@ -43,6 +47,17 @@ struct FeedItemView: View {
                                 RoundedRectangle(cornerRadius: PillLayout.cornerRadius)
                                     .fill(isFirstEncounter ? CatchTheme.primary.opacity(PillLayout.activeBackgroundOpacity) : CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity))
                             )
+                        if isUnnamed {
+                            Text(CatchStrings.Feed.pillStray)
+                                .font(.system(size: PillLayout.fontSize, weight: .bold))
+                                .foregroundStyle(CatchTheme.textSecondary)
+                                .padding(.horizontal, PillLayout.horizontalPadding)
+                                .padding(.vertical, PillLayout.verticalPadding)
+                                .background(
+                                    RoundedRectangle(cornerRadius: PillLayout.cornerRadius)
+                                        .fill(CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity))
+                                )
+                        }
                     }
                     Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
                         .font(.caption)

@@ -14,7 +14,7 @@ struct CatCardView: View {
                 HStack {
                     Text(data.name)
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(CatchTheme.textPrimary)
+                        .foregroundStyle(data.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                         .lineLimit(1)
                     if data.isSteven {
                         Image(systemName: "crown.fill")

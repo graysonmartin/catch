@@ -8,6 +8,7 @@ struct CatDisplayData: Identifiable, Hashable {
     let locationName: String
     let notes: String
     let isOwned: Bool
+    let isUnnamed: Bool
     let isSteven: Bool
     let createdAt: Date
     let encounterCount: Int
@@ -18,12 +19,13 @@ struct CatDisplayData: Identifiable, Hashable {
 
     init(local cat: Cat) {
         self.id = cat.persistentModelID.hashValue.description
-        self.name = cat.name
+        self.name = cat.displayName
         self.breed = cat.breed ?? ""
         self.estimatedAge = cat.estimatedAge
         self.locationName = cat.location.name
         self.notes = cat.notes
         self.isOwned = cat.isOwned
+        self.isUnnamed = cat.isUnnamed
         self.isSteven = cat.isSteven
         self.createdAt = cat.createdAt
         self.encounterCount = cat.encounters.count
@@ -35,12 +37,13 @@ struct CatDisplayData: Identifiable, Hashable {
 
     init(remote cat: CloudCat, encounterCount: Int) {
         self.id = cat.recordName
-        self.name = cat.name
+        self.name = cat.displayName
         self.breed = cat.breed
         self.estimatedAge = cat.estimatedAge
         self.locationName = cat.locationName
         self.notes = cat.notes
         self.isOwned = cat.isOwned
+        self.isUnnamed = cat.isUnnamed
         self.isSteven = false
         self.createdAt = cat.createdAt
         self.encounterCount = encounterCount

@@ -26,15 +26,14 @@ enum CatRecordMapper {
     }
 
     static func cloudCat(from record: CKRecord, photos: [Data]) -> CloudCat? {
-        guard let ownerID = record["ownerID"] as? String,
-              let name = record["name"] as? String else {
+        guard let ownerID = record["ownerID"] as? String else {
             return nil
         }
 
         return CloudCat(
             recordName: record.recordID.recordName,
             ownerID: ownerID,
-            name: name,
+            name: record["name"] as? String,
             breed: record["breed"] as? String ?? "",
             estimatedAge: record["estimatedAge"] as? String ?? "",
             locationName: record["locationName"] as? String ?? "",

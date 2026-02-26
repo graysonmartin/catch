@@ -29,9 +29,9 @@ struct RemoteFeedItemView: View {
             CatPhotoView(photoData: cat?.photos.first, size: Layout.thumbnailSize)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                Text(cat?.name ?? CatchStrings.Social.unknownCat)
+                Text(cat?.displayName ?? CatchStrings.Social.unknownCat)
                     .font(.headline)
-                    .foregroundStyle(CatchTheme.textPrimary)
+                    .foregroundStyle(cat?.isUnnamed == true ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                 Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)

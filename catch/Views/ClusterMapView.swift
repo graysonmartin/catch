@@ -19,7 +19,7 @@ private enum MapConfig {
 
 struct CatSnapshot: Equatable {
     let id: PersistentIdentifier
-    let name: String
+    let name: String?
     let latitude: Double?
     let longitude: Double?
     let photoCount: Int
@@ -69,7 +69,7 @@ struct ClusterMapView: UIViewRepresentable {
             guard let lat = cat.location.latitude, let lng = cat.location.longitude else { continue }
             let a = CatAnnotation()
             a.cat = cat
-            a.title = cat.name
+            a.title = cat.displayName
             a.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
             annotations.append(a)
         }
@@ -246,7 +246,7 @@ struct ClusterMapView: UIViewRepresentable {
                 guard let lat = cat.location.latitude, let lng = cat.location.longitude else { continue }
                 let a = CatAnnotation()
                 a.cat = cat
-                a.title = cat.name
+                a.title = cat.displayName
                 a.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
                 restored.append(a)
             }

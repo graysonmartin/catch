@@ -92,6 +92,32 @@ final class CatDisplayDataTests: XCTestCase {
         XCTAssertTrue(data.allPhotos.isEmpty)
     }
 
+    func testLocalInitNilNameUsesDisplayName() {
+        let cat = Fixtures.cat(name: nil, in: context)
+
+        let data = CatDisplayData(local: cat)
+
+        XCTAssertEqual(data.name, CatchStrings.Common.unnamedCatFallback)
+        XCTAssertTrue(data.isUnnamed)
+    }
+
+    func testLocalInitEmptyNameUsesDisplayName() {
+        let cat = Fixtures.cat(name: "", in: context)
+
+        let data = CatDisplayData(local: cat)
+
+        XCTAssertEqual(data.name, CatchStrings.Common.unnamedCatFallback)
+        XCTAssertTrue(data.isUnnamed)
+    }
+
+    func testLocalInitNamedCatIsNotUnnamed() {
+        let cat = Fixtures.cat(name: "Whiskers", in: context)
+
+        let data = CatDisplayData(local: cat)
+
+        XCTAssertFalse(data.isUnnamed)
+    }
+
     // MARK: - Remote init
 
     func testRemoteInitMapsBasicFields() {
@@ -162,11 +188,20 @@ final class CatDisplayDataTests: XCTestCase {
         XCTAssertNotEqual(data1, data2)
     }
 
+    func testRemoteInitNilNameUsesDisplayName() {
+        let cloudCat = makeCloudCat(name: nil)
+
+        let data = CatDisplayData(remote: cloudCat, encounterCount: 0)
+
+        XCTAssertEqual(data.name, CatchStrings.Common.unnamedCatFallback)
+        XCTAssertTrue(data.isUnnamed)
+    }
+
     // MARK: - Helpers
 
     private func makeCloudCat(
         recordName: String = "remote-1",
-        name: String = "Test Cat",
+        name: String? = "Test Cat",
         breed: String = "",
         estimatedAge: String = "1",
         locationName: String = "Somewhere",

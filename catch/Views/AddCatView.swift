@@ -7,6 +7,7 @@ struct AddCatView: View {
     @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
     @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
 
+    @State private var isUnnamed = false
     @State private var name = ""
     @State private var breed: String?
     @State private var estimatedAge = ""
@@ -22,7 +23,10 @@ struct AddCatView: View {
         NavigationStack {
             Form {
                 Section(CatchStrings.Common.catInfo) {
-                    TextField(CatchStrings.Common.name, text: $name)
+                    Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
+                    if !isUnnamed {
+                        TextField(CatchStrings.Common.name, text: $name)
+                    }
                     BreedPickerView(breed: $breed)
                     TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
                     LocationPickerView(location: $location)
@@ -75,6 +79,9 @@ struct AddCatView: View {
                         .fontWeight(.semibold)
                 }
             }
+            .onChange(of: isUnnamed) {
+                if isUnnamed { name = "" }
+            }
             .onChange(of: photos) {
                 guard breed == nil, !isDismissedSuggestion, !photos.isEmpty else { return }
                 Task {
@@ -92,12 +99,13 @@ struct AddCatView: View {
     }
 
     private var canSave: Bool {
-        !name.trimmingCharacters(in: .whitespaces).isEmpty && !photos.isEmpty
+        (isUnnamed || !name.trimmingCharacters(in: .whitespaces).isEmpty) && !photos.isEmpty
     }
 
     private func save() {
+        let trimmedName = isUnnamed ? nil : name.trimmingCharacters(in: .whitespaces)
         let cat = Cat(
-            name: name.trimmingCharacters(in: .whitespaces),
+            name: trimmedName,
             breed: breed,
             estimatedAge: estimatedAge,
             location: location,

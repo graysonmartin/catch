@@ -30,14 +30,14 @@ struct OwnProfileContent: View {
             filtered = cats
         } else {
             filtered = cats.filter {
-                $0.name.localizedCaseInsensitiveContains(searchText)
+                $0.displayName.localizedCaseInsensitiveContains(searchText)
                 || $0.location.name.localizedCaseInsensitiveContains(searchText)
             }
         }
 
         switch sortOption {
         case .name:
-            return filtered.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+            return filtered.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
         case .encounters:
             return filtered.sorted { $0.encounters.count > $1.encounters.count }
         case .recent:

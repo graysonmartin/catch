@@ -33,9 +33,9 @@ struct CatProfileView: View {
             // Info section
             Section {
                 HStack {
-                    Text(cat.name)
+                    Text(cat.displayName)
                         .font(.title.weight(.bold))
-                        .foregroundStyle(CatchTheme.textPrimary)
+                        .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                     if cat.isSteven {
                         Image(systemName: "crown.fill")
                             .font(.caption)
@@ -159,7 +159,7 @@ struct CatProfileView: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .background(CatchTheme.background)
-        .navigationTitle(cat.name)
+        .navigationTitle(cat.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $encounterToEdit) { encounter in
             EditEncounterView(encounter: encounter)
@@ -186,7 +186,7 @@ struct CatProfileView: View {
         } message: {
             Text(CatchStrings.CatProfile.deleteEncounterMessage)
         }
-        .alert(CatchStrings.CatProfile.deleteCatTitle(name: cat.name), isPresented: $showingDeleteCat) {
+        .alert(CatchStrings.CatProfile.deleteCatTitle(name: cat.displayName), isPresented: $showingDeleteCat) {
             Button(CatchStrings.Common.delete, role: .destructive) {
                 modelContext.delete(cat)
                 dismiss()

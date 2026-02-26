@@ -2,7 +2,7 @@ import Foundation
 
 struct CatSyncPayload: Sendable {
     let recordName: String?
-    let name: String
+    let name: String?
     let breed: String?
     let estimatedAge: String
     let locationName: String
