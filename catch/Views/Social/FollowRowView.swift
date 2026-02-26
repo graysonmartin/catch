@@ -29,12 +29,12 @@ struct FollowRowView: View {
                 initialDisplayName: resolvedName
             )
         } label: {
-            HStack(spacing: 12) {
+            HStack(spacing: CatchSpacing.space12) {
                 Image(systemName: "person.crop.circle.fill")
                     .font(.title2)
                     .foregroundStyle(CatchTheme.secondary)
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                     Text(displayName)
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(CatchTheme.textPrimary)

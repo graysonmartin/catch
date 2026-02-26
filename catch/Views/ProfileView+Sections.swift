@@ -6,7 +6,7 @@ extension ProfileView {
     // MARK: - Profile Header
 
     func profileHeader(_ profile: UserProfile) -> some View {
-        VStack(spacing: 24) {
+        VStack(spacing: CatchSpacing.space24) {
             avatarWithSocial(profile)
             infoSection(profile)
             statsSection
@@ -16,7 +16,7 @@ extension ProfileView {
     // MARK: - Avatar with Social
 
     private func avatarWithSocial(_ profile: UserProfile) -> some View {
-        HStack(alignment: .center, spacing: 24) {
+        HStack(alignment: .center, spacing: CatchSpacing.space24) {
             if authService.authState.isSignedIn {
                 NavigationLink {
                     SocialView(selectedTab: .followers)
@@ -58,7 +58,7 @@ extension ProfileView {
                 Spacer()
             }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, CatchSpacing.space20)
     }
 
     private func avatarImage(_ profile: UserProfile) -> some View {
@@ -80,7 +80,7 @@ extension ProfileView {
     }
 
     private func compactSocialStat(count: Int, label: String) -> some View {
-        VStack(spacing: 4) {
+        VStack(spacing: CatchSpacing.space4) {
             Text("\(count)")
                 .font(.title3.weight(.bold))
                 .foregroundStyle(CatchTheme.textPrimary)
@@ -99,7 +99,7 @@ extension ProfileView {
     // MARK: - Info
 
     private func infoSection(_ profile: UserProfile) -> some View {
-        VStack(spacing: 6) {
+        VStack(spacing: CatchSpacing.space6) {
             Text(profile.displayName.isEmpty ? CatchStrings.Profile.mysteriousStranger : profile.displayName)
                 .font(.title2)
                 .fontWeight(.bold)
@@ -109,14 +109,14 @@ extension ProfileView {
                 .font(.subheadline)
                 .foregroundStyle(CatchTheme.textSecondary)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+                .padding(.horizontal, CatchSpacing.space32)
         }
     }
 
     // MARK: - Stats
 
     private var statsSection: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: CatchSpacing.space10) {
             statCard(count: cats.count, label: CatchStrings.Profile.cats, icon: "cat.fill")
             statCard(count: encounters.count, label: CatchStrings.Profile.encounters, icon: "pawprint.fill")
             NavigationLink {
@@ -127,12 +127,12 @@ extension ProfileView {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 9, weight: .bold))
                             .foregroundStyle(CatchTheme.textSecondary)
-                            .padding(8)
+                            .padding(CatchSpacing.space8)
                     }
             }
             .buttonStyle(.plain)
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, CatchSpacing.space20)
     }
 
     private var breedCount: Int {
@@ -140,7 +140,7 @@ extension ProfileView {
     }
 
     func statCard(count: Int, label: String, icon: String) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: CatchSpacing.space8) {
             Image(systemName: icon)
                 .font(.title3)
                 .foregroundStyle(CatchTheme.primary)
@@ -155,7 +155,7 @@ extension ProfileView {
                 .foregroundStyle(CatchTheme.textSecondary)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 16)
+        .padding(.vertical, CatchSpacing.space16)
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(
@@ -175,25 +175,25 @@ extension ProfileView {
                 signInPrompt(profile)
             }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, CatchSpacing.space20)
     }
 
     private var signedInBadge: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: CatchSpacing.space8) {
             Image(systemName: "checkmark.seal.fill")
                 .foregroundStyle(CatchTheme.primary)
             Text(CatchStrings.Profile.signedInWithApple)
                 .font(.subheadline)
                 .foregroundStyle(CatchTheme.textSecondary)
         }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 20)
+        .padding(.vertical, CatchSpacing.space12)
+        .padding(.horizontal, CatchSpacing.space20)
         .background(CatchTheme.cardBackground)
         .clipShape(Capsule())
     }
 
     private func signInPrompt(_ profile: UserProfile) -> some View {
-        VStack(spacing: 10) {
+        VStack(spacing: CatchSpacing.space10) {
             SignInWithAppleButton(.signIn) { request in
                 request.requestedScopes = [.fullName, .email]
             } onCompletion: { result in
@@ -217,8 +217,8 @@ extension ProfileView {
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(.white)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
+                    .padding(.horizontal, CatchSpacing.space16)
+                    .padding(.vertical, CatchSpacing.space8)
                     .background(.red.opacity(0.8))
                     .clipShape(Capsule())
             }

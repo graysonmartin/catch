@@ -37,7 +37,7 @@ struct RemoteCatProfileView: View {
                 )
             }
         }
-        .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+        .listRowInsets(EdgeInsets(top: 0, leading: CatchSpacing.space16, bottom: 0, trailing: CatchSpacing.space16))
         .listRowBackground(CatchTheme.background)
         .listRowSeparator(.hidden)
     }
@@ -78,7 +78,7 @@ struct RemoteCatProfileView: View {
 
     private var ownerSection: some View {
         Section {
-            HStack(spacing: 8) {
+            HStack(spacing: CatchSpacing.space8) {
                 Image(systemName: "person.crop.circle.fill")
                     .foregroundStyle(CatchTheme.secondary)
                 Text(ownerName)
@@ -109,17 +109,17 @@ struct RemoteCatProfileView: View {
         }
         .listRowBackground(CatchTheme.background)
         .listRowSeparator(.hidden)
-        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+        .listRowInsets(EdgeInsets(top: CatchSpacing.space4, leading: CatchSpacing.space16, bottom: CatchSpacing.space4, trailing: CatchSpacing.space16))
     }
 
     // MARK: - Row helpers
 
     private func infoRow(icon: String, label: String, value: String) -> some View {
-        HStack(alignment: .top, spacing: 8) {
+        HStack(alignment: .top, spacing: CatchSpacing.space8) {
             Image(systemName: icon)
                 .foregroundStyle(CatchTheme.primary)
                 .frame(width: 20)
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(label)
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
@@ -132,7 +132,7 @@ struct RemoteCatProfileView: View {
     }
 
     private func encounterRow(_ encounter: CloudEncounter) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: CatchSpacing.space2) {
             Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(CatchTheme.textPrimary)
@@ -148,7 +148,7 @@ struct RemoteCatProfileView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(12)
+        .padding(CatchSpacing.space12)
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
     }

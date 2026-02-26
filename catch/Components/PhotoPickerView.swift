@@ -8,10 +8,10 @@ struct PhotoPickerView: View {
     @State private var draggingIndex: Int?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: CatchSpacing.space12) {
             if !selectedPhotos.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
+                    HStack(spacing: CatchSpacing.space8) {
                         ForEach(selectedPhotos.indices, id: \.self) { index in
                             photoThumbnail(at: index)
                                 .onDrag {
@@ -84,10 +84,10 @@ struct PhotoPickerView: View {
         Text(CatchStrings.Components.profilePic)
             .font(.system(size: 8, weight: .bold))
             .foregroundStyle(.white)
-            .padding(.horizontal, 5)
-            .padding(.vertical, 2)
+            .padding(.horizontal, CatchSpacing.space5)
+            .padding(.vertical, CatchSpacing.space2)
             .background(CatchTheme.primary, in: Capsule())
-            .padding(4)
+            .padding(CatchSpacing.space4)
     }
 
     private func setAsPrimaryButton(index: Int) -> some View {
@@ -102,7 +102,7 @@ struct PhotoPickerView: View {
                 .foregroundStyle(.white, .black.opacity(0.4))
                 .shadow(radius: 1)
         }
-        .padding(4)
+        .padding(CatchSpacing.space4)
     }
 
     private func deleteButton(index: Int) -> some View {
@@ -114,7 +114,7 @@ struct PhotoPickerView: View {
             Image(systemName: "xmark.circle.fill")
                 .foregroundStyle(.white, .black.opacity(0.5))
         }
-        .offset(x: 4, y: -4)
+        .offset(x: CatchSpacing.space4, y: -CatchSpacing.space4)
     }
 }
 

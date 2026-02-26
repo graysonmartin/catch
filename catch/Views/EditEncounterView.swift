@@ -23,7 +23,7 @@ struct EditEncounterView: View {
             Form {
                 if let cat = encounter.cat {
                     Section(CatchStrings.Log.catSection) {
-                        HStack(spacing: 12) {
+                        HStack(spacing: CatchSpacing.space12) {
                             CatPhotoView(photoData: cat.photos.first, size: 40)
                             Text(cat.name)
                                 .font(.body.weight(.semibold))

@@ -9,8 +9,8 @@ struct BreedRarityBadge: View {
             .textCase(.uppercase)
             .tracking(0.5)
             .foregroundStyle(.white)
-            .padding(.horizontal, 6)
-            .padding(.vertical, 2)
+            .padding(.horizontal, CatchSpacing.space6)
+            .padding(.vertical, CatchSpacing.space2)
             .background(rarity.color, in: Capsule())
     }
 }

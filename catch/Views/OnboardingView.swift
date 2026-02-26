@@ -21,8 +21,8 @@ struct OnboardingView: View {
                 .animation(.easeInOut(duration: 0.3), value: currentPage)
 
                 // Page dots + button
-                VStack(spacing: 24) {
-                    HStack(spacing: 8) {
+                VStack(spacing: CatchSpacing.space24) {
+                    HStack(spacing: CatchSpacing.space8) {
                         ForEach(0..<3) { index in
                             Circle()
                                 .fill(index == currentPage ? CatchTheme.primary : CatchTheme.primary.opacity(0.25))
@@ -56,8 +56,8 @@ struct OnboardingView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 32)
-                .padding(.bottom, 48)
+                .padding(.horizontal, CatchSpacing.space32)
+                .padding(.bottom, CatchSpacing.space48)
             }
         }
     }
@@ -65,14 +65,14 @@ struct OnboardingView: View {
     // MARK: - Page 1: Welcome
 
     private var welcomePage: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: CatchSpacing.space24) {
             Spacer()
 
             Image(systemName: "pawprint.fill")
                 .font(.system(size: 72))
                 .foregroundStyle(CatchTheme.primary)
 
-            VStack(spacing: 12) {
+            VStack(spacing: CatchSpacing.space12) {
                 Text(CatchStrings.Onboarding.appName)
                     .font(.system(size: 42, weight: .bold, design: .rounded))
                     .foregroundStyle(CatchTheme.textPrimary)
@@ -85,26 +85,26 @@ struct OnboardingView: View {
                     .font(.subheadline)
                     .foregroundStyle(CatchTheme.textSecondary)
                     .multilineTextAlignment(.center)
-                    .lineSpacing(4)
+                    .lineSpacing(CatchSpacing.space4)
             }
 
             Spacer()
             Spacer()
         }
-        .padding(.horizontal, 32)
+        .padding(.horizontal, CatchSpacing.space32)
     }
 
     // MARK: - Page 2: Tour
 
     private var tourPage: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: CatchSpacing.space32) {
             Spacer()
 
             Text(CatchStrings.Onboarding.tourTitle)
                 .font(.title2.weight(.bold))
                 .foregroundStyle(CatchTheme.textPrimary)
 
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: CatchSpacing.space20) {
                 tourRow(
                     icon: "pawprint.fill",
                     title: CatchStrings.Onboarding.tourFeed,
@@ -126,22 +126,22 @@ struct OnboardingView: View {
                     detail: CatchStrings.Onboarding.tourProfileDetail
                 )
             }
-            .padding(.horizontal, 8)
+            .padding(.horizontal, CatchSpacing.space8)
 
             Spacer()
             Spacer()
         }
-        .padding(.horizontal, 32)
+        .padding(.horizontal, CatchSpacing.space32)
     }
 
     private func tourRow(icon: String, title: String, detail: String) -> some View {
-        HStack(spacing: 16) {
+        HStack(spacing: CatchSpacing.space16) {
             Image(systemName: icon)
                 .font(.title3)
                 .foregroundStyle(CatchTheme.primary)
                 .frame(width: 36, height: 36)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(title)
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(CatchTheme.textPrimary)
@@ -155,14 +155,14 @@ struct OnboardingView: View {
     // MARK: - Page 3: Location Permission
 
     private var locationPage: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: CatchSpacing.space24) {
             Spacer()
 
             Image(systemName: "location.circle.fill")
                 .font(.system(size: 72))
                 .foregroundStyle(CatchTheme.primary)
 
-            VStack(spacing: 12) {
+            VStack(spacing: CatchSpacing.space12) {
                 Text(CatchStrings.Onboarding.locationTitle)
                     .font(.title2.weight(.bold))
                     .foregroundStyle(CatchTheme.textPrimary)
@@ -171,14 +171,14 @@ struct OnboardingView: View {
                     .font(.subheadline)
                     .foregroundStyle(CatchTheme.textSecondary)
                     .multilineTextAlignment(.center)
-                    .lineSpacing(4)
+                    .lineSpacing(CatchSpacing.space4)
 
                 Text(CatchStrings.Onboarding.locationReassurance)
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary.opacity(0.7))
                     .multilineTextAlignment(.center)
-                    .lineSpacing(4)
-                    .padding(.top, 4)
+                    .lineSpacing(CatchSpacing.space4)
+                    .padding(.top, CatchSpacing.space4)
             }
 
             if !locationManager.hasRequested {
@@ -191,13 +191,13 @@ struct OnboardingView: View {
                     }
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.primary)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 10)
+                    .padding(.horizontal, CatchSpacing.space20)
+                    .padding(.vertical, CatchSpacing.space10)
                     .background(CatchTheme.primary.opacity(0.12))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
             } else {
-                HStack(spacing: 6) {
+                HStack(spacing: CatchSpacing.space6) {
                     Image(systemName: locationManager.wasGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
                         .foregroundStyle(locationManager.wasGranted ? .green : CatchTheme.textSecondary)
                     Text(locationManager.wasGranted ? CatchStrings.Onboarding.locationEnabled : CatchStrings.Onboarding.locationDenied)
@@ -209,7 +209,7 @@ struct OnboardingView: View {
             Spacer()
             Spacer()
         }
-        .padding(.horizontal, 32)
+        .padding(.horizontal, CatchSpacing.space32)
     }
 }
 

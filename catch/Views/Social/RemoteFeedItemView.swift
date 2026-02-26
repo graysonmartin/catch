@@ -10,7 +10,7 @@ struct RemoteFeedItemView: View {
     let cat: CloudCat?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: CatchSpacing.space12) {
             header
             photos
             location
@@ -25,10 +25,10 @@ struct RemoteFeedItemView: View {
     // MARK: - Subviews
 
     private var header: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: CatchSpacing.space12) {
             CatPhotoView(photoData: cat?.photos.first, size: Layout.thumbnailSize)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(cat?.name ?? CatchStrings.Social.unknownCat)
                     .font(.headline)
                     .foregroundStyle(CatchTheme.textPrimary)

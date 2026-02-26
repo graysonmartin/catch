@@ -67,7 +67,7 @@ struct FeedView: View {
                 } else {
                     ScrollViewReader { proxy in
                         ScrollView {
-                            LazyVStack(spacing: 16) {
+                            LazyVStack(spacing: CatchSpacing.space16) {
                                 ForEach(filteredEncounters) { encounter in
                                     if let cat = encounter.cat {
                                         NavigationLink(value: cat) {
@@ -84,7 +84,7 @@ struct FeedView: View {
                                                         .font(.title3)
                                                         .foregroundStyle(.white, CatchTheme.textSecondary)
                                                 }
-                                                .padding(8)
+                                                .padding(CatchSpacing.space8)
                                             }
                                     }
                                 }

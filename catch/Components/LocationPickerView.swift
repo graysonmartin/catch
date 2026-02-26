@@ -94,7 +94,7 @@ struct LocationPickerView: View {
     @State private var hasUsedGPS = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: CatchSpacing.space8) {
             Button {
                 fetchCurrentLocation()
             } label: {
@@ -118,7 +118,7 @@ struct LocationPickerView: View {
             }
 
             if let error = fetcher.error {
-                HStack(spacing: 4) {
+                HStack(spacing: CatchSpacing.space4) {
                     Text(error)
                         .font(.caption)
                         .foregroundStyle(.red)

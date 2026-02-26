@@ -47,20 +47,20 @@ struct CatMapView: View {
                             Button {
                                 showMissingLocationSheet = true
                             } label: {
-                                HStack(spacing: 6) {
+                                HStack(spacing: CatchSpacing.space6) {
                                     Image(systemName: "eye.slash")
                                         .font(.caption2)
                                     Text(CatchStrings.Map.catsNotShown(catsWithoutLocation.count))
                                         .font(.caption.weight(.medium))
                                 }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
+                                .padding(.horizontal, CatchSpacing.space12)
+                                .padding(.vertical, CatchSpacing.space8)
                                 .background(.ultraThinMaterial)
                                 .clipShape(Capsule())
                                 .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
                             }
                             .buttonStyle(.plain)
-                            .padding(.top, 8)
+                            .padding(.top, CatchSpacing.space8)
                         }
                     }
                 }
@@ -103,7 +103,7 @@ struct MissingLocationSheet: View {
                 Button {
                     onSelect(cat)
                 } label: {
-                    HStack(spacing: 12) {
+                    HStack(spacing: CatchSpacing.space12) {
                         if let photoData = cat.photos.first,
                            let uiImage = ImageDownsampler.downsample(data: photoData, to: CGSize(width: 44, height: 44)) {
                             Image(uiImage: uiImage)
@@ -120,7 +120,7 @@ struct MissingLocationSheet: View {
                                 .clipShape(Circle())
                         }
 
-                        VStack(alignment: .leading, spacing: 2) {
+                        VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                             Text(cat.name)
                                 .font(.headline)
                                 .foregroundStyle(CatchTheme.textPrimary)
@@ -168,7 +168,7 @@ struct ClusterListSheet: View {
                 Button {
                     onSelect(cat)
                 } label: {
-                    HStack(spacing: 12) {
+                    HStack(spacing: CatchSpacing.space12) {
                         if let photoData = cat.photos.first,
                            let uiImage = ImageDownsampler.downsample(data: photoData, to: CGSize(width: 44, height: 44)) {
                             Image(uiImage: uiImage)
@@ -185,7 +185,7 @@ struct ClusterListSheet: View {
                                 .clipShape(Circle())
                         }
 
-                        VStack(alignment: .leading, spacing: 2) {
+                        VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                             Text(cat.name)
                                 .font(.headline)
                                 .foregroundStyle(CatchTheme.textPrimary)
