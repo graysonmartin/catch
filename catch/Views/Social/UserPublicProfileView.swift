@@ -132,6 +132,12 @@ struct UserPublicProfileView: View {
                 .font(.title2.weight(.bold))
                 .foregroundStyle(CatchTheme.textPrimary)
 
+            if let username = profile.username, !username.isEmpty {
+                Text(UsernameValidator.formatDisplay(username))
+                    .font(.subheadline)
+                    .foregroundStyle(CatchTheme.primary)
+            }
+
             if !profile.bio.isEmpty {
                 Text(profile.bio)
                     .font(.subheadline)

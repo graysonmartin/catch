@@ -6,6 +6,7 @@ protocol CloudKitService: Sendable {
         appleUserID: String,
         displayName: String,
         bio: String,
+        username: String?,
         isPrivate: Bool
     ) async throws -> String
 
@@ -20,6 +21,10 @@ protocol CloudKitService: Sendable {
     func searchUsers(
         query: String
     ) async throws -> [CloudUserProfile]
+
+    func checkUsernameAvailability(
+        _ username: String
+    ) async throws -> Bool
 }
 
 struct CloudUserProfile: Sendable {
@@ -27,5 +32,6 @@ struct CloudUserProfile: Sendable {
     let appleUserID: String
     let displayName: String
     let bio: String
+    var username: String?
     let isPrivate: Bool
 }

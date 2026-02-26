@@ -35,12 +35,19 @@ enum CatchSchemaV5: VersionedSchema {
     }
 }
 
+enum CatchSchemaV6: VersionedSchema {
+    static var versionIdentifier = Schema.Version(6, 0, 0)
+    static var models: [any PersistentModel.Type] {
+        [Cat.self, Encounter.self, UserProfile.self]
+    }
+}
+
 enum CatchMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [CatchSchemaV1.self, CatchSchemaV2.self, CatchSchemaV3.self, CatchSchemaV4.self, CatchSchemaV5.self]
+        [CatchSchemaV1.self, CatchSchemaV2.self, CatchSchemaV3.self, CatchSchemaV4.self, CatchSchemaV5.self, CatchSchemaV6.self]
     }
     static var stages: [MigrationStage] {
-        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5]
+        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5, migrateV5toV6]
     }
 
     private static let migrateV1toV2 = MigrationStage.lightweight(
@@ -61,5 +68,10 @@ enum CatchMigrationPlan: SchemaMigrationPlan {
     private static let migrateV4toV5 = MigrationStage.lightweight(
         fromVersion: CatchSchemaV4.self,
         toVersion: CatchSchemaV5.self
+    )
+
+    private static let migrateV5toV6 = MigrationStage.lightweight(
+        fromVersion: CatchSchemaV5.self,
+        toVersion: CatchSchemaV6.self
     )
 }

@@ -21,6 +21,7 @@ final class UserProfileTests: XCTestCase {
         let profile = UserProfile()
         XCTAssertEqual(profile.displayName, "")
         XCTAssertEqual(profile.bio, "")
+        XCTAssertNil(profile.username)
         XCTAssertNil(profile.avatarData)
         XCTAssertNil(profile.appleUserID)
         XCTAssertNil(profile.cloudKitRecordName)
@@ -100,6 +101,48 @@ final class UserProfileTests: XCTestCase {
         let fetched = try context.fetch(FetchDescriptor<UserProfile>())
         XCTAssertEqual(fetched.first?.appleUserID, "apple-789")
         XCTAssertEqual(fetched.first?.cloudKitRecordName, "ck-789")
+    }
+
+    // MARK: - Username
+
+    func test_username_defaultsToNil() {
+        let profile = UserProfile()
+        XCTAssertNil(profile.username)
+    }
+
+    func test_username_canBeSetViaInit() {
+        let profile = UserProfile(username: "cat_lover")
+        XCTAssertEqual(profile.username, "cat_lover")
+    }
+
+    func test_username_persistsRoundTrip() throws {
+        Fixtures.userProfile(username: "cool_cat_99", in: context)
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<UserProfile>())
+        XCTAssertEqual(fetched.first?.username, "cool_cat_99")
+    }
+
+    func test_username_canBeUpdated() throws {
+        let profile = Fixtures.userProfile(username: "old_name", in: context)
+        try context.save()
+
+        profile.username = "new_name"
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<UserProfile>())
+        XCTAssertEqual(fetched.first?.username, "new_name")
+    }
+
+    func test_username_canBeCleared() throws {
+        let profile = Fixtures.userProfile(username: "temp_name", in: context)
+        try context.save()
+
+        profile.username = nil
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<UserProfile>())
+        XCTAssertNil(fetched.first?.username)
     }
 
     // MARK: - Privacy
