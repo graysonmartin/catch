@@ -20,8 +20,8 @@ extension CatchStrings {
         static let tourLogDetail = String(localized: "register new cats or log re-sightings")
         static let tourMap = String(localized: "map")
         static let tourMapDetail = String(localized: "see where all your cats hang out")
-        static let tourCollection = String(localized: "collection")
-        static let tourCollectionDetail = String(localized: "your personal cat index")
+        static let tourProfile = String(localized: "profile")
+        static let tourProfileDetail = String(localized: "your cats, your stats, your whole deal")
 
         // Location page
         static let locationTitle = String(localized: "one more thing")

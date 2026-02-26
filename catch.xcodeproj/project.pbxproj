@@ -41,7 +41,6 @@
 		E8000001AA000007 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000016 /* EmptyStateView.swift */; };
 		E8000001AA000008 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000017 /* FeedView.swift */; };
 		E8000001AA000009 /* FeedItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000018 /* FeedItemView.swift */; };
-		E8000001AA00000A /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000019 /* CollectionView.swift */; };
 		E8000001AA00000B /* CatProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001A /* CatProfileView.swift */; };
 		E8000001AA00000C /* AddEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001B /* AddEncounterView.swift */; };
 		E8000001AA00000D /* AddCatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001C /* AddCatView.swift */; };
@@ -59,6 +58,9 @@
 		E8000001AA000051 /* ImageDownsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000050 /* ImageDownsampler.swift */; };
 		E8000001AA000052 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
 		E8000001AA000053 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000061 /* ProfileView.swift */; };
+		E8000001AA000057 /* ProfileView+Sections.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000063 /* ProfileView+Sections.swift */; };
+		E8000001AA000058 /* CatSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000064 /* CatSortOption.swift */; };
+		E8000001AA000059 /* CatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000065 /* CatCardView.swift */; };
 		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
 		E8000001AA000055 /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
 		E8000001AA000056 /* VisibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000080 /* VisibilitySettings.swift */; };
@@ -228,7 +230,6 @@
 		E8000001AA000016 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		E8000001AA000017 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		E8000001AA000018 /* FeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemView.swift; sourceTree = "<group>"; };
-		E8000001AA000019 /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 		E8000001AA00001A /* CatProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatProfileView.swift; sourceTree = "<group>"; };
 		E8000001AA00001B /* AddEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEncounterView.swift; sourceTree = "<group>"; };
 		E8000001AA00001C /* AddCatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCatView.swift; sourceTree = "<group>"; };
@@ -246,6 +247,9 @@
 		E8000001AA000050 /* ImageDownsampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownsampler.swift; sourceTree = "<group>"; };
 		E8000001AA000060 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		E8000001AA000061 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		E8000001AA000063 /* ProfileView+Sections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileView+Sections.swift"; sourceTree = "<group>"; };
+		E8000001AA000064 /* CatSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSortOption.swift; sourceTree = "<group>"; };
+		E8000001AA000065 /* CatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatCardView.swift; sourceTree = "<group>"; };
 		E8000001AA000062 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		E8000001AA000070 /* CatchSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchema.swift; sourceTree = "<group>"; };
 		E8000001AA000080 /* VisibilitySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibilitySettings.swift; sourceTree = "<group>"; };
@@ -430,7 +434,6 @@
 			children = (
 				E8000001AA000017 /* FeedView.swift */,
 				E8000001AA000018 /* FeedItemView.swift */,
-				E8000001AA000019 /* CollectionView.swift */,
 				E8000001AA00001A /* CatProfileView.swift */,
 				E8000001AA00001B /* AddEncounterView.swift */,
 				E8000001AA00001C /* AddCatView.swift */,
@@ -442,6 +445,8 @@
 				E8000001AA00002F /* MapAnnotations.swift */,
 				E8000001AA00002A /* OnboardingView.swift */,
 				E8000001AA000061 /* ProfileView.swift */,
+				E8000001AA000063 /* ProfileView+Sections.swift */,
+				E8000001AA000064 /* CatSortOption.swift */,
 				E8000001AA000062 /* EditProfileView.swift */,
 				E8BL0000F002 /* BreedLog */,
 				E8E500000021 /* Social */,
@@ -458,6 +463,7 @@
 				E8000001AA000028 /* PhotoCarouselView.swift */,
 				E8000001AA000015 /* PhotoPickerView.swift */,
 				E8000001AA000016 /* EmptyStateView.swift */,
+				E8000001AA000065 /* CatCardView.swift */,
 				E8000001AA000026 /* LocationPickerView.swift */,
 				E8000001AA000029 /* CatPickerView.swift */,
 				E8000001AA000050 /* ImageDownsampler.swift */,
@@ -896,7 +902,6 @@
 				E8000001AA000007 /* EmptyStateView.swift in Sources */,
 				E8000001AA000008 /* FeedView.swift in Sources */,
 				E8000001AA000009 /* FeedItemView.swift in Sources */,
-				E8000001AA00000A /* CollectionView.swift in Sources */,
 				E8000001AA00000B /* CatProfileView.swift in Sources */,
 				E8000001AA00000C /* AddEncounterView.swift in Sources */,
 				E8000001AA00000D /* AddCatView.swift in Sources */,
@@ -915,6 +920,9 @@
 				E8000001AA000051 /* ImageDownsampler.swift in Sources */,
 				E8000001AA000052 /* UserProfile.swift in Sources */,
 				E8000001AA000053 /* ProfileView.swift in Sources */,
+				E8000001AA000057 /* ProfileView+Sections.swift in Sources */,
+				E8000001AA000058 /* CatSortOption.swift in Sources */,
+				E8000001AA000059 /* CatCardView.swift in Sources */,
 				E8000001AA000054 /* EditProfileView.swift in Sources */,
 				E8000001AA000055 /* CatchSchema.swift in Sources */,
 				E8000001AA000056 /* VisibilitySettings.swift in Sources */,

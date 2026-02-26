@@ -35,7 +35,6 @@ enum CatchStrings {
         static let feed = String(localized: "Feed")
         static let log = String(localized: "Log")
         static let map = String(localized: "Map")
-        static let collection = String(localized: "Collection")
         static let profile = String(localized: "Profile")
     }
 }
