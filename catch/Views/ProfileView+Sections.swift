@@ -80,24 +80,20 @@ extension ProfileView {
     }
 
     private func compactSocialStat(count: Int, label: String) -> some View {
-        VStack(spacing: 2) {
+        VStack(spacing: 4) {
             Text("\(count)")
                 .font(.title3.weight(.bold))
                 .foregroundStyle(CatchTheme.textPrimary)
+
+            RoundedRectangle(cornerRadius: 1)
+                .fill(CatchTheme.primary)
+                .frame(width: 32, height: 2)
+
             Text(label)
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
         }
         .frame(minWidth: 60)
-        .padding(.vertical, 10)
-        .padding(.horizontal, 4)
-        .background(CatchTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
-        .shadow(
-            color: .black.opacity(CatchTheme.cardShadowOpacity),
-            radius: CatchTheme.cardShadowRadius,
-            y: CatchTheme.cardShadowY
-        )
     }
 
     // MARK: - Info
