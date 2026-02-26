@@ -4,40 +4,95 @@ import AuthenticationServices
 
 struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(AppleAuthService.self) private var authService
-    @Environment(CKFollowService.self) private var followService
+    @Environment(AppleAuthService.self) var authService
+    @Environment(CKFollowService.self) var followService
     @Query private var profiles: [UserProfile]
-    @Query private var cats: [Cat]
-    @Query private var encounters: [Encounter]
+    @Query(sort: \Cat.name) var cats: [Cat]
+    @Query var encounters: [Encounter]
 
+    @Binding var selectedTab: Int
     @State private var isShowingEditSheet = false
+    @State private var searchText = ""
+    @State private var sortOption: CatSortOption = .name
 
-    private var cloudKitService: CloudKitService = CKCloudKitService()
+    var cloudKitService: CloudKitService = CKCloudKitService()
 
     private var profile: UserProfile? { profiles.first }
 
+    private let columns = [
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16)
+    ]
+
+    private var filteredCats: [Cat] {
+        let filtered: [Cat]
+        if searchText.isEmpty {
+            filtered = cats
+        } else {
+            filtered = cats.filter {
+                $0.name.localizedCaseInsensitiveContains(searchText)
+                || $0.location.name.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+
+        switch sortOption {
+        case .name:
+            return filtered.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        case .encounters:
+            return filtered.sorted { $0.encounters.count > $1.encounters.count }
+        case .recent:
+            return filtered.sorted { ($0.lastEncounterDate ?? .distantPast) > ($1.lastEncounterDate ?? .distantPast) }
+        }
+    }
+
     var body: some View {
         NavigationStack {
-            Group {
-                if let profile {
-                    profileContent(profile)
-                } else {
-                    emptyState
+            ScrollView {
+                VStack(spacing: 24) {
+                    if let profile {
+                        profileHeader(profile)
+                    } else {
+                        setupBanner
+                    }
+
+                    collectionSection
+
+                    if let profile {
+                        authSection(profile)
+                        joinDateSection(profile)
+                    }
                 }
+                .padding(.vertical, 24)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(CatchTheme.background)
             .navigationTitle(CatchStrings.Profile.profileTitle)
             .navigationBarTitleDisplayMode(.large)
+            .searchable(text: $searchText, prompt: CatchStrings.Collection.searchPrompt)
             .toolbar {
-                if profile != nil {
-                    ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    Menu {
+                        Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
+                            ForEach(CatSortOption.allCases) { option in
+                                Text(option.displayName).tag(option)
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "arrow.up.arrow.down")
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                    if profile != nil {
                         Button {
                             isShowingEditSheet = true
                         } label: {
                             Image(systemName: "pencil")
+                                .foregroundStyle(CatchTheme.primary)
                         }
                     }
                 }
+            }
+            .navigationDestination(for: Cat.self) { cat in
+                CatProfileView(cat: cat)
             }
             .sheet(item: Binding(
                 get: { isShowingEditSheet ? profile : nil },
@@ -50,82 +105,70 @@ struct ProfileView: View {
         }
     }
 
-    // MARK: - Profile Content
+    // MARK: - Collection Section
 
-    private func profileContent(_ profile: UserProfile) -> some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                avatarSection(profile)
-                infoSection(profile)
-                statsSection
-                if authService.authState.isSignedIn {
-                    socialSection
+    @ViewBuilder
+    private var collectionSection: some View {
+        if cats.isEmpty {
+            EmptyStateView(
+                icon: "square.grid.2x2",
+                title: CatchStrings.Collection.emptyTitle,
+                subtitle: CatchStrings.Collection.emptySubtitle,
+                actionLabel: CatchStrings.Collection.emptyAction,
+                action: { selectedTab = 1 }
+            )
+        } else if filteredCats.isEmpty {
+            EmptyStateView(
+                icon: "magnifyingglass",
+                title: CatchStrings.Collection.searchEmptyTitle,
+                subtitle: CatchStrings.Collection.searchEmptySubtitle(searchText)
+            )
+        } else {
+            LazyVGrid(columns: columns, spacing: 16) {
+                ForEach(filteredCats) { cat in
+                    NavigationLink(value: cat) {
+                        CatCardView(cat: cat)
+                    }
+                    .buttonStyle(.plain)
                 }
-                authSection(profile)
-                joinDateSection(profile)
             }
-            .padding(.vertical, 24)
+            .padding(.horizontal)
         }
     }
 
-    private func avatarSection(_ profile: UserProfile) -> some View {
-        Group {
-            if let data = profile.avatarData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 120, height: 120)
-                    .clipShape(Circle())
-            } else {
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 120, height: 120)
-                    .foregroundStyle(CatchTheme.secondary)
-            }
-        }
-    }
+    // MARK: - Setup Banner
 
-    private func infoSection(_ profile: UserProfile) -> some View {
-        VStack(spacing: 6) {
-            Text(profile.displayName.isEmpty ? CatchStrings.Profile.mysteriousStranger : profile.displayName)
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundStyle(CatchTheme.textPrimary)
-
-            Text(profile.bio.isEmpty ? CatchStrings.Profile.tooCoolForBio : profile.bio)
-                .font(.subheadline)
-                .foregroundStyle(CatchTheme.textSecondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-        }
-    }
-
-    private var statsSection: some View {
+    private var setupBanner: some View {
         HStack(spacing: 12) {
-            statCard(count: cats.count, label: CatchStrings.Profile.cats, icon: "cat.fill")
-            statCard(count: encounters.count, label: CatchStrings.Profile.encounters, icon: "pawprint.fill")
-        }
-        .padding(.horizontal, 20)
-    }
-
-    private func statCard(count: Int, label: String, icon: String) -> some View {
-        VStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.title3)
+            Image(systemName: "person.crop.circle.badge.questionmark")
+                .font(.title2)
                 .foregroundStyle(CatchTheme.primary)
 
-            Text("\(count)")
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundStyle(CatchTheme.textPrimary)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(CatchStrings.Profile.emptyTitle)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(CatchTheme.textPrimary)
+                Text(CatchStrings.Profile.emptySubtitle)
+                    .font(.caption)
+                    .foregroundStyle(CatchTheme.textSecondary)
+                    .lineLimit(2)
+            }
 
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(CatchTheme.textSecondary)
+            Spacer()
+
+            Button {
+                createProfile()
+            } label: {
+                Text(CatchStrings.Profile.setUpProfile)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(CatchTheme.primary)
+                    .clipShape(Capsule())
+            }
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 16)
+        .padding(16)
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(
@@ -133,166 +176,7 @@ struct ProfileView: View {
             radius: CatchTheme.cardShadowRadius,
             y: CatchTheme.cardShadowY
         )
-    }
-
-    private var socialSection: some View {
-        HStack(spacing: 12) {
-            NavigationLink {
-                SocialView(selectedTab: .followers)
-            } label: {
-                statCard(
-                    count: followService.followers.count,
-                    label: CatchStrings.Profile.followers,
-                    icon: "person.2.fill"
-                )
-                .overlay(alignment: .topTrailing) {
-                    if followService.pendingRequests.count > 0 {
-                        Text("\(followService.pendingRequests.count)")
-                            .font(.caption2.weight(.bold))
-                            .foregroundStyle(.white)
-                            .frame(minWidth: 18, minHeight: 18)
-                            .background(Color.red)
-                            .clipShape(Circle())
-                            .offset(x: -4, y: 4)
-                    }
-                }
-            }
-
-            NavigationLink {
-                SocialView(selectedTab: .following)
-            } label: {
-                statCard(
-                    count: followService.following.count,
-                    label: CatchStrings.Profile.following,
-                    icon: "person.badge.plus"
-                )
-            }
-        }
-        .buttonStyle(.plain)
-        .padding(.horizontal, 20)
-    }
-
-    private func joinDateSection(_ profile: UserProfile) -> some View {
-        Text(CatchStrings.Profile.lurkingSince(profile.createdAt))
-            .font(.caption)
-            .foregroundStyle(CatchTheme.textSecondary)
-    }
-
-    // MARK: - Auth Section
-
-    private func authSection(_ profile: UserProfile) -> some View {
-        Group {
-            if authService.authState.isSignedIn {
-                signedInBadge
-            } else {
-                signInPrompt(profile)
-            }
-        }
-        .padding(.horizontal, 20)
-    }
-
-    private var signedInBadge: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "checkmark.seal.fill")
-                .foregroundStyle(CatchTheme.primary)
-            Text(CatchStrings.Profile.signedInWithApple)
-                .font(.subheadline)
-                .foregroundStyle(CatchTheme.textSecondary)
-        }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 20)
-        .background(CatchTheme.cardBackground)
-        .clipShape(Capsule())
-    }
-
-    private func signInPrompt(_ profile: UserProfile) -> some View {
-        VStack(spacing: 10) {
-            SignInWithAppleButton(.signIn) { request in
-                request.requestedScopes = [.fullName, .email]
-            } onCompletion: { result in
-                handleSignIn(result, profile: profile)
-            }
-            .signInWithAppleButtonStyle(.black)
-            .frame(height: 44)
-
-            Text(CatchStrings.Profile.signInPrompt)
-                .font(.caption)
-                .foregroundStyle(CatchTheme.textSecondary)
-
-            #if DEBUG
-            Button {
-                authService.debugSignIn()
-                if let userID = authService.authState.user?.userIdentifier {
-                    profile.appleUserID = userID
-                }
-            } label: {
-                Text(CatchStrings.Profile.fakeSignIn)
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(.red.opacity(0.8))
-                    .clipShape(Capsule())
-            }
-            #endif
-        }
-    }
-
-    private func handleSignIn(_ result: Result<ASAuthorization, any Error>, profile: UserProfile) {
-        do {
-            let user = try authService.processSignInResult(result)
-            profile.appleUserID = user.userIdentifier
-            syncToCloudKit(profile: profile, appleUserID: user.userIdentifier)
-        } catch {
-            // Sign-in cancelled or failed — profile still works locally
-        }
-    }
-
-    private func syncToCloudKit(profile: UserProfile, appleUserID: String) {
-        Task {
-            do {
-                let recordName = try await cloudKitService.saveUserProfile(
-                    appleUserID: appleUserID,
-                    displayName: profile.displayName,
-                    bio: profile.bio,
-                    isPrivate: profile.isPrivate
-                )
-                profile.cloudKitRecordName = recordName
-            } catch {
-                // CloudKit sync failure is non-fatal
-            }
-        }
-    }
-
-    private func syncProfileToCloudKit(_ profile: UserProfile) {
-        guard let appleUserID = profile.appleUserID else { return }
-        syncToCloudKit(profile: profile, appleUserID: appleUserID)
-    }
-
-    // MARK: - Empty State
-
-    private var emptyState: some View {
-        VStack(spacing: 16) {
-            Spacer()
-            EmptyStateView(
-                icon: "person.crop.circle.badge.questionmark",
-                title: CatchStrings.Profile.emptyTitle,
-                subtitle: CatchStrings.Profile.emptySubtitle
-            )
-            Button {
-                createProfile()
-            } label: {
-                Text(CatchStrings.Profile.setUpProfile)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 12)
-                    .background(CatchTheme.primary)
-                    .clipShape(Capsule())
-            }
-            Spacer()
-        }
+        .padding(.horizontal)
     }
 
     // MARK: - Helpers

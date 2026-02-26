@@ -26,17 +26,11 @@ struct ContentView: View {
                 }
                 .tag(2)
 
-            CollectionView(selectedTab: $selectedTab)
-                .tabItem {
-                    Label(CatchStrings.Tabs.collection, systemImage: "square.grid.2x2.fill")
-                }
-                .tag(3)
-
-            ProfileView()
+            ProfileView(selectedTab: $selectedTab)
                 .tabItem {
                     Label(CatchStrings.Tabs.profile, systemImage: "person.crop.circle")
                 }
-                .tag(4)
+                .tag(3)
                 .badge(followService.pendingRequests.count)
         }
         .tint(CatchTheme.primary)

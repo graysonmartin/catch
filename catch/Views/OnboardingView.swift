@@ -121,9 +121,9 @@ struct OnboardingView: View {
                     detail: CatchStrings.Onboarding.tourMapDetail
                 )
                 tourRow(
-                    icon: "square.grid.2x2.fill",
-                    title: CatchStrings.Onboarding.tourCollection,
-                    detail: CatchStrings.Onboarding.tourCollectionDetail
+                    icon: "person.crop.circle",
+                    title: CatchStrings.Onboarding.tourProfile,
+                    detail: CatchStrings.Onboarding.tourProfileDetail
                 )
             }
             .padding(.horizontal, 8)
