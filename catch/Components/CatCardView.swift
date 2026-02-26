@@ -1,39 +1,39 @@
 import SwiftUI
 
 struct CatCardView: View {
-    let cat: Cat
+    let data: CatDisplayData
 
     var body: some View {
         VStack(spacing: CatchSpacing.space8) {
-            CatPhotoView(photoData: cat.photos.first, size: 120)
+            CatPhotoView(photoData: data.firstPhotoData, size: 120)
                 .frame(maxWidth: .infinity)
                 .frame(height: 120)
                 .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
 
             VStack(spacing: CatchSpacing.space4) {
                 HStack {
-                    Text(cat.name)
+                    Text(data.name)
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(CatchTheme.textPrimary)
                         .lineLimit(1)
-                    if cat.isSteven {
+                    if data.isSteven {
                         Image(systemName: "crown.fill")
                             .font(.caption2)
                             .foregroundStyle(CatchTheme.primary)
                     }
-                    if cat.isOwned {
+                    if data.isOwned {
                         Image(systemName: "heart.fill")
                             .font(.caption2)
                             .foregroundStyle(CatchTheme.primary)
                     }
                 }
 
-                Text((cat.breed ?? "").isEmpty ? " " : (cat.breed ?? "").lowercased())
+                Text(data.breed.isEmpty ? " " : data.breed.lowercased())
                     .font(.caption2)
                     .foregroundStyle(CatchTheme.primary)
                     .lineLimit(1)
 
-                Text(CatchStrings.Common.encounterCount(cat.encounters.count))
+                Text(CatchStrings.Common.encounterCount(data.encounterCount))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }
