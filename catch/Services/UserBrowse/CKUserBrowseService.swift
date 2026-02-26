@@ -100,6 +100,19 @@ final class CKUserBrowseService: UserBrowseService {
         return profile.displayName
     }
 
+    func fetchProfile(userID: String) async -> CloudUserProfile? {
+        if let cached = cache[userID], !cached.isExpired {
+            return cached.profile
+        }
+
+        guard let profile = try? await cloudKitService.fetchUserProfile(appleUserID: userID) else {
+            return nil
+        }
+
+        displayNameCache[userID] = profile.displayName
+        return profile
+    }
+
     func clearCache() {
         cache.removeAll()
         displayNameCache.removeAll()
@@ -118,6 +131,7 @@ final class CKUserBrowseService: UserBrowseService {
             appleUserID: "fake-tuong",
             displayName: "tuong",
             bio: "i see cats. i log cats. it is my calling.",
+            username: "tuong_cats",
             isPrivate: false
         )
         let tuongCats = [
@@ -224,6 +238,7 @@ final class CKUserBrowseService: UserBrowseService {
             appleUserID: "fake-sophi",
             displayName: "sophi",
             bio: "every cat is my cat. they just don't know it yet.",
+            username: "sophi_vibes",
             isPrivate: false
         )
         let sophiCats = [
@@ -305,6 +320,7 @@ final class CKUserBrowseService: UserBrowseService {
             appleUserID: "fake-shiv",
             displayName: "shiv",
             bio: "my cats are none of your business (unless i follow you back)",
+            username: "shiv_private",
             isPrivate: true
         )
         let shivCats = [
@@ -350,6 +366,7 @@ final class CKUserBrowseService: UserBrowseService {
             appleUserID: "fake-mark",
             displayName: "mark",
             bio: "cats are just small roommates who don't pay rent",
+            username: "mark_the_cat_guy",
             isPrivate: false
         )
         let markCats = [

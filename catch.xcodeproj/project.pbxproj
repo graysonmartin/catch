@@ -204,6 +204,9 @@
 		E8BL00000222 /* MockBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000022 /* MockBreedLogService.swift */; };
 		E8D800000101 /* StevenEasterEggView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D800000001 /* StevenEasterEggView.swift */; };
 		E8D800000201 /* CatStevenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D800000002 /* CatStevenTests.swift */; };
+		E8UV00000101 /* UsernameValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000001 /* UsernameValidator.swift */; };
+		E8UV00000102 /* UsernameValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000001 /* UsernameValidator.swift */; };
+		E8UV00000103 /* UsernameValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000002 /* UsernameValidatorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -353,6 +356,8 @@
 		E8BL00000022 /* MockBreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedLogService.swift; sourceTree = "<group>"; };
 		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
+		E8UV00000001 /* UsernameValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameValidator.swift; sourceTree = "<group>"; };
+		E8UV00000002 /* UsernameValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameValidatorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -555,6 +560,7 @@
 				E8F500000022 /* CloudSync */,
 				E8E500000022 /* Follow */,
 				E8E500000041 /* UserBrowse */,
+				E8UV0000F002 /* Username */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 			);
 			path = Services;
@@ -589,6 +595,7 @@
 				E8F500000020 /* CloudSync */,
 				E8E500000020 /* Follow */,
 				E8E500000040 /* UserBrowse */,
+				E8UV0000F001 /* Username */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -779,6 +786,22 @@
 				E8BL00000021 /* DefaultBreedLogServiceTests.swift */,
 			);
 			path = BreedLog;
+			sourceTree = "<group>";
+		};
+		E8UV0000F001 /* Username */ = {
+			isa = PBXGroup;
+			children = (
+				E8UV00000001 /* UsernameValidator.swift */,
+			);
+			path = Username;
+			sourceTree = "<group>";
+		};
+		E8UV0000F002 /* Username */ = {
+			isa = PBXGroup;
+			children = (
+				E8UV00000002 /* UsernameValidatorTests.swift */,
+			);
+			path = Username;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -976,6 +999,7 @@
 				E8B700000105 /* BreedSuggestionView.swift in Sources */,
 				E8B700000106 /* BreedPickerView.swift in Sources */,
 				E8D800000101 /* StevenEasterEggView.swift in Sources */,
+				E8UV00000101 /* UsernameValidator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1074,6 +1098,8 @@
 				E8CS00000309 /* CatchStrings+Social.swift in Sources */,
 				E8CS0000030A /* CatchStrings+BreedLog.swift in Sources */,
 				E8CS0000030B /* CatchStrings+Components.swift in Sources */,
+				E8UV00000102 /* UsernameValidator.swift in Sources */,
+				E8UV00000103 /* UsernameValidatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

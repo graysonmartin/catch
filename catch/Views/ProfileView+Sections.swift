@@ -105,6 +105,12 @@ extension ProfileView {
                 .fontWeight(.bold)
                 .foregroundStyle(CatchTheme.textPrimary)
 
+            if let username = profile.username, !username.isEmpty {
+                Text(UsernameValidator.formatDisplay(username))
+                    .font(.subheadline)
+                    .foregroundStyle(CatchTheme.primary)
+            }
+
             Text(profile.bio.isEmpty ? CatchStrings.Profile.tooCoolForBio : profile.bio)
                 .font(.subheadline)
                 .foregroundStyle(CatchTheme.textSecondary)
@@ -253,6 +259,7 @@ extension ProfileView {
                     appleUserID: appleUserID,
                     displayName: profile.displayName,
                     bio: profile.bio,
+                    username: profile.username,
                     isPrivate: profile.isPrivate
                 )
                 profile.cloudKitRecordName = recordName

@@ -163,7 +163,8 @@ enum DataSeeder {
         if profileCount == 0 {
             let profile = UserProfile(
                 displayName: "cat enthusiast",
-                bio: "just out here cataloging every cat i see. it's not weird, you're weird."
+                bio: "just out here cataloging every cat i see. it's not weird, you're weird.",
+                username: "catlord42"
             )
             context.insert(profile)
         }

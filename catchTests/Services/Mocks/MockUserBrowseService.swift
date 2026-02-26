@@ -14,6 +14,8 @@ final class MockUserBrowseService: UserBrowseService {
     var fetchUserDataResult: Result<UserBrowseData, UserBrowseError> = .failure(.userNotFound)
     var cachedDataResult: UserBrowseData?
     var displayNameResult: String?
+    var profileResult: CloudUserProfile?
+    private(set) var fetchProfileCalls: [String] = []
 
     func fetchUserData(userID: String) async throws -> UserBrowseData {
         fetchUserDataCalls.append(userID)
@@ -29,6 +31,11 @@ final class MockUserBrowseService: UserBrowseService {
         return displayNameResult
     }
 
+    func fetchProfile(userID: String) async -> CloudUserProfile? {
+        fetchProfileCalls.append(userID)
+        return profileResult
+    }
+
     func clearCache() {
         clearCacheCalls += 1
     }
@@ -42,5 +49,7 @@ final class MockUserBrowseService: UserBrowseService {
         fetchUserDataResult = .failure(.userNotFound)
         cachedDataResult = nil
         displayNameResult = nil
+        profileResult = nil
+        fetchProfileCalls = []
     }
 }

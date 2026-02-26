@@ -9,17 +9,23 @@ struct EditProfileView: View {
 
     @State private var displayName: String
     @State private var bio: String
+    @State private var username: String
     @State private var avatarData: Data?
     @State private var isPrivate: Bool
     @State private var visibilitySettings: VisibilitySettings
     @State private var pickerItem: PhotosPickerItem?
     @State private var isShowingPhotoOptions = false
+    @State private var usernameAvailability: UsernameAvailability = .idle
+    @State private var usernameCheckTask: Task<Void, Never>?
+
+    private var cloudKitService: CloudKitService = CKCloudKitService()
 
     init(profile: UserProfile, onSave: ((UserProfile) -> Void)? = nil) {
         self.profile = profile
         self.onSave = onSave
         _displayName = State(initialValue: profile.displayName)
         _bio = State(initialValue: profile.bio)
+        _username = State(initialValue: profile.username ?? "")
         _avatarData = State(initialValue: profile.avatarData)
         _isPrivate = State(initialValue: profile.isPrivate)
         _visibilitySettings = State(initialValue: profile.visibilitySettings)
@@ -95,8 +101,85 @@ struct EditProfileView: View {
     private var infoSection: some View {
         Section(CatchStrings.Profile.info) {
             TextField(CatchStrings.Profile.displayName, text: $displayName)
+            VStack(alignment: .leading, spacing: CatchSpacing.space4) {
+                HStack {
+                    Text("@")
+                        .foregroundStyle(CatchTheme.textSecondary)
+                    TextField(CatchStrings.Profile.usernamePlaceholder, text: $username)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .onChange(of: username) { _, newValue in
+                            username = newValue.lowercased()
+                            checkUsernameAvailability()
+                        }
+                }
+                usernameStatusView
+            }
             TextField(CatchStrings.Profile.bio, text: $bio, axis: .vertical)
                 .lineLimit(3...6)
+        } footer: {
+            if !username.isEmpty {
+                Text(CatchStrings.Profile.usernameFooter)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var usernameStatusView: some View {
+        let validation = UsernameValidator.validate(username)
+        if username.isEmpty {
+            EmptyView()
+        } else if validation != .valid {
+            Text(validationMessage(for: validation))
+                .font(.caption)
+                .foregroundStyle(.red)
+        } else {
+            switch usernameAvailability {
+            case .idle:
+                EmptyView()
+            case .checking:
+                Text(CatchStrings.Profile.usernameChecking)
+                    .font(.caption)
+                    .foregroundStyle(CatchTheme.textSecondary)
+            case .available:
+                Text(CatchStrings.Profile.usernameAvailable)
+                    .font(.caption)
+                    .foregroundStyle(.green)
+            case .taken:
+                Text(CatchStrings.Profile.usernameTaken)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            }
+        }
+    }
+
+    private func validationMessage(for result: UsernameValidationResult) -> String {
+        switch result {
+        case .tooShort: CatchStrings.Profile.usernameTooShort
+        case .tooLong: CatchStrings.Profile.usernameTooLong
+        case .invalidCharacters: CatchStrings.Profile.usernameInvalidChars
+        case .empty, .valid: ""
+        }
+    }
+
+    private func checkUsernameAvailability() {
+        usernameCheckTask?.cancel()
+        let current = username
+        guard UsernameValidator.validate(current) == .valid else {
+            usernameAvailability = .idle
+            return
+        }
+        if current == profile.username {
+            usernameAvailability = .available
+            return
+        }
+        usernameAvailability = .checking
+        usernameCheckTask = Task {
+            try? await Task.sleep(for: .milliseconds(500))
+            guard !Task.isCancelled else { return }
+            let isAvailable = (try? await cloudKitService.checkUsernameAvailability(current)) ?? false
+            guard !Task.isCancelled else { return }
+            usernameAvailability = isAvailable ? .available : .taken
         }
     }
 
@@ -124,6 +207,8 @@ struct EditProfileView: View {
     private func save() {
         profile.displayName = displayName.trimmingCharacters(in: .whitespaces)
         profile.bio = bio.trimmingCharacters(in: .whitespaces)
+        let trimmedUsername = username.trimmingCharacters(in: .whitespaces)
+        profile.username = trimmedUsername.isEmpty ? nil : trimmedUsername
         profile.avatarData = avatarData
         profile.isPrivate = isPrivate
         profile.visibilitySettings = visibilitySettings

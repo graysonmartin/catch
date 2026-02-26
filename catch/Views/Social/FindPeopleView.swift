@@ -41,7 +41,7 @@ struct FindPeopleView: View {
                     )
                 }
             }
-            .searchable(text: $searchText, prompt: CatchStrings.Social.searchByName)
+            .searchable(text: $searchText, prompt: CatchStrings.Social.searchByNameOrUsername)
             .navigationTitle(CatchStrings.Social.findPeople)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -67,6 +67,12 @@ struct FindPeopleView: View {
                 Text(user.displayName.isEmpty ? CatchStrings.Social.anonymous : user.displayName)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.textPrimary)
+
+                if let username = user.username, !username.isEmpty {
+                    Text(UsernameValidator.formatDisplay(username))
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.primary)
+                }
 
                 if !user.bio.isEmpty {
                     Text(user.bio)

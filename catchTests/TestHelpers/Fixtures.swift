@@ -41,6 +41,7 @@ enum Fixtures {
     static func userProfile(
         displayName: String = "test user",
         bio: String = "test bio",
+        username: String? = nil,
         avatarData: Data? = nil,
         appleUserID: String? = nil,
         cloudKitRecordName: String? = nil,
@@ -51,6 +52,7 @@ enum Fixtures {
         let profile = UserProfile(
             displayName: displayName,
             bio: bio,
+            username: username,
             avatarData: avatarData,
             appleUserID: appleUserID,
             cloudKitRecordName: cloudKitRecordName,

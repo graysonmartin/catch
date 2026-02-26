@@ -8,5 +8,6 @@ protocol UserBrowseService: Observable, Sendable {
     func fetchUserData(userID: String) async throws -> UserBrowseData
     func cachedData(for userID: String) -> UserBrowseData?
     func fetchDisplayName(userID: String) async -> String?
+    func fetchProfile(userID: String) async -> CloudUserProfile?
     func clearCache()
 }
