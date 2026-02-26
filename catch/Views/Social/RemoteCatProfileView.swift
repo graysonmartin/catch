@@ -47,7 +47,7 @@ struct RemoteCatProfileView: View {
             HStack {
                 Text(cat.displayName)
                     .font(.title.weight(.bold))
-                    .foregroundStyle(CatchTheme.textPrimary)
+                    .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                 if cat.isOwned {
                     Image(systemName: "heart.fill")
                         .foregroundStyle(CatchTheme.primary)

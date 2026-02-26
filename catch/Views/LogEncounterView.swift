@@ -31,7 +31,7 @@ struct LogEncounterView: View {
                                         .foregroundStyle(CatchTheme.textSecondary)
                                     Text(cat.displayName)
                                         .font(.body.weight(.semibold))
-                                        .foregroundStyle(CatchTheme.textPrimary)
+                                        .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                                 }
                                 Spacer()
                             }
@@ -62,7 +62,7 @@ struct LogEncounterView: View {
                                         VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                                             Text(cat.displayName)
                                                 .font(.body.weight(.semibold))
-                                                .foregroundStyle(CatchTheme.textPrimary)
+                                                .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
 
                                             if !cat.location.name.isEmpty {
                                                 Text(cat.location.name)

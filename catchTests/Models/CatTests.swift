@@ -144,6 +144,23 @@ final class CatTests: XCTestCase {
         XCTAssertEqual(cat.displayName, CatchStrings.Common.unnamedCatFallback)
     }
 
+    // MARK: - isUnnamed
+
+    func test_isUnnamed_trueWhenNilName() {
+        let cat = Cat()
+        XCTAssertTrue(cat.isUnnamed)
+    }
+
+    func test_isUnnamed_trueWhenEmptyName() {
+        let cat = Cat(name: "")
+        XCTAssertTrue(cat.isUnnamed)
+    }
+
+    func test_isUnnamed_falseWhenNamed() {
+        let cat = Cat(name: "Mochi")
+        XCTAssertFalse(cat.isUnnamed)
+    }
+
     // MARK: - isSteven with nil name
 
     func test_isSteven_falseWhenNameIsNil() {

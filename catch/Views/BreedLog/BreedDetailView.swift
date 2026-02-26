@@ -123,7 +123,7 @@ struct BreedDetailView: View {
                     VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                         Text(cat.displayName)
                             .font(.subheadline.weight(.medium))
-                            .foregroundStyle(CatchTheme.textPrimary)
+                            .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                         Text(CatchStrings.Common.encounterCount(cat.encounters.count))
                             .font(.caption)
                             .foregroundStyle(CatchTheme.textSecondary)

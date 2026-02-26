@@ -27,7 +27,7 @@ struct EditEncounterView: View {
                             CatPhotoView(photoData: cat.photos.first, size: 40)
                             Text(cat.displayName)
                                 .font(.body.weight(.semibold))
-                                .foregroundStyle(CatchTheme.textPrimary)
+                                .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                             Spacer()
                         }
                     }

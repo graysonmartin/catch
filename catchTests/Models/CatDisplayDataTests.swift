@@ -98,6 +98,7 @@ final class CatDisplayDataTests: XCTestCase {
         let data = CatDisplayData(local: cat)
 
         XCTAssertEqual(data.name, CatchStrings.Common.unnamedCatFallback)
+        XCTAssertTrue(data.isUnnamed)
     }
 
     func testLocalInitEmptyNameUsesDisplayName() {
@@ -106,6 +107,15 @@ final class CatDisplayDataTests: XCTestCase {
         let data = CatDisplayData(local: cat)
 
         XCTAssertEqual(data.name, CatchStrings.Common.unnamedCatFallback)
+        XCTAssertTrue(data.isUnnamed)
+    }
+
+    func testLocalInitNamedCatIsNotUnnamed() {
+        let cat = Fixtures.cat(name: "Whiskers", in: context)
+
+        let data = CatDisplayData(local: cat)
+
+        XCTAssertFalse(data.isUnnamed)
     }
 
     // MARK: - Remote init
@@ -184,6 +194,7 @@ final class CatDisplayDataTests: XCTestCase {
         let data = CatDisplayData(remote: cloudCat, encounterCount: 0)
 
         XCTAssertEqual(data.name, CatchStrings.Common.unnamedCatFallback)
+        XCTAssertTrue(data.isUnnamed)
     }
 
     // MARK: - Helpers

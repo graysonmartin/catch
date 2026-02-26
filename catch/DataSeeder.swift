@@ -144,7 +144,8 @@ enum DataSeeder {
         let stray = Cat(
             estimatedAge: "1",
             location: Location(name: "Under the dumpster", latitude: 37.7710, longitude: -122.4250),
-            notes: "no collar, no name, no fear. just vibes."
+            notes: "no collar, no name, no fear. just vibes.",
+            photos: photo4
         )
         context.insert(stray)
 

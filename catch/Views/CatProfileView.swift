@@ -35,7 +35,7 @@ struct CatProfileView: View {
                 HStack {
                     Text(cat.displayName)
                         .font(.title.weight(.bold))
-                        .foregroundStyle(CatchTheme.textPrimary)
+                        .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                     if cat.isSteven {
                         Image(systemName: "crown.fill")
                             .font(.caption)

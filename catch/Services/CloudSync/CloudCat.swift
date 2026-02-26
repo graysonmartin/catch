@@ -14,6 +14,10 @@ struct CloudCat: Sendable {
     let createdAt: Date
     let photos: [Data]
 
+    var isUnnamed: Bool {
+        name?.isEmpty ?? true
+    }
+
     var displayName: String {
         if let name, !name.isEmpty {
             return name

@@ -38,6 +38,10 @@ final class Cat {
         self.encounters = []
     }
 
+    var isUnnamed: Bool {
+        name?.isEmpty ?? true
+    }
+
     var displayName: String {
         if let name, !name.isEmpty {
             return name

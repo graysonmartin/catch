@@ -11,6 +11,7 @@ extension CatchStrings {
         static let unknownCat = String(localized: "Unknown Cat")
         static let pillNew = String(localized: "NEW")
         static let pillRepeat = String(localized: "REPEAT")
+        static let pillStray = String(localized: "STRAY")
         static let newestFirst = String(localized: "newest first")
         static let oldestFirst = String(localized: "oldest first")
 
