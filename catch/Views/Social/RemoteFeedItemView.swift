@@ -9,17 +9,23 @@ struct RemoteFeedItemView: View {
     let encounter: CloudEncounter
     let cat: CloudCat?
 
+    @State private var showComments = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
             header
             photos
             location
             notes
+            InteractionBar(encounterRecordName: encounter.recordName, showComments: $showComments)
         }
         .padding()
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
+        .sheet(isPresented: $showComments) {
+            CommentThreadView(encounterRecordName: encounter.recordName)
+        }
     }
 
     // MARK: - Subviews
