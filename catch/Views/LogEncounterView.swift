@@ -129,7 +129,6 @@ struct LogEncounterView: View {
             photos: photos
         )
         modelContext.insert(encounter)
-        try? modelContext.save()
         Task { await encounterSyncService?.syncNewEncounter(encounter, for: cat) }
         dismiss()
     }
