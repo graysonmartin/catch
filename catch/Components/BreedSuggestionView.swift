@@ -19,18 +19,18 @@ struct BreedSuggestionView: View {
     // MARK: - States
 
     private var classifyingState: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: CatchSpacing.space8) {
             ProgressView()
                 .tint(CatchTheme.primary)
             Text(CatchStrings.Components.analyzingCreature)
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, CatchSpacing.space4)
     }
 
     private func suggestionState(_ prediction: BreedPrediction) -> some View {
-        HStack(spacing: 8) {
+        HStack(spacing: CatchSpacing.space8) {
             Image(systemName: "sparkles")
                 .font(.caption)
                 .foregroundStyle(CatchTheme.primary)
@@ -52,8 +52,8 @@ struct BreedSuggestionView: View {
             } label: {
                 Text(CatchStrings.Components.yep)
                     .font(.caption.weight(.semibold))
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
+                    .padding(.horizontal, CatchSpacing.space10)
+                    .padding(.vertical, CatchSpacing.space4)
                     .background(CatchTheme.primary)
                     .foregroundStyle(.white)
                     .clipShape(Capsule())
@@ -69,6 +69,6 @@ struct BreedSuggestionView: View {
             }
             .buttonStyle(.plain)
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, CatchSpacing.space4)
     }
 }

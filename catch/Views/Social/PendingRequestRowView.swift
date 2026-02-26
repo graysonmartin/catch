@@ -6,12 +6,12 @@ struct PendingRequestRowView: View {
     let onDecline: () async throws -> Void
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: CatchSpacing.space12) {
             Image(systemName: "person.crop.circle.badge.questionmark")
                 .font(.title2)
                 .foregroundStyle(CatchTheme.primary)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(follow.followerID)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.textPrimary)

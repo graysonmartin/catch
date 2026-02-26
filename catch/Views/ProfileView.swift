@@ -20,8 +20,8 @@ struct ProfileView: View {
     private var profile: UserProfile? { profiles.first }
 
     private let columns = [
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16)
+        GridItem(.flexible(), spacing: CatchSpacing.space16),
+        GridItem(.flexible(), spacing: CatchSpacing.space16)
     ]
 
     private var filteredCats: [Cat] {
@@ -48,7 +48,7 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 24) {
+                VStack(spacing: CatchSpacing.space24) {
                     if let profile {
                         profileHeader(profile)
                     } else {
@@ -62,7 +62,7 @@ struct ProfileView: View {
                         joinDateSection(profile)
                     }
                 }
-                .padding(.vertical, 24)
+                .padding(.vertical, CatchSpacing.space24)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(CatchTheme.background)
@@ -124,7 +124,7 @@ struct ProfileView: View {
                 subtitle: CatchStrings.Collection.searchEmptySubtitle(searchText)
             )
         } else {
-            LazyVGrid(columns: columns, spacing: 16) {
+            LazyVGrid(columns: columns, spacing: CatchSpacing.space16) {
                 ForEach(filteredCats) { cat in
                     NavigationLink(value: cat) {
                         CatCardView(cat: cat)
@@ -139,12 +139,12 @@ struct ProfileView: View {
     // MARK: - Setup Banner
 
     private var setupBanner: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: CatchSpacing.space12) {
             Image(systemName: "person.crop.circle.badge.questionmark")
                 .font(.title2)
                 .foregroundStyle(CatchTheme.primary)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(CatchStrings.Profile.emptyTitle)
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(CatchTheme.textPrimary)
@@ -162,13 +162,13 @@ struct ProfileView: View {
                 Text(CatchStrings.Profile.setUpProfile)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.white)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 8)
+                    .padding(.horizontal, CatchSpacing.space12)
+                    .padding(.vertical, CatchSpacing.space8)
                     .background(CatchTheme.primary)
                     .clipShape(Capsule())
             }
         }
-        .padding(16)
+        .padding(CatchSpacing.space16)
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(

@@ -8,7 +8,7 @@ struct EmptyStateView: View {
     var action: (() -> Void)? = nil
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: CatchSpacing.space16) {
             Image(systemName: icon)
                 .font(.system(size: 48))
                 .foregroundStyle(CatchTheme.primary.opacity(0.6))
@@ -25,14 +25,14 @@ struct EmptyStateView: View {
                     Text(actionLabel)
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(.white)
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 10)
+                        .padding(.horizontal, CatchSpacing.space24)
+                        .padding(.vertical, CatchSpacing.space10)
                         .background(CatchTheme.primary)
                         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
                 }
-                .padding(.top, 4)
+                .padding(.top, CatchSpacing.space4)
             }
         }
-        .padding(40)
+        .padding(CatchSpacing.space40)
     }
 }

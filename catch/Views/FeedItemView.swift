@@ -24,13 +24,13 @@ struct FeedItemView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: CatchSpacing.space12) {
             // Header: photo + name + date
-            HStack(spacing: 12) {
+            HStack(spacing: CatchSpacing.space12) {
                 CatPhotoView(photoData: encounter.cat?.photos.first, size: FeedItemLayout.thumbnailSize)
 
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 4) {
+                VStack(alignment: .leading, spacing: CatchSpacing.space2) {
+                    HStack(spacing: CatchSpacing.space4) {
                         Text(encounter.cat?.name ?? CatchStrings.Feed.unknownCat)
                             .font(.headline)
                             .foregroundStyle(CatchTheme.textPrimary)

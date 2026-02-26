@@ -8,9 +8,9 @@ struct BreedLogView: View {
 
     private let service: BreedLogService
     private let columns = [
-        GridItem(.flexible(), spacing: 8),
-        GridItem(.flexible(), spacing: 8),
-        GridItem(.flexible(), spacing: 8)
+        GridItem(.flexible(), spacing: CatchSpacing.space8),
+        GridItem(.flexible(), spacing: CatchSpacing.space8),
+        GridItem(.flexible(), spacing: CatchSpacing.space8)
     ]
 
     init(service: BreedLogService = DefaultBreedLogService()) {
@@ -28,13 +28,13 @@ struct BreedLogView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 16) {
+            VStack(spacing: CatchSpacing.space16) {
                 BreedLogProgressView(
                     discoveredCount: discoveredCount,
                     totalCount: BreedCatalog.count
                 )
 
-                LazyVGrid(columns: columns, spacing: 8) {
+                LazyVGrid(columns: columns, spacing: CatchSpacing.space8) {
                     ForEach(breedLog) { entry in
                         BreedLogCardView(entry: entry)
                             .onTapGesture {

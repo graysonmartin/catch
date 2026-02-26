@@ -8,7 +8,7 @@ struct AddEncounterView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
+            VStack(spacing: CatchSpacing.space24) {
                 Spacer()
 
                 Image(systemName: "pawprint.fill")
@@ -19,14 +19,14 @@ struct AddEncounterView: View {
                     .font(.title2.weight(.semibold))
                     .foregroundStyle(CatchTheme.textPrimary)
 
-                VStack(spacing: 16) {
+                VStack(spacing: CatchSpacing.space16) {
                     Button {
                         showingAddCat = true
                     } label: {
                         Label(CatchStrings.Log.newCat, systemImage: "plus.circle.fill")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 20)
+                            .padding(.vertical, CatchSpacing.space20)
                             .background(CatchTheme.primary)
                             .foregroundStyle(.white)
                             .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
@@ -38,13 +38,13 @@ struct AddEncounterView: View {
                         Label(CatchStrings.Log.seenAgain, systemImage: "eye.fill")
                             .font(.headline)
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 20)
+                            .padding(.vertical, CatchSpacing.space20)
                             .background(CatchTheme.secondary)
                             .foregroundStyle(CatchTheme.textPrimary)
                             .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
                     }
                 }
-                .padding(.horizontal, 32)
+                .padding(.horizontal, CatchSpacing.space32)
 
                 Spacer()
             }

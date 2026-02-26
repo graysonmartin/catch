@@ -31,7 +31,7 @@ struct BreedLogProgressView: View {
     }
 
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: CatchSpacing.space8) {
             HStack {
                 Text("\(discoveredCount) / \(totalCount)")
                     .font(.title2.weight(.bold).monospacedDigit())

@@ -14,6 +14,7 @@
 		E8000001AA000001 /* Cat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000010 /* Cat.swift */; };
 		E8000001AA000002 /* Encounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000011 /* Encounter.swift */; };
 		E8000001AA000004 /* CatchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000013 /* CatchTheme.swift */; };
+		E8SP00000001 /* CatchSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SP00000010 /* CatchSpacing.swift */; };
 		E8CS00000101 /* CatchStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000001 /* CatchStrings.swift */; };
 		E8CS00000102 /* CatchStrings+Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000002 /* CatchStrings+Feed.swift */; };
 		E8CS00000103 /* CatchStrings+CatProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000003 /* CatchStrings+CatProfile.swift */; };
@@ -214,6 +215,7 @@
 		E8000001AA000010 /* Cat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cat.swift; sourceTree = "<group>"; };
 		E8000001AA000011 /* Encounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encounter.swift; sourceTree = "<group>"; };
 		E8000001AA000013 /* CatchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchTheme.swift; sourceTree = "<group>"; };
+		E8SP00000010 /* CatchSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSpacing.swift; sourceTree = "<group>"; };
 		E8CS00000001 /* CatchStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchStrings.swift; sourceTree = "<group>"; };
 		E8CS00000002 /* CatchStrings+Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Feed.swift"; sourceTree = "<group>"; };
 		E8CS00000003 /* CatchStrings+CatProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+CatProfile.swift"; sourceTree = "<group>"; };
@@ -476,6 +478,7 @@
 			isa = PBXGroup;
 			children = (
 				E8000001AA000013 /* CatchTheme.swift */,
+				E8SP00000010 /* CatchSpacing.swift */,
 				E8CS00000001 /* CatchStrings.swift */,
 				E8CS00000002 /* CatchStrings+Feed.swift */,
 				E8CS00000003 /* CatchStrings+CatProfile.swift */,
@@ -886,6 +889,7 @@
 				E8000001AA000001 /* Cat.swift in Sources */,
 				E8000001AA000002 /* Encounter.swift in Sources */,
 				E8000001AA000004 /* CatchTheme.swift in Sources */,
+				E8SP00000001 /* CatchSpacing.swift in Sources */,
 				E8CS00000101 /* CatchStrings.swift in Sources */,
 				E8CS00000102 /* CatchStrings+Feed.swift in Sources */,
 				E8CS00000103 /* CatchStrings+CatProfile.swift in Sources */,

@@ -4,7 +4,7 @@ struct BreedLogCardView: View {
     let entry: BreedLogEntry
 
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: CatchSpacing.space6) {
             photoOrSilhouette
                 .frame(width: 70, height: 70)
                 .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
@@ -25,7 +25,7 @@ struct BreedLogCardView: View {
 
             BreedRarityBadge(rarity: entry.catalogEntry.rarity)
         }
-        .padding(8)
+        .padding(CatchSpacing.space8)
         .frame(maxWidth: .infinity)
         .background(entry.isDiscovered ? CatchTheme.cardBackground : CatchTheme.background)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))

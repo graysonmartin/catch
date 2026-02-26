@@ -6,7 +6,7 @@ struct BreedDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: CatchSpacing.space20) {
                 header
                 statsSection
                 funFactSection
@@ -24,7 +24,7 @@ struct BreedDetailView: View {
     // MARK: - Header
 
     private var header: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: CatchSpacing.space12) {
             headerImage
 
             Text(entry.catalogEntry.displayName.lowercased())
@@ -63,7 +63,7 @@ struct BreedDetailView: View {
     // MARK: - Stats
 
     private var statsSection: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: CatchSpacing.space16) {
             statCard(value: "\(entry.catCount)", label: CatchStrings.BreedLog.catsFound)
             if let date = entry.firstDiscoveredDate {
                 statCard(value: date.formatted(.dateTime.month(.abbreviated).day()), label: CatchStrings.BreedLog.firstSeen)
@@ -72,7 +72,7 @@ struct BreedDetailView: View {
     }
 
     private func statCard(value: String, label: String) -> some View {
-        VStack(spacing: 4) {
+        VStack(spacing: CatchSpacing.space4) {
             Text(value)
                 .font(.title3.weight(.bold).monospacedDigit())
                 .foregroundStyle(CatchTheme.primary)
@@ -81,7 +81,7 @@ struct BreedDetailView: View {
                 .foregroundStyle(CatchTheme.textSecondary)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 12)
+        .padding(.vertical, CatchSpacing.space12)
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
@@ -90,7 +90,7 @@ struct BreedDetailView: View {
     // MARK: - Fun Fact
 
     private var funFactSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: CatchSpacing.space8) {
             Text(CatchStrings.BreedLog.funFact)
                 .font(.caption.weight(.bold))
                 .textCase(.uppercase)
@@ -110,17 +110,17 @@ struct BreedDetailView: View {
     // MARK: - Cats List
 
     private var catsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: CatchSpacing.space12) {
             Text(CatchStrings.BreedLog.yourBreedCats(entry.catalogEntry.displayName.lowercased()))
                 .font(.caption.weight(.bold))
                 .textCase(.uppercase)
                 .foregroundStyle(CatchTheme.textSecondary)
 
             ForEach(cats) { cat in
-                HStack(spacing: 12) {
+                HStack(spacing: CatchSpacing.space12) {
                     CatPhotoView(photoData: cat.photos.first, size: 44)
 
-                    VStack(alignment: .leading, spacing: 2) {
+                    VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                         Text(cat.name)
                             .font(.subheadline.weight(.medium))
                             .foregroundStyle(CatchTheme.textPrimary)
@@ -131,7 +131,7 @@ struct BreedDetailView: View {
 
                     Spacer()
                 }
-                .padding(10)
+                .padding(CatchSpacing.space10)
                 .background(CatchTheme.cardBackground)
                 .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
             }

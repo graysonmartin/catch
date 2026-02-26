@@ -29,7 +29,7 @@ struct SocialView: View {
             }
             .pickerStyle(.segmented)
             .padding(.horizontal)
-            .padding(.vertical, 8)
+            .padding(.vertical, CatchSpacing.space8)
 
             List {
                 switch selectedTab {

@@ -27,8 +27,8 @@ struct UserPublicProfileView: View {
     }
 
     private let columns = [
-        GridItem(.flexible(), spacing: 16),
-        GridItem(.flexible(), spacing: 16)
+        GridItem(.flexible(), spacing: CatchSpacing.space16),
+        GridItem(.flexible(), spacing: CatchSpacing.space16)
     ]
 
     var body: some View {
@@ -58,7 +58,7 @@ struct UserPublicProfileView: View {
     // MARK: - States
 
     private var loadingState: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: CatchSpacing.space12) {
             ProgressView()
                 .tint(CatchTheme.primary)
             Text(CatchStrings.Social.loadingProfile)
@@ -69,7 +69,7 @@ struct UserPublicProfileView: View {
     }
 
     private func errorState(_ error: UserBrowseError) -> some View {
-        VStack(spacing: 12) {
+        VStack(spacing: CatchSpacing.space12) {
             Image(systemName: "exclamationmark.triangle")
                 .font(.largeTitle)
                 .foregroundStyle(CatchTheme.textSecondary)
@@ -86,11 +86,11 @@ struct UserPublicProfileView: View {
     }
 
     private func privateProfileState(profile: CloudUserProfile) -> some View {
-        VStack(spacing: 16) {
+        VStack(spacing: CatchSpacing.space16) {
             profileHeader(profile: profile)
             followButton
 
-            VStack(spacing: 8) {
+            VStack(spacing: CatchSpacing.space8) {
                 Image(systemName: "lock.fill")
                     .font(.title)
                     .foregroundStyle(CatchTheme.textSecondary)
@@ -101,7 +101,7 @@ struct UserPublicProfileView: View {
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }
-            .padding(.top, 32)
+            .padding(.top, CatchSpacing.space32)
 
             Spacer()
         }
@@ -112,7 +112,7 @@ struct UserPublicProfileView: View {
 
     private func profileContent(data: UserBrowseData) -> some View {
         ScrollView {
-            VStack(spacing: 16) {
+            VStack(spacing: CatchSpacing.space16) {
                 profileHeader(profile: data.profile)
                 followButton
                 tabPicker
@@ -123,7 +123,7 @@ struct UserPublicProfileView: View {
     }
 
     private func profileHeader(profile: CloudUserProfile) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: CatchSpacing.space8) {
             Image(systemName: "person.crop.circle.fill")
                 .font(.system(size: 64))
                 .foregroundStyle(CatchTheme.secondary)
@@ -140,17 +140,17 @@ struct UserPublicProfileView: View {
             }
 
             if let data {
-                HStack(spacing: 24) {
+                HStack(spacing: CatchSpacing.space24) {
                     statBadge(count: isPrivateHidden ? nil : data.cats.count, label: CatchStrings.Profile.cats)
                     statBadge(count: isPrivateHidden ? nil : data.encounters.count, label: CatchStrings.Profile.encounters)
                 }
-                .padding(.top, 4)
+                .padding(.top, CatchSpacing.space4)
             }
         }
     }
 
     private func statBadge(count: Int?, label: String) -> some View {
-        VStack(spacing: 2) {
+        VStack(spacing: CatchSpacing.space2) {
             Text(count.map { "\($0)" } ?? CatchStrings.Social.statPlaceholder)
                 .font(.headline)
                 .foregroundStyle(CatchTheme.textPrimary)
@@ -172,16 +172,16 @@ struct UserPublicProfileView: View {
                 }
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(CatchTheme.textPrimary)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 8)
+                .padding(.horizontal, CatchSpacing.space24)
+                .padding(.vertical, CatchSpacing.space8)
                 .background(CatchTheme.secondary)
                 .clipShape(Capsule())
             } else if followService.pendingRequestTo(userID) != nil {
                 Text(CatchStrings.Social.requestedStatus)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.textSecondary)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 8)
+                    .padding(.horizontal, CatchSpacing.space24)
+                    .padding(.vertical, CatchSpacing.space8)
                     .background(CatchTheme.textSecondary.opacity(0.1))
                     .clipShape(Capsule())
             } else {
@@ -197,8 +197,8 @@ struct UserPublicProfileView: View {
                 }
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(.white)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 8)
+                .padding(.horizontal, CatchSpacing.space24)
+                .padding(.vertical, CatchSpacing.space8)
                 .background(CatchTheme.primary)
                 .clipShape(Capsule())
             }
@@ -232,9 +232,9 @@ struct UserPublicProfileView: View {
                     title: CatchStrings.Social.noCatsYetTitle,
                     subtitle: CatchStrings.Social.noCatsYetSubtitle
                 )
-                .padding(.top, 32)
+                .padding(.top, CatchSpacing.space32)
             } else {
-                LazyVGrid(columns: columns, spacing: 16) {
+                LazyVGrid(columns: columns, spacing: CatchSpacing.space16) {
                     ForEach(data.cats, id: \.recordName) { cat in
                         let encounterCount = data.encounters.filter { $0.catRecordName == cat.recordName }.count
                         NavigationLink {
@@ -261,10 +261,10 @@ struct UserPublicProfileView: View {
                     title: CatchStrings.Social.noActivityTitle,
                     subtitle: CatchStrings.Social.noActivitySubtitle
                 )
-                .padding(.top, 32)
+                .padding(.top, CatchSpacing.space32)
             } else {
                 let sorted = data.encounters.sorted { $0.date > $1.date }
-                LazyVStack(spacing: 12) {
+                LazyVStack(spacing: CatchSpacing.space12) {
                     ForEach(sorted, id: \.recordName) { encounter in
                         let cat = data.cats.first { $0.recordName == encounter.catRecordName }
                         RemoteFeedItemView(encounter: encounter, cat: cat)

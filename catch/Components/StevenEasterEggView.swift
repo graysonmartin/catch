@@ -37,8 +37,8 @@ struct StevenEasterEggView: View {
         Text(CatchStrings.Components.youFoundHim)
             .font(.title2.weight(.bold))
             .foregroundStyle(CatchTheme.textPrimary)
-            .padding(.horizontal, 24)
-            .padding(.vertical, 14)
+            .padding(.horizontal, CatchSpacing.space24)
+            .padding(.vertical, CatchSpacing.space14)
             .background(
                 RoundedRectangle(cornerRadius: CatchTheme.cornerRadius)
                     .fill(CatchTheme.cardBackground)

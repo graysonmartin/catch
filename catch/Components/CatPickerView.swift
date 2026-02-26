@@ -54,11 +54,11 @@ private struct CatPickerRow: View {
     let isSelected: Bool
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: CatchSpacing.space12) {
             CatPhotoView(photoData: cat.photos.first, size: 48)
 
-            VStack(alignment: .leading, spacing: 3) {
-                HStack(spacing: 4) {
+            VStack(alignment: .leading, spacing: CatchSpacing.space3) {
+                HStack(spacing: CatchSpacing.space4) {
                     Text(cat.name)
                         .font(.body.weight(.semibold))
                         .foregroundStyle(CatchTheme.textPrimary)
@@ -88,7 +88,7 @@ private struct CatPickerRow: View {
                     .font(.title3)
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, CatchSpacing.space4)
         .contentShape(Rectangle())
     }
 

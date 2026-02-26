@@ -22,10 +22,10 @@ struct LogEncounterView: View {
                 if preselectedCat != nil {
                     Section {
                         if let cat = selectedCat {
-                            HStack(spacing: 12) {
+                            HStack(spacing: CatchSpacing.space12) {
                                 CatPhotoView(photoData: cat.photos.first, size: 40)
 
-                                VStack(alignment: .leading, spacing: 2) {
+                                VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                                     Text(CatchStrings.Log.loggingFor)
                                         .font(.caption)
                                         .foregroundStyle(CatchTheme.textSecondary)
@@ -40,7 +40,7 @@ struct LogEncounterView: View {
                 } else {
                     Section(CatchStrings.Log.whichCat) {
                         if cats.isEmpty {
-                            VStack(alignment: .leading, spacing: 8) {
+                            VStack(alignment: .leading, spacing: CatchSpacing.space8) {
                                 Text(CatchStrings.Log.noCatsRegistered)
                                     .foregroundStyle(CatchTheme.textSecondary)
                                 Button {
@@ -56,10 +56,10 @@ struct LogEncounterView: View {
                                 CatPickerView(cats: cats, selectedCat: $selectedCat)
                             } label: {
                                 if let cat = selectedCat {
-                                    HStack(spacing: 12) {
+                                    HStack(spacing: CatchSpacing.space12) {
                                         CatPhotoView(photoData: cat.photos.first, size: 40)
 
-                                        VStack(alignment: .leading, spacing: 2) {
+                                        VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                                             Text(cat.name)
                                                 .font(.body.weight(.semibold))
                                                 .foregroundStyle(CatchTheme.textPrimary)
