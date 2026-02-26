@@ -12,6 +12,7 @@ struct OwnProfileContent: View {
 
     @Binding var selectedTab: Int
     @State private var isShowingEditSheet = false
+    @State private var isShowingCollection = false
     @State private var searchText = ""
 
     var cloudKitService: CloudKitService = CKCloudKitService()
@@ -58,6 +59,9 @@ struct OwnProfileContent: View {
         }
         .navigationDestination(for: Cat.self) { cat in
             CatProfileView(cat: cat)
+        }
+        .navigationDestination(isPresented: $isShowingCollection) {
+            ProfileCollectionTab(selectedTab: $selectedTab)
         }
         .sheet(item: Binding(
             get: { isShowingEditSheet ? profile : nil },
@@ -175,8 +179,8 @@ struct OwnProfileContent: View {
 
     private var statsSection: some View {
         HStack(spacing: CatchSpacing.space10) {
-            NavigationLink {
-                ProfileCollectionTab(selectedTab: $selectedTab)
+            Button {
+                isShowingCollection = true
             } label: {
                 statCard(count: cats.count, label: CatchStrings.Profile.cats, icon: "cat.fill")
                     .overlay(alignment: .bottomTrailing) {
