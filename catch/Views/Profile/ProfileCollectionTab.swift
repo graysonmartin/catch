@@ -73,7 +73,9 @@ struct ProfileCollectionTab: View {
             } else {
                 LazyVGrid(columns: columns, spacing: CatchSpacing.space16) {
                     ForEach(filteredCats) { cat in
-                        NavigationLink(value: cat) {
+                        NavigationLink {
+                            CatProfileView(cat: cat)
+                        } label: {
                             CatCardView(data: CatDisplayData(local: cat, encounterCount: encounterCount(for: cat)))
                         }
                         .buttonStyle(.plain)
