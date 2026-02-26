@@ -28,7 +28,7 @@ extension CatchStrings {
         static let request = String(localized: "request")
         static let follow = String(localized: "follow")
 
-        // UserPublicProfileView
+        // RemoteProfileContent
         static let loadingProfile = String(localized: "loading profile...")
         static let tryAgain = String(localized: "try again")
         static let profileIsPrivate = String(localized: "this profile is private")

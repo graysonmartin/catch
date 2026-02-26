@@ -1,14 +1,123 @@
 import SwiftUI
+import SwiftData
 import AuthenticationServices
 
-extension ProfileView {
+struct OwnProfileContent: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(AppleAuthService.self) var authService
+    @Environment(CKFollowService.self) var followService
+    @Query private var profiles: [UserProfile]
+    @Query(sort: \Cat.name) var cats: [Cat]
+    @Query var encounters: [Encounter]
+
+    @Binding var selectedTab: Int
+    @State private var isShowingEditSheet = false
+    @State private var searchText = ""
+    @State private var sortOption: CatSortOption = .name
+
+    var cloudKitService: CloudKitService = CKCloudKitService()
+
+    private var profile: UserProfile? { profiles.first }
+
+    private let columns = [
+        GridItem(.flexible(), spacing: CatchSpacing.space16),
+        GridItem(.flexible(), spacing: CatchSpacing.space16)
+    ]
+
+    private var filteredCats: [Cat] {
+        let filtered: [Cat]
+        if searchText.isEmpty {
+            filtered = cats
+        } else {
+            filtered = cats.filter {
+                $0.name.localizedCaseInsensitiveContains(searchText)
+                || $0.location.name.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+
+        switch sortOption {
+        case .name:
+            return filtered.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        case .encounters:
+            return filtered.sorted { $0.encounters.count > $1.encounters.count }
+        case .recent:
+            return filtered.sorted { ($0.lastEncounterDate ?? .distantPast) > ($1.lastEncounterDate ?? .distantPast) }
+        }
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: CatchSpacing.space24) {
+                if let profile {
+                    profileHeader(profile)
+                } else {
+                    setupBanner
+                }
+
+                collectionSection
+
+                if let profile {
+                    authSection(profile)
+                    joinDateSection(profile)
+                }
+            }
+            .padding(.vertical, CatchSpacing.space24)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(CatchTheme.background)
+        .navigationTitle(CatchStrings.Profile.profileTitle)
+        .navigationBarTitleDisplayMode(.large)
+        .searchable(text: $searchText, prompt: CatchStrings.Collection.searchPrompt)
+        .toolbar {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Menu {
+                    Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
+                        ForEach(CatSortOption.allCases) { option in
+                            Text(option.displayName).tag(option)
+                        }
+                    }
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                        .foregroundStyle(CatchTheme.primary)
+                }
+                if profile != nil {
+                    Button {
+                        isShowingEditSheet = true
+                    } label: {
+                        Image(systemName: "pencil")
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                }
+            }
+        }
+        .navigationDestination(for: Cat.self) { cat in
+            CatProfileView(cat: cat)
+        }
+        .sheet(item: Binding(
+            get: { isShowingEditSheet ? profile : nil },
+            set: { _ in isShowingEditSheet = false }
+        )) { profile in
+            EditProfileView(profile: profile) { updatedProfile in
+                syncProfileToCloudKit(updatedProfile)
+            }
+        }
+    }
 
     // MARK: - Profile Header
 
-    func profileHeader(_ profile: UserProfile) -> some View {
+    private func profileHeader(_ profile: UserProfile) -> some View {
         VStack(spacing: CatchSpacing.space24) {
             avatarWithSocial(profile)
-            infoSection(profile)
+
+            ProfileHeaderView(
+                data: ProfileDisplayData(
+                    local: profile,
+                    catCount: cats.count,
+                    encounterCount: encounters.count
+                ),
+                showAvatar: false
+            )
+
             statsSection
         }
     }
@@ -96,29 +205,6 @@ extension ProfileView {
         .frame(minWidth: 60)
     }
 
-    // MARK: - Info
-
-    private func infoSection(_ profile: UserProfile) -> some View {
-        VStack(spacing: CatchSpacing.space6) {
-            Text(profile.displayName.isEmpty ? CatchStrings.Profile.mysteriousStranger : profile.displayName)
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundStyle(CatchTheme.textPrimary)
-
-            if let username = profile.username, !username.isEmpty {
-                Text(UsernameValidator.formatDisplay(username))
-                    .font(.subheadline)
-                    .foregroundStyle(CatchTheme.primary)
-            }
-
-            Text(profile.bio.isEmpty ? CatchStrings.Profile.tooCoolForBio : profile.bio)
-                .font(.subheadline)
-                .foregroundStyle(CatchTheme.textSecondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, CatchSpacing.space32)
-        }
-    }
-
     // MARK: - Stats
 
     private var statsSection: some View {
@@ -145,7 +231,7 @@ extension ProfileView {
         Set(cats.compactMap(\.breed)).count
     }
 
-    func statCard(count: Int, label: String, icon: String) -> some View {
+    private func statCard(count: Int, label: String, icon: String) -> some View {
         VStack(spacing: CatchSpacing.space8) {
             Image(systemName: icon)
                 .font(.title3)
@@ -171,9 +257,83 @@ extension ProfileView {
         )
     }
 
+    // MARK: - Collection Section
+
+    @ViewBuilder
+    private var collectionSection: some View {
+        if cats.isEmpty {
+            EmptyStateView(
+                icon: "square.grid.2x2",
+                title: CatchStrings.Collection.emptyTitle,
+                subtitle: CatchStrings.Collection.emptySubtitle,
+                actionLabel: CatchStrings.Collection.emptyAction,
+                action: { selectedTab = 1 }
+            )
+        } else if filteredCats.isEmpty {
+            EmptyStateView(
+                icon: "magnifyingglass",
+                title: CatchStrings.Collection.searchEmptyTitle,
+                subtitle: CatchStrings.Collection.searchEmptySubtitle(searchText)
+            )
+        } else {
+            LazyVGrid(columns: columns, spacing: CatchSpacing.space16) {
+                ForEach(filteredCats) { cat in
+                    NavigationLink(value: cat) {
+                        CatCardView(data: CatDisplayData(local: cat))
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+
+    // MARK: - Setup Banner
+
+    private var setupBanner: some View {
+        HStack(spacing: CatchSpacing.space12) {
+            Image(systemName: "person.crop.circle.badge.questionmark")
+                .font(.title2)
+                .foregroundStyle(CatchTheme.primary)
+
+            VStack(alignment: .leading, spacing: CatchSpacing.space2) {
+                Text(CatchStrings.Profile.emptyTitle)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(CatchTheme.textPrimary)
+                Text(CatchStrings.Profile.emptySubtitle)
+                    .font(.caption)
+                    .foregroundStyle(CatchTheme.textSecondary)
+                    .lineLimit(2)
+            }
+
+            Spacer()
+
+            Button {
+                createProfile()
+            } label: {
+                Text(CatchStrings.Profile.setUpProfile)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, CatchSpacing.space12)
+                    .padding(.vertical, CatchSpacing.space8)
+                    .background(CatchTheme.primary)
+                    .clipShape(Capsule())
+            }
+        }
+        .padding(CatchSpacing.space16)
+        .background(CatchTheme.cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+        .shadow(
+            color: .black.opacity(CatchTheme.cardShadowOpacity),
+            radius: CatchTheme.cardShadowRadius,
+            y: CatchTheme.cardShadowY
+        )
+        .padding(.horizontal)
+    }
+
     // MARK: - Auth
 
-    func authSection(_ profile: UserProfile) -> some View {
+    private func authSection(_ profile: UserProfile) -> some View {
         Group {
             if authService.authState.isSignedIn {
                 signedInBadge
@@ -234,13 +394,19 @@ extension ProfileView {
 
     // MARK: - Join Date
 
-    func joinDateSection(_ profile: UserProfile) -> some View {
+    private func joinDateSection(_ profile: UserProfile) -> some View {
         Text(CatchStrings.Profile.lurkingSince(profile.createdAt))
             .font(.caption)
             .foregroundStyle(CatchTheme.textSecondary)
     }
 
-    // MARK: - Auth Helpers
+    // MARK: - Helpers
+
+    private func createProfile() {
+        let profile = UserProfile()
+        modelContext.insert(profile)
+        isShowingEditSheet = true
+    }
 
     private func handleSignIn(_ result: Result<ASAuthorization, any Error>, profile: UserProfile) {
         do {
@@ -269,7 +435,7 @@ extension ProfileView {
         }
     }
 
-    func syncProfileToCloudKit(_ profile: UserProfile) {
+    private func syncProfileToCloudKit(_ profile: UserProfile) {
         guard let appleUserID = profile.appleUserID else { return }
         syncToCloudKit(profile: profile, appleUserID: appleUserID)
     }

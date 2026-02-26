@@ -25,7 +25,7 @@ struct FollowRowView: View {
 
     var body: some View {
         NavigationLink {
-            UserPublicProfileView(
+            RemoteProfileContent(
                 userID: targetUserID,
                 initialDisplayName: resolvedName
             )
