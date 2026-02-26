@@ -101,8 +101,5 @@ struct ProfileCollectionTab: View {
                 }
             }
         }
-        .navigationDestination(for: Cat.self) { cat in
-            CatProfileView(cat: cat)
-        }
     }
 }
