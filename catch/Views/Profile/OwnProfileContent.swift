@@ -24,6 +24,24 @@ struct OwnProfileContent: View {
         GridItem(.flexible(), spacing: CatchSpacing.space16)
     ]
 
+    private var encounterStatsByCat: [PersistentIdentifier: (count: Int, lastDate: Date)] {
+        var stats: [PersistentIdentifier: (count: Int, lastDate: Date)] = [:]
+        for encounter in encounters {
+            if let catID = encounter.cat?.persistentModelID {
+                let existing = stats[catID]
+                stats[catID] = (
+                    count: (existing?.count ?? 0) + 1,
+                    lastDate: max(encounter.date, existing?.lastDate ?? .distantPast)
+                )
+            }
+        }
+        return stats
+    }
+
+    private func encounterCount(for cat: Cat) -> Int {
+        encounterStatsByCat[cat.persistentModelID]?.count ?? 0
+    }
+
     private var filteredCats: [Cat] {
         let filtered: [Cat]
         if searchText.isEmpty {
@@ -39,9 +57,10 @@ struct OwnProfileContent: View {
         case .name:
             return filtered.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
         case .encounters:
-            return filtered.sorted { $0.encounters.count > $1.encounters.count }
+            return filtered.sorted { encounterCount(for: $0) > encounterCount(for: $1) }
         case .recent:
-            return filtered.sorted { ($0.lastEncounterDate ?? .distantPast) > ($1.lastEncounterDate ?? .distantPast) }
+            let stats = encounterStatsByCat
+            return filtered.sorted { (stats[$0.persistentModelID]?.lastDate ?? .distantPast) > (stats[$1.persistentModelID]?.lastDate ?? .distantPast) }
         }
     }
 
@@ -279,7 +298,7 @@ struct OwnProfileContent: View {
             LazyVGrid(columns: columns, spacing: CatchSpacing.space16) {
                 ForEach(filteredCats) { cat in
                     NavigationLink(value: cat) {
-                        CatCardView(data: CatDisplayData(local: cat))
+                        CatCardView(data: CatDisplayData(local: cat, encounterCount: encounterCount(for: cat)))
                     }
                     .buttonStyle(.plain)
                 }

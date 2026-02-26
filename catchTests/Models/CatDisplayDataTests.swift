@@ -168,14 +168,19 @@ final class CatDisplayDataTests: XCTestCase {
 
     // MARK: - Equatable / Hashable
 
-    func testEqualityBasedOnID() {
-        let cat1 = makeCloudCat(recordName: "same-id", name: "A")
-        let cat2 = makeCloudCat(recordName: "same-id", name: "B")
+    func testEqualityIncludesDisplayFields() {
+        let base = makeCloudCat(recordName: "same-id", name: "A")
 
-        let data1 = CatDisplayData(remote: cat1, encounterCount: 0)
-        let data2 = CatDisplayData(remote: cat2, encounterCount: 5)
-
+        let data1 = CatDisplayData(remote: base, encounterCount: 0)
+        let data2 = CatDisplayData(remote: base, encounterCount: 0)
         XCTAssertEqual(data1, data2)
+
+        let data3 = CatDisplayData(remote: base, encounterCount: 5)
+        XCTAssertNotEqual(data1, data3, "Different encounter counts should not be equal")
+
+        let different = makeCloudCat(recordName: "same-id", name: "B")
+        let data4 = CatDisplayData(remote: different, encounterCount: 0)
+        XCTAssertNotEqual(data1, data4, "Different names should not be equal")
     }
 
     func testInequalityForDifferentIDs() {

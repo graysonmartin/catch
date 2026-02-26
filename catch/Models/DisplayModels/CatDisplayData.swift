@@ -17,7 +17,7 @@ struct CatDisplayData: Identifiable, Hashable {
 
     // MARK: - Local SwiftData init
 
-    init(local cat: Cat) {
+    init(local cat: Cat, encounterCount: Int? = nil) {
         self.id = cat.persistentModelID.hashValue.description
         self.name = cat.displayName
         self.breed = cat.breed ?? ""
@@ -28,7 +28,7 @@ struct CatDisplayData: Identifiable, Hashable {
         self.isUnnamed = cat.isUnnamed
         self.isSteven = cat.isSteven
         self.createdAt = cat.createdAt
-        self.encounterCount = cat.encounters.count
+        self.encounterCount = encounterCount ?? cat.encounters.count
         self.firstPhotoData = cat.photos.first
         self.allPhotos = cat.photos
     }
@@ -55,9 +55,14 @@ struct CatDisplayData: Identifiable, Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+        hasher.combine(encounterCount)
     }
 
     static func == (lhs: CatDisplayData, rhs: CatDisplayData) -> Bool {
         lhs.id == rhs.id
+            && lhs.encounterCount == rhs.encounterCount
+            && lhs.name == rhs.name
+            && lhs.breed == rhs.breed
+            && lhs.isOwned == rhs.isOwned
     }
 }
