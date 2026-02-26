@@ -221,6 +221,28 @@
 		E8CS0000010C /* CatchStrings+Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000C /* CatchStrings+Diary.swift */; };
 		E8CS0000030C /* CatchStrings+Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000C /* CatchStrings+Diary.swift */; };
 		E8PT00000212 /* ProfileDiaryTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000012 /* ProfileDiaryTabTests.swift */; };
+		E8SI00000101 /* EncounterLike.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000001 /* EncounterLike.swift */; };
+		E8SI00000102 /* EncounterComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000002 /* EncounterComment.swift */; };
+		E8SI00000103 /* SocialInteractionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000003 /* SocialInteractionError.swift */; };
+		E8SI00000104 /* LikeRecordMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000004 /* LikeRecordMapper.swift */; };
+		E8SI00000105 /* CommentRecordMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000005 /* CommentRecordMapper.swift */; };
+		E8SI00000106 /* SocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000006 /* SocialInteractionService.swift */; };
+		E8SI00000107 /* CKSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000007 /* CKSocialInteractionService.swift */; };
+		E8SI00000108 /* CatchStrings+Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000008 /* CatchStrings+Interaction.swift */; };
+		E8SI00000109 /* InteractionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000009 /* InteractionBar.swift */; };
+		E8SI0000010A /* CommentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000A /* CommentRowView.swift */; };
+		E8SI0000010B /* CommentThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000B /* CommentThreadView.swift */; };
+		E8SI00000201 /* EncounterLike.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000001 /* EncounterLike.swift */; };
+		E8SI00000202 /* EncounterComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000002 /* EncounterComment.swift */; };
+		E8SI00000203 /* SocialInteractionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000003 /* SocialInteractionError.swift */; };
+		E8SI00000204 /* LikeRecordMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000004 /* LikeRecordMapper.swift */; };
+		E8SI00000205 /* CommentRecordMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000005 /* CommentRecordMapper.swift */; };
+		E8SI00000206 /* SocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000006 /* SocialInteractionService.swift */; };
+		E8SI00000207 /* CKSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000007 /* CKSocialInteractionService.swift */; };
+		E8SI00000208 /* MockSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000C /* MockSocialInteractionService.swift */; };
+		E8SI00000209 /* LikeRecordMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000D /* LikeRecordMapperTests.swift */; };
+		E8SI0000020A /* CommentRecordMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000E /* CommentRecordMapperTests.swift */; };
+		E8SI0000020B /* CKSocialInteractionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000F /* CKSocialInteractionServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -383,6 +405,21 @@
 		E8DR00000002 /* RemoteDiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDiaryEntryRow.swift; sourceTree = "<group>"; };
 		E8CS0000000C /* CatchStrings+Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Diary.swift"; sourceTree = "<group>"; };
 		E8PT00000012 /* ProfileDiaryTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDiaryTabTests.swift; sourceTree = "<group>"; };
+		E8SI00000001 /* EncounterLike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterLike.swift; sourceTree = "<group>"; };
+		E8SI00000002 /* EncounterComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterComment.swift; sourceTree = "<group>"; };
+		E8SI00000003 /* SocialInteractionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialInteractionError.swift; sourceTree = "<group>"; };
+		E8SI00000004 /* LikeRecordMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeRecordMapper.swift; sourceTree = "<group>"; };
+		E8SI00000005 /* CommentRecordMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRecordMapper.swift; sourceTree = "<group>"; };
+		E8SI00000006 /* SocialInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialInteractionService.swift; sourceTree = "<group>"; };
+		E8SI00000007 /* CKSocialInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialInteractionService.swift; sourceTree = "<group>"; };
+		E8SI00000008 /* CatchStrings+Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Interaction.swift"; sourceTree = "<group>"; };
+		E8SI00000009 /* InteractionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionBar.swift; sourceTree = "<group>"; };
+		E8SI0000000A /* CommentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRowView.swift; sourceTree = "<group>"; };
+		E8SI0000000B /* CommentThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentThreadView.swift; sourceTree = "<group>"; };
+		E8SI0000000C /* MockSocialInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialInteractionService.swift; sourceTree = "<group>"; };
+		E8SI0000000D /* LikeRecordMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeRecordMapperTests.swift; sourceTree = "<group>"; };
+		E8SI0000000E /* CommentRecordMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRecordMapperTests.swift; sourceTree = "<group>"; };
+		E8SI0000000F /* CKSocialInteractionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialInteractionServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -503,6 +540,7 @@
 				E8PF00000005 /* ProfileHeaderView.swift */,
 				E8DR00000002 /* RemoteDiaryEntryRow.swift */,
 				E8D800000001 /* StevenEasterEggView.swift */,
+				E8SI00000009 /* InteractionBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -524,6 +562,7 @@
 				E8CS0000000A /* CatchStrings+BreedLog.swift */,
 				E8CS0000000B /* CatchStrings+Components.swift */,
 				E8CS0000000C /* CatchStrings+Diary.swift */,
+				E8SI00000008 /* CatchStrings+Interaction.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -601,6 +640,7 @@
 				E8E500000022 /* Follow */,
 				E8E500000041 /* UserBrowse */,
 				E8UV0000F002 /* Username */,
+				E8SI0000F002 /* Social */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 			);
 			path = Services;
@@ -636,6 +676,7 @@
 				E8E500000020 /* Follow */,
 				E8E500000040 /* UserBrowse */,
 				E8UV0000F001 /* Username */,
+				E8SI0000F001 /* Social */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -653,6 +694,7 @@
 				E8F500000306 /* MockEncounterSyncService.swift */,
 				E8E500000039 /* MockUserBrowseService.swift */,
 				E8BL00000022 /* MockBreedLogService.swift */,
+				E8SI0000000C /* MockSocialInteractionService.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -695,6 +737,8 @@
 				E8E50000000A /* PendingRequestRowView.swift */,
 				E8E500000036 /* RemoteCatProfileView.swift */,
 				E8E500000037 /* RemoteFeedItemView.swift */,
+				E8SI0000000A /* CommentRowView.swift */,
+				E8SI0000000B /* CommentThreadView.swift */,
 			);
 			path = Social;
 			sourceTree = "<group>";
@@ -862,6 +906,30 @@
 				E8PT00000003 /* ProfileDiaryTab.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		E8SI0000F001 /* Social */ = {
+			isa = PBXGroup;
+			children = (
+				E8SI00000001 /* EncounterLike.swift */,
+				E8SI00000002 /* EncounterComment.swift */,
+				E8SI00000003 /* SocialInteractionError.swift */,
+				E8SI00000004 /* LikeRecordMapper.swift */,
+				E8SI00000005 /* CommentRecordMapper.swift */,
+				E8SI00000006 /* SocialInteractionService.swift */,
+				E8SI00000007 /* CKSocialInteractionService.swift */,
+			);
+			path = Social;
+			sourceTree = "<group>";
+		};
+		E8SI0000F002 /* Social */ = {
+			isa = PBXGroup;
+			children = (
+				E8SI0000000D /* LikeRecordMapperTests.swift */,
+				E8SI0000000E /* CommentRecordMapperTests.swift */,
+				E8SI0000000F /* CKSocialInteractionServiceTests.swift */,
+			);
+			path = Social;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1068,6 +1136,17 @@
 				E8DR00000101 /* DiaryEntryRow.swift in Sources */,
 				E8DR00000102 /* RemoteDiaryEntryRow.swift in Sources */,
 				E8CS0000010C /* CatchStrings+Diary.swift in Sources */,
+				E8SI00000101 /* EncounterLike.swift in Sources */,
+				E8SI00000102 /* EncounterComment.swift in Sources */,
+				E8SI00000103 /* SocialInteractionError.swift in Sources */,
+				E8SI00000104 /* LikeRecordMapper.swift in Sources */,
+				E8SI00000105 /* CommentRecordMapper.swift in Sources */,
+				E8SI00000106 /* SocialInteractionService.swift in Sources */,
+				E8SI00000107 /* CKSocialInteractionService.swift in Sources */,
+				E8SI00000108 /* CatchStrings+Interaction.swift in Sources */,
+				E8SI00000109 /* InteractionBar.swift in Sources */,
+				E8SI0000010A /* CommentRowView.swift in Sources */,
+				E8SI0000010B /* CommentThreadView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1174,6 +1253,17 @@
 				E8DM00000302 /* ProfileDisplayDataTests.swift in Sources */,
 				E8PT00000212 /* ProfileDiaryTabTests.swift in Sources */,
 				E8CS0000030C /* CatchStrings+Diary.swift in Sources */,
+				E8SI00000201 /* EncounterLike.swift in Sources */,
+				E8SI00000202 /* EncounterComment.swift in Sources */,
+				E8SI00000203 /* SocialInteractionError.swift in Sources */,
+				E8SI00000204 /* LikeRecordMapper.swift in Sources */,
+				E8SI00000205 /* CommentRecordMapper.swift in Sources */,
+				E8SI00000206 /* SocialInteractionService.swift in Sources */,
+				E8SI00000207 /* CKSocialInteractionService.swift in Sources */,
+				E8SI00000208 /* MockSocialInteractionService.swift in Sources */,
+				E8SI00000209 /* LikeRecordMapperTests.swift in Sources */,
+				E8SI0000020A /* CommentRecordMapperTests.swift in Sources */,
+				E8SI0000020B /* CKSocialInteractionServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

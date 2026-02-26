@@ -17,6 +17,8 @@ private enum FeedItemLayout {
 struct FeedItemView: View {
     let encounter: Encounter
 
+    @State private var showComments = false
+
     private var isFirstEncounter: Bool {
         guard let cat = encounter.cat else { return false }
         guard let earliest = cat.encounters.min(by: { $0.date < $1.date }) else { return false }
@@ -92,10 +94,20 @@ struct FeedItemView: View {
                     .font(.subheadline)
                     .foregroundStyle(CatchTheme.textPrimary)
             }
+
+            // Interaction bar — only for synced encounters
+            if let recordName = encounter.cloudKitRecordName {
+                InteractionBar(encounterRecordName: recordName, showComments: $showComments)
+            }
         }
         .padding()
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
+        .sheet(isPresented: $showComments) {
+            if let recordName = encounter.cloudKitRecordName {
+                CommentThreadView(encounterRecordName: recordName)
+            }
+        }
     }
 }

@@ -17,6 +17,7 @@ enum FeedSortOption: String, CaseIterable, Identifiable {
 
 struct FeedView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Query(sort: \Encounter.date, order: .reverse) private var encounters: [Encounter]
     @Query private var cats: [Cat]
     @Binding var scrollToTop: Bool
@@ -140,6 +141,16 @@ struct FeedView: View {
             } message: {
                 Text(CatchStrings.Feed.orphanedAlertMessage)
             }
+            .task {
+                await loadInteractionData()
+            }
         }
+    }
+
+    private func loadInteractionData() async {
+        guard let socialService else { return }
+        let recordNames = encounters.compactMap(\.cloudKitRecordName)
+        guard !recordNames.isEmpty else { return }
+        try? await socialService.loadInteractionData(for: recordNames)
     }
 }

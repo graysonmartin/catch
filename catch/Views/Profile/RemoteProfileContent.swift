@@ -7,6 +7,7 @@ struct RemoteProfileContent: View {
     @Environment(CKFollowService.self) private var followService
     @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
     @Environment(AppleAuthService.self) private var authService
+    @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
 
     @State private var data: UserBrowseData?
     @State private var loadError: UserBrowseError?
