@@ -28,12 +28,10 @@ struct CatCardView: View {
                     }
                 }
 
-                if let breed = cat.breed, !breed.isEmpty {
-                    Text(breed.lowercased())
-                        .font(.caption2)
-                        .foregroundStyle(CatchTheme.primary)
-                        .lineLimit(1)
-                }
+                Text((cat.breed ?? "").isEmpty ? " " : (cat.breed ?? "").lowercased())
+                    .font(.caption2)
+                    .foregroundStyle(CatchTheme.primary)
+                    .lineLimit(1)
 
                 Text(CatchStrings.Common.encounterCount(cat.encounters.count))
                     .font(.caption)
