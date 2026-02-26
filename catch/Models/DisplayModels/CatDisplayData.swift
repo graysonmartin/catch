@@ -18,7 +18,7 @@ struct CatDisplayData: Identifiable, Hashable {
 
     init(local cat: Cat) {
         self.id = cat.persistentModelID.hashValue.description
-        self.name = cat.name
+        self.name = cat.displayName
         self.breed = cat.breed ?? ""
         self.estimatedAge = cat.estimatedAge
         self.locationName = cat.location.name
@@ -35,7 +35,7 @@ struct CatDisplayData: Identifiable, Hashable {
 
     init(remote cat: CloudCat, encounterCount: Int) {
         self.id = cat.recordName
-        self.name = cat.name
+        self.name = cat.displayName
         self.breed = cat.breed
         self.estimatedAge = cat.estimatedAge
         self.locationName = cat.locationName

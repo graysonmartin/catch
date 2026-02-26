@@ -6,6 +6,7 @@ struct EditCatView: View {
     @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
     @Bindable var cat: Cat
 
+    @State private var isUnnamed: Bool
     @State private var name: String
     @State private var breed: String?
     @State private var estimatedAge: String
@@ -18,7 +19,8 @@ struct EditCatView: View {
 
     init(cat: Cat) {
         self.cat = cat
-        _name = State(initialValue: cat.name)
+        _isUnnamed = State(initialValue: cat.name == nil)
+        _name = State(initialValue: cat.name ?? "")
         _breed = State(initialValue: cat.breed)
         _estimatedAge = State(initialValue: cat.estimatedAge)
         _location = State(initialValue: cat.location)
@@ -31,7 +33,10 @@ struct EditCatView: View {
         NavigationStack {
             Form {
                 Section(CatchStrings.Common.catInfo) {
-                    TextField(CatchStrings.Common.name, text: $name)
+                    Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
+                    if !isUnnamed {
+                        TextField(CatchStrings.Common.name, text: $name)
+                    }
                     BreedPickerView(breed: $breed)
                     TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
                     LocationPickerView(location: $location)
@@ -69,9 +74,12 @@ struct EditCatView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(CatchStrings.Common.save) { save() }
-                        .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                        .disabled(!isUnnamed && name.trimmingCharacters(in: .whitespaces).isEmpty)
                         .fontWeight(.semibold)
                 }
+            }
+            .onChange(of: isUnnamed) {
+                if isUnnamed { name = "" }
             }
             .onChange(of: photos) {
                 guard breed == nil, !isDismissedSuggestion, !photos.isEmpty else { return }
@@ -83,7 +91,7 @@ struct EditCatView: View {
     }
 
     private func save() {
-        cat.name = name.trimmingCharacters(in: .whitespaces)
+        cat.name = isUnnamed ? nil : name.trimmingCharacters(in: .whitespaces)
         cat.breed = breed
         cat.estimatedAge = estimatedAge
         cat.location = location

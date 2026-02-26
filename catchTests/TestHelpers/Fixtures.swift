@@ -14,7 +14,7 @@ extension Location {
 @MainActor
 enum Fixtures {
     static func cat(
-        name: String = "Mr. Whiskers",
+        name: String? = "Mr. Whiskers",
         breed: String? = nil,
         cloudKitRecordName: String? = nil,
         in context: ModelContext

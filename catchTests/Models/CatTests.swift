@@ -126,4 +126,64 @@ final class CatTests: XCTestCase {
 
         XCTAssertEqual(cat.lastEncounterDate, recentDate)
     }
+
+    // MARK: - displayName
+
+    func test_displayName_returnsNameWhenSet() {
+        let cat = Cat(name: "Mochi")
+        XCTAssertEqual(cat.displayName, "Mochi")
+    }
+
+    func test_displayName_returnsFallbackWhenNil() {
+        let cat = Cat()
+        XCTAssertEqual(cat.displayName, CatchStrings.Common.unnamedCatFallback)
+    }
+
+    func test_displayName_returnsFallbackWhenEmpty() {
+        let cat = Cat(name: "")
+        XCTAssertEqual(cat.displayName, CatchStrings.Common.unnamedCatFallback)
+    }
+
+    // MARK: - isSteven with nil name
+
+    func test_isSteven_falseWhenNameIsNil() {
+        let cat = Cat(breed: "Tabby")
+        XCTAssertFalse(cat.isSteven)
+    }
+
+    // MARK: - nil name persistence
+
+    func test_nilNamePersistsAndRoundTrips() throws {
+        let cat = Cat()
+        context.insert(cat)
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<Cat>())
+        XCTAssertEqual(fetched.count, 1)
+        XCTAssertNil(fetched.first?.name)
+    }
+
+    func test_namedToUnnamed_roundTrip() throws {
+        let cat = Cat(name: "Temp")
+        context.insert(cat)
+        try context.save()
+
+        cat.name = nil
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<Cat>())
+        XCTAssertNil(fetched.first?.name)
+    }
+
+    func test_unnamedToNamed_roundTrip() throws {
+        let cat = Cat()
+        context.insert(cat)
+        try context.save()
+
+        cat.name = "Now Named"
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<Cat>())
+        XCTAssertEqual(fetched.first?.name, "Now Named")
+    }
 }

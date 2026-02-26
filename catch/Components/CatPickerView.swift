@@ -15,7 +15,7 @@ struct CatPickerView: View {
         if searchText.isEmpty { return sorted }
         let query = searchText.lowercased()
         return sorted.filter {
-            $0.name.lowercased().contains(query) ||
+            $0.displayName.lowercased().contains(query) ||
             $0.location.name.lowercased().contains(query)
         }
     }
@@ -59,7 +59,7 @@ private struct CatPickerRow: View {
 
             VStack(alignment: .leading, spacing: CatchSpacing.space3) {
                 HStack(spacing: CatchSpacing.space4) {
-                    Text(cat.name)
+                    Text(cat.displayName)
                         .font(.body.weight(.semibold))
                         .foregroundStyle(CatchTheme.textPrimary)
                     if cat.isOwned {

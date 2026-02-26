@@ -31,7 +31,7 @@ struct FeedView: View {
             filtered = encounters
         } else {
             filtered = encounters.filter { encounter in
-                let matchesCatName = encounter.cat?.name.localizedCaseInsensitiveContains(searchText) ?? false
+                let matchesCatName = encounter.cat?.displayName.localizedCaseInsensitiveContains(searchText) ?? false
                 let matchesNotes = encounter.notes.localizedCaseInsensitiveContains(searchText)
                 let matchesLocation = encounter.location.name.localizedCaseInsensitiveContains(searchText)
                 return matchesCatName || matchesNotes || matchesLocation

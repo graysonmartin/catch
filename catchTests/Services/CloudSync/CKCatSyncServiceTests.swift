@@ -117,6 +117,17 @@ final class CKCatSyncServiceTests: XCTestCase {
         XCTAssertEqual(mockCatRepo.deleteCalls, ["cat-to-delete"])
     }
 
+    func test_syncNewCat_handlesNilName() async {
+        let sut = makeSUT()
+        let cat = Fixtures.cat(name: nil, in: context)
+        let encounter = Fixtures.encounter(for: cat, in: context)
+
+        await sut.syncNewCat(cat, firstEncounter: encounter)
+
+        XCTAssertEqual(mockCatRepo.saveCalls.count, 1)
+        XCTAssertNil(mockCatRepo.saveCalls[0].payload.name)
+    }
+
     // MARK: - isSyncing
 
     func test_isSyncing_isFalseAfterSync() async {

@@ -29,7 +29,7 @@ struct LogEncounterView: View {
                                     Text(CatchStrings.Log.loggingFor)
                                         .font(.caption)
                                         .foregroundStyle(CatchTheme.textSecondary)
-                                    Text(cat.name)
+                                    Text(cat.displayName)
                                         .font(.body.weight(.semibold))
                                         .foregroundStyle(CatchTheme.textPrimary)
                                 }
@@ -60,7 +60,7 @@ struct LogEncounterView: View {
                                         CatPhotoView(photoData: cat.photos.first, size: 40)
 
                                         VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                                            Text(cat.name)
+                                            Text(cat.displayName)
                                                 .font(.body.weight(.semibold))
                                                 .foregroundStyle(CatchTheme.textPrimary)
 

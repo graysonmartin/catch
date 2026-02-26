@@ -3,7 +3,7 @@ import SwiftData
 
 @Model
 final class Cat {
-    var name: String
+    var name: String?
     var breed: String?
     var estimatedAge: String
     var location: Location
@@ -19,7 +19,7 @@ final class Cat {
     var encounters: [Encounter]
 
     init(
-        name: String,
+        name: String? = nil,
         breed: String? = nil,
         estimatedAge: String = "",
         location: Location = .empty,
@@ -38,6 +38,13 @@ final class Cat {
         self.encounters = []
     }
 
+    var displayName: String {
+        if let name, !name.isEmpty {
+            return name
+        }
+        return CatchStrings.Common.unnamedCatFallback
+    }
+
     var lastEncounterDate: Date? {
         encounters.map(\.date).max()
     }
@@ -46,7 +53,8 @@ final class Cat {
     private static let stevenBreeds: Set<String> = ["Tabby", "Tiger Tabby"]
 
     var isSteven: Bool {
-        Self.stevenNames.contains(name.trimmingCharacters(in: .whitespaces).lowercased())
+        guard let name else { return false }
+        return Self.stevenNames.contains(name.trimmingCharacters(in: .whitespaces).lowercased())
             && Self.stevenBreeds.contains(breed ?? "")
     }
 }

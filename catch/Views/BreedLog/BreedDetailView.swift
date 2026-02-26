@@ -121,7 +121,7 @@ struct BreedDetailView: View {
                     CatPhotoView(photoData: cat.photos.first, size: 44)
 
                     VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                        Text(cat.name)
+                        Text(cat.displayName)
                             .font(.subheadline.weight(.medium))
                             .foregroundStyle(CatchTheme.textPrimary)
                         Text(CatchStrings.Common.encounterCount(cat.encounters.count))
