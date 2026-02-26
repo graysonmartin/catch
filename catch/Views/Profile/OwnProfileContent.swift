@@ -13,52 +13,10 @@ struct OwnProfileContent: View {
     @Binding var selectedTab: Int
     @State private var isShowingEditSheet = false
     @State private var searchText = ""
-    @State private var sortOption: CatSortOption = .name
-    @State private var selectedProfileTab: ProfileTab = .collection
 
     var cloudKitService: CloudKitService = CKCloudKitService()
 
     private var profile: UserProfile? { profiles.first }
-
-    private var encounterStatsByCat: [PersistentIdentifier: (count: Int, lastDate: Date)] {
-        var stats: [PersistentIdentifier: (count: Int, lastDate: Date)] = [:]
-        for encounter in encounters {
-            if let catID = encounter.cat?.persistentModelID {
-                let existing = stats[catID]
-                stats[catID] = (
-                    count: (existing?.count ?? 0) + 1,
-                    lastDate: max(encounter.date, existing?.lastDate ?? .distantPast)
-                )
-            }
-        }
-        return stats
-    }
-
-    private func encounterCount(for cat: Cat) -> Int {
-        encounterStatsByCat[cat.persistentModelID]?.count ?? 0
-    }
-
-    private var filteredCats: [Cat] {
-        let filtered: [Cat]
-        if searchText.isEmpty {
-            filtered = cats
-        } else {
-            filtered = cats.filter {
-                $0.displayName.localizedCaseInsensitiveContains(searchText)
-                || $0.location.name.localizedCaseInsensitiveContains(searchText)
-            }
-        }
-
-        switch sortOption {
-        case .name:
-            return filtered.sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
-        case .encounters:
-            return filtered.sorted { encounterCount(for: $0) > encounterCount(for: $1) }
-        case .recent:
-            let stats = encounterStatsByCat
-            return filtered.sorted { (stats[$0.persistentModelID]?.lastDate ?? .distantPast) > (stats[$1.persistentModelID]?.lastDate ?? .distantPast) }
-        }
-    }
 
     var body: some View {
         ScrollView {
@@ -69,8 +27,10 @@ struct OwnProfileContent: View {
                     setupBanner
                 }
 
-                profileTabPicker
-                profileTabContent
+                ProfileDiaryTab(
+                    encounters: encounters,
+                    searchText: searchText
+                )
 
                 if let profile {
                     authSection(profile)
@@ -83,27 +43,10 @@ struct OwnProfileContent: View {
         .background(CatchTheme.background)
         .navigationTitle(CatchStrings.Profile.profileTitle)
         .navigationBarTitleDisplayMode(.large)
-        .searchable(
-            text: $searchText,
-            prompt: selectedProfileTab == .collection
-                ? CatchStrings.Collection.searchPrompt
-                : CatchStrings.Diary.searchPrompt
-        )
+        .searchable(text: $searchText, prompt: CatchStrings.Diary.searchPrompt)
         .toolbar {
-            ToolbarItemGroup(placement: .topBarTrailing) {
-                if selectedProfileTab == .collection {
-                    Menu {
-                        Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
-                            ForEach(CatSortOption.allCases) { option in
-                                Text(option.displayName).tag(option)
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "arrow.up.arrow.down")
-                            .foregroundStyle(CatchTheme.primary)
-                    }
-                }
-                if profile != nil {
+            if profile != nil {
+                ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         isShowingEditSheet = true
                     } label: {
@@ -232,22 +175,36 @@ struct OwnProfileContent: View {
 
     private var statsSection: some View {
         HStack(spacing: CatchSpacing.space10) {
-            statCard(count: cats.count, label: CatchStrings.Profile.cats, icon: "cat.fill")
+            NavigationLink {
+                ProfileCollectionTab(selectedTab: $selectedTab)
+            } label: {
+                statCard(count: cats.count, label: CatchStrings.Profile.cats, icon: "cat.fill")
+                    .overlay(alignment: .bottomTrailing) {
+                        statChevron
+                    }
+            }
+            .buttonStyle(.plain)
+
             statCard(count: encounters.count, label: CatchStrings.Profile.encounters, icon: "pawprint.fill")
+
             NavigationLink {
                 BreedLogView()
             } label: {
                 statCard(count: breedCount, label: CatchStrings.Profile.breedLog, icon: "book.closed.fill")
                     .overlay(alignment: .bottomTrailing) {
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 9, weight: .bold))
-                            .foregroundStyle(CatchTheme.textSecondary)
-                            .padding(CatchSpacing.space8)
+                        statChevron
                     }
             }
             .buttonStyle(.plain)
         }
         .padding(.horizontal, CatchSpacing.space20)
+    }
+
+    private var statChevron: some View {
+        Image(systemName: "chevron.right")
+            .font(.system(size: 9, weight: .bold))
+            .foregroundStyle(CatchTheme.textSecondary)
+            .padding(CatchSpacing.space8)
     }
 
     private var breedCount: Int {
@@ -278,37 +235,6 @@ struct OwnProfileContent: View {
             radius: CatchTheme.cardShadowRadius,
             y: CatchTheme.cardShadowY
         )
-    }
-
-    // MARK: - Profile Tabs
-
-    private var profileTabPicker: some View {
-        Picker("", selection: $selectedProfileTab) {
-            ForEach(ProfileTab.allCases) { tab in
-                Text(tab.displayName).tag(tab)
-            }
-        }
-        .pickerStyle(.segmented)
-        .padding(.horizontal, CatchSpacing.space20)
-    }
-
-    @ViewBuilder
-    private var profileTabContent: some View {
-        switch selectedProfileTab {
-        case .collection:
-            ProfileCollectionTab(
-                cats: cats,
-                filteredCats: filteredCats,
-                searchText: searchText,
-                encounterCount: { encounterCount(for: $0) },
-                selectedTab: $selectedTab
-            )
-        case .diary:
-            ProfileDiaryTab(
-                encounters: encounters,
-                searchText: searchText
-            )
-        }
     }
 
     // MARK: - Setup Banner
