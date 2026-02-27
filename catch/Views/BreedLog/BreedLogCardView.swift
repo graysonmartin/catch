@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct BreedLogCardView: View {
     let entry: BreedLogEntry

@@ -1,4 +1,5 @@
 import Foundation
+import CatchCore
 
 protocol BreedLogService {
     func buildBreedLog(from cats: [Cat]) -> [BreedLogEntry]

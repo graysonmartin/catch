@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import CatchCore
 
 // MARK: - SwiftUI wrapper
 

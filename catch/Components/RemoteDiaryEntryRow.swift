@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct RemoteDiaryEntryRow: View {
     let encounter: CloudEncounter

@@ -1,4 +1,5 @@
 import XCTest
+import CatchCore
 
 final class BreedCatalogTests: XCTestCase {
 

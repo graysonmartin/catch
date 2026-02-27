@@ -1,4 +1,5 @@
 import XCTest
+import CatchCore
 
 @MainActor
 final class CKSocialFeedServiceTests: XCTestCase {

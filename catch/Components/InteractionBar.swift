@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct InteractionBar: View {
     let encounterRecordName: String

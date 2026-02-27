@@ -1,4 +1,5 @@
 import Foundation
+import CatchCore
 
 struct ProfileDisplayData {
     let displayName: String

@@ -1,4 +1,5 @@
 import Foundation
+import CatchCore
 
 struct CatDisplayData: Identifiable, Hashable {
     let id: String

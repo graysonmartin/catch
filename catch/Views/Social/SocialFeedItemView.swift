@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 private enum Layout {
     static let thumbnailSize: CGFloat = 48

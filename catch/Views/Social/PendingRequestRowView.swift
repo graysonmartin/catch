@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct PendingRequestRowView: View {
     let follow: Follow

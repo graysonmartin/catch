@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import CatchCore
 
 struct ProfileDiaryTab: View {
     let encounters: [Encounter]

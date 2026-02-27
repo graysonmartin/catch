@@ -1,5 +1,6 @@
 import XCTest
 import SwiftData
+import CatchCore
 
 @MainActor
 final class CatTests: XCTestCase {

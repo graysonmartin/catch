@@ -1,5 +1,6 @@
 import SwiftUI
 import CoreLocation
+import CatchCore
 
 @Observable
 class LocationFetcher: NSObject, CLLocationManagerDelegate {

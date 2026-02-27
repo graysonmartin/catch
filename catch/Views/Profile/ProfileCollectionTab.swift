@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import CatchCore
 
 struct ProfileCollectionTab: View {
     @Query(sort: \Cat.name) private var cats: [Cat]

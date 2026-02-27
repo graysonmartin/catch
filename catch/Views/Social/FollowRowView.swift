@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct FollowRowView: View {
     let follow: Follow

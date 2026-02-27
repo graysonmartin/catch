@@ -1,4 +1,5 @@
 import Foundation
+import CatchCore
 
 enum BreedLogSortOption: String, CaseIterable, Identifiable {
     case rarity = "rarity"

@@ -5,7 +5,7 @@ TEST_SCHEME = catchTests
 BUNDLE_ID = com.catch.catch
 APP_PATH = $(shell find ~/Library/Developer/Xcode/DerivedData/catch-*/Build/Products/Debug-iphonesimulator/catch.app -maxdepth 0 2>/dev/null | head -1)
 
-.PHONY: test test-verbose test-serial boot-sim kill-sim clean-build build run install reset-sim
+.PHONY: test test-fast test-all test-verbose test-serial boot-sim kill-sim clean-build build run install reset-sim
 
 # --- Simulator ---
 
@@ -45,6 +45,13 @@ install:
 	@echo "Reinstalled from last build."
 
 # --- Tests ---
+
+# Package tests only — no simulator, runs in seconds
+test-fast:
+	swift test --package-path .
+
+# Package + Xcode tests
+test-all: test-fast test
 
 test: boot-sim
 	xcodebuild test \

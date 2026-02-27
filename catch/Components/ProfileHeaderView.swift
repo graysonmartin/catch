@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct ProfileHeaderView: View {
     let data: ProfileDisplayData

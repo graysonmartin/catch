@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import CatchCore
 
 struct LogEncounterView: View {
     @Environment(\.modelContext) private var modelContext

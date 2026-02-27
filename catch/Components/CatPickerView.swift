@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct CatPickerView: View {
     let cats: [Cat]

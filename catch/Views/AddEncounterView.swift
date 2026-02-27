@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct AddEncounterView: View {
     @Binding var selectedTab: Int

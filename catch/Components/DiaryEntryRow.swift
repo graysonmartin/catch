@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 private enum DiaryRowLayout {
     static let thumbnailSize: CGFloat = 48
