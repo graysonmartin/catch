@@ -14,6 +14,7 @@ struct OwnProfileContent: View {
     @Binding var selectedTab: Int
     @State private var isShowingEditSheet = false
     @State private var isShowingCollection = false
+    @State private var isShowingSettings = false
     @State private var searchText = ""
 
     var cloudKitService: CloudKitService = CKCloudKitService()
@@ -47,6 +48,17 @@ struct OwnProfileContent: View {
         .navigationBarTitleDisplayMode(.large)
         .searchable(text: $searchText, prompt: CatchStrings.Diary.searchPrompt)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                NavigationLink {
+                    SettingsView(
+                        settingsService: UserDefaultsSettingsService(),
+                        authService: authService
+                    )
+                } label: {
+                    Image(systemName: "gearshape")
+                        .foregroundStyle(CatchTheme.primary)
+                }
+            }
             if profile != nil {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {

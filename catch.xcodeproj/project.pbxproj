@@ -163,6 +163,17 @@
 		E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000006 /* CKSocialFeedServiceTests.swift */; };
 		E8PKG0000020 /* CatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = E8PKG0000010 /* CatchCore */; };
 		E8PKG0000021 /* CatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = E8PKG0000011 /* CatchCore */; };
+
+		E8ST00000101 /* UserDefaultsSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000001 /* UserDefaultsSettingsService.swift */; };
+		E8ST00000102 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000002 /* SettingsViewModel.swift */; };
+		E8ST00000103 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000003 /* SettingsView.swift */; };
+		E8ST00000104 /* CatchStrings+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000004 /* CatchStrings+Settings.swift */; };
+		E8ST00000204 /* CatchStrings+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000004 /* CatchStrings+Settings.swift */; };
+		E8ST00000201 /* UserDefaultsSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000001 /* UserDefaultsSettingsService.swift */; };
+		E8ST00000202 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000002 /* SettingsViewModel.swift */; };
+		E8ST00000211 /* UserDefaultsSettingsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000011 /* UserDefaultsSettingsServiceTests.swift */; };
+		E8ST00000212 /* SettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000012 /* SettingsViewModelTests.swift */; };
+		E8ST00000213 /* MockSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000013 /* MockSettingsService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -290,6 +301,14 @@
 		E8SF00000004 /* SocialFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialFeedItemView.swift; sourceTree = "<group>"; };
 		E8SF00000005 /* MockSocialFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialFeedService.swift; sourceTree = "<group>"; };
 		E8SF00000006 /* CKSocialFeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialFeedServiceTests.swift; sourceTree = "<group>"; };
+
+		E8ST00000001 /* UserDefaultsSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsSettingsService.swift; sourceTree = "<group>"; };
+		E8ST00000002 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		E8ST00000003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E8ST00000004 /* CatchStrings+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Settings.swift"; sourceTree = "<group>"; };
+		E8ST00000011 /* UserDefaultsSettingsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsSettingsServiceTests.swift; sourceTree = "<group>"; };
+		E8ST00000012 /* SettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModelTests.swift; sourceTree = "<group>"; };
+		E8ST00000013 /* MockSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -407,6 +426,7 @@
 				E8PF0000F001 /* Profile */,
 				E8BL0000F002 /* BreedLog */,
 				E8E500000021 /* Social */,
+				E8ST0000F002 /* Settings */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -451,6 +471,7 @@
 				E8CS0000000B /* CatchStrings+Components.swift */,
 				E8CS0000000C /* CatchStrings+Diary.swift */,
 				E8SI00000008 /* CatchStrings+Interaction.swift */,
+				E8ST00000004 /* CatchStrings+Settings.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -527,6 +548,7 @@
 				E8UV0000F002 /* Username */,
 				E8SI0000F002 /* Social */,
 				E8SF0000F002 /* SocialFeed */,
+				E8ST0000F003 /* Settings */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 			);
 			path = Services;
@@ -561,6 +583,7 @@
 				E8UV0000F001 /* Username */,
 				E8SI0000F001 /* Social */,
 				E8SF0000F001 /* SocialFeed */,
+				E8ST0000F001 /* Settings */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -580,6 +603,7 @@
 				E8BL00000022 /* MockBreedLogService.swift */,
 				E8SI0000000C /* MockSocialInteractionService.swift */,
 				E8SF00000005 /* MockSocialFeedService.swift */,
+				E8ST00000013 /* MockSettingsService.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -788,6 +812,32 @@
 			path = SocialFeed;
 			sourceTree = "<group>";
 		};
+		E8ST0000F001 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E8ST00000001 /* UserDefaultsSettingsService.swift */,
+				E8ST00000002 /* SettingsViewModel.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		E8ST0000F002 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E8ST00000003 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		E8ST0000F003 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E8ST00000011 /* UserDefaultsSettingsServiceTests.swift */,
+				E8ST00000012 /* SettingsViewModelTests.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -979,6 +1029,10 @@
 				E8SF00000102 /* SocialFeedService.swift in Sources */,
 				E8SF00000103 /* CKSocialFeedService.swift in Sources */,
 				E8SF00000104 /* SocialFeedItemView.swift in Sources */,
+				E8ST00000101 /* UserDefaultsSettingsService.swift in Sources */,
+				E8ST00000102 /* SettingsViewModel.swift in Sources */,
+				E8ST00000103 /* SettingsView.swift in Sources */,
+				E8ST00000104 /* CatchStrings+Settings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1047,6 +1101,12 @@
 				E8SF00000203 /* CKSocialFeedService.swift in Sources */,
 				E8SF00000204 /* MockSocialFeedService.swift in Sources */,
 				E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */,
+				E8ST00000201 /* UserDefaultsSettingsService.swift in Sources */,
+				E8ST00000202 /* SettingsViewModel.swift in Sources */,
+				E8ST00000204 /* CatchStrings+Settings.swift in Sources */,
+				E8ST00000211 /* UserDefaultsSettingsServiceTests.swift in Sources */,
+				E8ST00000212 /* SettingsViewModelTests.swift in Sources */,
+				E8ST00000213 /* MockSettingsService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

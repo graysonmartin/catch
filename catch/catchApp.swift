@@ -5,6 +5,7 @@ import CatchCore
 @main
 struct catchApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    @AppStorage("catch.settings.appearanceMode") private var appearanceModeRaw = AppearanceMode.system.rawValue
     @State private var authService = AppleAuthService()
     @State private var followService = CKFollowService()
     @State private var breedClassifier = VisionBreedClassifierService()
@@ -58,6 +59,7 @@ struct catchApp: App {
         WindowGroup {
             if hasCompletedOnboarding {
                 ContentView()
+                    .preferredColorScheme(resolvedColorScheme)
                     .environment(breedClassifier)
                     .environment(authService)
                     .environment(followService)
@@ -112,8 +114,17 @@ struct catchApp: App {
                     }
             } else {
                 OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
+                    .preferredColorScheme(resolvedColorScheme)
             }
         }
         .modelContainer(modelContainer)
+    }
+
+    private var resolvedColorScheme: ColorScheme? {
+        switch AppearanceMode(rawValue: appearanceModeRaw) {
+        case .light: return .light
+        case .dark: return .dark
+        case .system, .none: return nil
+        }
     }
 }
