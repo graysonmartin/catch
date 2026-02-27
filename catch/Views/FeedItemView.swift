@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 private enum PillLayout {
     static let fontSize: CGFloat = 9

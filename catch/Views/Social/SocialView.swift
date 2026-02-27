@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 enum SocialTab: String, CaseIterable, Identifiable {
     case followers

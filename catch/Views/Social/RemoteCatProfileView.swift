@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct RemoteCatProfileView: View {
     let cat: CloudCat

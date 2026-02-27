@@ -1,4 +1,5 @@
 import AuthenticationServices
+import CatchCore
 
 @MainActor
 protocol AuthService: Observable {

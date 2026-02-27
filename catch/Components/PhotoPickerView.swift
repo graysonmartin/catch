@@ -1,6 +1,7 @@
 import SwiftUI
 import PhotosUI
 import UniformTypeIdentifiers
+import CatchCore
 
 struct PhotoPickerView: View {
     @Binding var selectedPhotos: [Data]

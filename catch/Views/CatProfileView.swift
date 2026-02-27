@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import CatchCore
 
 struct CatProfileView: View {
     @Environment(\.modelContext) private var modelContext

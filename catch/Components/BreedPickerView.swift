@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct BreedPickerView: View {
     @Binding var breed: String?

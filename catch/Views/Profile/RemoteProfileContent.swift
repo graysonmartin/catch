@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct RemoteProfileContent: View {
     let userID: String

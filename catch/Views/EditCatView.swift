@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct EditCatView: View {
     @Environment(\.dismiss) private var dismiss

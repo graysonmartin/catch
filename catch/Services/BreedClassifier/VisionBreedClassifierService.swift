@@ -2,6 +2,7 @@ import Foundation
 import Observation
 import Vision
 import os
+import CatchCore
 
 @Observable
 @MainActor

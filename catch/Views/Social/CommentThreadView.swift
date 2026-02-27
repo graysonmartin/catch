@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct CommentThreadView: View {
     let encounterRecordName: String

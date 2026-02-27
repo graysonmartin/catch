@@ -1,5 +1,6 @@
 import SwiftUI
 import CoreLocation
+import CatchCore
 
 struct OnboardingView: View {
     @Binding var hasCompletedOnboarding: Bool

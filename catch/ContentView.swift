@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct ContentView: View {
     @Environment(CKFollowService.self) private var followService

@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import CatchCore
 
 struct AddCatView: View {
     @Environment(\.modelContext) private var modelContext

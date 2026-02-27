@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 enum BreedRarity: Int, CaseIterable, Comparable {
     case common = 0

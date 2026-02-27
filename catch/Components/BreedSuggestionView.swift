@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct BreedSuggestionView: View {
     let prediction: BreedPrediction?

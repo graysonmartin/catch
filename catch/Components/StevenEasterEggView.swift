@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct StevenEasterEggView: View {
     var onComplete: () -> Void

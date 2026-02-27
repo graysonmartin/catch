@@ -1,5 +1,6 @@
 import SwiftUI
 import PhotosUI
+import CatchCore
 
 struct EditProfileView: View {
     @Environment(\.dismiss) private var dismiss

@@ -1,6 +1,7 @@
 #if DEBUG
 import SwiftData
 import UIKit
+import CatchCore
 
 @MainActor
 enum DataSeeder {

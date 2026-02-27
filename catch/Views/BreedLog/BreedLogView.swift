@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import CatchCore
 
 struct BreedLogView: View {
     @Query(sort: \Cat.name) private var queriedCats: [Cat]

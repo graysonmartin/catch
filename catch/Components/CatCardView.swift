@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct CatCardView: View {
     let data: CatDisplayData

@@ -1,4 +1,5 @@
 import Foundation
+import CatchCore
 
 @MainActor
 final class MockCloudKitService: CloudKitService {

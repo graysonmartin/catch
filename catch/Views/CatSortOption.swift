@@ -1,4 +1,5 @@
 import Foundation
+import CatchCore
 
 enum CatSortOption: String, CaseIterable, Identifiable {
     case name = "name"

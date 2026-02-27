@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import AuthenticationServices
+import CatchCore
 
 struct OwnProfileContent: View {
     @Environment(\.modelContext) private var modelContext
