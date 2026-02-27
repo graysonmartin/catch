@@ -67,7 +67,6 @@
 		E8PF00000103 /* OwnProfileContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000003 /* OwnProfileContent.swift */; };
 		E8PF00000104 /* RemoteProfileContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000004 /* RemoteProfileContent.swift */; };
 		E8PF00000105 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000005 /* ProfileHeaderView.swift */; };
-		E8000001AA000058 /* CatSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000064 /* CatSortOption.swift */; };
 		E8000001AA000059 /* CatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000065 /* CatCardView.swift */; };
 		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
 		E8000001AA000055 /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
@@ -163,6 +162,15 @@
 		E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000006 /* CKSocialFeedServiceTests.swift */; };
 		E8PKG0000020 /* CatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = E8PKG0000010 /* CatchCore */; };
 		E8PKG0000021 /* CatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = E8PKG0000011 /* CatchCore */; };
+		E8CL00000101 /* CollectionSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000001 /* CollectionSortOption.swift */; };
+		E8CL00000102 /* CollectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000002 /* CollectionFilter.swift */; };
+		E8CL00000103 /* CollectionSortFilterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000003 /* CollectionSortFilterService.swift */; };
+		E8CL00000104 /* CollectionSortFilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000004 /* CollectionSortFilterBar.swift */; };
+		E8CL00000105 /* RemoteCollectionTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000005 /* RemoteCollectionTab.swift */; };
+		E8CL00000201 /* CollectionSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000001 /* CollectionSortOption.swift */; };
+		E8CL00000202 /* CollectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000002 /* CollectionFilter.swift */; };
+		E8CL00000203 /* CollectionSortFilterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000003 /* CollectionSortFilterService.swift */; };
+		E8CL00000204 /* CollectionSortFilterServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000006 /* CollectionSortFilterServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -215,7 +223,6 @@
 		E8PF00000003 /* OwnProfileContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnProfileContent.swift; sourceTree = "<group>"; };
 		E8PF00000004 /* RemoteProfileContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteProfileContent.swift; sourceTree = "<group>"; };
 		E8PF00000005 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
-		E8000001AA000064 /* CatSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSortOption.swift; sourceTree = "<group>"; };
 		E8000001AA000065 /* CatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatCardView.swift; sourceTree = "<group>"; };
 		E8000001AA000062 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		E8000001AA000070 /* CatchSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchema.swift; sourceTree = "<group>"; };
@@ -290,6 +297,12 @@
 		E8SF00000004 /* SocialFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialFeedItemView.swift; sourceTree = "<group>"; };
 		E8SF00000005 /* MockSocialFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialFeedService.swift; sourceTree = "<group>"; };
 		E8SF00000006 /* CKSocialFeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialFeedServiceTests.swift; sourceTree = "<group>"; };
+		E8CL00000001 /* CollectionSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortOption.swift; sourceTree = "<group>"; };
+		E8CL00000002 /* CollectionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionFilter.swift; sourceTree = "<group>"; };
+		E8CL00000003 /* CollectionSortFilterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterService.swift; sourceTree = "<group>"; };
+		E8CL00000004 /* CollectionSortFilterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterBar.swift; sourceTree = "<group>"; };
+		E8CL00000005 /* RemoteCollectionTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCollectionTab.swift; sourceTree = "<group>"; };
+		E8CL00000006 /* CollectionSortFilterServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -402,7 +415,6 @@
 				E8000001AA00002E /* ClusterMapView.swift */,
 				E8000001AA00002F /* MapAnnotations.swift */,
 				E8000001AA00002A /* OnboardingView.swift */,
-				E8000001AA000064 /* CatSortOption.swift */,
 				E8000001AA000062 /* EditProfileView.swift */,
 				E8PF0000F001 /* Profile */,
 				E8BL0000F002 /* BreedLog */,
@@ -430,6 +442,7 @@
 				E8SC00000001 /* StatCardView.swift */,
 				E8D800000001 /* StevenEasterEggView.swift */,
 				E8SI00000009 /* InteractionBar.swift */,
+				E8CL00000004 /* CollectionSortFilterBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -518,6 +531,7 @@
 			isa = PBXGroup;
 			children = (
 				E8CF211849B3A47ED1640CA4 /* Auth */,
+				E8CL0000F002 /* Collection */,
 				E8B700000011 /* BreedClassifier */,
 				E8BL0000F003 /* BreedLog */,
 				E8D100000020 /* CloudKit */,
@@ -552,6 +566,7 @@
 			isa = PBXGroup;
 			children = (
 				E8C4C76FF8B24F98B098D2F1 /* Auth */,
+				E8CL0000F001 /* Collection */,
 				E8B700000010 /* BreedClassifier */,
 				E8BL0000F001 /* BreedLog */,
 				E8C29A31E399698E3B36A45C /* CloudKit */,
@@ -753,6 +768,7 @@
 				E8PF00000004 /* RemoteProfileContent.swift */,
 				E8PT00000002 /* ProfileCollectionTab.swift */,
 				E8PT00000003 /* ProfileDiaryTab.swift */,
+				E8CL00000005 /* RemoteCollectionTab.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -786,6 +802,24 @@
 				E8SF00000006 /* CKSocialFeedServiceTests.swift */,
 			);
 			path = SocialFeed;
+			sourceTree = "<group>";
+		};
+		E8CL0000F001 /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				E8CL00000001 /* CollectionSortOption.swift */,
+				E8CL00000002 /* CollectionFilter.swift */,
+				E8CL00000003 /* CollectionSortFilterService.swift */,
+			);
+			path = Collection;
+			sourceTree = "<group>";
+		};
+		E8CL0000F002 /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				E8CL00000006 /* CollectionSortFilterServiceTests.swift */,
+			);
+			path = Collection;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -938,7 +972,6 @@
 				E8000001AA000036 /* OnboardingView.swift in Sources */,
 				E8000001AA000051 /* ImageDownsampler.swift in Sources */,
 				E8000001AA000052 /* UserProfile.swift in Sources */,
-				E8000001AA000058 /* CatSortOption.swift in Sources */,
 				E8000001AA000059 /* CatCardView.swift in Sources */,
 				E8000001AA000054 /* EditProfileView.swift in Sources */,
 				E8000001AA000055 /* CatchSchema.swift in Sources */,
@@ -967,7 +1000,12 @@
 				E8PF00000104 /* RemoteProfileContent.swift in Sources */,
 				E8PF00000105 /* ProfileHeaderView.swift in Sources */,
 				E8PT00000102 /* ProfileCollectionTab.swift in Sources */,
+				E8CL00000105 /* RemoteCollectionTab.swift in Sources */,
 				E8PT00000103 /* ProfileDiaryTab.swift in Sources */,
+				E8CL00000101 /* CollectionSortOption.swift in Sources */,
+				E8CL00000102 /* CollectionFilter.swift in Sources */,
+				E8CL00000103 /* CollectionSortFilterService.swift in Sources */,
+				E8CL00000104 /* CollectionSortFilterBar.swift in Sources */,
 				E8DR00000101 /* DiaryEntryRow.swift in Sources */,
 				E8DR00000102 /* RemoteDiaryEntryRow.swift in Sources */,
 				E8CS0000010C /* CatchStrings+Diary.swift in Sources */,
@@ -1047,6 +1085,10 @@
 				E8SF00000203 /* CKSocialFeedService.swift in Sources */,
 				E8SF00000204 /* MockSocialFeedService.swift in Sources */,
 				E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */,
+				E8CL00000201 /* CollectionSortOption.swift in Sources */,
+				E8CL00000202 /* CollectionFilter.swift in Sources */,
+				E8CL00000203 /* CollectionSortFilterService.swift in Sources */,
+				E8CL00000204 /* CollectionSortFilterServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

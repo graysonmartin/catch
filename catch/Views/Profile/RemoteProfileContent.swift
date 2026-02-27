@@ -16,11 +16,6 @@ struct RemoteProfileContent: View {
     @State private var isShowingBreedLog = false
     @State private var isShowingUnfollowConfirmation = false
 
-    private let columns = [
-        GridItem(.flexible(), spacing: CatchSpacing.space16),
-        GridItem(.flexible(), spacing: CatchSpacing.space16)
-    ]
-
     var body: some View {
         Group {
             if browseService?.isLoading == true && data == nil {
@@ -211,7 +206,11 @@ struct RemoteProfileContent: View {
         }
         .padding(.horizontal, CatchSpacing.space20)
         .navigationDestination(isPresented: $isShowingCollection) {
-            remoteCatsGrid(data: data)
+            RemoteCollectionTab(
+                cats: data.cats,
+                encounters: data.encounters,
+                ownerName: data.profile.displayName
+            )
         }
         .navigationDestination(isPresented: $isShowingBreedLog) {
             BreedLogView(entries: breedLogEntries(data: data))
@@ -305,42 +304,6 @@ struct RemoteProfileContent: View {
                 .clipShape(Capsule())
             }
         }
-    }
-
-    // MARK: - Collection Grid
-
-    private func remoteCatsGrid(data: UserBrowseData) -> some View {
-        ScrollView {
-            if data.cats.isEmpty {
-                EmptyStateView(
-                    icon: "square.grid.2x2",
-                    title: CatchStrings.Social.noCatsYetTitle,
-                    subtitle: CatchStrings.Social.noCatsYetSubtitle
-                )
-                .padding(.top, CatchSpacing.space32)
-            } else {
-                LazyVGrid(columns: columns, spacing: CatchSpacing.space16) {
-                    ForEach(data.cats, id: \.recordName) { cat in
-                        let encounterCount = data.encounters.filter { $0.catRecordName == cat.recordName }.count
-                        NavigationLink {
-                            RemoteCatProfileView(
-                                cat: cat,
-                                encounters: data.encounters,
-                                ownerName: data.profile.displayName
-                            )
-                        } label: {
-                            CatCardView(data: CatDisplayData(remote: cat, encounterCount: encounterCount))
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.top, CatchSpacing.space8)
-            }
-        }
-        .background(CatchTheme.background)
-        .navigationTitle(CatchStrings.Profile.collectionTab)
-        .navigationBarTitleDisplayMode(.large)
     }
 
     // MARK: - Diary Feed
