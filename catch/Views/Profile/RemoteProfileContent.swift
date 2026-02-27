@@ -12,6 +12,8 @@ struct RemoteProfileContent: View {
     @State private var data: UserBrowseData?
     @State private var loadError: UserBrowseError?
     @State private var isShowingCollection = false
+    @State private var isShowingBreedLog = false
+    @State private var isShowingUnfollowConfirmation = false
 
     private let columns = [
         GridItem(.flexible(), spacing: CatchSpacing.space16),
@@ -37,6 +39,13 @@ struct RemoteProfileContent: View {
         .background(CatchTheme.background)
         .navigationTitle(displayTitle)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if !isPrivateHidden {
+                ToolbarItem(placement: .topBarTrailing) {
+                    toolbarFollowButton
+                }
+            }
+        }
         .task {
             await loadData()
         }
@@ -74,11 +83,14 @@ struct RemoteProfileContent: View {
 
     private func privateProfileState(data: UserBrowseData) -> some View {
         VStack(spacing: CatchSpacing.space16) {
+            avatarWithSocial(data: data)
+
             ProfileHeaderView(
                 data: ProfileDisplayData(remote: data),
-                avatarSize: 64
+                showAvatar: false
             )
-            followButton
+
+            inlineFollowButton
 
             VStack(spacing: CatchSpacing.space8) {
                 Image(systemName: "lock.fill")
@@ -102,73 +114,170 @@ struct RemoteProfileContent: View {
 
     private func profileContent(data: UserBrowseData) -> some View {
         ScrollView {
-            VStack(spacing: CatchSpacing.space16) {
+            VStack(spacing: CatchSpacing.space24) {
+                avatarWithSocial(data: data)
+
                 ProfileHeaderView(
                     data: ProfileDisplayData(remote: data),
-                    avatarSize: 64
+                    showAvatar: false
                 )
 
-                if !isPrivateHidden {
-                    statBadges(data: data)
-                }
-
-                followButton
+                statsSection(data: data)
                 diaryFeed(data: data)
             }
-            .padding()
+            .padding(.vertical, CatchSpacing.space24)
         }
     }
 
-    private func statBadges(data: UserBrowseData) -> some View {
-        HStack(spacing: CatchSpacing.space24) {
-            Button {
-                isShowingCollection = true
-            } label: {
-                HStack(spacing: CatchSpacing.space4) {
-                    statBadge(count: data.cats.count, label: CatchStrings.Profile.cats)
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 9, weight: .bold))
-                        .foregroundStyle(CatchTheme.textSecondary)
-                }
-            }
-            .buttonStyle(.plain)
+    // MARK: - Avatar with Social
 
-            statBadge(count: data.encounters.count, label: CatchStrings.Profile.encounters)
+    private func avatarWithSocial(data: UserBrowseData) -> some View {
+        HStack(alignment: .center, spacing: CatchSpacing.space24) {
+            compactSocialStat(
+                count: data.followerCount,
+                label: CatchStrings.Profile.followers
+            )
+
+            avatarImage(data: data)
+
+            compactSocialStat(
+                count: data.followingCount,
+                label: CatchStrings.Profile.following
+            )
         }
-        .padding(.top, CatchSpacing.space4)
-        .navigationDestination(isPresented: $isShowingCollection) {
-            remoteCatsGrid(data: data)
-        }
+        .padding(.horizontal, CatchSpacing.space20)
     }
 
-    private func statBadge(count: Int, label: String) -> some View {
-        VStack(spacing: CatchSpacing.space2) {
+    @ViewBuilder
+    private func avatarImage(data: UserBrowseData) -> some View {
+        Image(systemName: "person.crop.circle.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 120, height: 120)
+            .foregroundStyle(CatchTheme.secondary)
+    }
+
+    private func compactSocialStat(count: Int, label: String) -> some View {
+        VStack(spacing: CatchSpacing.space4) {
             Text("\(count)")
-                .font(.headline)
+                .font(.title3.weight(.bold))
                 .foregroundStyle(CatchTheme.textPrimary)
+
+            RoundedRectangle(cornerRadius: 1)
+                .fill(CatchTheme.primary)
+                .frame(width: 32, height: 2)
+
             Text(label)
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
         }
+        .frame(minWidth: 60)
     }
 
+    // MARK: - Stats
+
+    private func statsSection(data: UserBrowseData) -> some View {
+        HStack(spacing: CatchSpacing.space10) {
+            Button {
+                isShowingCollection = true
+            } label: {
+                StatCardView(
+                    count: data.cats.count,
+                    label: CatchStrings.Profile.cats,
+                    icon: "cat.fill",
+                    showChevron: true
+                )
+            }
+            .buttonStyle(.plain)
+
+            StatCardView(
+                count: data.encounters.count,
+                label: CatchStrings.Profile.encounters,
+                icon: "pawprint.fill"
+            )
+
+            Button {
+                isShowingBreedLog = true
+            } label: {
+                StatCardView(
+                    count: breedCount(data: data),
+                    label: CatchStrings.Profile.breedLog,
+                    icon: "book.closed.fill",
+                    showChevron: true
+                )
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, CatchSpacing.space20)
+        .navigationDestination(isPresented: $isShowingCollection) {
+            remoteCatsGrid(data: data)
+        }
+        .navigationDestination(isPresented: $isShowingBreedLog) {
+            BreedLogView(entries: breedLogEntries(data: data))
+        }
+    }
+
+    // MARK: - Follow Button (Toolbar)
+
     @ViewBuilder
-    private var followButton: some View {
+    private var toolbarFollowButton: some View {
         let currentUserID = authService.authState.user?.userIdentifier ?? ""
         if userID != currentUserID {
             if followService.isFollowing(userID) {
-                Button(CatchStrings.Social.followingStatus) {
-                    Task {
-                        try? await followService.unfollow(targetID: userID, by: currentUserID)
-                    }
+                Button {
+                    isShowingUnfollowConfirmation = true
+                } label: {
+                    Text(CatchStrings.Social.followingStatus)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(CatchTheme.textPrimary)
                 }
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(CatchTheme.textPrimary)
-                .padding(.horizontal, CatchSpacing.space24)
-                .padding(.vertical, CatchSpacing.space8)
-                .background(CatchTheme.secondary)
-                .clipShape(Capsule())
+                .confirmationDialog(
+                    CatchStrings.Social.areYouSure,
+                    isPresented: $isShowingUnfollowConfirmation,
+                    titleVisibility: .visible
+                ) {
+                    Button(CatchStrings.Social.unfollow, role: .destructive) {
+                        Task {
+                            try? await followService.unfollow(targetID: userID, by: currentUserID)
+                        }
+                    }
+                } message: {
+                    Text(CatchStrings.Social.unfollowConfirmMessage)
+                }
             } else if followService.pendingRequestTo(userID) != nil {
+                Text(CatchStrings.Social.requestedStatus)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(CatchTheme.textSecondary)
+            } else {
+                Button {
+                    Task {
+                        let isPrivate = data?.profile.isPrivate ?? false
+                        try? await followService.follow(
+                            targetID: userID,
+                            by: currentUserID,
+                            isTargetPrivate: isPrivate
+                        )
+                    }
+                } label: {
+                    Text(CatchStrings.Social.follow)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, CatchSpacing.space12)
+                        .padding(.vertical, CatchSpacing.space6)
+                        .background(CatchTheme.primary)
+                        .clipShape(Capsule())
+                }
+            }
+        }
+    }
+
+    // MARK: - Follow Button (Inline for Private)
+
+    @ViewBuilder
+    private var inlineFollowButton: some View {
+        let currentUserID = authService.authState.user?.userIdentifier ?? ""
+        if userID != currentUserID {
+            if followService.pendingRequestTo(userID) != nil {
                 Text(CatchStrings.Social.requestedStatus)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.textSecondary)
@@ -196,6 +305,8 @@ struct RemoteProfileContent: View {
             }
         }
     }
+
+    // MARK: - Collection Grid
 
     private func remoteCatsGrid(data: UserBrowseData) -> some View {
         ScrollView {
@@ -231,6 +342,8 @@ struct RemoteProfileContent: View {
         .navigationBarTitleDisplayMode(.large)
     }
 
+    // MARK: - Diary Feed
+
     private func diaryFeed(data: UserBrowseData) -> some View {
         Group {
             if data.encounters.isEmpty {
@@ -242,12 +355,17 @@ struct RemoteProfileContent: View {
                 .padding(.top, CatchSpacing.space32)
             } else {
                 let grouped = groupedEncounters(data.encounters)
+                let firstEncounterIDs = earliestEncounterIDs(data.encounters)
                 LazyVStack(alignment: .leading, spacing: 0) {
                     ForEach(grouped, id: \.date) { group in
                         Section {
                             ForEach(group.encounters, id: \.recordName) { encounter in
                                 let cat = data.cats.first { $0.recordName == encounter.catRecordName }
-                                RemoteDiaryEntryRow(encounter: encounter, cat: cat)
+                                RemoteDiaryEntryRow(
+                                    encounter: encounter,
+                                    cat: cat,
+                                    isFirstEncounter: firstEncounterIDs.contains(encounter.recordName)
+                                )
                             }
                         } header: {
                             Text(formattedDateHeader(group.date))
@@ -258,8 +376,22 @@ struct RemoteProfileContent: View {
                         }
                     }
                 }
+                .padding(.horizontal)
             }
         }
+    }
+
+    private func earliestEncounterIDs(_ encounters: [CloudEncounter]) -> Set<String> {
+        var ids = Set<String>()
+        var seenCats = Set<String>()
+        let allSorted = encounters.sorted { $0.date < $1.date }
+        for encounter in allSorted {
+            if !seenCats.contains(encounter.catRecordName) {
+                seenCats.insert(encounter.catRecordName)
+                ids.insert(encounter.recordName)
+            }
+        }
+        return ids
     }
 
     private func groupedEncounters(_ encounters: [CloudEncounter]) -> [(date: Date, encounters: [CloudEncounter])] {
@@ -293,6 +425,14 @@ struct RemoteProfileContent: View {
     private var isPrivateHidden: Bool {
         guard let data else { return false }
         return data.profile.isPrivate && !isFollowingUser
+    }
+
+    private func breedCount(data: UserBrowseData) -> Int {
+        Set(data.cats.map(\.breed).filter { BreedCatalog.contains($0) }).count
+    }
+
+    private func breedLogEntries(data: UserBrowseData) -> [BreedLogEntry] {
+        DefaultBreedLogService().buildBreedLog(from: data.cats)
     }
 
     private func loadData() async {

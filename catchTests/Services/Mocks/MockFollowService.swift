@@ -16,7 +16,9 @@ final class MockFollowService: FollowService {
     private(set) var declineRequestCalls: [Follow] = []
     private(set) var removeFollowerCalls: [Follow] = []
     private(set) var refreshCalls: [String] = []
+    private(set) var fetchFollowCountsCalls: [String] = []
 
+    var stubbedFollowCounts: (followers: Int, following: Int) = (0, 0)
     var followError: FollowServiceError?
     var unfollowError: FollowServiceError?
     var approveError: FollowServiceError?
@@ -50,6 +52,11 @@ final class MockFollowService: FollowService {
 
     func refresh(for userID: String) async throws {
         refreshCalls.append(userID)
+    }
+
+    func fetchFollowCounts(for userID: String) async throws -> (followers: Int, following: Int) {
+        fetchFollowCountsCalls.append(userID)
+        return stubbedFollowCounts
     }
 
     func isFollowing(_ targetID: String) -> Bool {
@@ -103,6 +110,8 @@ final class MockFollowService: FollowService {
         declineRequestCalls = []
         removeFollowerCalls = []
         refreshCalls = []
+        fetchFollowCountsCalls = []
+        stubbedFollowCounts = (0, 0)
         followError = nil
         unfollowError = nil
         approveError = nil

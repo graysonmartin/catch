@@ -37,6 +37,7 @@
 		E8CS00000309 /* CatchStrings+Social.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000009 /* CatchStrings+Social.swift */; };
 		E8CS0000030A /* CatchStrings+BreedLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000A /* CatchStrings+BreedLog.swift */; };
 		E8CS0000030B /* CatchStrings+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000B /* CatchStrings+Components.swift */; };
+		E8SC00000100 /* StatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SC00000001 /* StatCardView.swift */; };
 		E8000001AA000005 /* CatPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000014 /* CatPhotoView.swift */; };
 		E8000001AA000006 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000015 /* PhotoPickerView.swift */; };
 		E8000001AA000007 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000016 /* EmptyStateView.swift */; };
@@ -252,6 +253,8 @@
 		E8SF00000203 /* CKSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000003 /* CKSocialFeedService.swift */; };
 		E8SF00000204 /* MockSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000005 /* MockSocialFeedService.swift */; };
 		E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000006 /* CKSocialFeedServiceTests.swift */; };
+		E8FC00000201 /* FetchFollowCountsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FC00000001 /* FetchFollowCountsTests.swift */; };
+		E8RP00000201 /* RemoteProfileEarliestEncounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RP00000001 /* RemoteProfileEarliestEncounterTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -275,6 +278,7 @@
 		E8CS00000009 /* CatchStrings+Social.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Social.swift"; sourceTree = "<group>"; };
 		E8CS0000000A /* CatchStrings+BreedLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+BreedLog.swift"; sourceTree = "<group>"; };
 		E8CS0000000B /* CatchStrings+Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Components.swift"; sourceTree = "<group>"; };
+		E8SC00000001 /* StatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCardView.swift; sourceTree = "<group>"; };
 		E8000001AA000014 /* CatPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatPhotoView.swift; sourceTree = "<group>"; };
 		E8000001AA000015 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		E8000001AA000016 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
@@ -435,6 +439,8 @@
 		E8SF00000004 /* SocialFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialFeedItemView.swift; sourceTree = "<group>"; };
 		E8SF00000005 /* MockSocialFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialFeedService.swift; sourceTree = "<group>"; };
 		E8SF00000006 /* CKSocialFeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialFeedServiceTests.swift; sourceTree = "<group>"; };
+		E8FC00000001 /* FetchFollowCountsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFollowCountsTests.swift; sourceTree = "<group>"; };
+		E8RP00000001 /* RemoteProfileEarliestEncounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteProfileEarliestEncounterTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -554,6 +560,7 @@
 				E8000001AA000050 /* ImageDownsampler.swift */,
 				E8PF00000005 /* ProfileHeaderView.swift */,
 				E8DR00000002 /* RemoteDiaryEntryRow.swift */,
+				E8SC00000001 /* StatCardView.swift */,
 				E8D800000001 /* StevenEasterEggView.swift */,
 				E8SI00000009 /* InteractionBar.swift */,
 			);
@@ -640,6 +647,7 @@
 			isa = PBXGroup;
 			children = (
 				E8PT00000012 /* ProfileDiaryTabTests.swift */,
+				E8RP00000001 /* RemoteProfileEarliestEncounterTests.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -769,6 +777,7 @@
 				E8E50000000D /* FollowTests.swift */,
 				E8E50000000E /* FollowServiceErrorTests.swift */,
 				E8E50000000F /* MockFollowServiceTests.swift */,
+				E8FC00000001 /* FetchFollowCountsTests.swift */,
 			);
 			path = Follow;
 			sourceTree = "<group>";
@@ -1089,6 +1098,7 @@
 				E8CS00000109 /* CatchStrings+Social.swift in Sources */,
 				E8CS0000010A /* CatchStrings+BreedLog.swift in Sources */,
 				E8CS0000010B /* CatchStrings+Components.swift in Sources */,
+				E8SC00000100 /* StatCardView.swift in Sources */,
 				E8000001AA000005 /* CatPhotoView.swift in Sources */,
 				E8000001AA000006 /* PhotoPickerView.swift in Sources */,
 				E8000001AA000007 /* EmptyStateView.swift in Sources */,
@@ -1310,6 +1320,8 @@
 				E8SF00000203 /* CKSocialFeedService.swift in Sources */,
 				E8SF00000204 /* MockSocialFeedService.swift in Sources */,
 				E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */,
+				E8FC00000201 /* FetchFollowCountsTests.swift in Sources */,
+				E8RP00000201 /* RemoteProfileEarliestEncounterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,10 +2,11 @@ import SwiftUI
 import SwiftData
 
 struct BreedLogView: View {
-    @Query(sort: \Cat.name) private var cats: [Cat]
+    @Query(sort: \Cat.name) private var queriedCats: [Cat]
     @State private var sortOption: BreedLogSortOption = .rarity
     @State private var selectedEntry: BreedLogEntry?
 
+    private let externalEntries: [BreedLogEntry]?
     private let service: BreedLogService
     private let columns = [
         GridItem(.flexible(), spacing: CatchSpacing.space8),
@@ -13,12 +14,13 @@ struct BreedLogView: View {
         GridItem(.flexible(), spacing: CatchSpacing.space8)
     ]
 
-    init(service: BreedLogService = DefaultBreedLogService()) {
+    init(entries: [BreedLogEntry]? = nil, service: BreedLogService = DefaultBreedLogService()) {
+        self.externalEntries = entries
         self.service = service
     }
 
     private var breedLog: [BreedLogEntry] {
-        let log = service.buildBreedLog(from: cats)
+        let log = externalEntries ?? service.buildBreedLog(from: queriedCats)
         return sorted(log)
     }
 
@@ -66,7 +68,7 @@ struct BreedLogView: View {
         .sheet(item: $selectedEntry) { entry in
             BreedDetailView(
                 entry: entry,
-                cats: service.catsForBreed(entry.id, from: cats)
+                cats: externalEntries != nil ? [] : service.catsForBreed(entry.id, from: queriedCats)
             )
         }
     }

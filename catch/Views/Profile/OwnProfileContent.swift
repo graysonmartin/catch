@@ -182,63 +182,24 @@ struct OwnProfileContent: View {
             Button {
                 isShowingCollection = true
             } label: {
-                statCard(count: cats.count, label: CatchStrings.Profile.cats, icon: "cat.fill")
-                    .overlay(alignment: .bottomTrailing) {
-                        statChevron
-                    }
+                StatCardView(count: cats.count, label: CatchStrings.Profile.cats, icon: "cat.fill", showChevron: true)
             }
             .buttonStyle(.plain)
 
-            statCard(count: encounters.count, label: CatchStrings.Profile.encounters, icon: "pawprint.fill")
+            StatCardView(count: encounters.count, label: CatchStrings.Profile.encounters, icon: "pawprint.fill")
 
             NavigationLink {
                 BreedLogView()
             } label: {
-                statCard(count: breedCount, label: CatchStrings.Profile.breedLog, icon: "book.closed.fill")
-                    .overlay(alignment: .bottomTrailing) {
-                        statChevron
-                    }
+                StatCardView(count: breedCount, label: CatchStrings.Profile.breedLog, icon: "book.closed.fill", showChevron: true)
             }
             .buttonStyle(.plain)
         }
         .padding(.horizontal, CatchSpacing.space20)
     }
 
-    private var statChevron: some View {
-        Image(systemName: "chevron.right")
-            .font(.system(size: 9, weight: .bold))
-            .foregroundStyle(CatchTheme.textSecondary)
-            .padding(CatchSpacing.space8)
-    }
-
     private var breedCount: Int {
         Set(cats.compactMap(\.breed)).count
-    }
-
-    private func statCard(count: Int, label: String, icon: String) -> some View {
-        VStack(spacing: CatchSpacing.space8) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundStyle(CatchTheme.primary)
-
-            Text("\(count)")
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundStyle(CatchTheme.textPrimary)
-
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(CatchTheme.textSecondary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, CatchSpacing.space16)
-        .background(CatchTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
-        .shadow(
-            color: .black.opacity(CatchTheme.cardShadowOpacity),
-            radius: CatchTheme.cardShadowRadius,
-            y: CatchTheme.cardShadowY
-        )
     }
 
     // MARK: - Setup Banner

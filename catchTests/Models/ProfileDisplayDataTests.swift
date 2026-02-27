@@ -183,6 +183,8 @@ final class ProfileDisplayDataTests: XCTestCase {
             profile: profile,
             cats: cats,
             encounters: encounters,
+            followerCount: 0,
+            followingCount: 0,
             fetchedAt: Date()
         )
     }

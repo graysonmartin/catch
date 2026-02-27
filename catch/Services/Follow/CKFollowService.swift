@@ -95,6 +95,12 @@ final class CKFollowService: FollowService {
         outgoingPending = po
     }
 
+    func fetchFollowCounts(for userID: String) async throws -> (followers: Int, following: Int) {
+        async let followerCount = countRecords(field: "followeeID", value: userID)
+        async let followingCount = countRecords(field: "followerID", value: userID)
+        return try await (followers: followerCount, following: followingCount)
+    }
+
     func isFollowing(_ targetID: String) -> Bool {
         following.contains { $0.followeeID == targetID }
     }
@@ -104,6 +110,16 @@ final class CKFollowService: FollowService {
     }
 
     // MARK: - Private
+
+    private func countRecords(field: String, value: String) async throws -> Int {
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "%K == %@", field, value),
+            NSPredicate(format: "status == %@", FollowStatus.active.rawValue)
+        ])
+        let ckQuery = CKQuery(recordType: Self.recordType, predicate: predicate)
+        let (results, _) = try await database.records(matching: ckQuery, resultsLimit: 200)
+        return results.count
+    }
 
     private func query(field: String, value: String, status: FollowStatus) async throws -> [Follow] {
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
