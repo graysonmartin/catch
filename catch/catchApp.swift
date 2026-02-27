@@ -8,6 +8,7 @@ struct catchApp: App {
     @State private var authService = AppleAuthService()
     @State private var followService = CKFollowService()
     @State private var breedClassifier = VisionBreedClassifierService()
+    @State private var catPhotoValidator = VisionCatPhotoValidationService()
     @State private var catSyncService: CKCatSyncService?
     @State private var encounterSyncService: CKEncounterSyncService?
     @State private var userBrowseService: CKUserBrowseService?
@@ -59,6 +60,7 @@ struct catchApp: App {
             if hasCompletedOnboarding {
                 ContentView()
                     .environment(breedClassifier)
+                    .environment(catPhotoValidator)
                     .environment(authService)
                     .environment(followService)
                     .environment(catSyncService)

@@ -35,6 +35,9 @@
 		E8CS00000309 /* CatchStrings+Social.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000009 /* CatchStrings+Social.swift */; };
 		E8CS0000030A /* CatchStrings+BreedLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000A /* CatchStrings+BreedLog.swift */; };
 		E8CS0000030B /* CatchStrings+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000B /* CatchStrings+Components.swift */; };
+		E8PV00000101 /* VisionCatPhotoValidationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PV00000001 /* VisionCatPhotoValidationService.swift */; };
+		E8PV00000102 /* CatchStrings+PhotoValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PV00000002 /* CatchStrings+PhotoValidation.swift */; };
+		E8PV00000302 /* CatchStrings+PhotoValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PV00000002 /* CatchStrings+PhotoValidation.swift */; };
 		E8SC00000100 /* StatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SC00000001 /* StatCardView.swift */; };
 		E8000001AA000005 /* CatPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000014 /* CatPhotoView.swift */; };
 		E8000001AA000006 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000015 /* PhotoPickerView.swift */; };
@@ -253,6 +256,8 @@
 		E8F500000307 /* CKCatSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatSyncServiceTests.swift; sourceTree = "<group>"; };
 		E8F500000308 /* CKEncounterSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterSyncServiceTests.swift; sourceTree = "<group>"; };
 		E8B700000003 /* VisionBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionBreedClassifierService.swift; sourceTree = "<group>"; };
+		E8PV00000001 /* VisionCatPhotoValidationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionCatPhotoValidationService.swift; sourceTree = "<group>"; };
+		E8PV00000002 /* CatchStrings+PhotoValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+PhotoValidation.swift"; sourceTree = "<group>"; };
 		E8B700000005 /* BreedSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedSuggestionView.swift; sourceTree = "<group>"; };
 		E8B700000006 /* BreedPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPickerView.swift; sourceTree = "<group>"; };
 		E8B700000009 /* MockBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedClassifierService.swift; sourceTree = "<group>"; };
@@ -451,6 +456,7 @@
 				E8CS0000000B /* CatchStrings+Components.swift */,
 				E8CS0000000C /* CatchStrings+Diary.swift */,
 				E8SI00000008 /* CatchStrings+Interaction.swift */,
+				E8PV00000002 /* CatchStrings+PhotoValidation.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -553,6 +559,7 @@
 			children = (
 				E8C4C76FF8B24F98B098D2F1 /* Auth */,
 				E8B700000010 /* BreedClassifier */,
+				E8PV0000F001 /* CatPhotoValidation */,
 				E8BL0000F001 /* BreedLog */,
 				E8C29A31E399698E3B36A45C /* CloudKit */,
 				E8F500000020 /* CloudSync */,
@@ -668,6 +675,14 @@
 			children = (
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E8PV0000F001 /* CatPhotoValidation */ = {
+			isa = PBXGroup;
+			children = (
+				E8PV00000001 /* VisionCatPhotoValidationService.swift */,
+			);
+			path = CatPhotoValidation;
 			sourceTree = "<group>";
 		};
 		E8B700000010 /* BreedClassifier */ = {
@@ -979,6 +994,8 @@
 				E8SF00000102 /* SocialFeedService.swift in Sources */,
 				E8SF00000103 /* CKSocialFeedService.swift in Sources */,
 				E8SF00000104 /* SocialFeedItemView.swift in Sources */,
+				E8PV00000101 /* VisionCatPhotoValidationService.swift in Sources */,
+				E8PV00000102 /* CatchStrings+PhotoValidation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1041,6 +1058,7 @@
 				E8DM00000302 /* ProfileDisplayDataTests.swift in Sources */,
 				E8PT00000212 /* ProfileDiaryTabTests.swift in Sources */,
 				E8CS0000030C /* CatchStrings+Diary.swift in Sources */,
+				E8PV00000302 /* CatchStrings+PhotoValidation.swift in Sources */,
 				E8SI00000208 /* MockSocialInteractionService.swift in Sources */,
 				E8SF00000201 /* FeedItem.swift in Sources */,
 				E8SF00000202 /* SocialFeedService.swift in Sources */,
