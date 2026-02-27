@@ -47,10 +47,10 @@ final class CKSocialFeedServiceTests: XCTestCase {
         let encounterB = makeEncounter(recordName: "enc-b1", ownerID: "user-b", catRecordName: "cat-b")
 
         mockBrowseService.fetchUserDataResults["user-a"] = .success(
-            UserBrowseData(profile: profileA, cats: [catA], encounters: [encounterA], fetchedAt: Date())
+            UserBrowseData(profile: profileA, cats: [catA], encounters: [encounterA], followerCount: 0, followingCount: 0, fetchedAt: Date())
         )
         mockBrowseService.fetchUserDataResults["user-b"] = .success(
-            UserBrowseData(profile: profileB, cats: [catB], encounters: [encounterB], fetchedAt: Date())
+            UserBrowseData(profile: profileB, cats: [catB], encounters: [encounterB], followerCount: 0, followingCount: 0, fetchedAt: Date())
         )
 
         await sut.refresh()
@@ -81,7 +81,7 @@ final class CKSocialFeedServiceTests: XCTestCase {
         }
 
         mockBrowseService.fetchUserDataResults["prolific-user"] = .success(
-            UserBrowseData(profile: profile, cats: [cat], encounters: encounters, fetchedAt: Date())
+            UserBrowseData(profile: profile, cats: [cat], encounters: encounters, followerCount: 0, followingCount: 0, fetchedAt: Date())
         )
 
         await sut.refresh()
@@ -100,7 +100,7 @@ final class CKSocialFeedServiceTests: XCTestCase {
         let encounter = makeEncounter(recordName: "enc-g1", ownerID: "good-user", catRecordName: "cat-g")
 
         mockBrowseService.fetchUserDataResults["good-user"] = .success(
-            UserBrowseData(profile: profile, cats: [cat], encounters: [encounter], fetchedAt: Date())
+            UserBrowseData(profile: profile, cats: [cat], encounters: [encounter], followerCount: 0, followingCount: 0, fetchedAt: Date())
         )
         mockBrowseService.fetchUserDataResults["bad-user"] = .failure(.networkError("timeout"))
 
@@ -117,7 +117,7 @@ final class CKSocialFeedServiceTests: XCTestCase {
 
         let profile = makeProfile(userID: "user-x", name: "x")
         mockBrowseService.fetchUserDataResults["user-x"] = .success(
-            UserBrowseData(profile: profile, cats: [], encounters: [], fetchedAt: Date())
+            UserBrowseData(profile: profile, cats: [], encounters: [], followerCount: 0, followingCount: 0, fetchedAt: Date())
         )
 
         XCTAssertFalse(sut.isLoading)
@@ -137,7 +137,7 @@ final class CKSocialFeedServiceTests: XCTestCase {
         let encounter = makeEncounter(recordName: "enc-c1", ownerID: "user-c", catRecordName: "cat-c1")
 
         mockBrowseService.fetchUserDataResults["user-c"] = .success(
-            UserBrowseData(profile: profile, cats: [cat], encounters: [encounter], fetchedAt: Date())
+            UserBrowseData(profile: profile, cats: [cat], encounters: [encounter], followerCount: 0, followingCount: 0, fetchedAt: Date())
         )
 
         await sut.refresh()
@@ -163,7 +163,7 @@ final class CKSocialFeedServiceTests: XCTestCase {
         let encounter = makeEncounter(recordName: "enc-d1", ownerID: "user-d", catRecordName: "nonexistent-cat")
 
         mockBrowseService.fetchUserDataResults["user-d"] = .success(
-            UserBrowseData(profile: profile, cats: [], encounters: [encounter], fetchedAt: Date())
+            UserBrowseData(profile: profile, cats: [], encounters: [encounter], followerCount: 0, followingCount: 0, fetchedAt: Date())
         )
 
         await sut.refresh()

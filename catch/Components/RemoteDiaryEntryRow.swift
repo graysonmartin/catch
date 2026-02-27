@@ -3,6 +3,7 @@ import SwiftUI
 struct RemoteDiaryEntryRow: View {
     let encounter: CloudEncounter
     let cat: CloudCat?
+    let isFirstEncounter: Bool
 
     private enum Layout {
         static let thumbnailSize: CGFloat = 48
@@ -10,6 +11,7 @@ struct RemoteDiaryEntryRow: View {
         static let pillHPadding: CGFloat = 6
         static let pillVPadding: CGFloat = 2
         static let pillCornerRadius: CGFloat = 4
+        static let activeOpacity: Double = 0.15
         static let inactiveOpacity: Double = 0.1
     }
 
@@ -23,6 +25,12 @@ struct RemoteDiaryEntryRow: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(cat?.isUnnamed == true ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                         .lineLimit(1)
+
+                    encounterPill
+
+                    if cat?.isUnnamed == true {
+                        strayPill
+                    }
 
                     if cat?.isOwned == true {
                         Image(systemName: "heart.fill")
@@ -43,6 +51,36 @@ struct RemoteDiaryEntryRow: View {
         .padding(.vertical, CatchSpacing.space4)
         .contentShape(Rectangle())
     }
+
+    // MARK: - Pills
+
+    private var encounterPill: some View {
+        Text(isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat)
+            .font(.system(size: Layout.pillFontSize, weight: .bold))
+            .foregroundStyle(isFirstEncounter ? CatchTheme.primary : CatchTheme.textSecondary)
+            .padding(.horizontal, Layout.pillHPadding)
+            .padding(.vertical, Layout.pillVPadding)
+            .background(
+                RoundedRectangle(cornerRadius: Layout.pillCornerRadius)
+                    .fill(isFirstEncounter
+                        ? CatchTheme.primary.opacity(Layout.activeOpacity)
+                        : CatchTheme.textSecondary.opacity(Layout.inactiveOpacity))
+            )
+    }
+
+    private var strayPill: some View {
+        Text(CatchStrings.Feed.pillStray)
+            .font(.system(size: Layout.pillFontSize, weight: .bold))
+            .foregroundStyle(CatchTheme.textSecondary)
+            .padding(.horizontal, Layout.pillHPadding)
+            .padding(.vertical, Layout.pillVPadding)
+            .background(
+                RoundedRectangle(cornerRadius: Layout.pillCornerRadius)
+                    .fill(CatchTheme.textSecondary.opacity(Layout.inactiveOpacity))
+            )
+    }
+
+    // MARK: - Context
 
     @ViewBuilder
     private var contextLine: some View {

@@ -14,6 +14,7 @@ protocol FollowService: Observable, Sendable {
     func declineRequest(_ follow: Follow) async throws
     func removeFollower(_ follow: Follow) async throws
     func refresh(for userID: String) async throws
+    func fetchFollowCounts(for userID: String) async throws -> (followers: Int, following: Int)
     func isFollowing(_ targetID: String) -> Bool
     func pendingRequestTo(_ targetID: String) -> Follow?
 }

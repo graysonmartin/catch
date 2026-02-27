@@ -55,10 +55,13 @@ final class CKUserBrowseService: UserBrowseService {
         let isPrivateAndNotFollowing = profile.isPrivate && !isOwnProfile && !followService.isFollowing(userID)
 
         if isPrivateAndNotFollowing {
+            let counts = try? await followService.fetchFollowCounts(for: userID)
             let data = UserBrowseData(
                 profile: profile,
                 cats: [],
                 encounters: [],
+                followerCount: counts?.followers ?? 0,
+                followingCount: counts?.following ?? 0,
                 fetchedAt: Date()
             )
             cache[userID] = data
@@ -68,11 +71,15 @@ final class CKUserBrowseService: UserBrowseService {
         do {
             async let cats = catRepository.fetchAll(ownerID: userID)
             async let encounters = encounterRepository.fetchAll(ownerID: userID)
+            async let counts = followService.fetchFollowCounts(for: userID)
 
+            let fetchedCounts = try? await counts
             let data = UserBrowseData(
                 profile: profile,
                 cats: try await cats,
                 encounters: try await encounters,
+                followerCount: fetchedCounts?.followers ?? 0,
+                followingCount: fetchedCounts?.following ?? 0,
                 fetchedAt: Date()
             )
 
@@ -247,6 +254,8 @@ final class CKUserBrowseService: UserBrowseService {
             profile: tuongProfile,
             cats: tuongCats,
             encounters: tuongEncounters,
+            followerCount: 89,
+            followingCount: 34,
             fetchedAt: now
         )
         displayNameCache["fake-tuong"] = tuongProfile.displayName
@@ -329,6 +338,8 @@ final class CKUserBrowseService: UserBrowseService {
             profile: sophiProfile,
             cats: sophiCats,
             encounters: sophiEncounters,
+            followerCount: 42,
+            followingCount: 15,
             fetchedAt: now
         )
         displayNameCache["fake-sophi"] = sophiProfile.displayName
@@ -375,6 +386,8 @@ final class CKUserBrowseService: UserBrowseService {
             profile: shivProfile,
             cats: shivCats,
             encounters: shivEncounters,
+            followerCount: 7,
+            followingCount: 3,
             fetchedAt: now
         )
         displayNameCache["fake-shiv"] = shivProfile.displayName
@@ -432,6 +445,8 @@ final class CKUserBrowseService: UserBrowseService {
             profile: markProfile,
             cats: markCats,
             encounters: markEncounters,
+            followerCount: 23,
+            followingCount: 11,
             fetchedAt: now
         )
         displayNameCache["fake-mark"] = markProfile.displayName
