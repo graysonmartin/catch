@@ -5,13 +5,15 @@ TEST_SCHEME = catchTests
 BUNDLE_ID = com.catch.catch
 APP_PATH = $(shell find ~/Library/Developer/Xcode/DerivedData/catch-*/Build/Products/Debug-iphonesimulator/catch.app -maxdepth 0 2>/dev/null | head -1)
 
-.PHONY: test test-verbose test-serial boot-sim kill-sim clean-build build run install reset-sim
+.PHONY: test test-fast test-all test-verbose test-serial boot-sim kill-sim clean-build build run install reset-sim build-for-testing test-without-building
 
 # --- Simulator ---
 
 boot-sim:
-	@xcrun simctl boot $(SIMULATOR_ID) 2>/dev/null || true
-	@sleep 1
+	@if ! xcrun simctl list devices booted | grep -q $(SIMULATOR_ID); then \
+		xcrun simctl boot $(SIMULATOR_ID) 2>/dev/null || true; \
+		sleep 2; \
+	fi
 
 kill-sim:
 	xcrun simctl shutdown $(SIMULATOR_ID)
@@ -46,6 +48,9 @@ install:
 
 # --- Tests ---
 
+test-fast:
+	swift test --package-path .
+
 test: boot-sim
 	xcodebuild test \
 		-project $(PROJECT) \
@@ -56,6 +61,8 @@ test: boot-sim
 		-parallel-testing-enabled YES \
 		CODE_SIGNING_ALLOWED=NO \
 		2>&1 | tail -30
+
+test-all: test-fast test
 
 test-verbose: boot-sim
 	xcodebuild test \
@@ -75,6 +82,26 @@ test-serial: boot-sim
 		-destination 'id=$(SIMULATOR_ID)' \
 		-enableCodeCoverage NO \
 		CODE_SIGNING_ALLOWED=NO
+
+build-for-testing: boot-sim
+	xcodebuild build-for-testing \
+		-project $(PROJECT) \
+		-scheme $(TEST_SCHEME) \
+		-destination 'id=$(SIMULATOR_ID)' \
+		-enableCodeCoverage NO \
+		-skipPackagePluginValidation \
+		CODE_SIGNING_ALLOWED=NO \
+		2>&1 | tail -10
+
+test-without-building:
+	xcodebuild test-without-building \
+		-project $(PROJECT) \
+		-scheme $(TEST_SCHEME) \
+		-destination 'id=$(SIMULATOR_ID)' \
+		-enableCodeCoverage NO \
+		-parallel-testing-enabled YES \
+		CODE_SIGNING_ALLOWED=NO \
+		2>&1 | tail -30
 
 # --- Cleanup ---
 

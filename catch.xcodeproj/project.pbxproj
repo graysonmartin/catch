@@ -76,7 +76,6 @@
 		E8000001AA000055 /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
 		E8000001AA000056 /* VisibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000080 /* VisibilitySettings.swift */; };
 		E8000001BB000002 /* DataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001BB000001 /* DataSeeder.swift */; };
-		E8A100000001 /* LocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000010 /* LocationTests.swift */; };
 		E8A100000003 /* CatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000012 /* CatTests.swift */; };
 		E8A100000004 /* EncounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000013 /* EncounterTests.swift */; };
 		E8A100000005 /* ModelContainerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000014 /* ModelContainerFactory.swift */; };
@@ -91,20 +90,16 @@
 		E8A10000000F /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
 		E8A100000025 /* CatchSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000019 /* CatchSchemaTests.swift */; };
 		E8A100000026 /* VisibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000080 /* VisibilitySettings.swift */; };
-		E8A100000027 /* VisibilitySettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A10000001A /* VisibilitySettingsTests.swift */; };
-		E8A100000029 /* AddCatValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000028 /* AddCatValidationTests.swift */; };
 		E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */; };
 		E8C45823BB168636E9BDC605 /* MockCloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */; };
 		E8C5DB4466426FAE9480469A /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CADC30543FE5A6E743849E /* CloudKitService.swift */; };
-		E8C6A3B73A0CC162F803D7CA /* AuthStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */; };
 		E8C7737EC218A5DCA33037D1 /* CKCloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C63F8101AC616F8FD0BA84 /* CKCloudKitService.swift */; };
 		E8CCDF6B8933605A62729069 /* AuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CA043BAE1603803A839C0C /* AuthState.swift */; };
 		E8CCF3022A93BC29B1DF104A /* CloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CADC30543FE5A6E743849E /* CloudKitService.swift */; };
 		E8CE692EDFCE0B5ECDC4C1DD /* AuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CA043BAE1603803A839C0C /* AuthState.swift */; };
 		E8CF9FE9B8D8EB743AC8A414 /* MockAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB34FA781359331A3ED13A /* MockAuthService.swift */; };
-		E8D200000005 /* CloudKitServiceSearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D100000005 /* CloudKitServiceSearchTests.swift */; };
 		E8E600000001 /* FollowStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000001 /* FollowStatus.swift */; };
 		E8E600000002 /* Follow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000002 /* Follow.swift */; };
 		E8E600000003 /* FollowServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000003 /* FollowServiceError.swift */; };
@@ -116,10 +111,6 @@
 		E8E600000009 /* FollowRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000009 /* FollowRowView.swift */; };
 		E8E60000000A /* PendingRequestRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000A /* PendingRequestRowView.swift */; };
 		E8E60000000B /* MockFollowService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000B /* MockFollowService.swift */; };
-		E8E60000000C /* FollowStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000C /* FollowStatusTests.swift */; };
-		E8E60000000D /* FollowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000D /* FollowTests.swift */; };
-		E8E60000000E /* FollowServiceErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000E /* FollowServiceErrorTests.swift */; };
-		E8E60000000F /* MockFollowServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000000F /* MockFollowServiceTests.swift */; };
 		E8E600000011 /* FollowStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000001 /* FollowStatus.swift */; };
 		E8E600000012 /* Follow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000002 /* Follow.swift */; };
 		E8E600000013 /* FollowServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000003 /* FollowServiceError.swift */; };
@@ -130,7 +121,6 @@
 		E8E600000033 /* UserBrowseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000033 /* UserBrowseError.swift */; };
 		E8E600000036 /* RemoteCatProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000036 /* RemoteCatProfileView.swift */; };
 		E8E600000037 /* RemoteFeedItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000037 /* RemoteFeedItemView.swift */; };
-		E8E600000038 /* CKUserBrowseServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000038 /* CKUserBrowseServiceTests.swift */; };
 		E8E600000039 /* MockUserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000039 /* MockUserBrowseService.swift */; };
 		E8E600000040 /* UserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000030 /* UserBrowseService.swift */; };
 		E8E600000041 /* CKUserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000031 /* CKUserBrowseService.swift */; };
@@ -139,7 +129,6 @@
 		E8F600000002 /* CatSyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000002 /* CatSyncPayload.swift */; };
 		E8F600000003 /* CloudCat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000003 /* CloudCat.swift */; };
 		E8F600000004 /* CloudSyncError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000004 /* CloudSyncError.swift */; };
-		E8F60000000D /* CloudSyncErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000000D /* CloudSyncErrorTests.swift */; };
 		E8F600000012 /* CatSyncPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000002 /* CatSyncPayload.swift */; };
 		E8F600000013 /* CloudCat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000003 /* CloudCat.swift */; };
 		E8F600000014 /* CloudSyncError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000004 /* CloudSyncError.swift */; };
@@ -150,8 +139,6 @@
 		E8F600000105 /* CKEncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000105 /* CKEncounterRepository.swift */; };
 		E8F60000010B /* MockCatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010B /* MockCatRepository.swift */; };
 		E8F60000010C /* MockEncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010C /* MockEncounterRepository.swift */; };
-		E8F60000010D /* MockCatRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010D /* MockCatRepositoryTests.swift */; };
-		E8F60000010E /* MockEncounterRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010E /* MockEncounterRepositoryTests.swift */; };
 		E8F600000111 /* CatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000101 /* CatRepository.swift */; };
 		E8F600000112 /* EncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000102 /* EncounterRepository.swift */; };
 		E8F600000113 /* CloudKitAssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000103 /* CloudKitAssetManager.swift */; };
@@ -183,8 +170,6 @@
 		E8B700000104 /* BreedLabelMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000004 /* BreedLabelMapper.swift */; };
 		E8B700000105 /* BreedSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000005 /* BreedSuggestionView.swift */; };
 		E8B700000106 /* BreedPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000006 /* BreedPickerView.swift */; };
-		E8B700000201 /* BreedLabelMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000007 /* BreedLabelMapperTests.swift */; };
-		E8B700000202 /* BreedPredictionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000008 /* BreedPredictionTests.swift */; };
 		E8B700000203 /* MockBreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000009 /* MockBreedClassifierService.swift */; };
 		E8B700000204 /* BreedPrediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000001 /* BreedPrediction.swift */; };
 		E8B700000205 /* BreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000002 /* BreedClassifierService.swift */; };
@@ -214,7 +199,6 @@
 		E8D800000201 /* CatStevenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D800000002 /* CatStevenTests.swift */; };
 		E8UV00000101 /* UsernameValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000001 /* UsernameValidator.swift */; };
 		E8UV00000102 /* UsernameValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000001 /* UsernameValidator.swift */; };
-		E8UV00000103 /* UsernameValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UV00000002 /* UsernameValidatorTests.swift */; };
 		E8PT00000102 /* ProfileCollectionTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000002 /* ProfileCollectionTab.swift */; };
 		E8PT00000103 /* ProfileDiaryTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000003 /* ProfileDiaryTab.swift */; };
 		E8DR00000101 /* DiaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DR00000001 /* DiaryEntryRow.swift */; };
@@ -241,9 +225,6 @@
 		E8SI00000206 /* SocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000006 /* SocialInteractionService.swift */; };
 		E8SI00000207 /* CKSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000007 /* CKSocialInteractionService.swift */; };
 		E8SI00000208 /* MockSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000C /* MockSocialInteractionService.swift */; };
-		E8SI00000209 /* LikeRecordMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000D /* LikeRecordMapperTests.swift */; };
-		E8SI0000020A /* CommentRecordMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000E /* CommentRecordMapperTests.swift */; };
-		E8SI0000020B /* CKSocialInteractionServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000F /* CKSocialInteractionServiceTests.swift */; };
 		E8SF00000101 /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000001 /* FeedItem.swift */; };
 		E8SF00000102 /* SocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000002 /* SocialFeedService.swift */; };
 		E8SF00000103 /* CKSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000003 /* CKSocialFeedService.swift */; };
@@ -253,8 +234,6 @@
 		E8SF00000203 /* CKSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000003 /* CKSocialFeedService.swift */; };
 		E8SF00000204 /* MockSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000005 /* MockSocialFeedService.swift */; };
 		E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000006 /* CKSocialFeedServiceTests.swift */; };
-		E8FC00000201 /* FetchFollowCountsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FC00000001 /* FetchFollowCountsTests.swift */; };
-		E8RP00000201 /* RemoteProfileEarliestEncounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RP00000001 /* RemoteProfileEarliestEncounterTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -315,7 +294,6 @@
 		E8000001AA000070 /* CatchSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchema.swift; sourceTree = "<group>"; };
 		E8000001AA000080 /* VisibilitySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibilitySettings.swift; sourceTree = "<group>"; };
 		E8000001BB000001 /* DataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSeeder.swift; sourceTree = "<group>"; };
-		E8A100000010 /* LocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTests.swift; sourceTree = "<group>"; };
 		E8A100000012 /* CatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatTests.swift; sourceTree = "<group>"; };
 		E8A100000013 /* EncounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterTests.swift; sourceTree = "<group>"; };
 		E8A100000014 /* ModelContainerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerFactory.swift; sourceTree = "<group>"; };
@@ -324,9 +302,6 @@
 		E8A100000017 /* ImageDownsamplerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownsamplerTests.swift; sourceTree = "<group>"; };
 		E8A100000018 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
 		E8A100000019 /* CatchSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchemaTests.swift; sourceTree = "<group>"; };
-		E8A10000001A /* VisibilitySettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibilitySettingsTests.swift; sourceTree = "<group>"; };
-		E8A100000028 /* AddCatValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCatValidationTests.swift; sourceTree = "<group>"; };
-		E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStateTests.swift; sourceTree = "<group>"; };
 		E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCloudKitService.swift; sourceTree = "<group>"; };
 		E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthService.swift; sourceTree = "<group>"; };
 		E8C63F8101AC616F8FD0BA84 /* CKCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCloudKitService.swift; sourceTree = "<group>"; };
@@ -335,7 +310,6 @@
 		E8CADC30543FE5A6E743849E /* CloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitService.swift; sourceTree = "<group>"; };
 		E8CB34FA781359331A3ED13A /* MockAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthService.swift; sourceTree = "<group>"; };
 		E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
-		E8D100000005 /* CloudKitServiceSearchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitServiceSearchTests.swift; sourceTree = "<group>"; };
 		E8E500000001 /* FollowStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowStatus.swift; sourceTree = "<group>"; };
 		E8E500000002 /* Follow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follow.swift; sourceTree = "<group>"; };
 		E8E500000003 /* FollowServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowServiceError.swift; sourceTree = "<group>"; };
@@ -347,22 +321,16 @@
 		E8E500000009 /* FollowRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowRowView.swift; sourceTree = "<group>"; };
 		E8E50000000A /* PendingRequestRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingRequestRowView.swift; sourceTree = "<group>"; };
 		E8E50000000B /* MockFollowService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFollowService.swift; sourceTree = "<group>"; };
-		E8E50000000C /* FollowStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowStatusTests.swift; sourceTree = "<group>"; };
-		E8E50000000D /* FollowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTests.swift; sourceTree = "<group>"; };
-		E8E50000000E /* FollowServiceErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowServiceErrorTests.swift; sourceTree = "<group>"; };
-		E8E50000000F /* MockFollowServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFollowServiceTests.swift; sourceTree = "<group>"; };
 		E8E500000030 /* UserBrowseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBrowseService.swift; sourceTree = "<group>"; };
 		E8E500000031 /* CKUserBrowseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUserBrowseService.swift; sourceTree = "<group>"; };
 		E8E500000032 /* UserBrowseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBrowseData.swift; sourceTree = "<group>"; };
 		E8E500000033 /* UserBrowseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserBrowseError.swift; sourceTree = "<group>"; };
 		E8E500000036 /* RemoteCatProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCatProfileView.swift; sourceTree = "<group>"; };
 		E8E500000037 /* RemoteFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedItemView.swift; sourceTree = "<group>"; };
-		E8E500000038 /* CKUserBrowseServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKUserBrowseServiceTests.swift; sourceTree = "<group>"; };
 		E8E500000039 /* MockUserBrowseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserBrowseService.swift; sourceTree = "<group>"; };
 		E8F500000002 /* CatSyncPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatSyncPayload.swift; sourceTree = "<group>"; };
 		E8F500000003 /* CloudCat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudCat.swift; sourceTree = "<group>"; };
 		E8F500000004 /* CloudSyncError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncError.swift; sourceTree = "<group>"; };
-		E8F50000000D /* CloudSyncErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncErrorTests.swift; sourceTree = "<group>"; };
 		E8F500000101 /* CatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatRepository.swift; sourceTree = "<group>"; };
 		E8F500000102 /* EncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterRepository.swift; sourceTree = "<group>"; };
 		E8F500000103 /* CloudKitAssetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitAssetManager.swift; sourceTree = "<group>"; };
@@ -370,8 +338,6 @@
 		E8F500000105 /* CKEncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterRepository.swift; sourceTree = "<group>"; };
 		E8F50000010B /* MockCatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatRepository.swift; sourceTree = "<group>"; };
 		E8F50000010C /* MockEncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterRepository.swift; sourceTree = "<group>"; };
-		E8F50000010D /* MockCatRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatRepositoryTests.swift; sourceTree = "<group>"; };
-		E8F50000010E /* MockEncounterRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterRepositoryTests.swift; sourceTree = "<group>"; };
 		E8F500000201 /* EncounterSyncPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterSyncPayload.swift; sourceTree = "<group>"; };
 		E8F500000202 /* CloudEncounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudEncounter.swift; sourceTree = "<group>"; };
 		E8F500000205 /* CatRecordMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatRecordMapper.swift; sourceTree = "<group>"; };
@@ -390,8 +356,6 @@
 		E8B700000004 /* BreedLabelMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLabelMapper.swift; sourceTree = "<group>"; };
 		E8B700000005 /* BreedSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedSuggestionView.swift; sourceTree = "<group>"; };
 		E8B700000006 /* BreedPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPickerView.swift; sourceTree = "<group>"; };
-		E8B700000007 /* BreedLabelMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLabelMapperTests.swift; sourceTree = "<group>"; };
-		E8B700000008 /* BreedPredictionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPredictionTests.swift; sourceTree = "<group>"; };
 		E8B700000009 /* MockBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedClassifierService.swift; sourceTree = "<group>"; };
 		E8BL00000001 /* BreedRarity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedRarity.swift; sourceTree = "<group>"; };
 		E8BL00000002 /* BreedCatalogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalogEntry.swift; sourceTree = "<group>"; };
@@ -411,7 +375,6 @@
 		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
 		E8UV00000001 /* UsernameValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameValidator.swift; sourceTree = "<group>"; };
-		E8UV00000002 /* UsernameValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameValidatorTests.swift; sourceTree = "<group>"; };
 		E8PT00000002 /* ProfileCollectionTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionTab.swift; sourceTree = "<group>"; };
 		E8PT00000003 /* ProfileDiaryTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDiaryTab.swift; sourceTree = "<group>"; };
 		E8DR00000001 /* DiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEntryRow.swift; sourceTree = "<group>"; };
@@ -430,17 +393,12 @@
 		E8SI0000000A /* CommentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRowView.swift; sourceTree = "<group>"; };
 		E8SI0000000B /* CommentThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentThreadView.swift; sourceTree = "<group>"; };
 		E8SI0000000C /* MockSocialInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialInteractionService.swift; sourceTree = "<group>"; };
-		E8SI0000000D /* LikeRecordMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeRecordMapperTests.swift; sourceTree = "<group>"; };
-		E8SI0000000E /* CommentRecordMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRecordMapperTests.swift; sourceTree = "<group>"; };
-		E8SI0000000F /* CKSocialInteractionServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialInteractionServiceTests.swift; sourceTree = "<group>"; };
 		E8SF00000001 /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
 		E8SF00000002 /* SocialFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialFeedService.swift; sourceTree = "<group>"; };
 		E8SF00000003 /* CKSocialFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialFeedService.swift; sourceTree = "<group>"; };
 		E8SF00000004 /* SocialFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialFeedItemView.swift; sourceTree = "<group>"; };
 		E8SF00000005 /* MockSocialFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialFeedService.swift; sourceTree = "<group>"; };
 		E8SF00000006 /* CKSocialFeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialFeedServiceTests.swift; sourceTree = "<group>"; };
-		E8FC00000001 /* FetchFollowCountsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFollowCountsTests.swift; sourceTree = "<group>"; };
-		E8RP00000001 /* RemoteProfileEarliestEncounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteProfileEarliestEncounterTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -604,12 +562,10 @@
 		E8A100000022 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E8A100000010 /* LocationTests.swift */,
 				E8A100000012 /* CatTests.swift */,
 				E8A100000013 /* EncounterTests.swift */,
 				E8A100000018 /* UserProfileTests.swift */,
 				E8A100000019 /* CatchSchemaTests.swift */,
-				E8A10000001A /* VisibilitySettingsTests.swift */,
 				E8D800000002 /* CatStevenTests.swift */,
 				E8DM00000011 /* CatDisplayDataTests.swift */,
 				E8DM00000012 /* ProfileDisplayDataTests.swift */,
@@ -637,7 +593,6 @@
 		E8A10000002A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E8A100000028 /* AddCatValidationTests.swift */,
 				E8PT0000F001 /* Profile */,
 			);
 			path = Views;
@@ -647,7 +602,6 @@
 			isa = PBXGroup;
 			children = (
 				E8PT00000012 /* ProfileDiaryTabTests.swift */,
-				E8RP00000001 /* RemoteProfileEarliestEncounterTests.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -655,15 +609,8 @@
 		E8C17FF134EEE52DB9FA0D4A /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				E8CF211849B3A47ED1640CA4 /* Auth */,
-				E8B700000011 /* BreedClassifier */,
 				E8BL0000F003 /* BreedLog */,
-				E8D100000020 /* CloudKit */,
 				E8F500000022 /* CloudSync */,
-				E8E500000022 /* Follow */,
-				E8E500000041 /* UserBrowse */,
-				E8UV0000F002 /* Username */,
-				E8SI0000F002 /* Social */,
 				E8SF0000F002 /* SocialFeed */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 			);
@@ -725,22 +672,6 @@
 			path = Mocks;
 			sourceTree = "<group>";
 		};
-		E8CF211849B3A47ED1640CA4 /* Auth */ = {
-			isa = PBXGroup;
-			children = (
-				E8C0EED40EF171CC2784D638 /* AuthStateTests.swift */,
-			);
-			path = Auth;
-			sourceTree = "<group>";
-		};
-		E8D100000020 /* CloudKit */ = {
-			isa = PBXGroup;
-			children = (
-				E8D100000005 /* CloudKitServiceSearchTests.swift */,
-			);
-			path = CloudKit;
-			sourceTree = "<group>";
-		};
 		E8E500000020 /* Follow */ = {
 			isa = PBXGroup;
 			children = (
@@ -770,18 +701,6 @@
 			path = Social;
 			sourceTree = "<group>";
 		};
-		E8E500000022 /* Follow */ = {
-			isa = PBXGroup;
-			children = (
-				E8E50000000C /* FollowStatusTests.swift */,
-				E8E50000000D /* FollowTests.swift */,
-				E8E50000000E /* FollowServiceErrorTests.swift */,
-				E8E50000000F /* MockFollowServiceTests.swift */,
-				E8FC00000001 /* FetchFollowCountsTests.swift */,
-			);
-			path = Follow;
-			sourceTree = "<group>";
-		};
 		E8E500000040 /* UserBrowse */ = {
 			isa = PBXGroup;
 			children = (
@@ -789,14 +708,6 @@
 				E8E500000031 /* CKUserBrowseService.swift */,
 				E8E500000032 /* UserBrowseData.swift */,
 				E8E500000033 /* UserBrowseError.swift */,
-			);
-			path = UserBrowse;
-			sourceTree = "<group>";
-		};
-		E8E500000041 /* UserBrowse */ = {
-			isa = PBXGroup;
-			children = (
-				E8E500000038 /* CKUserBrowseServiceTests.swift */,
 			);
 			path = UserBrowse;
 			sourceTree = "<group>";
@@ -827,9 +738,6 @@
 		E8F500000022 /* CloudSync */ = {
 			isa = PBXGroup;
 			children = (
-				E8F50000000D /* CloudSyncErrorTests.swift */,
-				E8F50000010D /* MockCatRepositoryTests.swift */,
-				E8F50000010E /* MockEncounterRepositoryTests.swift */,
 				E8F500000307 /* CKCatSyncServiceTests.swift */,
 				E8F500000308 /* CKEncounterSyncServiceTests.swift */,
 			);
@@ -850,15 +758,6 @@
 				E8B700000002 /* BreedClassifierService.swift */,
 				E8B700000003 /* VisionBreedClassifierService.swift */,
 				E8B700000004 /* BreedLabelMapper.swift */,
-			);
-			path = BreedClassifier;
-			sourceTree = "<group>";
-		};
-		E8B700000011 /* BreedClassifier */ = {
-			isa = PBXGroup;
-			children = (
-				E8B700000007 /* BreedLabelMapperTests.swift */,
-				E8B700000008 /* BreedPredictionTests.swift */,
 			);
 			path = BreedClassifier;
 			sourceTree = "<group>";
@@ -906,14 +805,6 @@
 			path = Username;
 			sourceTree = "<group>";
 		};
-		E8UV0000F002 /* Username */ = {
-			isa = PBXGroup;
-			children = (
-				E8UV00000002 /* UsernameValidatorTests.swift */,
-			);
-			path = Username;
-			sourceTree = "<group>";
-		};
 		E8DM0000F001 /* DisplayModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -947,16 +838,6 @@
 				E8SI00000005 /* CommentRecordMapper.swift */,
 				E8SI00000006 /* SocialInteractionService.swift */,
 				E8SI00000007 /* CKSocialInteractionService.swift */,
-			);
-			path = Social;
-			sourceTree = "<group>";
-		};
-		E8SI0000F002 /* Social */ = {
-			isa = PBXGroup;
-			children = (
-				E8SI0000000D /* LikeRecordMapperTests.swift */,
-				E8SI0000000E /* CommentRecordMapperTests.swift */,
-				E8SI0000000F /* CKSocialInteractionServiceTests.swift */,
 			);
 			path = Social;
 			sourceTree = "<group>";
@@ -1205,7 +1086,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E8A100000001 /* LocationTests.swift in Sources */,
 				E8A100000003 /* CatTests.swift in Sources */,
 				E8A100000004 /* EncounterTests.swift in Sources */,
 				E8A100000005 /* ModelContainerFactory.swift in Sources */,
@@ -1229,23 +1109,16 @@
 				E8A10000000F /* CatchSchema.swift in Sources */,
 				E8A100000025 /* CatchSchemaTests.swift in Sources */,
 				E8A100000026 /* VisibilitySettings.swift in Sources */,
-				E8A100000027 /* VisibilitySettingsTests.swift in Sources */,
-				E8C6A3B73A0CC162F803D7CA /* AuthStateTests.swift in Sources */,
 				E8CF9FE9B8D8EB743AC8A414 /* MockAuthService.swift in Sources */,
 				E8C45823BB168636E9BDC605 /* MockCloudKitService.swift in Sources */,
 				E8CCDF6B8933605A62729069 /* AuthState.swift in Sources */,
 				E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources */,
 				E8CCF3022A93BC29B1DF104A /* CloudKitService.swift in Sources */,
-				E8D200000005 /* CloudKitServiceSearchTests.swift in Sources */,
 				E8E600000011 /* FollowStatus.swift in Sources */,
 				E8E600000012 /* Follow.swift in Sources */,
 				E8E600000013 /* FollowServiceError.swift in Sources */,
 				E8E600000014 /* FollowService.swift in Sources */,
 				E8E60000000B /* MockFollowService.swift in Sources */,
-				E8E60000000C /* FollowStatusTests.swift in Sources */,
-				E8E60000000D /* FollowTests.swift in Sources */,
-				E8E60000000E /* FollowServiceErrorTests.swift in Sources */,
-				E8E60000000F /* MockFollowServiceTests.swift in Sources */,
 				E8F600000111 /* CatRepository.swift in Sources */,
 				E8F600000112 /* EncounterRepository.swift in Sources */,
 				E8F600000113 /* CloudKitAssetManager.swift in Sources */,
@@ -1256,9 +1129,6 @@
 				E8F600000014 /* CloudSyncError.swift in Sources */,
 				E8F60000010B /* MockCatRepository.swift in Sources */,
 				E8F60000010C /* MockEncounterRepository.swift in Sources */,
-				E8F60000010D /* MockCatRepositoryTests.swift in Sources */,
-				E8F60000010E /* MockEncounterRepositoryTests.swift in Sources */,
-				E8F60000000D /* CloudSyncErrorTests.swift in Sources */,
 				E8F600000211 /* EncounterSyncPayload.swift in Sources */,
 				E8F600000212 /* CloudEncounter.swift in Sources */,
 				E8F600000215 /* CatRecordMapper.swift in Sources */,
@@ -1275,16 +1145,12 @@
 				E8E600000041 /* CKUserBrowseService.swift in Sources */,
 				E8E600000042 /* UserBrowseData.swift in Sources */,
 				E8E600000043 /* UserBrowseError.swift in Sources */,
-				E8E600000038 /* CKUserBrowseServiceTests.swift in Sources */,
 				E8E600000039 /* MockUserBrowseService.swift in Sources */,
-				E8B700000201 /* BreedLabelMapperTests.swift in Sources */,
-				E8B700000202 /* BreedPredictionTests.swift in Sources */,
 				E8B700000203 /* MockBreedClassifierService.swift in Sources */,
 				E8B700000204 /* BreedPrediction.swift in Sources */,
 				E8B700000205 /* BreedClassifierService.swift in Sources */,
 				E8B700000206 /* BreedLabelMapper.swift in Sources */,
 				E8D800000201 /* CatStevenTests.swift in Sources */,
-				E8A100000029 /* AddCatValidationTests.swift in Sources */,
 				E8CS00000301 /* CatchStrings.swift in Sources */,
 				E8CS00000302 /* CatchStrings+Feed.swift in Sources */,
 				E8CS00000303 /* CatchStrings+CatProfile.swift in Sources */,
@@ -1297,7 +1163,6 @@
 				E8CS0000030A /* CatchStrings+BreedLog.swift in Sources */,
 				E8CS0000030B /* CatchStrings+Components.swift in Sources */,
 				E8UV00000102 /* UsernameValidator.swift in Sources */,
-				E8UV00000103 /* UsernameValidatorTests.swift in Sources */,
 				E8DM00000201 /* CatDisplayData.swift in Sources */,
 				E8DM00000202 /* ProfileDisplayData.swift in Sources */,
 				E8DM00000301 /* CatDisplayDataTests.swift in Sources */,
@@ -1312,16 +1177,11 @@
 				E8SI00000206 /* SocialInteractionService.swift in Sources */,
 				E8SI00000207 /* CKSocialInteractionService.swift in Sources */,
 				E8SI00000208 /* MockSocialInteractionService.swift in Sources */,
-				E8SI00000209 /* LikeRecordMapperTests.swift in Sources */,
-				E8SI0000020A /* CommentRecordMapperTests.swift in Sources */,
-				E8SI0000020B /* CKSocialInteractionServiceTests.swift in Sources */,
 				E8SF00000201 /* FeedItem.swift in Sources */,
 				E8SF00000202 /* SocialFeedService.swift in Sources */,
 				E8SF00000203 /* CKSocialFeedService.swift in Sources */,
 				E8SF00000204 /* MockSocialFeedService.swift in Sources */,
 				E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */,
-				E8FC00000201 /* FetchFollowCountsTests.swift in Sources */,
-				E8RP00000201 /* RemoteProfileEarliestEncounterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,6 +1,6 @@
 import Foundation
 import Observation
-#if DEBUG
+#if canImport(UIKit)
 import UIKit
 #endif
 
@@ -130,7 +130,7 @@ final class CKUserBrowseService: UserBrowseService {
 
     // MARK: - Debug Seeding
 
-    #if DEBUG
+    #if DEBUG && canImport(UIKit)
     private static func seedPhoto(named assetName: String) -> [Data] {
         guard let image = UIImage(named: assetName),
               let data = image.jpegData(compressionQuality: 0.7) else {
