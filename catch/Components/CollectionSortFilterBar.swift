@@ -13,8 +13,9 @@ struct CollectionSortFilterBar: View {
                 filterPills
             }
             .padding(.horizontal)
-            .padding(.vertical, CatchSpacing.space4)
+            .padding(.vertical, CatchSpacing.space8)
         }
+        .scrollClipDisabled()
     }
 
     // MARK: - Sort Menu
@@ -51,6 +52,7 @@ struct CollectionSortFilterBar: View {
                 y: 1
             )
         }
+        .transaction { $0.animation = nil }
     }
 
     // MARK: - Divider

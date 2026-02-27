@@ -20,16 +20,15 @@ extension CatchStrings {
 
         // MARK: - Sort Options
 
-        static let sortMostRecent = String(localized: "most recent")
+        static let sortMostRecent = String(localized: "newest")
+        static let sortOldestFirst = String(localized: "oldest")
         static let sortMostEncounters = String(localized: "most encounters")
-        static let sortOldestFirst = String(localized: "oldest first")
         static let sortAlphabetical = String(localized: "a-z")
-        static let sortNewestAddition = String(localized: "newest addition")
 
         // MARK: - Filter Options
 
         static let filterOwned = String(localized: "mine")
-        static let filterRepeats = String(localized: "repeat offenders")
+        static let filterRepeats = String(localized: "repeats")
         static let filterLast7Days = String(localized: "last 7 days")
         static let filterLast30Days = String(localized: "last 30 days")
         static let filters = String(localized: "filters")

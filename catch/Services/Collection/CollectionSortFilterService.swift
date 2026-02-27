@@ -82,8 +82,6 @@ struct DefaultCollectionSortFilterService: CollectionSortFilterService {
             return items.sorted {
                 $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
             }
-        case .newestAddition:
-            return items.sorted { $0.createdAt > $1.createdAt }
         }
     }
 
