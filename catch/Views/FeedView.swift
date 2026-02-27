@@ -1,46 +1,14 @@
 import SwiftUI
 import SwiftData
 
-enum FeedSortOption: String, CaseIterable, Identifiable {
-    case newest = "newest first"
-    case oldest = "oldest first"
-
-    var id: String { rawValue }
-
-    var displayName: String {
-        switch self {
-        case .newest: CatchStrings.Feed.newestFirst
-        case .oldest: CatchStrings.Feed.oldestFirst
-        }
-    }
-}
-
 struct FeedView: View {
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
     @Binding var scrollToTop: Bool
     @Binding var selectedTab: Int
-    @State private var searchText = ""
-    @State private var sortOption: FeedSortOption = .newest
 
     private var feedItems: [FeedItem] {
-        var items = socialFeedService?.remoteEncounters ?? []
-
-        if !searchText.isEmpty {
-            items = items.filter { item in
-                guard case .remote(let encounter, let cat, let owner, _) = item else { return false }
-                let matchesCatName = cat?.displayName.localizedCaseInsensitiveContains(searchText) ?? false
-                let matchesNotes = encounter.notes.localizedCaseInsensitiveContains(searchText)
-                let matchesLocation = encounter.locationName.localizedCaseInsensitiveContains(searchText)
-                let matchesOwner = owner.displayName.localizedCaseInsensitiveContains(searchText)
-                return matchesCatName || matchesNotes || matchesLocation || matchesOwner
-            }
-        }
-
-        switch sortOption {
-        case .newest: return items.sorted { $0.date > $1.date }
-        case .oldest: return items.sorted { $0.date < $1.date }
-        }
+        (socialFeedService?.remoteEncounters ?? []).sorted { $0.date > $1.date }
     }
 
     var body: some View {
@@ -55,12 +23,6 @@ struct FeedView: View {
                         icon: "person.2.circle",
                         title: CatchStrings.Feed.socialEmptyTitle,
                         subtitle: CatchStrings.Feed.socialEmptySubtitle
-                    )
-                } else if feedItems.isEmpty {
-                    EmptyStateView(
-                        icon: "magnifyingglass",
-                        title: CatchStrings.Feed.searchEmptyTitle,
-                        subtitle: CatchStrings.Feed.searchEmptySubtitle(searchText)
                     )
                 } else {
                     ScrollViewReader { proxy in
@@ -89,21 +51,6 @@ struct FeedView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(CatchTheme.background)
             .navigationTitle(CatchStrings.Tabs.feed)
-            .searchable(text: $searchText, prompt: CatchStrings.Feed.searchPrompt)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
-                            ForEach(FeedSortOption.allCases) { option in
-                                Text(option.displayName).tag(option)
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "arrow.up.arrow.down")
-                            .foregroundStyle(CatchTheme.primary)
-                    }
-                }
-            }
             .navigationDestination(for: RemoteProfileRoute.self) { route in
                 RemoteProfileContent(
                     userID: route.userID,
