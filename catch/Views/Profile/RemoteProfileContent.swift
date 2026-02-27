@@ -230,10 +230,6 @@ struct RemoteProfileContent: View {
                     Text(CatchStrings.Social.followingStatus)
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(CatchTheme.textPrimary)
-                        .padding(.horizontal, CatchSpacing.space12)
-                        .padding(.vertical, CatchSpacing.space6)
-                        .background(CatchTheme.secondary)
-                        .clipShape(Capsule())
                 }
                 .confirmationDialog(
                     CatchStrings.Social.areYouSure,
@@ -252,10 +248,6 @@ struct RemoteProfileContent: View {
                 Text(CatchStrings.Social.requestedStatus)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(CatchTheme.textSecondary)
-                    .padding(.horizontal, CatchSpacing.space12)
-                    .padding(.vertical, CatchSpacing.space6)
-                    .background(CatchTheme.textSecondary.opacity(0.1))
-                    .clipShape(Capsule())
             } else {
                 Button {
                     Task {
