@@ -12,6 +12,8 @@ struct RemoteProfileContent: View {
     @State private var data: UserBrowseData?
     @State private var loadError: UserBrowseError?
     @State private var isShowingCollection = false
+    @State private var isShowingBreedLog = false
+    @State private var isShowingUnfollowConfirmation = false
 
     private let columns = [
         GridItem(.flexible(), spacing: CatchSpacing.space16),
@@ -193,10 +195,25 @@ struct RemoteProfileContent: View {
                 label: CatchStrings.Profile.encounters,
                 icon: "pawprint.fill"
             )
+
+            Button {
+                isShowingBreedLog = true
+            } label: {
+                StatCardView(
+                    count: breedCount(data: data),
+                    label: CatchStrings.Profile.breedLog,
+                    icon: "book.closed.fill",
+                    showChevron: true
+                )
+            }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, CatchSpacing.space20)
         .navigationDestination(isPresented: $isShowingCollection) {
             remoteCatsGrid(data: data)
+        }
+        .navigationDestination(isPresented: $isShowingBreedLog) {
+            BreedLogView(entries: breedLogEntries(data: data))
         }
     }
 
@@ -208,9 +225,7 @@ struct RemoteProfileContent: View {
         if userID != currentUserID {
             if followService.isFollowing(userID) {
                 Button {
-                    Task {
-                        try? await followService.unfollow(targetID: userID, by: currentUserID)
-                    }
+                    isShowingUnfollowConfirmation = true
                 } label: {
                     Text(CatchStrings.Social.followingStatus)
                         .font(.caption.weight(.semibold))
@@ -219,6 +234,19 @@ struct RemoteProfileContent: View {
                         .padding(.vertical, CatchSpacing.space6)
                         .background(CatchTheme.secondary)
                         .clipShape(Capsule())
+                }
+                .confirmationDialog(
+                    CatchStrings.Social.areYouSure,
+                    isPresented: $isShowingUnfollowConfirmation,
+                    titleVisibility: .visible
+                ) {
+                    Button(CatchStrings.Social.unfollow, role: .destructive) {
+                        Task {
+                            try? await followService.unfollow(targetID: userID, by: currentUserID)
+                        }
+                    }
+                } message: {
+                    Text(CatchStrings.Social.unfollowConfirmMessage)
                 }
             } else if followService.pendingRequestTo(userID) != nil {
                 Text(CatchStrings.Social.requestedStatus)
@@ -405,6 +433,14 @@ struct RemoteProfileContent: View {
     private var isPrivateHidden: Bool {
         guard let data else { return false }
         return data.profile.isPrivate && !isFollowingUser
+    }
+
+    private func breedCount(data: UserBrowseData) -> Int {
+        Set(data.cats.map(\.breed).filter { BreedCatalog.contains($0) }).count
+    }
+
+    private func breedLogEntries(data: UserBrowseData) -> [BreedLogEntry] {
+        DefaultBreedLogService().buildBreedLog(from: data.cats)
     }
 
     private func loadData() async {

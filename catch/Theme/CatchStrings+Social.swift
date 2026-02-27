@@ -44,6 +44,7 @@ extension CatchStrings {
         static let removeFollower = String(localized: "remove follower")
         static let unfollow = String(localized: "unfollow")
         static let areYouSure = String(localized: "are you sure?")
+        static let unfollowConfirmMessage = String(localized: "you'll stop seeing their posts in your feed")
 
         static func since(_ date: Date) -> String {
             let formatted = date.formatted(.dateTime.month(.abbreviated).year())

@@ -25,7 +25,7 @@ final class DefaultBreedLogServiceTests: XCTestCase {
     // MARK: - buildBreedLog
 
     func test_buildBreedLog_emptyCats_returnsAllUndiscovered() {
-        let log = service.buildBreedLog(from: [])
+        let log = service.buildBreedLog(from: [Cat]())
         XCTAssertEqual(log.count, 27)
         XCTAssertTrue(log.allSatisfy { !$0.isDiscovered })
         XCTAssertTrue(log.allSatisfy { $0.catCount == 0 })
@@ -96,7 +96,7 @@ final class DefaultBreedLogServiceTests: XCTestCase {
     }
 
     func test_buildBreedLog_returnsAll27Entries() {
-        let log = service.buildBreedLog(from: [])
+        let log = service.buildBreedLog(from: [Cat]())
         XCTAssertEqual(log.count, BreedCatalog.count)
     }
 
