@@ -3,6 +3,7 @@ import SwiftUI
 struct InteractionBar: View {
     let encounterRecordName: String
     @Binding var showComments: Bool
+    var ownerRoute: RemoteProfileRoute?
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
 
@@ -11,6 +12,9 @@ struct InteractionBar: View {
             likeButton
             commentButton
             Spacer()
+            if let ownerRoute {
+                ownerLink(route: ownerRoute)
+            }
         }
     }
 
@@ -49,6 +53,21 @@ struct InteractionBar: View {
                         .font(.caption)
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func ownerLink(route: RemoteProfileRoute) -> some View {
+        NavigationLink(value: route) {
+            HStack(spacing: CatchSpacing.space4) {
+                Text(CatchStrings.Feed.spottedBy(route.displayName))
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(CatchTheme.textSecondary)
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
             }
         }
         .buttonStyle(.plain)

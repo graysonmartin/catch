@@ -16,50 +16,47 @@ enum FeedSortOption: String, CaseIterable, Identifiable {
 }
 
 struct FeedView: View {
-    @Environment(\.modelContext) private var modelContext
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
-    @Query(sort: \Encounter.date, order: .reverse) private var encounters: [Encounter]
-    @Query private var cats: [Cat]
+    @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
     @Binding var scrollToTop: Bool
     @Binding var selectedTab: Int
     @State private var searchText = ""
     @State private var sortOption: FeedSortOption = .newest
-    @State private var encounterToDelete: Encounter?
 
-    private var filteredEncounters: [Encounter] {
-        let filtered: [Encounter]
-        if searchText.isEmpty {
-            filtered = encounters
-        } else {
-            filtered = encounters.filter { encounter in
-                let matchesCatName = encounter.cat?.displayName.localizedCaseInsensitiveContains(searchText) ?? false
+    private var feedItems: [FeedItem] {
+        var items = socialFeedService?.remoteEncounters ?? []
+
+        if !searchText.isEmpty {
+            items = items.filter { item in
+                guard case .remote(let encounter, let cat, let owner, _) = item else { return false }
+                let matchesCatName = cat?.displayName.localizedCaseInsensitiveContains(searchText) ?? false
                 let matchesNotes = encounter.notes.localizedCaseInsensitiveContains(searchText)
-                let matchesLocation = encounter.location.name.localizedCaseInsensitiveContains(searchText)
-                return matchesCatName || matchesNotes || matchesLocation
+                let matchesLocation = encounter.locationName.localizedCaseInsensitiveContains(searchText)
+                let matchesOwner = owner.displayName.localizedCaseInsensitiveContains(searchText)
+                return matchesCatName || matchesNotes || matchesLocation || matchesOwner
             }
         }
 
         switch sortOption {
-        case .newest:
-            return filtered.sorted { $0.date > $1.date }
-        case .oldest:
-            return filtered.sorted { $0.date < $1.date }
+        case .newest: return items.sorted { $0.date > $1.date }
+        case .oldest: return items.sorted { $0.date < $1.date }
         }
     }
 
     var body: some View {
-        let _ = cats // Observe cat changes so feed items refresh after edits
         NavigationStack {
             Group {
-                if encounters.isEmpty {
+                if socialFeedService?.isLoading == true && (socialFeedService?.remoteEncounters.isEmpty ?? true) {
+                    ProgressView()
+                        .tint(CatchTheme.primary)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if socialFeedService?.remoteEncounters.isEmpty ?? true {
                     EmptyStateView(
-                        icon: "pawprint.circle",
-                        title: CatchStrings.Feed.emptyTitle,
-                        subtitle: CatchStrings.Feed.emptySubtitle,
-                        actionLabel: CatchStrings.Feed.emptyAction,
-                        action: { selectedTab = 1 }
+                        icon: "person.2.circle",
+                        title: CatchStrings.Feed.socialEmptyTitle,
+                        subtitle: CatchStrings.Feed.socialEmptySubtitle
                     )
-                } else if filteredEncounters.isEmpty {
+                } else if feedItems.isEmpty {
                     EmptyStateView(
                         icon: "magnifyingglass",
                         title: CatchStrings.Feed.searchEmptyTitle,
@@ -69,24 +66,9 @@ struct FeedView: View {
                     ScrollViewReader { proxy in
                         ScrollView {
                             LazyVStack(spacing: CatchSpacing.space16) {
-                                ForEach(filteredEncounters) { encounter in
-                                    if let cat = encounter.cat {
-                                        NavigationLink(value: cat) {
-                                            FeedItemView(encounter: encounter)
-                                        }
-                                        .buttonStyle(.plain)
-                                    } else {
-                                        FeedItemView(encounter: encounter)
-                                            .overlay(alignment: .topTrailing) {
-                                                Button {
-                                                    encounterToDelete = encounter
-                                                } label: {
-                                                    Image(systemName: "xmark.circle.fill")
-                                                        .font(.title3)
-                                                        .foregroundStyle(.white, CatchTheme.textSecondary)
-                                                }
-                                                .padding(CatchSpacing.space8)
-                                            }
+                                ForEach(feedItems) { item in
+                                    if case .remote(let encounter, let cat, let owner, let isFirstEncounter) = item {
+                                        SocialFeedItemView(encounter: encounter, cat: cat, owner: owner, isFirstEncounter: isFirstEncounter)
                                     }
                                 }
                             }
@@ -122,34 +104,27 @@ struct FeedView: View {
                     }
                 }
             }
-            .navigationDestination(for: Cat.self) { cat in
-                CatProfileView(cat: cat)
+            .navigationDestination(for: RemoteProfileRoute.self) { route in
+                RemoteProfileContent(
+                    userID: route.userID,
+                    initialDisplayName: route.displayName
+                )
             }
-            .alert(CatchStrings.Feed.orphanedAlertTitle, isPresented: Binding(
-                get: { encounterToDelete != nil },
-                set: { if !$0 { encounterToDelete = nil } }
-            )) {
-                Button(CatchStrings.Common.delete, role: .destructive) {
-                    if let encounter = encounterToDelete {
-                        modelContext.delete(encounter)
-                        encounterToDelete = nil
-                    }
-                }
-                Button(CatchStrings.Common.cancel, role: .cancel) {
-                    encounterToDelete = nil
-                }
-            } message: {
-                Text(CatchStrings.Feed.orphanedAlertMessage)
+            .refreshable {
+                await socialFeedService?.refresh()
             }
-            .task {
+            .task(id: socialFeedService != nil) {
+                await socialFeedService?.refresh()
                 await loadInteractionData()
             }
         }
     }
 
+    // MARK: - Data Loading
+
     private func loadInteractionData() async {
         guard let socialService else { return }
-        let recordNames = encounters.compactMap(\.cloudKitRecordName)
+        let recordNames = socialFeedService?.remoteEncounters.compactMap(\.encounterRecordName) ?? []
         guard !recordNames.isEmpty else { return }
         try? await socialService.loadInteractionData(for: recordNames)
     }

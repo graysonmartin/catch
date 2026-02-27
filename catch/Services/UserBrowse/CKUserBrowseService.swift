@@ -1,5 +1,8 @@
 import Foundation
 import Observation
+#if DEBUG
+import UIKit
+#endif
 
 @Observable
 @MainActor
@@ -121,9 +124,25 @@ final class CKUserBrowseService: UserBrowseService {
     // MARK: - Debug Seeding
 
     #if DEBUG
+    private static func seedPhoto(named assetName: String) -> [Data] {
+        guard let image = UIImage(named: assetName),
+              let data = image.jpegData(compressionQuality: 0.7) else {
+            return []
+        }
+        return [data]
+    }
+
     func seedFakeUsers() {
         let calendar = Calendar.current
         let now = Date()
+
+        let chairmanMeowPhoto = Self.seedPhoto(named: "SeedSocial1") // orange tabby in garden
+        let beansPhoto = Self.seedPhoto(named: "SeedSocial2")        // white cat on pillows
+        let professorPhoto = Self.seedPhoto(named: "SeedSocial3")    // grey cat, judgy
+        let noodlePhoto = Self.seedPhoto(named: "SeedSocial4")       // black & white cow cat
+        let biscuitPhoto = Self.seedPhoto(named: "SeedSocial5")      // orange tabby looking up
+        let ghostPhoto = Self.seedPhoto(named: "SeedSocial6")        // white cat, blue eyes
+        let gremlinPhoto = Self.seedPhoto(named: "SeedSocial7")      // b&w kitten reaching
 
         // -- tuong: prolific cat spotter --
         let tuongProfile = CloudUserProfile(
@@ -147,7 +166,7 @@ final class CKUserBrowseService: UserBrowseService {
                 notes: "runs this block. nobody disputes it.",
                 isOwned: false,
                 createdAt: calendar.date(byAdding: .day, value: -60, to: now)!,
-                photos: []
+                photos: chairmanMeowPhoto
             ),
             CloudCat(
                 recordName: "tuong-cat-2",
@@ -161,7 +180,7 @@ final class CKUserBrowseService: UserBrowseService {
                 notes: "sleeps in the window display. customers think she's decor.",
                 isOwned: true,
                 createdAt: calendar.date(byAdding: .day, value: -30, to: now)!,
-                photos: []
+                photos: beansPhoto
             ),
             CloudCat(
                 recordName: "tuong-cat-3",
@@ -175,7 +194,7 @@ final class CKUserBrowseService: UserBrowseService {
                 notes: "sits on the library steps looking disappointed in everyone. valid.",
                 isOwned: false,
                 createdAt: calendar.date(byAdding: .day, value: -14, to: now)!,
-                photos: []
+                photos: professorPhoto
             )
         ]
         let tuongEncounters = [
@@ -188,7 +207,7 @@ final class CKUserBrowseService: UserBrowseService {
                 locationLatitude: 37.7800,
                 locationLongitude: -122.4200,
                 notes: "first sighting. he hissed. i respected it.",
-                photos: []
+                photos: chairmanMeowPhoto
             ),
             CloudEncounter(
                 recordName: "tuong-enc-2",
@@ -210,7 +229,7 @@ final class CKUserBrowseService: UserBrowseService {
                 locationLatitude: 37.7810,
                 locationLongitude: -122.4150,
                 notes: "ordered a latte just to sit near her. worth it.",
-                photos: []
+                photos: beansPhoto
             ),
             CloudEncounter(
                 recordName: "tuong-enc-4",
@@ -221,7 +240,7 @@ final class CKUserBrowseService: UserBrowseService {
                 locationLatitude: 37.7790,
                 locationLongitude: -122.4180,
                 notes: "he looked at me like i owe him money.",
-                photos: []
+                photos: professorPhoto
             )
         ]
         cache["fake-tuong"] = UserBrowseData(
@@ -254,7 +273,7 @@ final class CKUserBrowseService: UserBrowseService {
                 notes: "appears when you least expect it. vanishes just as fast.",
                 isOwned: false,
                 createdAt: calendar.date(byAdding: .day, value: -45, to: now)!,
-                photos: []
+                photos: noodlePhoto
             ),
             CloudCat(
                 recordName: "sophi-cat-2",
@@ -268,7 +287,7 @@ final class CKUserBrowseService: UserBrowseService {
                 notes: "makes biscuits on the fence post. it's her whole personality.",
                 isOwned: true,
                 createdAt: calendar.date(byAdding: .day, value: -20, to: now)!,
-                photos: []
+                photos: biscuitPhoto
             )
         ]
         let sophiEncounters = [
@@ -281,7 +300,7 @@ final class CKUserBrowseService: UserBrowseService {
                 locationLatitude: 37.7700,
                 locationLongitude: -122.4300,
                 notes: "heard a noise. looked down. noodle.",
-                photos: []
+                photos: noodlePhoto
             ),
             CloudEncounter(
                 recordName: "sophi-enc-2",
@@ -303,7 +322,7 @@ final class CKUserBrowseService: UserBrowseService {
                 locationLatitude: 37.7710,
                 locationLongitude: -122.4280,
                 notes: "she kneaded the fence for 10 minutes straight. dedication.",
-                photos: []
+                photos: biscuitPhoto
             )
         ]
         cache["fake-sophi"] = UserBrowseData(
@@ -336,7 +355,7 @@ final class CKUserBrowseService: UserBrowseService {
                 notes: "you'll never find this cat.",
                 isOwned: true,
                 createdAt: calendar.date(byAdding: .day, value: -90, to: now)!,
-                photos: []
+                photos: ghostPhoto
             )
         ]
         let shivEncounters = [
@@ -349,7 +368,7 @@ final class CKUserBrowseService: UserBrowseService {
                 locationLatitude: nil,
                 locationLongitude: nil,
                 notes: "redacted",
-                photos: []
+                photos: ghostPhoto
             )
         ]
         cache["fake-shiv"] = UserBrowseData(
@@ -382,7 +401,7 @@ final class CKUserBrowseService: UserBrowseService {
                 notes: "chaotic neutral energy. knocked over a trash can and stared at me.",
                 isOwned: false,
                 createdAt: calendar.date(byAdding: .day, value: -25, to: now)!,
-                photos: []
+                photos: gremlinPhoto
             )
         ]
         let markEncounters = [
@@ -395,7 +414,7 @@ final class CKUserBrowseService: UserBrowseService {
                 locationLatitude: 37.7750,
                 locationLongitude: -122.4250,
                 notes: "he was standing on the dumpster like a king surveying his domain.",
-                photos: []
+                photos: gremlinPhoto
             ),
             CloudEncounter(
                 recordName: "mark-enc-2",

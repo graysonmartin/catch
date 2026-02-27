@@ -3,9 +3,6 @@ import Foundation
 extension CatchStrings {
 
     enum Feed {
-        static let emptyTitle = String(localized: "no encounters yet")
-        static let emptySubtitle = String(localized: "go outside. find a cat. report back.")
-        static let emptyAction = String(localized: "log your first cat")
         static let searchEmptyTitle = String(localized: "nothing here")
         static let searchPrompt = String(localized: "search encounters")
         static let unknownCat = String(localized: "Unknown Cat")
@@ -19,8 +16,12 @@ extension CatchStrings {
             String(localized: "no encounters matching \"\(query)\"")
         }
 
-        // Orphaned encounters
-        static let orphanedAlertTitle = String(localized: "delete orphaned encounter?")
-        static let orphanedAlertMessage = String(localized: "this encounter lost its cat. let it go.")
+        // Social feed
+        static let socialEmptyTitle = String(localized: "ghost town")
+        static let socialEmptySubtitle = String(localized: "follow some people and their cat encounters will show up here")
+
+        static func spottedBy(_ name: String) -> String {
+            String(localized: "spotted by \(name)")
+        }
     }
 }
