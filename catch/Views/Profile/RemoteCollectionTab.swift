@@ -1,15 +1,14 @@
 import SwiftUI
-import SwiftData
 import CatchCore
 
-struct ProfileCollectionTab: View {
-    @Query(sort: \Cat.name) private var cats: [Cat]
-    @Query private var encounters: [Encounter]
+struct RemoteCollectionTab: View {
+    let cats: [CloudCat]
+    let encounters: [CloudEncounter]
+    let ownerName: String
 
-    @Binding var selectedTab: Int
-    @State private var searchText = ""
     @State private var sortOption: CollectionSortOption = .mostRecent
     @State private var activeFilters: Set<CollectionFilter> = []
+    @State private var searchText = ""
 
     private let service: CollectionSortFilterService = DefaultCollectionSortFilterService()
 
@@ -18,42 +17,31 @@ struct ProfileCollectionTab: View {
         GridItem(.flexible(), spacing: CatchSpacing.space16)
     ]
 
-    private var encounterStatsByCat: [PersistentIdentifier: (count: Int, lastDate: Date)] {
-        var stats: [PersistentIdentifier: (count: Int, lastDate: Date)] = [:]
-        for encounter in encounters {
-            if let catID = encounter.cat?.persistentModelID {
-                let existing = stats[catID]
-                stats[catID] = (
-                    count: (existing?.count ?? 0) + 1,
-                    lastDate: max(encounter.date, existing?.lastDate ?? .distantPast)
-                )
-            }
-        }
-        return stats
+    private func encounterCount(for cat: CloudCat) -> Int {
+        encounters.filter { $0.catRecordName == cat.recordName }.count
     }
 
-    private func encounterCount(for cat: Cat) -> Int {
-        encounterStatsByCat[cat.persistentModelID]?.count ?? 0
+    private func lastEncounterDate(for cat: CloudCat) -> Date? {
+        encounters
+            .filter { $0.catRecordName == cat.recordName }
+            .map(\.date)
+            .max()
     }
 
-    private func lastEncounterDate(for cat: Cat) -> Date? {
-        encounterStatsByCat[cat.persistentModelID]?.lastDate
-    }
-
-    private var processedCats: [Cat] {
-        let searched: [Cat]
+    private var processedCats: [CloudCat] {
+        let searched: [CloudCat]
         if searchText.isEmpty {
             searched = cats
         } else {
             searched = cats.filter {
                 $0.displayName.localizedCaseInsensitiveContains(searchText)
-                || $0.location.name.localizedCaseInsensitiveContains(searchText)
+                || $0.locationName.localizedCaseInsensitiveContains(searchText)
             }
         }
 
         let items = searched.map { cat in
             CollectionCatItem(
-                id: cat.persistentModelID.hashValue.description,
+                id: cat.recordName,
                 name: cat.displayName,
                 isOwned: cat.isOwned,
                 createdAt: cat.createdAt,
@@ -71,13 +59,9 @@ struct ProfileCollectionTab: View {
 
         let orderedIDs = sortedItems.map(\.id)
         let catsByID = Dictionary(
-            uniqueKeysWithValues: searched.map { ($0.persistentModelID.hashValue.description, $0) }
+            uniqueKeysWithValues: searched.map { ($0.recordName, $0) }
         )
         return orderedIDs.compactMap { catsByID[$0] }
-    }
-
-    private var hasActiveFilters: Bool {
-        !activeFilters.isEmpty
     }
 
     var body: some View {
@@ -85,11 +69,10 @@ struct ProfileCollectionTab: View {
             if cats.isEmpty {
                 EmptyStateView(
                     icon: "square.grid.2x2",
-                    title: CatchStrings.Collection.emptyTitle,
-                    subtitle: CatchStrings.Collection.emptySubtitle,
-                    actionLabel: CatchStrings.Collection.emptyAction,
-                    action: { selectedTab = 1 }
+                    title: CatchStrings.Social.noCatsYetTitle,
+                    subtitle: CatchStrings.Social.noCatsYetSubtitle
                 )
+                .padding(.top, CatchSpacing.space32)
             } else {
                 VStack(spacing: 0) {
                     CollectionSortFilterBar(
@@ -101,11 +84,20 @@ struct ProfileCollectionTab: View {
                         filterEmptyState
                     } else {
                         LazyVGrid(columns: columns, spacing: CatchSpacing.space16) {
-                            ForEach(processedCats) { cat in
+                            ForEach(processedCats, id: \.recordName) { cat in
                                 NavigationLink {
-                                    CatProfileView(cat: cat)
+                                    RemoteCatProfileView(
+                                        cat: cat,
+                                        encounters: encounters,
+                                        ownerName: ownerName
+                                    )
                                 } label: {
-                                    CatCardView(data: CatDisplayData(local: cat, encounterCount: encounterCount(for: cat)))
+                                    CatCardView(
+                                        data: CatDisplayData(
+                                            remote: cat,
+                                            encounterCount: encounterCount(for: cat)
+                                        )
+                                    )
                                 }
                                 .buttonStyle(.plain)
                             }
