@@ -3,30 +3,37 @@ import SwiftUI
 private enum Layout {
     static let thumbnailSize: CGFloat = 48
     static let carouselHeight: CGFloat = 200
-    static let ownerIconSize: CGFloat = 9
     static let pillFontSize: CGFloat = 9
     static let pillHPadding: CGFloat = 6
     static let pillVPadding: CGFloat = 2
     static let pillCornerRadius: CGFloat = 4
-    static let pillBackgroundOpacity: Double = 0.15
+    static let pillActiveBackgroundOpacity: Double = 0.15
+    static let pillInactiveBackgroundOpacity: Double = 0.1
 }
 
 struct SocialFeedItemView: View {
     let encounter: CloudEncounter
     let cat: CloudCat?
     let owner: CloudUserProfile
+    let isFirstEncounter: Bool
 
     @State private var showComments = false
-    @State private var isShowingOwnerProfile = false
+
+    private var isUnnamed: Bool {
+        cat?.isUnnamed ?? true
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
-            ownerHeader
             catHeader
             photos
             location
             notes
-            InteractionBar(encounterRecordName: encounter.recordName, showComments: $showComments)
+            InteractionBar(
+                encounterRecordName: encounter.recordName,
+                showComments: $showComments,
+                ownerRoute: RemoteProfileRoute(userID: owner.appleUserID, displayName: owner.displayName)
+            )
         }
         .padding()
         .background(CatchTheme.cardBackground)
@@ -39,50 +46,23 @@ struct SocialFeedItemView: View {
 
     // MARK: - Subviews
 
-    private var ownerHeader: some View {
-        Button {
-            isShowingOwnerProfile = true
-        } label: {
-            HStack(spacing: CatchSpacing.space4) {
-                Image(systemName: "person.crop.circle.fill")
-                    .font(.system(size: Layout.ownerIconSize))
-                    .foregroundStyle(CatchTheme.textSecondary)
-                Text(CatchStrings.Feed.spottedBy(owner.displayName))
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
-                friendPill
-                Spacer()
-            }
-        }
-        .buttonStyle(.plain)
-        .navigationDestination(isPresented: $isShowingOwnerProfile) {
-            RemoteProfileContent(
-                userID: owner.appleUserID,
-                initialDisplayName: owner.displayName
-            )
-        }
-    }
-
-    private var friendPill: some View {
-        Text(CatchStrings.Feed.pillFriend)
-            .font(.system(size: Layout.pillFontSize, weight: .bold))
-            .foregroundStyle(CatchTheme.primary)
-            .padding(.horizontal, Layout.pillHPadding)
-            .padding(.vertical, Layout.pillVPadding)
-            .background(
-                RoundedRectangle(cornerRadius: Layout.pillCornerRadius)
-                    .fill(CatchTheme.primary.opacity(Layout.pillBackgroundOpacity))
-            )
-    }
-
     private var catHeader: some View {
         HStack(spacing: CatchSpacing.space12) {
             CatPhotoView(photoData: cat?.photos.first, size: Layout.thumbnailSize)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                Text(cat?.displayName ?? CatchStrings.Social.unknownCat)
-                    .font(.headline)
-                    .foregroundStyle(cat?.isUnnamed == true ? CatchTheme.textSecondary : CatchTheme.textPrimary)
+                HStack(spacing: CatchSpacing.space4) {
+                    Text(cat?.displayName ?? CatchStrings.Social.unknownCat)
+                        .font(.headline)
+                        .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
+                    pill(
+                        text: isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat,
+                        isActive: isFirstEncounter
+                    )
+                    if isUnnamed {
+                        pill(text: CatchStrings.Feed.pillStray, isActive: false)
+                    }
+                }
                 Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
@@ -96,6 +76,22 @@ struct SocialFeedItemView: View {
                     .font(.caption)
             }
         }
+    }
+
+    private func pill(text: String, isActive: Bool) -> some View {
+        Text(text)
+            .font(.system(size: Layout.pillFontSize, weight: .bold))
+            .foregroundStyle(isActive ? CatchTheme.primary : CatchTheme.textSecondary)
+            .padding(.horizontal, Layout.pillHPadding)
+            .padding(.vertical, Layout.pillVPadding)
+            .background(
+                RoundedRectangle(cornerRadius: Layout.pillCornerRadius)
+                    .fill(
+                        isActive
+                            ? CatchTheme.primary.opacity(Layout.pillActiveBackgroundOpacity)
+                            : CatchTheme.textSecondary.opacity(Layout.pillInactiveBackgroundOpacity)
+                    )
+            )
     }
 
     @ViewBuilder

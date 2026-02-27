@@ -144,7 +144,7 @@ final class CKSocialFeedServiceTests: XCTestCase {
 
         XCTAssertEqual(sut.remoteEncounters.count, 1)
 
-        guard case .remote(let enc, let associatedCat, let owner) = sut.remoteEncounters.first else {
+        guard case .remote(let enc, let associatedCat, let owner, _) = sut.remoteEncounters.first else {
             XCTFail("Expected remote feed item")
             return
         }
@@ -169,7 +169,7 @@ final class CKSocialFeedServiceTests: XCTestCase {
         await sut.refresh()
 
         XCTAssertEqual(sut.remoteEncounters.count, 1)
-        guard case .remote(_, let associatedCat, _) = sut.remoteEncounters.first else {
+        guard case .remote(_, let associatedCat, _, _) = sut.remoteEncounters.first else {
             XCTFail("Expected remote feed item")
             return
         }

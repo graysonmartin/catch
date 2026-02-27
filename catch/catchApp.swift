@@ -96,20 +96,19 @@ struct catchApp: App {
                                 followService: followService,
                                 userBrowseService: userBrowseService!
                             )
+
+                            #if DEBUG
+                            DataSeeder.seedIfEmpty(context: modelContainer.mainContext)
+                            let fakeUserID = authService.authState.user?.userIdentifier ?? "debug-user"
+                            followService.seedFakeFollows(currentUserID: fakeUserID)
+                            userBrowseService?.seedFakeUsers()
+                            socialInteractionService?.seedFakeInteractions(encounterRecordNames: [
+                                "tuong-enc-1", "tuong-enc-2", "tuong-enc-3", "tuong-enc-4",
+                                "sophi-enc-1", "sophi-enc-2"
+                            ])
+                            #endif
                         }
                     }
-                    #if DEBUG
-                    .task {
-                        DataSeeder.seedIfEmpty(context: modelContainer.mainContext)
-                        let fakeUserID = authService.authState.user?.userIdentifier ?? "debug-user"
-                        followService.seedFakeFollows(currentUserID: fakeUserID)
-                        userBrowseService?.seedFakeUsers()
-                        socialInteractionService?.seedFakeInteractions(encounterRecordNames: [
-                            "tuong-enc-1", "tuong-enc-2", "tuong-enc-3", "tuong-enc-4",
-                            "sophi-enc-1", "sophi-enc-2"
-                        ])
-                    }
-                    #endif
             } else {
                 OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
             }

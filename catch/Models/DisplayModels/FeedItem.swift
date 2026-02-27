@@ -1,14 +1,19 @@
 import Foundation
 
+struct RemoteProfileRoute: Hashable {
+    let userID: String
+    let displayName: String
+}
+
 enum FeedItem: Identifiable {
     case local(Encounter)
-    case remote(CloudEncounter, cat: CloudCat?, owner: CloudUserProfile)
+    case remote(CloudEncounter, cat: CloudCat?, owner: CloudUserProfile, isFirstEncounter: Bool)
 
     var id: String {
         switch self {
         case .local(let encounter):
             return "local-\(encounter.id)"
-        case .remote(let encounter, _, _):
+        case .remote(let encounter, _, _, _):
             return "remote-\(encounter.recordName)"
         }
     }
@@ -17,7 +22,7 @@ enum FeedItem: Identifiable {
         switch self {
         case .local(let encounter):
             return encounter.date
-        case .remote(let encounter, _, _):
+        case .remote(let encounter, _, _, _):
             return encounter.date
         }
     }
@@ -31,7 +36,7 @@ enum FeedItem: Identifiable {
         switch self {
         case .local(let encounter):
             return encounter.cloudKitRecordName
-        case .remote(let encounter, _, _):
+        case .remote(let encounter, _, _, _):
             return encounter.recordName
         }
     }

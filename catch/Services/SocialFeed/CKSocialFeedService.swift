@@ -44,9 +44,13 @@ final class CKSocialFeedService: SocialFeedService {
                                 .sorted { $0.date > $1.date }
                                 .prefix(CKSocialFeedService.maxEncountersPerUser)
                         )
+                        let earliestByCat = Dictionary(grouping: data.encounters, by: \.catRecordName)
+                            .compactMapValues { $0.min(by: { $0.date < $1.date })?.recordName }
+
                         return capped.map { encounter in
                             let cat = data.cats.first { $0.recordName == encounter.catRecordName }
-                            return FeedItem.remote(encounter, cat: cat, owner: data.profile)
+                            let isFirst = earliestByCat[encounter.catRecordName] == encounter.recordName
+                            return FeedItem.remote(encounter, cat: cat, owner: data.profile, isFirstEncounter: isFirst)
                         }
                     } catch {
                         return []
