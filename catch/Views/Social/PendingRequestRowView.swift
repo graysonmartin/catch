@@ -3,6 +3,7 @@ import CatchCore
 
 struct PendingRequestRowView: View {
     let follow: Follow
+    var displayName: String?
     let onApprove: () async throws -> Void
     let onDecline: () async throws -> Void
 
@@ -13,7 +14,7 @@ struct PendingRequestRowView: View {
                 .foregroundStyle(CatchTheme.primary)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                Text(follow.followerID)
+                Text(displayName ?? follow.followerID)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.textPrimary)
                     .lineLimit(1)

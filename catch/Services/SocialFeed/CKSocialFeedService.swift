@@ -64,6 +64,6 @@ final class CKSocialFeedService: SocialFeedService {
             }
         }
 
-        remoteEncounters = allItems
+        remoteEncounters = allItems.sorted { $0.date > $1.date }
     }
 }

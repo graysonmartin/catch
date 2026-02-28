@@ -17,8 +17,10 @@ enum SocialTab: String, CaseIterable, Identifiable {
 
 struct SocialView: View {
     @Environment(CKFollowService.self) private var followService
+    @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
     @Environment(AppleAuthService.self) private var authService
     @State private var isShowingFindPeople = false
+    @State private var resolvedNames: [String: String] = [:]
     @State var selectedTab: SocialTab
 
     var body: some View {
@@ -96,6 +98,7 @@ struct SocialView: View {
             ForEach(followService.pendingRequests) { follow in
                 PendingRequestRowView(
                     follow: follow,
+                    displayName: resolvedNames[follow.followerID],
                     onApprove: { try await followService.approveRequest(follow) },
                     onDecline: { try await followService.declineRequest(follow) }
                 )
@@ -110,6 +113,7 @@ struct SocialView: View {
                     follow: follow,
                     currentUserID: currentUserID,
                     isFollowerRow: true,
+                    resolvedName: resolvedNames[follow.followerID],
                     onAction: { try await followService.removeFollower(follow) }
                 )
             }
@@ -123,6 +127,7 @@ struct SocialView: View {
                     follow: follow,
                     currentUserID: currentUserID,
                     isFollowerRow: false,
+                    resolvedName: resolvedNames[follow.followeeID],
                     onAction: {
                         try await followService.unfollow(
                             targetID: follow.followeeID,
@@ -173,5 +178,23 @@ struct SocialView: View {
     private func refresh() async {
         guard let userID = authService.authState.user?.userIdentifier else { return }
         try? await followService.refresh(for: userID)
+        await resolveDisplayNames()
+    }
+
+    private func resolveDisplayNames() async {
+        guard let browseService else { return }
+        var userIDs: Set<String> = []
+        for follow in followService.followers {
+            userIDs.insert(follow.followerID)
+        }
+        for follow in followService.following {
+            userIDs.insert(follow.followeeID)
+        }
+        for follow in followService.pendingRequests {
+            userIDs.insert(follow.followerID)
+        }
+        guard !userIDs.isEmpty else { return }
+        let names = await browseService.fetchDisplayNames(userIDs: Array(userIDs))
+        resolvedNames = names
     }
 }

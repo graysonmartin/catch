@@ -13,7 +13,6 @@ public extension CKFollowService {
         info.shouldSendContentAvailable = true
         subscription.notificationInfo = info
 
-        let container = CKContainer(identifier: "iCloud.com.catch.catch")
-        container.publicCloudDatabase.save(subscription) { _, _ in }
+        database.save(subscription) { _, _ in }
     }
 }

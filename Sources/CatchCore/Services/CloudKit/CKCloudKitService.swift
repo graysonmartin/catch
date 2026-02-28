@@ -2,14 +2,13 @@ import CloudKit
 
 @MainActor
 public final class CKCloudKitService: CloudKitService {
-    private static let containerID = "iCloud.com.catch.catch"
     private static let recordType = "UserProfile"
 
-    private var database: CKDatabase {
-        CKContainer(identifier: Self.containerID).publicCloudDatabase
-    }
+    private let database: CKDatabase
 
-    public init() {}
+    public init() {
+        self.database = CKContainer(identifier: "iCloud.com.catch.catch").publicCloudDatabase
+    }
 
     // MARK: - CloudKitService
 
@@ -85,6 +84,35 @@ public final class CKCloudKitService: CloudKitService {
         ckQuery.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
 
         let (results, _) = try await database.records(matching: ckQuery, resultsLimit: 20)
+
+        return results.compactMap { _, result in
+            guard case .success(let record) = result,
+                  let appleID = record["appleUserID"] as? String,
+                  let displayName = record["displayName"] as? String,
+                  let bio = record["bio"] as? String else {
+                return nil
+            }
+            let isPrivate = (record["isPrivate"] as? Int ?? 0) == 1
+            let username = record["username"] as? String
+            return CloudUserProfile(
+                recordName: record.recordID.recordName,
+                appleUserID: appleID,
+                displayName: displayName,
+                bio: bio,
+                username: username,
+                isPrivate: isPrivate
+            )
+        }
+    }
+
+    public func fetchUserProfiles(appleUserIDs: [String]) async throws -> [CloudUserProfile] {
+        guard !appleUserIDs.isEmpty else { return [] }
+
+        let recordIDs = appleUserIDs.map { CKRecord.ID(recordName: $0) }
+        let results = try await database.records(
+            for: recordIDs,
+            desiredKeys: ["appleUserID", "displayName", "bio", "username", "isPrivate"]
+        )
 
         return results.compactMap { _, result in
             guard case .success(let record) = result,

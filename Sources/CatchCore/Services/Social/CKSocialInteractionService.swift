@@ -8,11 +8,10 @@ public final class CKSocialInteractionService: SocialInteractionService {
     public private(set) var commentCounts: [String: Int] = [:]
     public private(set) var likedEncounters: Set<String> = []
 
-    private static let containerID = "iCloud.com.catch.catch"
     private let getCurrentUserID: () -> String?
 
     private var database: CKDatabase {
-        CKContainer(identifier: Self.containerID).publicCloudDatabase
+        CKContainer(identifier: "iCloud.com.catch.catch").publicCloudDatabase
     }
 
     public init(getCurrentUserID: @escaping @Sendable () -> String?) {
@@ -173,15 +172,20 @@ public final class CKSocialInteractionService: SocialInteractionService {
         let predicate = NSPredicate(format: "encounterRecordName IN %@", encounterRecordNames)
         let query = CKQuery(recordType: LikeRecordMapper.recordType, predicate: predicate)
 
-        let (results, _) = try await database.records(matching: query, resultsLimit: 200)
+        // Only fetch the fields needed for counting and user-liked checks
+        let (results, _) = try await database.records(
+            matching: query,
+            desiredKeys: ["encounterRecordName", "userID"],
+            resultsLimit: 200
+        )
 
         var result = LikeLoadResult()
         for (_, recordResult) in results {
             guard case .success(let record) = recordResult,
-                  let like = LikeRecordMapper.like(from: record) else { continue }
-            result.counts[like.encounterRecordName, default: 0] += 1
-            if like.userID == userID {
-                result.userLiked.insert(like.encounterRecordName)
+                  let encounterName = record["encounterRecordName"] as? String else { continue }
+            result.counts[encounterName, default: 0] += 1
+            if let recordUserID = record["userID"] as? String, recordUserID == userID {
+                result.userLiked.insert(encounterName)
             }
         }
         return result
@@ -193,7 +197,12 @@ public final class CKSocialInteractionService: SocialInteractionService {
         let predicate = NSPredicate(format: "encounterRecordName IN %@", encounterRecordNames)
         let query = CKQuery(recordType: CommentRecordMapper.recordType, predicate: predicate)
 
-        let (results, _) = try await database.records(matching: query, resultsLimit: 200)
+        // Only fetch encounterRecordName since we just need counts per encounter
+        let (results, _) = try await database.records(
+            matching: query,
+            desiredKeys: ["encounterRecordName"],
+            resultsLimit: 200
+        )
 
         var counts: [String: Int] = [:]
         for (_, recordResult) in results {

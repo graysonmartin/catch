@@ -6,11 +6,11 @@ import CatchCore
 @Observable
 @MainActor
 final class CKEncounterRepository: EncounterRepository {
-    private let container = CKContainer(identifier: "iCloud.com.catch.catch")
+    private let database: CKDatabase
     private let logger = Logger(subsystem: "com.catch.catch", category: "CKEncounterRepository")
 
-    private var database: CKDatabase {
-        container.publicCloudDatabase
+    init() {
+        self.database = CKContainer(identifier: "iCloud.com.catch.catch").publicCloudDatabase
     }
 
     func save(_ payload: EncounterSyncPayload, ownerID: String) async throws -> String {

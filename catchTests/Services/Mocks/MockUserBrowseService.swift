@@ -10,12 +10,14 @@ final class MockUserBrowseService: UserBrowseService {
 
     private(set) var fetchUserDataCalls: [String] = []
     private(set) var fetchDisplayNameCalls: [String] = []
+    private(set) var fetchDisplayNamesCalls: [[String]] = []
     private(set) var clearCacheCalls = 0
 
     var fetchUserDataResult: Result<UserBrowseData, UserBrowseError> = .failure(.userNotFound)
     var fetchUserDataResults: [String: Result<UserBrowseData, UserBrowseError>] = [:]
     var cachedDataResult: UserBrowseData?
     var displayNameResult: String?
+    var displayNamesResult: [String: String] = [:]
     var profileResult: CloudUserProfile?
     private(set) var fetchProfileCalls: [String] = []
 
@@ -36,6 +38,11 @@ final class MockUserBrowseService: UserBrowseService {
         return displayNameResult
     }
 
+    func fetchDisplayNames(userIDs: [String]) async -> [String: String] {
+        fetchDisplayNamesCalls.append(userIDs)
+        return displayNamesResult
+    }
+
     func fetchProfile(userID: String) async -> CloudUserProfile? {
         fetchProfileCalls.append(userID)
         return profileResult
@@ -50,11 +57,13 @@ final class MockUserBrowseService: UserBrowseService {
         error = nil
         fetchUserDataCalls = []
         fetchDisplayNameCalls = []
+        fetchDisplayNamesCalls = []
         clearCacheCalls = 0
         fetchUserDataResult = .failure(.userNotFound)
         fetchUserDataResults = [:]
         cachedDataResult = nil
         displayNameResult = nil
+        displayNamesResult = [:]
         profileResult = nil
         fetchProfileCalls = []
     }

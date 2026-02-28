@@ -10,14 +10,13 @@ public final class CKFollowService: FollowService {
     public private(set) var pendingRequests: [Follow] = []
     public private(set) var isLoading = false
 
-    private static let containerID = "iCloud.com.catch.catch"
     private static let recordType = "Follow"
 
-    private var database: CKDatabase {
-        CKContainer(identifier: Self.containerID).publicCloudDatabase
-    }
+    let database: CKDatabase
 
-    public init() {}
+    public init() {
+        self.database = CKContainer(identifier: "iCloud.com.catch.catch").publicCloudDatabase
+    }
 
     // MARK: - FollowService
 
@@ -119,7 +118,12 @@ public final class CKFollowService: FollowService {
             NSPredicate(format: "status == %@", FollowStatus.active.rawValue)
         ])
         let ckQuery = CKQuery(recordType: Self.recordType, predicate: predicate)
-        let (results, _) = try await database.records(matching: ckQuery, resultsLimit: 200)
+        // Fetch record IDs only (no field data) since we just need the count
+        let (results, _) = try await database.records(
+            matching: ckQuery,
+            desiredKeys: [],
+            resultsLimit: 200
+        )
         return results.count
     }
 

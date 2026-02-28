@@ -9,7 +9,7 @@ struct FeedView: View {
     @Binding var selectedTab: Int
 
     private var feedItems: [FeedItem] {
-        (socialFeedService?.remoteEncounters ?? []).sorted { $0.date > $1.date }
+        socialFeedService?.remoteEncounters ?? []
     }
 
     var body: some View {

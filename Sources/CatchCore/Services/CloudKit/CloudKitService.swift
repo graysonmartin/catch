@@ -22,6 +22,10 @@ public protocol CloudKitService: Sendable {
         query: String
     ) async throws -> [CloudUserProfile]
 
+    func fetchUserProfiles(
+        appleUserIDs: [String]
+    ) async throws -> [CloudUserProfile]
+
     func checkUsernameAvailability(
         _ username: String
     ) async throws -> Bool

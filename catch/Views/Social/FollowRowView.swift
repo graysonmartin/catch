@@ -5,11 +5,12 @@ struct FollowRowView: View {
     let follow: Follow
     let currentUserID: String
     let isFollowerRow: Bool
+    var resolvedName: String?
     let onAction: () async throws -> Void
 
     @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
     @State private var isShowingConfirmation = false
-    @State private var resolvedName: String?
+    @State private var fetchedName: String?
     @State private var resolvedUsername: String?
 
     private var targetUserID: String {
@@ -17,7 +18,7 @@ struct FollowRowView: View {
     }
 
     private var displayName: String {
-        resolvedName ?? targetUserID
+        resolvedName ?? fetchedName ?? targetUserID
     }
 
     private var actionLabel: String {
@@ -73,8 +74,10 @@ struct FollowRowView: View {
             Text(CatchStrings.Social.areYouSure)
         }
         .task {
+            // Skip individual fetch if name was batch-resolved by parent
+            guard resolvedName == nil else { return }
             let profile = await browseService?.fetchProfile(userID: targetUserID)
-            resolvedName = profile?.displayName
+            fetchedName = profile?.displayName
             resolvedUsername = profile?.username
         }
     }

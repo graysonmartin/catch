@@ -6,11 +6,11 @@ import CatchCore
 @Observable
 @MainActor
 final class CKCatRepository: CatRepository {
-    private let container = CKContainer(identifier: "iCloud.com.catch.catch")
+    private let database: CKDatabase
     private let logger = Logger(subsystem: "com.catch.catch", category: "CKCatRepository")
 
-    private var database: CKDatabase {
-        container.publicCloudDatabase
+    init() {
+        self.database = CKContainer(identifier: "iCloud.com.catch.catch").publicCloudDatabase
     }
 
     func save(_ payload: CatSyncPayload, ownerID: String) async throws -> String {

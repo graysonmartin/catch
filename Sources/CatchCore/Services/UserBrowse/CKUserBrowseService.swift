@@ -110,6 +110,25 @@ public final class CKUserBrowseService: UserBrowseService {
         return profile.displayName
     }
 
+    public func fetchDisplayNames(userIDs: [String]) async -> [String: String] {
+        let uncachedIDs = userIDs.filter { displayNameCache[$0] == nil }
+
+        if !uncachedIDs.isEmpty {
+            let profiles = (try? await cloudKitService.fetchUserProfiles(appleUserIDs: uncachedIDs)) ?? []
+            for profile in profiles {
+                displayNameCache[profile.appleUserID] = profile.displayName
+            }
+        }
+
+        var result: [String: String] = [:]
+        for userID in userIDs {
+            if let name = displayNameCache[userID] {
+                result[userID] = name
+            }
+        }
+        return result
+    }
+
     public func fetchProfile(userID: String) async -> CloudUserProfile? {
         if let cached = cache[userID], !cached.isExpired {
             return cached.profile

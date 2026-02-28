@@ -12,6 +12,8 @@ final class MockCloudKitService: CloudKitService {
     var deleteError: (any Error)?
     var searchUsersResult: [CloudUserProfile] = []
     private(set) var searchUsersCalls: [String] = []
+    var fetchUserProfilesResult: [CloudUserProfile] = []
+    private(set) var fetchUserProfilesCalls: [[String]] = []
     var usernameAvailabilityResult: Bool = true
     private(set) var usernameAvailabilityCalls: [String] = []
 
@@ -39,6 +41,11 @@ final class MockCloudKitService: CloudKitService {
     func searchUsers(query: String) async throws -> [CloudUserProfile] {
         searchUsersCalls.append(query)
         return searchUsersResult
+    }
+
+    func fetchUserProfiles(appleUserIDs: [String]) async throws -> [CloudUserProfile] {
+        fetchUserProfilesCalls.append(appleUserIDs)
+        return fetchUserProfilesResult.filter { appleUserIDs.contains($0.appleUserID) }
     }
 
     func checkUsernameAvailability(_ username: String) async throws -> Bool {

@@ -396,4 +396,87 @@ final class CKUserBrowseServiceTests: XCTestCase {
         _ = try? await sut.fetchUserData(userID: "ghost")
         XCTAssertFalse(sut.isLoading)
     }
+
+    // MARK: - fetchDisplayNames (batch)
+
+    func testFetchDisplayNamesReturnsCachedAndFetchedNames() async {
+        // Pre-populate cache via single fetch
+        mockCloudKit.fetchResult = CloudUserProfile(
+            recordName: "rec-1",
+            appleUserID: "user-1",
+            displayName: "cached name",
+            bio: "",
+            isPrivate: false
+        )
+        _ = await sut.fetchDisplayName(userID: "user-1")
+
+        // Set up batch result for uncached user
+        mockCloudKit.fetchUserProfilesResult = [
+            CloudUserProfile(
+                recordName: "rec-2",
+                appleUserID: "user-2",
+                displayName: "fetched name",
+                bio: "",
+                isPrivate: false
+            )
+        ]
+
+        let result = await sut.fetchDisplayNames(userIDs: ["user-1", "user-2"])
+
+        XCTAssertEqual(result["user-1"], "cached name")
+        XCTAssertEqual(result["user-2"], "fetched name")
+    }
+
+    func testFetchDisplayNamesSkipsFetchWhenAllCached() async {
+        // Pre-populate cache
+        mockCloudKit.fetchResult = CloudUserProfile(
+            recordName: "rec-1",
+            appleUserID: "user-1",
+            displayName: "name1",
+            bio: "",
+            isPrivate: false
+        )
+        _ = await sut.fetchDisplayName(userID: "user-1")
+
+        let result = await sut.fetchDisplayNames(userIDs: ["user-1"])
+
+        XCTAssertEqual(result["user-1"], "name1")
+        // No batch fetch should have been made
+        XCTAssertTrue(mockCloudKit.fetchUserProfilesCalls.isEmpty)
+    }
+
+    func testFetchDisplayNamesHandlesEmptyInput() async {
+        let result = await sut.fetchDisplayNames(userIDs: [])
+
+        XCTAssertTrue(result.isEmpty)
+        XCTAssertTrue(mockCloudKit.fetchUserProfilesCalls.isEmpty)
+    }
+
+    func testFetchDisplayNamesOnlyFetchesUncachedIDs() async {
+        // Pre-populate one user in cache
+        mockCloudKit.fetchResult = CloudUserProfile(
+            recordName: "rec-1",
+            appleUserID: "user-1",
+            displayName: "cached",
+            bio: "",
+            isPrivate: false
+        )
+        _ = await sut.fetchDisplayName(userID: "user-1")
+
+        mockCloudKit.fetchUserProfilesResult = [
+            CloudUserProfile(
+                recordName: "rec-3",
+                appleUserID: "user-3",
+                displayName: "new",
+                bio: "",
+                isPrivate: false
+            )
+        ]
+
+        _ = await sut.fetchDisplayNames(userIDs: ["user-1", "user-3"])
+
+        // Should only fetch user-3 (user-1 is cached)
+        XCTAssertEqual(mockCloudKit.fetchUserProfilesCalls.count, 1)
+        XCTAssertEqual(mockCloudKit.fetchUserProfilesCalls.first, ["user-3"])
+    }
 }

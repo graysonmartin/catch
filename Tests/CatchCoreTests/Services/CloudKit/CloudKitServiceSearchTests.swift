@@ -41,4 +41,63 @@ final class CloudKitServiceSearchTests: XCTestCase {
         XCTAssertEqual(mock.searchUsersCalls[0], "first")
         XCTAssertEqual(mock.searchUsersCalls[1], "second")
     }
+
+    // MARK: - fetchUserProfiles (batch)
+
+    func test_fetchUserProfiles_returnsMatchingProfiles() async throws {
+        let mock = MockCloudKitService()
+        let profile1 = CloudUserProfile(
+            recordName: "rec-1",
+            appleUserID: "user-1",
+            displayName: "First",
+            bio: "",
+            isPrivate: false
+        )
+        let profile2 = CloudUserProfile(
+            recordName: "rec-2",
+            appleUserID: "user-2",
+            displayName: "Second",
+            bio: "",
+            isPrivate: false
+        )
+        mock.fetchUserProfilesResult = [profile1, profile2]
+
+        let results = try await mock.fetchUserProfiles(appleUserIDs: ["user-1", "user-2"])
+
+        XCTAssertEqual(results.count, 2)
+        XCTAssertEqual(mock.fetchUserProfilesCalls.count, 1)
+        XCTAssertEqual(mock.fetchUserProfilesCalls.first, ["user-1", "user-2"])
+    }
+
+    func test_fetchUserProfiles_filtersToRequestedIDs() async throws {
+        let mock = MockCloudKitService()
+        let profile1 = CloudUserProfile(
+            recordName: "rec-1",
+            appleUserID: "user-1",
+            displayName: "First",
+            bio: "",
+            isPrivate: false
+        )
+        let profile2 = CloudUserProfile(
+            recordName: "rec-2",
+            appleUserID: "user-2",
+            displayName: "Second",
+            bio: "",
+            isPrivate: false
+        )
+        mock.fetchUserProfilesResult = [profile1, profile2]
+
+        let results = try await mock.fetchUserProfiles(appleUserIDs: ["user-1"])
+
+        XCTAssertEqual(results.count, 1)
+        XCTAssertEqual(results.first?.displayName, "First")
+    }
+
+    func test_fetchUserProfiles_returnsEmptyForEmptyInput() async throws {
+        let mock = MockCloudKitService()
+
+        let results = try await mock.fetchUserProfiles(appleUserIDs: [])
+
+        XCTAssertTrue(results.isEmpty)
+    }
 }
