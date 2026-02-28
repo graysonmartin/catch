@@ -12,10 +12,10 @@ public final class CKFollowService: FollowService {
 
     private static let recordType = "Follow"
 
-    let database: CKDatabase
+    private let database: CKDatabase
 
-    public init() {
-        self.database = CKContainer(identifier: "iCloud.com.catch.catch").publicCloudDatabase
+    public init(database: CKDatabase) {
+        self.database = database
     }
 
     // MARK: - FollowService

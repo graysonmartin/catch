@@ -9,12 +9,10 @@ public final class CKSocialInteractionService: SocialInteractionService {
     public private(set) var likedEncounters: Set<String> = []
 
     private let getCurrentUserID: () -> String?
+    private let database: CKDatabase
 
-    private var database: CKDatabase {
-        CKContainer(identifier: "iCloud.com.catch.catch").publicCloudDatabase
-    }
-
-    public init(getCurrentUserID: @escaping @Sendable () -> String?) {
+    public init(database: CKDatabase, getCurrentUserID: @escaping @Sendable () -> String?) {
+        self.database = database
         self.getCurrentUserID = getCurrentUserID
     }
 

@@ -1,8 +1,11 @@
 import XCTest
+import CloudKit
 @testable import CatchCore
 
 @MainActor
 final class CKSocialInteractionServiceTests: XCTestCase {
+
+    private let testDatabase = CloudKitConfiguration.publicDatabase
 
     // MARK: - Mock Service Tests
 
@@ -191,7 +194,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
     // MARK: - Validation Tests (CKSocialInteractionService)
 
     func test_addComment_validatesEmptyText() async {
-        let service = CKSocialInteractionService(getCurrentUserID: { "user1" })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { "user1" })
 
         do {
             _ = try await service.addComment(encounterRecordName: "enc1", text: "   ")
@@ -202,7 +205,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
     }
 
     func test_addComment_validatesLongText() async {
-        let service = CKSocialInteractionService(getCurrentUserID: { "user1" })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { "user1" })
         let longText = String(repeating: "a", count: 501)
 
         do {
@@ -214,7 +217,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
     }
 
     func test_toggleLike_requiresSignIn() async {
-        let service = CKSocialInteractionService(getCurrentUserID: { nil })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { nil })
 
         do {
             try await service.toggleLike(encounterRecordName: "enc1")
@@ -225,7 +228,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
     }
 
     func test_addComment_requiresSignIn() async {
-        let service = CKSocialInteractionService(getCurrentUserID: { nil })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { nil })
 
         do {
             _ = try await service.addComment(encounterRecordName: "enc1", text: "hello")
@@ -236,7 +239,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
     }
 
     func test_deleteComment_requiresSignIn() async {
-        let service = CKSocialInteractionService(getCurrentUserID: { nil })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { nil })
 
         do {
             try await service.deleteComment(recordName: "c1", encounterRecordName: "enc1")
@@ -247,7 +250,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
     }
 
     func test_deleteComment_requiresOwnership() async {
-        let service = CKSocialInteractionService(getCurrentUserID: { "user1" })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { "user1" })
 
         do {
             try await service.deleteComment(recordName: "otheruser_comment_abc", encounterRecordName: "enc1")
@@ -258,7 +261,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
     }
 
     func test_optimisticLike_updatesStateImmediately() async throws {
-        let service = CKSocialInteractionService(getCurrentUserID: { "user1" })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { "user1" })
 
         // Before toggle
         XCTAssertFalse(service.isLiked("enc1"))
@@ -266,7 +269,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
     }
 
     func test_loadInteractionData_skipsEmptyArray() async throws {
-        let service = CKSocialInteractionService(getCurrentUserID: { "user1" })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { "user1" })
 
         // Should not throw
         try await service.loadInteractionData(for: [])
@@ -276,7 +279,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
     }
 
     func test_loadInteractionData_skipsWhenNotSignedIn() async throws {
-        let service = CKSocialInteractionService(getCurrentUserID: { nil })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { nil })
 
         // Should not throw
         try await service.loadInteractionData(for: ["enc1"])
@@ -286,7 +289,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
 
     #if DEBUG
     func test_seedFakeInteractions_populatesState() {
-        let service = CKSocialInteractionService(getCurrentUserID: { "debug-user" })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { "debug-user" })
 
         service.seedFakeInteractions(encounterRecordNames: ["enc1", "enc2", "enc3"])
 
@@ -295,7 +298,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
     }
 
     func test_seedFakeInteractions_skipsIfAlreadySeeded() {
-        let service = CKSocialInteractionService(getCurrentUserID: { "debug-user" })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { "debug-user" })
         service.seedFakeInteractions(encounterRecordNames: ["enc1", "enc2"])
         let initialCount = service.likeCounts.count
 
@@ -305,7 +308,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
     }
 
     func test_seedFakeInteractions_skipsEmptyRecordNames() {
-        let service = CKSocialInteractionService(getCurrentUserID: { "debug-user" })
+        let service = CKSocialInteractionService(database: testDatabase, getCurrentUserID: { "debug-user" })
 
         service.seedFakeInteractions(encounterRecordNames: [])
 

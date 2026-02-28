@@ -74,10 +74,10 @@ struct FollowRowView: View {
             Text(CatchStrings.Social.areYouSure)
         }
         .task {
-            // Skip individual fetch if name was batch-resolved by parent
-            guard resolvedName == nil else { return }
             let profile = await browseService?.fetchProfile(userID: targetUserID)
-            fetchedName = profile?.displayName
+            if fetchedName == nil {
+                fetchedName = profile?.displayName
+            }
             resolvedUsername = profile?.username
         }
     }

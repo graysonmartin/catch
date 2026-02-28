@@ -1,12 +1,14 @@
 import SwiftUI
 import SwiftData
+import CloudKit
 import CatchCore
 
 @main
 struct catchApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    private let cloudDatabase: CKDatabase
     @State private var authService = AppleAuthService()
-    @State private var followService = CKFollowService()
+    @State private var followService: CKFollowService
     @State private var breedClassifier = VisionBreedClassifierService()
     @State private var catSyncService: CKCatSyncService?
     @State private var encounterSyncService: CKEncounterSyncService?
@@ -16,6 +18,10 @@ struct catchApp: App {
     let modelContainer: ModelContainer
 
     init() {
+        let database = CloudKitConfiguration.publicDatabase
+        self.cloudDatabase = database
+        self._followService = State(initialValue: CKFollowService(database: database))
+
         let schema = Schema(versionedSchema: CatchSchemaV6.self)
         let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
         do {
@@ -38,7 +44,7 @@ struct catchApp: App {
                 fatalError("Failed to create ModelContainer after wipe: \(error)")
             }
             #else
-            fatalError("Failed to create ModelContainer: \(error)") 
+            fatalError("Failed to create ModelContainer: \(error)")
             #endif
         }
     }
@@ -69,8 +75,9 @@ struct catchApp: App {
                     .task {
                         await authService.checkCredentialState()
                         if catSyncService == nil {
-                            let catRepo = CKCatRepository()
-                            let encRepo = CKEncounterRepository()
+                            let db = cloudDatabase
+                            let catRepo = CKCatRepository(database: db)
+                            let encRepo = CKEncounterRepository(database: db)
                             let getUserID: () -> String? = { [authService] in
                                 authService.authState.user?.userIdentifier
                             }
@@ -84,13 +91,14 @@ struct catchApp: App {
                                 getUserID: getUserID
                             )
                             userBrowseService = CKUserBrowseService(
-                                cloudKitService: CKCloudKitService(),
+                                cloudKitService: CKCloudKitService(database: db),
                                 catRepository: catRepo,
                                 encounterRepository: encRepo,
                                 followService: followService,
                                 currentUserIDProvider: getUserID
                             )
                             socialInteractionService = CKSocialInteractionService(
+                                database: db,
                                 getCurrentUserID: getUserID
                             )
                             socialFeedService = CKSocialFeedService(

@@ -9,8 +9,8 @@ final class CKCatRepository: CatRepository {
     private let database: CKDatabase
     private let logger = Logger(subsystem: "com.catch.catch", category: "CKCatRepository")
 
-    init() {
-        self.database = CKContainer(identifier: "iCloud.com.catch.catch").publicCloudDatabase
+    init(database: CKDatabase) {
+        self.database = database
     }
 
     func save(_ payload: CatSyncPayload, ownerID: String) async throws -> String {

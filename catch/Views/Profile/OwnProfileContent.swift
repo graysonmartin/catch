@@ -16,7 +16,7 @@ struct OwnProfileContent: View {
     @State private var isShowingCollection = false
     @State private var searchText = ""
 
-    var cloudKitService: CloudKitService = CKCloudKitService()
+    var cloudKitService: CloudKitService = CKCloudKitService(database: CloudKitConfiguration.publicDatabase)
 
     private var profile: UserProfile? { profiles.first }
 

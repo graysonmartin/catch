@@ -9,8 +9,8 @@ final class CKEncounterRepository: EncounterRepository {
     private let database: CKDatabase
     private let logger = Logger(subsystem: "com.catch.catch", category: "CKEncounterRepository")
 
-    init() {
-        self.database = CKContainer(identifier: "iCloud.com.catch.catch").publicCloudDatabase
+    init(database: CKDatabase) {
+        self.database = database
     }
 
     func save(_ payload: EncounterSyncPayload, ownerID: String) async throws -> String {

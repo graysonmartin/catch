@@ -11,7 +11,7 @@ struct FindPeopleView: View {
     @State private var isSearching = false
     @State private var sentFollowIDs: Set<String> = []
 
-    private var cloudKitService: CloudKitService = CKCloudKitService()
+    private var cloudKitService: CloudKitService = CKCloudKitService(database: CloudKitConfiguration.publicDatabase)
 
     private var currentUserID: String {
         authService.authState.user?.userIdentifier ?? ""

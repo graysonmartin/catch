@@ -19,7 +19,7 @@ struct EditProfileView: View {
     @State private var usernameAvailability: UsernameAvailability = .idle
     @State private var usernameCheckTask: Task<Void, Never>?
 
-    private var cloudKitService: CloudKitService = CKCloudKitService()
+    private var cloudKitService: CloudKitService = CKCloudKitService(database: CloudKitConfiguration.publicDatabase)
 
     init(profile: UserProfile, onSave: ((UserProfile) -> Void)? = nil) {
         self.profile = profile

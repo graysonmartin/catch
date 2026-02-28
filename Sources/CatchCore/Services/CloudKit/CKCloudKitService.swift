@@ -6,8 +6,8 @@ public final class CKCloudKitService: CloudKitService {
 
     private let database: CKDatabase
 
-    public init() {
-        self.database = CKContainer(identifier: "iCloud.com.catch.catch").publicCloudDatabase
+    public init(database: CKDatabase) {
+        self.database = database
     }
 
     // MARK: - CloudKitService

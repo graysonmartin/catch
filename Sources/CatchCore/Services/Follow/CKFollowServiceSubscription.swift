@@ -1,7 +1,7 @@
 import CloudKit
 
 public extension CKFollowService {
-    func registerForFollowNotifications(userID: String) {
+    func registerForFollowNotifications(userID: String, database: CKDatabase) {
         let predicate = NSPredicate(format: "followeeID == %@", userID)
         let subscription = CKQuerySubscription(
             recordType: "Follow",
