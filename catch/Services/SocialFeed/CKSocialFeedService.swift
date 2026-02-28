@@ -7,11 +7,15 @@ import CatchCore
 final class CKSocialFeedService: SocialFeedService {
     private(set) var remoteEncounters: [FeedItem] = []
     private(set) var isLoading = false
+    private(set) var isLoadingMore = false
+    private(set) var hasMorePages = false
 
     private let followService: any FollowService
     private let userBrowseService: any UserBrowseService
 
-    private static let maxEncountersPerUser = 20
+    /// All fetched items before pagination slicing — kept in memory for load-more.
+    private var allFetchedItems: [FeedItem] = []
+    private var displayedCount = 0
 
     init(
         followService: any FollowService,
@@ -25,6 +29,9 @@ final class CKSocialFeedService: SocialFeedService {
         let activeFollows = followService.following
         guard !activeFollows.isEmpty else {
             remoteEncounters = []
+            allFetchedItems = []
+            displayedCount = 0
+            hasMorePages = false
             return
         }
 
@@ -43,7 +50,7 @@ final class CKSocialFeedService: SocialFeedService {
                         let capped = Array(
                             data.encounters
                                 .sorted { $0.date > $1.date }
-                                .prefix(CKSocialFeedService.maxEncountersPerUser)
+                                .prefix(PaginationConstants.maxEncountersPerUser)
                         )
                         let earliestByCat = Dictionary(grouping: data.encounters, by: \.catRecordName)
                             .compactMapValues { $0.min(by: { $0.date < $1.date })?.recordName }
@@ -64,6 +71,24 @@ final class CKSocialFeedService: SocialFeedService {
             }
         }
 
-        remoteEncounters = allItems
+        allFetchedItems = allItems.sorted { $0.date > $1.date }
+        displayedCount = min(PaginationConstants.defaultPageSize, allFetchedItems.count)
+        remoteEncounters = Array(allFetchedItems.prefix(displayedCount))
+        hasMorePages = displayedCount < allFetchedItems.count
+    }
+
+    func loadMore() async {
+        guard hasMorePages, !isLoadingMore else { return }
+
+        isLoadingMore = true
+        defer { isLoadingMore = false }
+
+        let nextCount = min(
+            displayedCount + PaginationConstants.defaultPageSize,
+            allFetchedItems.count
+        )
+        displayedCount = nextCount
+        remoteEncounters = Array(allFetchedItems.prefix(displayedCount))
+        hasMorePages = displayedCount < allFetchedItems.count
     }
 }

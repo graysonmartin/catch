@@ -9,9 +9,14 @@ public final class CKFollowService: FollowService {
     public private(set) var outgoingPending: [Follow] = []
     public private(set) var pendingRequests: [Follow] = []
     public private(set) var isLoading = false
+    public private(set) var hasMoreFollowers = false
+    public private(set) var hasMoreFollowing = false
 
     private static let containerID = "iCloud.com.catch.catch"
     private static let recordType = "Follow"
+
+    private var followersCursor: CKQueryOperation.Cursor?
+    private var followingCursor: CKQueryOperation.Cursor?
 
     private var database: CKDatabase {
         CKContainer(identifier: Self.containerID).publicCloudDatabase
@@ -85,16 +90,58 @@ public final class CKFollowService: FollowService {
         isLoading = true
         defer { isLoading = false }
 
-        async let activeFollowers = query(field: "followeeID", value: userID, status: .active)
-        async let activeFollowing = query(field: "followerID", value: userID, status: .active)
+        async let activeFollowers = paginatedQuery(
+            field: "followeeID", value: userID, status: .active,
+            limit: PaginationConstants.defaultPageSize
+        )
+        async let activeFollowing = paginatedQuery(
+            field: "followerID", value: userID, status: .active,
+            limit: PaginationConstants.defaultPageSize
+        )
         async let pendingIncoming = query(field: "followeeID", value: userID, status: .pending)
         async let pendingOutgoing = query(field: "followerID", value: userID, status: .pending)
 
-        let (f, g, pi, po) = try await (activeFollowers, activeFollowing, pendingIncoming, pendingOutgoing)
-        followers = f
-        following = g
+        let (fResult, gResult, pi, po) = try await (activeFollowers, activeFollowing, pendingIncoming, pendingOutgoing)
+        followers = fResult.items
+        followersCursor = fResult.cursor
+        hasMoreFollowers = fResult.cursor != nil
+        following = gResult.items
+        followingCursor = gResult.cursor
+        hasMoreFollowing = gResult.cursor != nil
         pendingRequests = pi
         outgoingPending = po
+    }
+
+    public func loadMoreFollowers(for userID: String) async throws {
+        guard let cursor = followersCursor else { return }
+
+        let (pageResults, nextCursor) = try await database.records(
+            continuingMatchFrom: cursor,
+            resultsLimit: PaginationConstants.defaultPageSize
+        )
+        let newFollows = pageResults.compactMap { _, result -> Follow? in
+            guard case .success(let record) = result else { return nil }
+            return Self.follow(from: record)
+        }
+        followers.append(contentsOf: newFollows)
+        followersCursor = nextCursor
+        hasMoreFollowers = nextCursor != nil
+    }
+
+    public func loadMoreFollowing(for userID: String) async throws {
+        guard let cursor = followingCursor else { return }
+
+        let (pageResults, nextCursor) = try await database.records(
+            continuingMatchFrom: cursor,
+            resultsLimit: PaginationConstants.defaultPageSize
+        )
+        let newFollows = pageResults.compactMap { _, result -> Follow? in
+            guard case .success(let record) = result else { return nil }
+            return Self.follow(from: record)
+        }
+        following.append(contentsOf: newFollows)
+        followingCursor = nextCursor
+        hasMoreFollowing = nextCursor != nil
     }
 
     public func fetchFollowCounts(for userID: String) async throws -> (followers: Int, following: Int) {
@@ -121,6 +168,32 @@ public final class CKFollowService: FollowService {
         let ckQuery = CKQuery(recordType: Self.recordType, predicate: predicate)
         let (results, _) = try await database.records(matching: ckQuery, resultsLimit: 200)
         return results.count
+    }
+
+    private struct PaginatedFollowResult {
+        let items: [Follow]
+        let cursor: CKQueryOperation.Cursor?
+    }
+
+    private func paginatedQuery(
+        field: String,
+        value: String,
+        status: FollowStatus,
+        limit: Int
+    ) async throws -> PaginatedFollowResult {
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            NSPredicate(format: "%K == %@", field, value),
+            NSPredicate(format: "status == %@", status.rawValue)
+        ])
+        let ckQuery = CKQuery(recordType: Self.recordType, predicate: predicate)
+        ckQuery.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+
+        let (results, cursor) = try await database.records(matching: ckQuery, resultsLimit: limit)
+        let follows = results.compactMap { _, result -> Follow? in
+            guard case .success(let record) = result else { return nil }
+            return Self.follow(from: record)
+        }
+        return PaginatedFollowResult(items: follows, cursor: cursor)
     }
 
     private func query(field: String, value: String, status: FollowStatus) async throws -> [Follow] {

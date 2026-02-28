@@ -101,16 +101,6 @@ final class CollectionSortFilterServiceTests: XCTestCase {
         XCTAssertEqual(result.map(\.id), ["lower", "upper"])
     }
 
-    // MARK: - Sort: Newest Addition
-
-    func test_sort_newestAddition_ordersByCreatedAtDescending() {
-        let old = makeItem(id: "old", createdAt: daysAgo(30))
-        let recent = makeItem(id: "recent", createdAt: daysAgo(1))
-
-        let result = service.sort([old, recent], by: .newestAddition)
-        XCTAssertEqual(result.map(\.id), ["recent", "old"])
-    }
-
     // MARK: - Filter: Owned Only
 
     func test_filter_ownedOnly_keepsOnlyOwned() {

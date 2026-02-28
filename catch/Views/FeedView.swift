@@ -34,6 +34,8 @@ struct FeedView: View {
                                         SocialFeedItemView(encounter: encounter, cat: cat, owner: owner, isFirstEncounter: isFirstEncounter)
                                     }
                                 }
+
+                                loadMoreSection
                             }
                             .padding()
                             .id("feedTop")
@@ -64,6 +66,25 @@ struct FeedView: View {
             .task(id: socialFeedService != nil) {
                 await socialFeedService?.refresh()
                 await loadInteractionData()
+            }
+        }
+    }
+
+    // MARK: - Load More
+
+    @ViewBuilder
+    private var loadMoreSection: some View {
+        if socialFeedService?.hasMorePages == true {
+            if socialFeedService?.isLoadingMore == true {
+                ProgressView()
+                    .tint(CatchTheme.primary)
+                    .padding()
+            } else {
+                Color.clear
+                    .frame(height: 1)
+                    .onAppear {
+                        Task { await socialFeedService?.loadMore() }
+                    }
             }
         }
     }

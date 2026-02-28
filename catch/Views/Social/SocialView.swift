@@ -19,6 +19,8 @@ struct SocialView: View {
     @Environment(CKFollowService.self) private var followService
     @Environment(AppleAuthService.self) private var authService
     @State private var isShowingFindPeople = false
+    @State private var isLoadingMoreFollowers = false
+    @State private var isLoadingMoreFollowing = false
     @State var selectedTab: SocialTab
 
     var body: some View {
@@ -113,6 +115,10 @@ struct SocialView: View {
                     onAction: { try await followService.removeFollower(follow) }
                 )
             }
+
+            if followService.hasMoreFollowers {
+                loadMoreFollowersRow
+            }
         }
     }
 
@@ -131,6 +137,52 @@ struct SocialView: View {
                     }
                 )
             }
+
+            if followService.hasMoreFollowing {
+                loadMoreFollowingRow
+            }
+        }
+    }
+
+    // MARK: - Load More
+
+    @ViewBuilder
+    private var loadMoreFollowersRow: some View {
+        if isLoadingMoreFollowers {
+            HStack {
+                Spacer()
+                ProgressView()
+                    .tint(CatchTheme.primary)
+                Spacer()
+            }
+            .listRowBackground(Color.clear)
+        } else {
+            Color.clear
+                .frame(height: 1)
+                .listRowBackground(Color.clear)
+                .onAppear {
+                    Task { await loadMoreFollowers() }
+                }
+        }
+    }
+
+    @ViewBuilder
+    private var loadMoreFollowingRow: some View {
+        if isLoadingMoreFollowing {
+            HStack {
+                Spacer()
+                ProgressView()
+                    .tint(CatchTheme.primary)
+                Spacer()
+            }
+            .listRowBackground(Color.clear)
+        } else {
+            Color.clear
+                .frame(height: 1)
+                .listRowBackground(Color.clear)
+                .onAppear {
+                    Task { await loadMoreFollowing() }
+                }
         }
     }
 
@@ -173,5 +225,19 @@ struct SocialView: View {
     private func refresh() async {
         guard let userID = authService.authState.user?.userIdentifier else { return }
         try? await followService.refresh(for: userID)
+    }
+
+    private func loadMoreFollowers() async {
+        guard !isLoadingMoreFollowers else { return }
+        isLoadingMoreFollowers = true
+        defer { isLoadingMoreFollowers = false }
+        try? await followService.loadMoreFollowers(for: currentUserID)
+    }
+
+    private func loadMoreFollowing() async {
+        guard !isLoadingMoreFollowing else { return }
+        isLoadingMoreFollowing = true
+        defer { isLoadingMoreFollowing = false }
+        try? await followService.loadMoreFollowing(for: currentUserID)
     }
 }
