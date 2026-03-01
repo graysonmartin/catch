@@ -8,7 +8,6 @@ struct CatMapView: View {
     @Query(sort: \Cat.name) private var cats: [Cat]
     @Binding var selectedTab: Int
     @State private var selectedCat: Cat?
-    @State private var showProfile = false
     @State private var clusterSelection: ClusterSelection?
     @State private var showMissingLocationSheet = false
 
@@ -37,7 +36,6 @@ struct CatMapView: View {
                             cats: catsWithLocation,
                             onSelectCat: { cat in
                                 selectedCat = cat
-                                showProfile = true
                             },
                             onSelectCluster: { cats in
                                 clusterSelection = ClusterSelection(cats: cats)
@@ -68,23 +66,19 @@ struct CatMapView: View {
             }
             .navigationTitle(CatchStrings.Tabs.map)
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(isPresented: $showProfile) {
-                if let cat = selectedCat {
-                    CatProfileView(cat: cat)
-                }
+            .navigationDestination(item: $selectedCat) { cat in
+                CatProfileView(cat: cat)
             }
             .sheet(item: $clusterSelection) { selection in
                 ClusterListSheet(cats: selection.cats) { cat in
                     clusterSelection = nil
                     selectedCat = cat
-                    showProfile = true
                 }
             }
             .sheet(isPresented: $showMissingLocationSheet) {
                 MissingLocationSheet(cats: catsWithoutLocation) { cat in
                     showMissingLocationSheet = false
                     selectedCat = cat
-                    showProfile = true
                 }
             }
         }
