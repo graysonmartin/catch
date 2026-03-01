@@ -2,7 +2,7 @@ SIMULATOR_ID = 427BD9BF-F3B2-4985-B434-3B872EC26E28
 PROJECT = catch.xcodeproj
 APP_SCHEME = catch
 TEST_SCHEME = catchTests
-BUNDLE_ID = com.catch.catch
+BUNDLE_ID = com.graysonmartin.catch
 APP_PATH = $(shell find ~/Library/Developer/Xcode/DerivedData/catch-*/Build/Products/Debug-iphonesimulator/catch.app -maxdepth 0 2>/dev/null | head -1)
 
 .PHONY: test test-fast test-all test-verbose test-serial boot-sim kill-sim clean-build build run install reset-sim

@@ -10,7 +10,7 @@ final class CKEncounterSyncService: EncounterSyncService {
 
     private let encounterRepository: any EncounterRepository
     private let getUserID: () -> String?
-    private let logger = Logger(subsystem: "com.catch.catch", category: "EncounterSync")
+    private let logger = Logger(subsystem: "com.graysonmartin.catch", category: "EncounterSync")
 
     init(
         encounterRepository: any EncounterRepository,
