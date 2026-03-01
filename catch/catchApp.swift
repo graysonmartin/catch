@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import CatchCore
+import UserNotifications
 
 @main
 struct catchApp: App {
@@ -13,6 +14,8 @@ struct catchApp: App {
     @State private var userBrowseService: CKUserBrowseService?
     @State private var socialInteractionService: CKSocialInteractionService?
     @State private var socialFeedService: CKSocialFeedService?
+    @State private var pushNotificationService: CKPushNotificationService?
+    @UIApplicationDelegateAdaptor private var notificationDelegate: NotificationDelegate
     let modelContainer: ModelContainer
 
     init() {
@@ -66,6 +69,7 @@ struct catchApp: App {
                     .environment(userBrowseService)
                     .environment(socialInteractionService)
                     .environment(socialFeedService)
+                    .environment(pushNotificationService)
                     .task {
                         await authService.checkCredentialState()
                         if catSyncService == nil {
@@ -98,6 +102,14 @@ struct catchApp: App {
                                 userBrowseService: userBrowseService!
                             )
 
+                            let notifService = CKPushNotificationService()
+                            pushNotificationService = notifService
+                            notificationDelegate.notificationService = notifService
+                            await setupPushNotifications(
+                                service: notifService,
+                                getUserID: getUserID
+                            )
+
                             #if DEBUG
                             DataSeeder.seedIfEmpty(context: modelContainer.mainContext)
                             let fakeUserID = authService.authState.user?.userIdentifier ?? "debug-user"
@@ -115,5 +127,23 @@ struct catchApp: App {
             }
         }
         .modelContainer(modelContainer)
+    }
+
+    @MainActor
+    private func setupPushNotifications(
+        service: CKPushNotificationService,
+        getUserID: () -> String?
+    ) async {
+        do {
+            let granted = try await service.requestAuthorization()
+            guard granted else { return }
+            UIApplication.shared.registerForRemoteNotifications()
+
+            if let userID = getUserID() {
+                try await service.setupSubscriptions(for: userID)
+            }
+        } catch {
+            print("[catch] push notification setup failed: \(error)")
+        }
     }
 }
