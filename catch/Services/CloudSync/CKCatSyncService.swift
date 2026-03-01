@@ -11,7 +11,7 @@ final class CKCatSyncService: CatSyncService {
     private let catRepository: any CatRepository
     private let encounterRepository: any EncounterRepository
     private let getUserID: () -> String?
-    private let logger = Logger(subsystem: "com.catch.catch", category: "CatSync")
+    private let logger = Logger(subsystem: "com.graysonmartin.catch", category: "CatSync")
 
     init(
         catRepository: any CatRepository,
