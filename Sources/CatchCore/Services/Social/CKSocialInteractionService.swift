@@ -98,14 +98,7 @@ public final class CKSocialInteractionService: SocialInteractionService {
         guard !trimmed.isEmpty else { throw SocialInteractionError.commentEmpty }
         guard trimmed.count <= 500 else { throw SocialInteractionError.commentTooLong }
 
-        switch rateLimiter.checkAndRecord(action: .comment) {
-        case .allowed:
-            break
-        case .debounced:
-            throw SocialInteractionError.rateLimited(retryAfter: 5)
-        case .throttled(let retryAfter):
-            throw SocialInteractionError.rateLimited(retryAfter: retryAfter)
-        }
+        try checkCommentRateLimit()
 
         let comment = EncounterComment(
             id: "\(userID)_comment_\(UUID().uuidString)",
@@ -183,6 +176,17 @@ public final class CKSocialInteractionService: SocialInteractionService {
     }
 
     // MARK: - Private
+
+    private func checkCommentRateLimit() throws {
+        switch rateLimiter.checkAndRecord(action: .comment) {
+        case .allowed:
+            break
+        case .debounced:
+            throw SocialInteractionError.rateLimited(retryAfter: RateLimitConfig.comment.debounceInterval)
+        case .throttled(let retryAfter):
+            throw SocialInteractionError.rateLimited(retryAfter: retryAfter)
+        }
+    }
 
     private struct LikeLoadResult {
         var counts: [String: Int] = [:]

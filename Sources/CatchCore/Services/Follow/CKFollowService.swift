@@ -29,14 +29,7 @@ public final class CKFollowService: FollowService {
         guard !isFollowing(targetID) else { throw FollowServiceError.alreadyFollowing }
         guard pendingRequestTo(targetID) == nil else { throw FollowServiceError.requestAlreadyPending }
 
-        switch rateLimiter.checkAndRecord(action: .follow) {
-        case .allowed:
-            break
-        case .debounced:
-            return
-        case .throttled(let retryAfter):
-            throw FollowServiceError.rateLimited(retryAfter: retryAfter)
-        }
+        try checkRateLimit()
 
         let status: FollowStatus = isTargetPrivate ? .pending : .active
         let recordID = CKRecord.ID(recordName: "\(userID)_\(targetID)")
@@ -56,14 +49,7 @@ public final class CKFollowService: FollowService {
     }
 
     public func unfollow(targetID: String, by userID: String) async throws {
-        switch rateLimiter.checkAndRecord(action: .follow) {
-        case .allowed:
-            break
-        case .debounced:
-            return
-        case .throttled(let retryAfter):
-            throw FollowServiceError.rateLimited(retryAfter: retryAfter)
-        }
+        try checkRateLimit()
 
         guard let match = following.first(where: { $0.followeeID == targetID }) else {
             throw FollowServiceError.followNotFound
@@ -133,6 +119,17 @@ public final class CKFollowService: FollowService {
     }
 
     // MARK: - Private
+
+    private func checkRateLimit() throws {
+        switch rateLimiter.checkAndRecord(action: .follow) {
+        case .allowed:
+            break
+        case .debounced:
+            throw FollowServiceError.rateLimited(retryAfter: RateLimitConfig.follow.debounceInterval)
+        case .throttled(let retryAfter):
+            throw FollowServiceError.rateLimited(retryAfter: retryAfter)
+        }
+    }
 
     private func countRecords(field: String, value: String) async throws -> Int {
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [

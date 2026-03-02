@@ -45,7 +45,9 @@ struct InteractionBar: View {
                     if case .rateLimited = error {
                         showRateLimitFeedback(CatchStrings.RateLimit.likeCooldown)
                     }
-                } catch {}
+                } catch {
+                    // Non-rate-limit errors silently ignored (network, etc.)
+                }
             }
         } label: {
             HStack(spacing: CatchSpacing.space4) {

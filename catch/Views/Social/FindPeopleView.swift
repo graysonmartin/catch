@@ -168,7 +168,9 @@ struct FindPeopleView: View {
                 if case .rateLimited = error {
                     showFollowRateLimitFeedback()
                 }
-            } catch {}
+            } catch {
+                // Non-rate-limit errors silently ignored (network, etc.)
+            }
         }
     }
 

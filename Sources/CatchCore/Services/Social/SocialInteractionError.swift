@@ -25,7 +25,7 @@ public enum SocialInteractionError: LocalizedError, Equatable {
         case .unauthorized:
             "you can't do that"
         case .rateLimited:
-            CatchStrings.RateLimit.commentCooldown
+            CatchStrings.RateLimit.genericCooldown
         case .networkError(let message):
             "something went wrong: \(message)"
         }
