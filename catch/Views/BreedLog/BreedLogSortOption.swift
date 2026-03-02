@@ -26,8 +26,8 @@ enum BreedLogSortDirection: Equatable {
 
 enum BreedLogSortOption: String, CaseIterable, Identifiable {
     case rarity = "rarity"
-    case alphabetical = "a-z"
-    case discoveredFirst = "discovered first"
+    case alphabetical = "alphabetical"
+    case discoveredFirst = "discovery date"
 
     var id: String { rawValue }
 
