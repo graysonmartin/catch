@@ -44,18 +44,16 @@ struct CollectionSortFilterBar: View {
         HStack(spacing: CatchSpacing.space4) {
             Image(systemName: "arrow.up.arrow.down")
                 .font(.caption2.weight(.bold))
-            Text(selectedSort.displayName)
-                .font(.caption.weight(.medium))
-                .overlay {
-                    ZStack {
-                        ForEach(CollectionSortOption.allCases) { option in
-                            Text(option.displayName)
-                        }
-                    }
-                    .font(.caption.weight(.medium))
-                    .hidden()
+            ZStack {
+                ForEach(CollectionSortOption.allCases) { option in
+                    Text(option.displayName)
+                        .hidden()
                 }
+                Text(selectedSort.displayName)
+            }
+            .font(.caption.weight(.medium))
         }
+        .fixedSize()
         .foregroundStyle(CatchTheme.textPrimary)
         .padding(.horizontal, CatchSpacing.space12)
         .padding(.vertical, CatchSpacing.space6)
@@ -95,6 +93,7 @@ struct CollectionSortFilterBar: View {
                 Text(filter.displayName)
                     .font(.caption.weight(.medium))
             }
+            .fixedSize()
             .foregroundStyle(isActive ? .white : CatchTheme.textSecondary)
             .padding(.horizontal, CatchSpacing.space12)
             .padding(.vertical, CatchSpacing.space6)
@@ -107,6 +106,7 @@ struct CollectionSortFilterBar: View {
             )
         }
         .buttonStyle(.plain)
+        .transaction { $0.animation = nil }
     }
 
     // MARK: - Helpers
