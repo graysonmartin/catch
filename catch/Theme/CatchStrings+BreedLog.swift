@@ -10,8 +10,8 @@ extension CatchStrings {
 
         // Sort options
         static let sortRarity = String(localized: "rarity")
-        static let sortAlphabetical = String(localized: "a-z")
-        static let sortDiscoveredFirst = String(localized: "discovered first")
+        static let sortAlphabetical = String(localized: "alphabetical")
+        static let sortDiscoveredFirst = String(localized: "discovery date")
 
         // BreedDetailView
         static let catsFound = String(localized: "cats found")
