@@ -14,15 +14,15 @@ struct CollectionSortFilterBar: View {
             .padding(.horizontal)
             .padding(.vertical, CatchSpacing.space8)
         }
-        .scrollClipDisabled()
+        .contentShape(Rectangle())
     }
-
-    // MARK: - Filter Pills
 
     private func filterPill(for filter: CollectionFilter) -> some View {
         let isActive = activeFilters.contains(filter)
         return Button {
-            toggleFilter(filter)
+            withAnimation(nil) {
+                toggleFilter(filter)
+            }
         } label: {
             HStack(spacing: CatchSpacing.space4) {
                 Image(systemName: filter.icon)
