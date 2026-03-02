@@ -35,35 +35,26 @@ struct CollectionSortFilterBar: View {
                 }
             }
         } label: {
-            sortMenuLabel
+            HStack(spacing: CatchSpacing.space4) {
+                Image(systemName: "arrow.up.arrow.down")
+                    .font(.caption2.weight(.bold))
+                Text(selectedSort.displayName)
+                    .font(.caption.weight(.medium))
+                    .lineLimit(1)
+                    .fixedSize(horizontal: true, vertical: false)
+            }
+            .foregroundStyle(CatchTheme.textPrimary)
+            .padding(.horizontal, CatchSpacing.space12)
+            .padding(.vertical, CatchSpacing.space6)
+            .background(CatchTheme.cardBackground)
+            .clipShape(Capsule())
+            .shadow(
+                color: .black.opacity(CatchTheme.cardShadowOpacity),
+                radius: 2,
+                y: 1
+            )
         }
         .transaction { $0.animation = nil }
-    }
-
-    private var sortMenuLabel: some View {
-        HStack(spacing: CatchSpacing.space4) {
-            Image(systemName: "arrow.up.arrow.down")
-                .font(.caption2.weight(.bold))
-            ZStack {
-                ForEach(CollectionSortOption.allCases) { option in
-                    Text(option.displayName)
-                        .hidden()
-                }
-                Text(selectedSort.displayName)
-            }
-            .font(.caption.weight(.medium))
-        }
-        .fixedSize()
-        .foregroundStyle(CatchTheme.textPrimary)
-        .padding(.horizontal, CatchSpacing.space12)
-        .padding(.vertical, CatchSpacing.space6)
-        .background(CatchTheme.cardBackground)
-        .clipShape(Capsule())
-        .shadow(
-            color: .black.opacity(CatchTheme.cardShadowOpacity),
-            radius: 2,
-            y: 1
-        )
     }
 
     // MARK: - Divider
@@ -85,7 +76,9 @@ struct CollectionSortFilterBar: View {
     private func filterPill(for filter: CollectionFilter) -> some View {
         let isActive = activeFilters.contains(filter)
         return Button {
-            toggleFilter(filter)
+            withAnimation(nil) {
+                toggleFilter(filter)
+            }
         } label: {
             HStack(spacing: CatchSpacing.space4) {
                 Image(systemName: filter.icon)
@@ -93,7 +86,6 @@ struct CollectionSortFilterBar: View {
                 Text(filter.displayName)
                     .font(.caption.weight(.medium))
             }
-            .fixedSize()
             .foregroundStyle(isActive ? .white : CatchTheme.textSecondary)
             .padding(.horizontal, CatchSpacing.space12)
             .padding(.vertical, CatchSpacing.space6)
@@ -106,7 +98,6 @@ struct CollectionSortFilterBar: View {
             )
         }
         .buttonStyle(.plain)
-        .transaction { $0.animation = nil }
     }
 
     // MARK: - Helpers
