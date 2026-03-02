@@ -8,7 +8,7 @@ struct CollectionSortFilterBar: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: CatchSpacing.space8) {
-                sortMenu
+                sortButton
                 divider
                 filterPills
             }
@@ -18,43 +18,44 @@ struct CollectionSortFilterBar: View {
         .scrollClipDisabled()
     }
 
-    // MARK: - Sort Menu
+    // MARK: - Sort Button
 
-    private var sortMenu: some View {
-        Menu {
-            ForEach(CollectionSortOption.allCases) { option in
-                Button {
-                    selectedSort = option
-                } label: {
-                    HStack {
-                        Text(option.displayName)
-                        if selectedSort == option {
-                            Image(systemName: "checkmark")
+    private var sortButton: some View {
+        HStack(spacing: CatchSpacing.space4) {
+            Image(systemName: "arrow.up.arrow.down")
+                .font(.caption2.weight(.bold))
+            Text(selectedSort.displayName)
+                .font(.caption.weight(.medium))
+        }
+        .foregroundStyle(CatchTheme.textPrimary)
+        .padding(.horizontal, CatchSpacing.space12)
+        .padding(.vertical, CatchSpacing.space6)
+        .background(CatchTheme.cardBackground)
+        .clipShape(Capsule())
+        .shadow(
+            color: .black.opacity(CatchTheme.cardShadowOpacity),
+            radius: 2,
+            y: 1
+        )
+        .overlay {
+            Menu {
+                ForEach(CollectionSortOption.allCases) { option in
+                    Button {
+                        selectedSort = option
+                    } label: {
+                        HStack {
+                            Text(option.displayName)
+                            if selectedSort == option {
+                                Image(systemName: "checkmark")
+                            }
                         }
                     }
                 }
+            } label: {
+                Color.clear
+                    .contentShape(Capsule())
             }
-        } label: {
-            HStack(spacing: CatchSpacing.space4) {
-                Image(systemName: "arrow.up.arrow.down")
-                    .font(.caption2.weight(.bold))
-                Text(selectedSort.displayName)
-                    .font(.caption.weight(.medium))
-                    .lineLimit(1)
-                    .fixedSize(horizontal: true, vertical: false)
-            }
-            .foregroundStyle(CatchTheme.textPrimary)
-            .padding(.horizontal, CatchSpacing.space12)
-            .padding(.vertical, CatchSpacing.space6)
-            .background(CatchTheme.cardBackground)
-            .clipShape(Capsule())
-            .shadow(
-                color: .black.opacity(CatchTheme.cardShadowOpacity),
-                radius: 2,
-                y: 1
-            )
         }
-        .transaction { $0.animation = nil }
     }
 
     // MARK: - Divider
