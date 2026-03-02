@@ -5,6 +5,7 @@ import CatchCore
 struct BreedLogView: View {
     @Query(sort: \Cat.name) private var queriedCats: [Cat]
     @State private var sortOption: BreedLogSortOption = .rarity
+    @State private var sortDirection: BreedLogSortDirection = BreedLogSortOption.rarity.defaultDirection
     @State private var selectedEntry: BreedLogEntry?
 
     private let externalEntries: [BreedLogEntry]?
@@ -22,7 +23,7 @@ struct BreedLogView: View {
 
     private var breedLog: [BreedLogEntry] {
         let log = externalEntries ?? service.buildBreedLog(from: queriedCats)
-        return sorted(log)
+        return sortOption.sorted(log, direction: sortDirection)
     }
 
     private var discoveredCount: Int {
@@ -54,16 +55,7 @@ struct BreedLogView: View {
         .navigationTitle(CatchStrings.BreedLog.title)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Menu {
-                    Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
-                        ForEach(BreedLogSortOption.allCases) { option in
-                            Text(option.displayName).tag(option)
-                        }
-                    }
-                } label: {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .foregroundStyle(CatchTheme.primary)
-                }
+                sortMenu
             }
         }
         .sheet(item: $selectedEntry) { entry in
@@ -74,24 +66,35 @@ struct BreedLogView: View {
         }
     }
 
-    // MARK: - Sorting
+    // MARK: - Sort Menu
 
-    private func sorted(_ log: [BreedLogEntry]) -> [BreedLogEntry] {
-        switch sortOption {
-        case .rarity:
-            return log.sorted { $0.catalogEntry.rarity > $1.catalogEntry.rarity }
-        case .alphabetical:
-            return log.sorted {
-                $0.catalogEntry.displayName.localizedCaseInsensitiveCompare($1.catalogEntry.displayName) == .orderedAscending
-            }
-        case .discoveredFirst:
-            return log.sorted { lhs, rhs in
-                switch (lhs.isDiscovered, rhs.isDiscovered) {
-                case (true, false): return true
-                case (false, true): return false
-                default: return lhs.catalogEntry.displayName < rhs.catalogEntry.displayName
+    private var sortMenu: some View {
+        Menu {
+            ForEach(BreedLogSortOption.allCases) { option in
+                Button {
+                    handleSortTap(option)
+                } label: {
+                    Label {
+                        Text(option.displayName)
+                    } icon: {
+                        if option == sortOption {
+                            Image(systemName: sortDirection.chevronSymbol)
+                        }
+                    }
                 }
             }
+        } label: {
+            Image(systemName: "arrow.up.arrow.down")
+                .foregroundStyle(CatchTheme.primary)
+        }
+    }
+
+    private func handleSortTap(_ option: BreedLogSortOption) {
+        if option == sortOption {
+            sortDirection = sortDirection.toggled
+        } else {
+            sortOption = option
+            sortDirection = option.defaultDirection
         }
     }
 }

@@ -75,7 +75,9 @@
 		E8BL00000206 /* DefaultBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000006 /* DefaultBreedLogService.swift */; };
 		E8BL00000220 /* BreedCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000020 /* BreedCatalogTests.swift */; };
 		E8BL00000221 /* DefaultBreedLogServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000021 /* DefaultBreedLogServiceTests.swift */; };
+		E8BL00000215 /* BreedLogSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000015 /* BreedLogSortOption.swift */; };
 		E8BL00000222 /* MockBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000022 /* MockBreedLogService.swift */; };
+		E8BL00000230 /* BreedLogSortOptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000030 /* BreedLogSortOptionTests.swift */; };
 		E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */; };
@@ -234,6 +236,7 @@
 		E8BL00000015 /* BreedLogSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogSortOption.swift; sourceTree = "<group>"; };
 		E8BL00000020 /* BreedCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalogTests.swift; sourceTree = "<group>"; };
 		E8BL00000021 /* DefaultBreedLogServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBreedLogServiceTests.swift; sourceTree = "<group>"; };
+		E8BL00000030 /* BreedLogSortOptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogSortOptionTests.swift; sourceTree = "<group>"; };
 		E8BL00000022 /* MockBreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedLogService.swift; sourceTree = "<group>"; };
 		E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCloudKitService.swift; sourceTree = "<group>"; };
 		E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthService.swift; sourceTree = "<group>"; };
@@ -550,6 +553,7 @@
 			children = (
 				E8BL00000020 /* BreedCatalogTests.swift */,
 				E8BL00000021 /* DefaultBreedLogServiceTests.swift */,
+				E8BL00000030 /* BreedLogSortOptionTests.swift */,
 			);
 			path = BreedLog;
 			sourceTree = "<group>";
@@ -1021,8 +1025,10 @@
 				E8BL00000205 /* BreedLogService.swift in Sources */,
 				E8BL00000206 /* DefaultBreedLogService.swift in Sources */,
 				E8BL00000220 /* BreedCatalogTests.swift in Sources */,
+				E8BL00000215 /* BreedLogSortOption.swift in Sources */,
 				E8BL00000221 /* DefaultBreedLogServiceTests.swift in Sources */,
 				E8BL00000222 /* MockBreedLogService.swift in Sources */,
+				E8BL00000230 /* BreedLogSortOptionTests.swift in Sources */,
 				E8A100000007 /* Cat.swift in Sources */,
 				E8A100000008 /* Encounter.swift in Sources */,
 				E8A10000000B /* ImageDownsampler.swift in Sources */,
