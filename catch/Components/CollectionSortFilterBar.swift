@@ -2,79 +2,27 @@ import SwiftUI
 import CatchCore
 
 struct CollectionSortFilterBar: View {
-    @Binding var selectedSort: CollectionSortOption
     @Binding var activeFilters: Set<CollectionFilter>
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: CatchSpacing.space8) {
-                sortMenu
-                divider
-                filterPills
+                ForEach(CollectionFilter.allCases) { filter in
+                    filterPill(for: filter)
+                }
             }
             .padding(.horizontal)
             .padding(.vertical, CatchSpacing.space8)
         }
-        .scrollClipDisabled()
-    }
-
-    // MARK: - Sort Menu
-
-    private var sortMenu: some View {
-        Menu {
-            ForEach(CollectionSortOption.allCases) { option in
-                Button {
-                    selectedSort = option
-                } label: {
-                    HStack {
-                        Text(option.displayName)
-                        if selectedSort == option {
-                            Image(systemName: "checkmark")
-                        }
-                    }
-                }
-            }
-        } label: {
-            HStack(spacing: CatchSpacing.space4) {
-                Image(systemName: "arrow.up.arrow.down")
-                    .font(.caption2.weight(.bold))
-                Text(selectedSort.displayName)
-                    .font(.caption.weight(.medium))
-            }
-            .foregroundStyle(CatchTheme.textPrimary)
-            .padding(.horizontal, CatchSpacing.space12)
-            .padding(.vertical, CatchSpacing.space6)
-            .background(CatchTheme.cardBackground)
-            .clipShape(Capsule())
-            .shadow(
-                color: .black.opacity(CatchTheme.cardShadowOpacity),
-                radius: 2,
-                y: 1
-            )
-        }
-        .transaction { $0.animation = nil }
-    }
-
-    // MARK: - Divider
-
-    private var divider: some View {
-        RoundedRectangle(cornerRadius: 1)
-            .fill(CatchTheme.textSecondary.opacity(0.2))
-            .frame(width: 1, height: 20)
-    }
-
-    // MARK: - Filter Pills
-
-    private var filterPills: some View {
-        ForEach(CollectionFilter.allCases) { filter in
-            filterPill(for: filter)
-        }
+        .contentShape(Rectangle())
     }
 
     private func filterPill(for filter: CollectionFilter) -> some View {
         let isActive = activeFilters.contains(filter)
         return Button {
-            toggleFilter(filter)
+            withAnimation(nil) {
+                toggleFilter(filter)
+            }
         } label: {
             HStack(spacing: CatchSpacing.space4) {
                 Image(systemName: filter.icon)
