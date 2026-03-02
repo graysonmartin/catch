@@ -35,24 +35,37 @@ struct CollectionSortFilterBar: View {
                 }
             }
         } label: {
-            HStack(spacing: CatchSpacing.space4) {
-                Image(systemName: "arrow.up.arrow.down")
-                    .font(.caption2.weight(.bold))
-                Text(selectedSort.displayName)
-                    .font(.caption.weight(.medium))
-            }
-            .foregroundStyle(CatchTheme.textPrimary)
-            .padding(.horizontal, CatchSpacing.space12)
-            .padding(.vertical, CatchSpacing.space6)
-            .background(CatchTheme.cardBackground)
-            .clipShape(Capsule())
-            .shadow(
-                color: .black.opacity(CatchTheme.cardShadowOpacity),
-                radius: 2,
-                y: 1
-            )
+            sortMenuLabel
         }
         .transaction { $0.animation = nil }
+    }
+
+    private var sortMenuLabel: some View {
+        HStack(spacing: CatchSpacing.space4) {
+            Image(systemName: "arrow.up.arrow.down")
+                .font(.caption2.weight(.bold))
+            Text(selectedSort.displayName)
+                .font(.caption.weight(.medium))
+                .overlay {
+                    ZStack {
+                        ForEach(CollectionSortOption.allCases) { option in
+                            Text(option.displayName)
+                        }
+                    }
+                    .font(.caption.weight(.medium))
+                    .hidden()
+                }
+        }
+        .foregroundStyle(CatchTheme.textPrimary)
+        .padding(.horizontal, CatchSpacing.space12)
+        .padding(.vertical, CatchSpacing.space6)
+        .background(CatchTheme.cardBackground)
+        .clipShape(Capsule())
+        .shadow(
+            color: .black.opacity(CatchTheme.cardShadowOpacity),
+            radius: 2,
+            y: 1
+        )
     }
 
     // MARK: - Divider
