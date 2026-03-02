@@ -122,6 +122,7 @@ struct LogEncounterView: View {
 
     private func save() {
         guard let cat = selectedCat else { return }
+        HapticService.fire(.success)
         let encounter = Encounter(
             date: date,
             location: location,

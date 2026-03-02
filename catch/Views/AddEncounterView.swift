@@ -20,6 +20,7 @@ struct AddEncounterView: View {
 
                 VStack(spacing: CatchSpacing.space16) {
                     Button {
+                        HapticService.fire(.medium)
                         showingAddCat = true
                     } label: {
                         Label(CatchStrings.Log.newCat, systemImage: "plus.circle.fill")
@@ -32,6 +33,7 @@ struct AddEncounterView: View {
                     }
 
                     Button {
+                        HapticService.fire(.medium)
                         showingLogEncounter = true
                     } label: {
                         Label(CatchStrings.Log.seenAgain, systemImage: "eye.fill")

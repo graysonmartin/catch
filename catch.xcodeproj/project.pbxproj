@@ -174,6 +174,9 @@
 		E8SI0000010B /* CommentThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000B /* CommentThreadView.swift */; };
 		E8SI00000208 /* MockSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000C /* MockSocialInteractionService.swift */; };
 		E8SP00000001 /* CatchSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SP00000010 /* CatchSpacing.swift */; };
+		E8HA00000101 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8HA00000001 /* HapticService.swift */; };
+		E8HA00000201 /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8HA00000001 /* HapticService.swift */; };
+		E8HA00000202 /* HapticCooldownTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8HA00000002 /* HapticCooldownTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -308,6 +311,8 @@
 		E8SI0000000B /* CommentThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentThreadView.swift; sourceTree = "<group>"; };
 		E8SI0000000C /* MockSocialInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialInteractionService.swift; sourceTree = "<group>"; };
 		E8SP00000010 /* CatchSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSpacing.swift; sourceTree = "<group>"; };
+		E8HA00000001 /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
+		E8HA00000002 /* HapticCooldownTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticCooldownTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -572,6 +577,7 @@
 				E8UV0000F002 /* Username */,
 				E8SI0000F002 /* Social */,
 				E8SF0000F002 /* SocialFeed */,
+				E8HA0000F002 /* Haptics */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 			);
 			path = Services;
@@ -607,6 +613,7 @@
 				E8UV0000F001 /* Username */,
 				E8SI0000F001 /* Social */,
 				E8SF0000F001 /* SocialFeed */,
+				E8HA0000F001 /* Haptics */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -811,6 +818,22 @@
 			path = Username;
 			sourceTree = "<group>";
 		};
+		E8HA0000F001 /* Haptics */ = {
+			isa = PBXGroup;
+			children = (
+				E8HA00000001 /* HapticService.swift */,
+			);
+			path = Haptics;
+			sourceTree = "<group>";
+		};
+		E8HA0000F002 /* Haptics */ = {
+			isa = PBXGroup;
+			children = (
+				E8HA00000002 /* HapticCooldownTests.swift */,
+			);
+			path = Haptics;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1007,6 +1030,7 @@
 				E8SF00000102 /* SocialFeedService.swift in Sources */,
 				E8SF00000103 /* CKSocialFeedService.swift in Sources */,
 				E8SF00000104 /* SocialFeedItemView.swift in Sources */,
+				E8HA00000101 /* HapticService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1081,6 +1105,8 @@
 				E8CL00000202 /* CollectionFilter.swift in Sources */,
 				E8CL00000203 /* CollectionSortFilterService.swift in Sources */,
 				E8CL00000204 /* CollectionSortFilterServiceTests.swift in Sources */,
+				E8HA00000201 /* HapticService.swift in Sources */,
+				E8HA00000202 /* HapticCooldownTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -49,6 +49,7 @@ struct BreedSuggestionView: View {
             Spacer()
 
             Button {
+                HapticService.fire(.medium)
                 onConfirm(prediction.breed)
             } label: {
                 Text(CatchStrings.Components.yep)

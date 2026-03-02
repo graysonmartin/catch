@@ -34,6 +34,9 @@ struct ContentView: View {
                 .badge(followService.pendingRequests.count)
         }
         .tint(CatchTheme.primary)
+        .onChange(of: selectedTab) {
+            HapticService.fire(.light)
+        }
         .task {
             guard let userID = authService.authState.user?.userIdentifier else { return }
             try? await followService.refresh(for: userID)

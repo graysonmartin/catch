@@ -99,6 +99,7 @@ struct AddCatView: View {
     }
 
     private func save() {
+        HapticService.fire(.success)
         let trimmedName = isUnnamed ? nil : name.trimmingCharacters(in: .whitespaces)
         let cat = Cat(
             name: trimmedName,

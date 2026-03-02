@@ -66,6 +66,7 @@ struct CatMapView: View {
                         ClusterMapView(
                             pins: allPins,
                             onSelectPin: { pin in
+                                HapticService.fire(.light)
                                 switch pin {
                                 case .local(let cat):
                                     selectedCat = cat
@@ -78,6 +79,7 @@ struct CatMapView: View {
                                 }
                             },
                             onSelectCluster: { pins in
+                                HapticService.fire(.light)
                                 clusterSelection = ClusterSelection(pins: pins)
                             }
                         )

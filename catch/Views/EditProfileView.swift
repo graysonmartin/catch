@@ -208,6 +208,7 @@ struct EditProfileView: View {
     // MARK: - Actions
 
     private func save() {
+        HapticService.fire(.success)
         profile.displayName = displayName.trimmingCharacters(in: .whitespaces)
         profile.bio = bio.trimmingCharacters(in: .whitespaces)
         let trimmedUsername = username.trimmingCharacters(in: .whitespaces)

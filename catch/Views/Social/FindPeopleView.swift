@@ -140,6 +140,7 @@ struct FindPeopleView: View {
     }
 
     private func performFollow(targetID: String, isPrivate: Bool) {
+        HapticService.fire(.medium)
         Task {
             do {
                 try await followService.follow(
