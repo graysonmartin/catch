@@ -93,9 +93,9 @@ struct ProfileCollectionTab: View {
             } else {
                 VStack(spacing: 0) {
                     CollectionSortFilterBar(
-                        selectedSort: $sortOption,
                         activeFilters: $activeFilters
                     )
+                    .zIndex(1)
 
                     if processedCats.isEmpty {
                         filterEmptyState
@@ -120,6 +120,20 @@ struct ProfileCollectionTab: View {
         .navigationTitle(CatchStrings.Profile.collectionTab)
         .navigationBarTitleDisplayMode(.large)
         .searchable(text: $searchText, prompt: CatchStrings.Collection.searchPrompt)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
+                        ForEach(CollectionSortOption.allCases) { option in
+                            Text(option.displayName).tag(option)
+                        }
+                    }
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                        .foregroundStyle(CatchTheme.primary)
+                }
+            }
+        }
     }
 
     // MARK: - Filter Empty State

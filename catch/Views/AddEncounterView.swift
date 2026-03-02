@@ -2,8 +2,6 @@ import SwiftUI
 import CatchCore
 
 struct AddEncounterView: View {
-    @Binding var selectedTab: Int
-    @Binding var feedScrollToTop: Bool
     @State private var showingAddCat = false
     @State private var showingLogEncounter = false
 
@@ -52,17 +50,12 @@ struct AddEncounterView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(CatchTheme.background)
             .navigationTitle(CatchStrings.Tabs.log)
-            .sheet(isPresented: $showingAddCat, onDismiss: switchToFeed) {
+            .sheet(isPresented: $showingAddCat) {
                 AddCatView()
             }
-            .sheet(isPresented: $showingLogEncounter, onDismiss: switchToFeed) {
+            .sheet(isPresented: $showingLogEncounter) {
                 LogEncounterView()
             }
         }
-    }
-
-    private func switchToFeed() {
-        selectedTab = 0
-        feedScrollToTop = true
     }
 }
