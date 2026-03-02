@@ -10,6 +10,7 @@ struct FindPeopleView: View {
     @State private var results: [CloudUserProfile] = []
     @State private var isSearching = false
     @State private var sentFollowIDs: Set<String> = []
+    @State private var rateLimitMessage: String?
 
     private var cloudKitService: CloudKitService = CKCloudKitService()
 
@@ -42,6 +43,18 @@ struct FindPeopleView: View {
                     )
                 }
             }
+            .safeAreaInset(edge: .bottom) {
+                if let rateLimitMessage {
+                    Text(rateLimitMessage)
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, CatchSpacing.space8)
+                        .background(CatchTheme.cardBackground)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(.easeInOut(duration: 0.2), value: rateLimitMessage)
             .searchable(text: $searchText, prompt: CatchStrings.Social.searchByNameOrUsername)
             .navigationTitle(CatchStrings.Social.findPeople)
             .navigationBarTitleDisplayMode(.inline)
@@ -150,9 +163,20 @@ struct FindPeopleView: View {
                 if isPrivate {
                     sentFollowIDs.insert(targetID)
                 }
-            } catch {
-                // Follow failed — button stays visible so user can retry
-            }
+                rateLimitMessage = nil
+            } catch let error as FollowServiceError {
+                if case .rateLimited = error {
+                    showFollowRateLimitFeedback()
+                }
+            } catch {}
+        }
+    }
+
+    private func showFollowRateLimitFeedback() {
+        rateLimitMessage = CatchStrings.RateLimit.followCooldown
+        Task {
+            try? await Task.sleep(for: .seconds(3))
+            rateLimitMessage = nil
         }
     }
 }

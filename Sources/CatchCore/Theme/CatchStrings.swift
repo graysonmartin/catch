@@ -39,4 +39,18 @@ public enum CatchStrings {
         public static let map = String(localized: "Map")
         public static let profile = String(localized: "Profile")
     }
+
+    // MARK: - Rate Limiting
+
+    public enum RateLimit {
+        public static let likeCooldown = String(localized: "okay we get it, you like cats")
+        public static let followCooldown = String(localized: "slow down there, you're following too fast")
+        public static let commentCooldown = String(localized: "give it a sec, you're commenting too fast")
+        public static let searchCooldown = String(localized: "the search bar needs a breather")
+        public static let genericCooldown = String(localized: "chill for a sec, you're going too fast")
+
+        public static func retryIn(_ seconds: Int) -> String {
+            String(localized: "try again in \(seconds)s")
+        }
+    }
 }

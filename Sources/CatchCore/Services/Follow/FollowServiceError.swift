@@ -7,6 +7,7 @@ public enum FollowServiceError: LocalizedError, Equatable {
     case requestAlreadyPending
     case followNotFound
     case unauthorized
+    case rateLimited(retryAfter: TimeInterval)
 
     public var errorDescription: String? {
         switch self {
@@ -22,6 +23,8 @@ public enum FollowServiceError: LocalizedError, Equatable {
             "follow record not found"
         case .unauthorized:
             "you don't have permission to do that"
+        case .rateLimited:
+            CatchStrings.RateLimit.followCooldown
         }
     }
 }

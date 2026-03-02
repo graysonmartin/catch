@@ -7,6 +7,7 @@ public enum SocialInteractionError: LocalizedError, Equatable {
     case commentTooLong
     case commentNotFound
     case unauthorized
+    case rateLimited(retryAfter: TimeInterval)
     case networkError(String)
 
     public var errorDescription: String? {
@@ -23,6 +24,8 @@ public enum SocialInteractionError: LocalizedError, Equatable {
             "that comment doesn't exist anymore"
         case .unauthorized:
             "you can't do that"
+        case .rateLimited:
+            CatchStrings.RateLimit.commentCooldown
         case .networkError(let message):
             "something went wrong: \(message)"
         }

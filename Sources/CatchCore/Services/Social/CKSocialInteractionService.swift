@@ -10,13 +10,18 @@ public final class CKSocialInteractionService: SocialInteractionService {
 
     private static let containerID = "iCloud.com.catch.catch"
     private let getCurrentUserID: () -> String?
+    private let rateLimiter: RateLimiterService
 
     private var database: CKDatabase {
         CKContainer(identifier: Self.containerID).publicCloudDatabase
     }
 
-    public init(getCurrentUserID: @escaping @Sendable () -> String?) {
+    public init(
+        getCurrentUserID: @escaping @Sendable () -> String?,
+        rateLimiter: RateLimiterService = DefaultRateLimiterService()
+    ) {
         self.getCurrentUserID = getCurrentUserID
+        self.rateLimiter = rateLimiter
     }
 
     // MARK: - Likes
@@ -24,6 +29,15 @@ public final class CKSocialInteractionService: SocialInteractionService {
     public func toggleLike(encounterRecordName: String) async throws {
         guard let userID = getCurrentUserID() else {
             throw SocialInteractionError.notSignedIn
+        }
+
+        switch rateLimiter.checkAndRecord(action: .like) {
+        case .allowed:
+            break
+        case .debounced:
+            return
+        case .throttled(let retryAfter):
+            throw SocialInteractionError.rateLimited(retryAfter: retryAfter)
         }
 
         let wasLiked = likedEncounters.contains(encounterRecordName)
@@ -83,6 +97,15 @@ public final class CKSocialInteractionService: SocialInteractionService {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { throw SocialInteractionError.commentEmpty }
         guard trimmed.count <= 500 else { throw SocialInteractionError.commentTooLong }
+
+        switch rateLimiter.checkAndRecord(action: .comment) {
+        case .allowed:
+            break
+        case .debounced:
+            throw SocialInteractionError.rateLimited(retryAfter: 5)
+        case .throttled(let retryAfter):
+            throw SocialInteractionError.rateLimited(retryAfter: retryAfter)
+        }
 
         let comment = EncounterComment(
             id: "\(userID)_comment_\(UUID().uuidString)",

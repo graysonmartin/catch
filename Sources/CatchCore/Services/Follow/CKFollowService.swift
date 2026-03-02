@@ -12,12 +12,15 @@ public final class CKFollowService: FollowService {
 
     private static let containerID = "iCloud.com.catch.catch"
     private static let recordType = "Follow"
+    private let rateLimiter: RateLimiterService
 
     private var database: CKDatabase {
         CKContainer(identifier: Self.containerID).publicCloudDatabase
     }
 
-    public init() {}
+    public init(rateLimiter: RateLimiterService = DefaultRateLimiterService()) {
+        self.rateLimiter = rateLimiter
+    }
 
     // MARK: - FollowService
 
@@ -25,6 +28,15 @@ public final class CKFollowService: FollowService {
         guard userID != targetID else { throw FollowServiceError.cannotFollowSelf }
         guard !isFollowing(targetID) else { throw FollowServiceError.alreadyFollowing }
         guard pendingRequestTo(targetID) == nil else { throw FollowServiceError.requestAlreadyPending }
+
+        switch rateLimiter.checkAndRecord(action: .follow) {
+        case .allowed:
+            break
+        case .debounced:
+            return
+        case .throttled(let retryAfter):
+            throw FollowServiceError.rateLimited(retryAfter: retryAfter)
+        }
 
         let status: FollowStatus = isTargetPrivate ? .pending : .active
         let recordID = CKRecord.ID(recordName: "\(userID)_\(targetID)")
@@ -44,6 +56,15 @@ public final class CKFollowService: FollowService {
     }
 
     public func unfollow(targetID: String, by userID: String) async throws {
+        switch rateLimiter.checkAndRecord(action: .follow) {
+        case .allowed:
+            break
+        case .debounced:
+            return
+        case .throttled(let retryAfter):
+            throw FollowServiceError.rateLimited(retryAfter: retryAfter)
+        }
+
         guard let match = following.first(where: { $0.followeeID == targetID }) else {
             throw FollowServiceError.followNotFound
         }

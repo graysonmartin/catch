@@ -135,6 +135,7 @@ final class CKSocialInteractionServiceTests: XCTestCase {
             .commentTooLong,
             .commentNotFound,
             .unauthorized,
+            .rateLimited(retryAfter: 5),
             .networkError("test")
         ]
         for error in cases {
