@@ -11,8 +11,6 @@ extension CatchStrings {
 
         // AddCatView
         static let photoRequired = String(localized: "at least 1 photo required -- no pics no proof")
-        static let firstEncounter = String(localized: "First Encounter")
-        static let firstEncounterHint = String(localized: "A first encounter will be logged automatically with today's date and the location above.")
 
         // LogEncounterView
         static let loggingFor = String(localized: "logging for")
