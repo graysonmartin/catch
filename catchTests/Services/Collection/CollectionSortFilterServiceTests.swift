@@ -39,77 +39,99 @@ final class CollectionSortFilterServiceTests: XCTestCase {
         Calendar.current.date(byAdding: .day, value: -days, to: now) ?? now
     }
 
-    // MARK: - Sort: Most Recent
+    // MARK: - Sort: Last Seen (Descending — Default)
 
-    func test_sort_mostRecent_ordersByLastEncounterDescending() {
+    func test_sort_lastSeen_descending_ordersByLastEncounterDescending() {
         let old = makeItem(id: "old", name: "Old", lastEncounterDate: daysAgo(10))
         let recent = makeItem(id: "recent", name: "Recent", lastEncounterDate: daysAgo(1))
         let mid = makeItem(id: "mid", name: "Mid", lastEncounterDate: daysAgo(5))
 
-        let result = service.sort([old, recent, mid], by: .mostRecent)
+        let result = service.sort([old, recent, mid], by: .lastSeen, direction: .descending)
         XCTAssertEqual(result.map(\.id), ["recent", "mid", "old"])
     }
 
-    func test_sort_mostRecent_nilDateGoesLast() {
+    func test_sort_lastSeen_descending_nilDateGoesLast() {
         let noDate = CollectionCatItem(
             id: "none", name: "None", isOwned: false,
             createdAt: now, encounterCount: 0, lastEncounterDate: nil
         )
         let hasDate = makeItem(id: "has", name: "Has", lastEncounterDate: daysAgo(5))
 
-        let result = service.sort([noDate, hasDate], by: .mostRecent)
+        let result = service.sort([noDate, hasDate], by: .lastSeen, direction: .descending)
         XCTAssertEqual(result.map(\.id), ["has", "none"])
     }
 
-    // MARK: - Sort: Most Encounters
+    // MARK: - Sort: Last Seen (Ascending)
 
-    func test_sort_mostEncounters_ordersByCountDescending() {
+    func test_sort_lastSeen_ascending_ordersByLastEncounterAscending() {
+        let old = makeItem(id: "old", lastEncounterDate: daysAgo(10))
+        let recent = makeItem(id: "recent", lastEncounterDate: daysAgo(1))
+
+        let result = service.sort([recent, old], by: .lastSeen, direction: .ascending)
+        XCTAssertEqual(result.map(\.id), ["old", "recent"])
+    }
+
+    func test_sort_lastSeen_ascending_nilDateGoesLast() {
+        let noDate = CollectionCatItem(
+            id: "none", name: "None", isOwned: false,
+            createdAt: now, encounterCount: 0, lastEncounterDate: nil
+        )
+        let hasDate = makeItem(id: "has", name: "Has", lastEncounterDate: daysAgo(5))
+
+        let result = service.sort([noDate, hasDate], by: .lastSeen, direction: .ascending)
+        XCTAssertEqual(result.map(\.id), ["has", "none"])
+    }
+
+    // MARK: - Sort: Encounters (Descending — Default)
+
+    func test_sort_encounters_descending_ordersByCountDescending() {
         let few = makeItem(id: "few", encounterCount: 2)
         let many = makeItem(id: "many", encounterCount: 10)
         let mid = makeItem(id: "mid", encounterCount: 5)
 
-        let result = service.sort([few, many, mid], by: .mostEncounters)
+        let result = service.sort([few, many, mid], by: .encounters, direction: .descending)
         XCTAssertEqual(result.map(\.id), ["many", "mid", "few"])
     }
 
-    // MARK: - Sort: Oldest First
+    // MARK: - Sort: Encounters (Ascending)
 
-    func test_sort_oldestFirst_ordersByLastEncounterAscending() {
-        let old = makeItem(id: "old", lastEncounterDate: daysAgo(10))
-        let recent = makeItem(id: "recent", lastEncounterDate: daysAgo(1))
+    func test_sort_encounters_ascending_ordersByCountAscending() {
+        let few = makeItem(id: "few", encounterCount: 2)
+        let many = makeItem(id: "many", encounterCount: 10)
+        let mid = makeItem(id: "mid", encounterCount: 5)
 
-        let result = service.sort([recent, old], by: .oldestFirst)
-        XCTAssertEqual(result.map(\.id), ["old", "recent"])
+        let result = service.sort([few, many, mid], by: .encounters, direction: .ascending)
+        XCTAssertEqual(result.map(\.id), ["few", "mid", "many"])
     }
 
-    // MARK: - Sort: Alphabetical
+    // MARK: - Sort: Alphabetical (Ascending — Default)
 
-    func test_sort_alphabetical_ordersByNameAZ() {
+    func test_sort_alphabetical_ascending_ordersByNameAZ() {
         let b = makeItem(id: "b", name: "Biscuit")
         let a = makeItem(id: "a", name: "Apollo")
         let c = makeItem(id: "c", name: "Clover")
 
-        let result = service.sort([b, a, c], by: .alphabetical)
+        let result = service.sort([b, a, c], by: .alphabetical, direction: .ascending)
         XCTAssertEqual(result.map(\.id), ["a", "b", "c"])
     }
 
-    func test_sort_alphabetical_isCaseInsensitive() {
+    func test_sort_alphabetical_ascending_isCaseInsensitive() {
         let upper = makeItem(id: "upper", name: "Ziggy")
         let lower = makeItem(id: "lower", name: "apollo")
 
-        let result = service.sort([upper, lower], by: .alphabetical)
+        let result = service.sort([upper, lower], by: .alphabetical, direction: .ascending)
         XCTAssertEqual(result.map(\.id), ["lower", "upper"])
     }
 
-    // MARK: - Sort: Most Recent (by createdAt fallback)
+    // MARK: - Sort: Alphabetical (Descending)
 
-    func test_sort_mostRecent_sameLastEncounter_preservesOrder() {
-        let old = makeItem(id: "old", createdAt: daysAgo(30), lastEncounterDate: daysAgo(1))
-        let recent = makeItem(id: "recent", createdAt: daysAgo(1), lastEncounterDate: daysAgo(1))
+    func test_sort_alphabetical_descending_ordersByNameZA() {
+        let b = makeItem(id: "b", name: "Biscuit")
+        let a = makeItem(id: "a", name: "Apollo")
+        let c = makeItem(id: "c", name: "Clover")
 
-        let result = service.sort([old, recent], by: .mostRecent)
-        // Both have same lastEncounterDate so order is stable (not changed)
-        XCTAssertEqual(result.count, 2)
+        let result = service.sort([b, a, c], by: .alphabetical, direction: .descending)
+        XCTAssertEqual(result.map(\.id), ["c", "b", "a"])
     }
 
     // MARK: - Filter: Owned Only
@@ -214,6 +236,7 @@ final class CollectionSortFilterServiceTests: XCTestCase {
 
         let result = service.apply(
             sort: .alphabetical,
+            direction: .ascending,
             filters: [.ownedOnly],
             to: [ownedZ, stray, ownedA],
             now: now
@@ -225,20 +248,32 @@ final class CollectionSortFilterServiceTests: XCTestCase {
         let b = makeItem(id: "b", name: "Biscuit")
         let a = makeItem(id: "a", name: "Apollo")
 
-        let result = service.apply(sort: .alphabetical, filters: [], to: [b, a], now: now)
+        let result = service.apply(
+            sort: .alphabetical,
+            direction: .ascending,
+            filters: [],
+            to: [b, a],
+            now: now
+        )
         XCTAssertEqual(result.map(\.id), ["a", "b"])
     }
 
     func test_apply_allFilteredOut_returnsEmpty() {
         let stray = makeItem(id: "s", isOwned: false)
-        let result = service.apply(sort: .mostRecent, filters: [.ownedOnly], to: [stray], now: now)
+        let result = service.apply(
+            sort: .lastSeen,
+            direction: .descending,
+            filters: [.ownedOnly],
+            to: [stray],
+            now: now
+        )
         XCTAssertTrue(result.isEmpty)
     }
 
     // MARK: - Edge Cases
 
     func test_sort_emptyInput_returnsEmpty() {
-        let result = service.sort([], by: .alphabetical)
+        let result = service.sort([], by: .alphabetical, direction: .ascending)
         XCTAssertTrue(result.isEmpty)
     }
 
@@ -249,8 +284,32 @@ final class CollectionSortFilterServiceTests: XCTestCase {
 
     func test_sort_singleItem_returnsSameItem() {
         let item = makeItem(id: "solo")
-        let result = service.sort([item], by: .mostRecent)
+        let result = service.sort([item], by: .lastSeen, direction: .descending)
         XCTAssertEqual(result.count, 1)
         XCTAssertEqual(result.first?.id, "solo")
+    }
+
+    // MARK: - Default Directions
+
+    func test_defaultDirection_lastSeen_isDescending() {
+        XCTAssertEqual(CollectionSortOption.lastSeen.defaultDirection, .descending)
+    }
+
+    func test_defaultDirection_encounters_isDescending() {
+        XCTAssertEqual(CollectionSortOption.encounters.defaultDirection, .descending)
+    }
+
+    func test_defaultDirection_alphabetical_isAscending() {
+        XCTAssertEqual(CollectionSortOption.alphabetical.defaultDirection, .ascending)
+    }
+
+    // MARK: - Direction Toggle
+
+    func test_directionToggle_ascendingToDescending() {
+        XCTAssertEqual(CollectionSortDirection.ascending.toggled, .descending)
+    }
+
+    func test_directionToggle_descendingToAscending() {
+        XCTAssertEqual(CollectionSortDirection.descending.toggled, .ascending)
     }
 }

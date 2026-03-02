@@ -15,6 +15,7 @@ struct CollectionCatItem {
 protocol CollectionSortFilterService {
     func apply(
         sort: CollectionSortOption,
+        direction: CollectionSortDirection,
         filters: Set<CollectionFilter>,
         to items: [CollectionCatItem],
         now: Date
@@ -28,7 +29,8 @@ protocol CollectionSortFilterService {
 
     func sort(
         _ items: [CollectionCatItem],
-        by option: CollectionSortOption
+        by option: CollectionSortOption,
+        direction: CollectionSortDirection
     ) -> [CollectionCatItem]
 }
 
@@ -38,12 +40,13 @@ struct DefaultCollectionSortFilterService: CollectionSortFilterService {
 
     func apply(
         sort: CollectionSortOption,
+        direction: CollectionSortDirection,
         filters: Set<CollectionFilter>,
         to items: [CollectionCatItem],
         now: Date = Date()
     ) -> [CollectionCatItem] {
         let filtered = filter(items, by: filters, now: now)
-        return self.sort(filtered, by: sort)
+        return self.sort(filtered, by: sort, direction: direction)
     }
 
     func filter(
@@ -65,22 +68,30 @@ struct DefaultCollectionSortFilterService: CollectionSortFilterService {
 
     func sort(
         _ items: [CollectionCatItem],
-        by option: CollectionSortOption
+        by option: CollectionSortOption,
+        direction: CollectionSortDirection
     ) -> [CollectionCatItem] {
+        let isAscending = direction == .ascending
+
         switch option {
-        case .mostRecent:
+        case .lastSeen:
             return items.sorted {
-                ($0.lastEncounterDate ?? .distantPast) > ($1.lastEncounterDate ?? .distantPast)
+                let lhs = $0.lastEncounterDate ?? (isAscending ? .distantFuture : .distantPast)
+                let rhs = $1.lastEncounterDate ?? (isAscending ? .distantFuture : .distantPast)
+                return isAscending ? lhs < rhs : lhs > rhs
             }
-        case .mostEncounters:
-            return items.sorted { $0.encounterCount > $1.encounterCount }
-        case .oldestFirst:
+        case .encounters:
             return items.sorted {
-                ($0.lastEncounterDate ?? .distantFuture) < ($1.lastEncounterDate ?? .distantFuture)
+                isAscending
+                    ? $0.encounterCount < $1.encounterCount
+                    : $0.encounterCount > $1.encounterCount
             }
         case .alphabetical:
             return items.sorted {
-                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+                let result = $0.name.localizedCaseInsensitiveCompare($1.name)
+                return isAscending
+                    ? result == .orderedAscending
+                    : result == .orderedDescending
             }
         }
     }
