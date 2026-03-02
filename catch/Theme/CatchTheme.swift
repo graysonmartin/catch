@@ -23,6 +23,12 @@ enum CatchTheme {
     /// UIColor version of `primary` for UIKit contexts (MapKit annotations, etc.)
     static let primaryUIColor = UIColor(red: 1.0, green: 0.6, blue: 0.2, alpha: 1.0)
 
+    /// UIColor version for remote (friend's) cat pins — muted brown to distinguish from own cats
+    static let remotePinUIColor = UIColor(red: 0.5, green: 0.4, blue: 0.35, alpha: 1.0)
+
+    /// SwiftUI Color version for remote cat pins
+    static let remotePinColor = Color(red: 0.5, green: 0.4, blue: 0.35)
+
     // MARK: - Corner Radii
 
     static let cornerRadius: CGFloat = 16

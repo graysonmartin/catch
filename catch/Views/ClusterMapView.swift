@@ -17,33 +17,43 @@ private enum MapConfig {
 
 // MARK: - Snapshot for change detection
 
-struct CatSnapshot: Equatable {
-    let id: PersistentIdentifier
+struct PinSnapshot: Equatable {
+    let id: String
     let name: String?
     let latitude: Double?
     let longitude: Double?
     let photoCount: Int
     let firstPhotoPrefix: Data?
 
-    init(cat: Cat) {
-        self.id = cat.persistentModelID
-        self.name = cat.name
-        self.latitude = cat.location.latitude
-        self.longitude = cat.location.longitude
-        self.photoCount = cat.photos.count
-        self.firstPhotoPrefix = cat.photos.first.map { Data($0.prefix(MapConfig.photoComparisonPrefixSize)) }
+    init(pin: MapPin) {
+        switch pin {
+        case .local(let cat):
+            self.id = "local-\(cat.persistentModelID)"
+            self.name = cat.name
+            self.latitude = cat.location.latitude
+            self.longitude = cat.location.longitude
+            self.photoCount = cat.photos.count
+            self.firstPhotoPrefix = cat.photos.first.map { Data($0.prefix(MapConfig.photoComparisonPrefixSize)) }
+        case .remote(let encounter, let cat, _):
+            self.id = "remote-\(encounter.recordName)"
+            self.name = cat?.name
+            self.latitude = encounter.locationLatitude
+            self.longitude = encounter.locationLongitude
+            self.photoCount = cat?.photos.count ?? 0
+            self.firstPhotoPrefix = cat?.photos.first.map { Data($0.prefix(MapConfig.photoComparisonPrefixSize)) }
+        }
     }
 }
 
 // MARK: - UIKit MKMapView with clustering
 
 struct ClusterMapView: UIViewRepresentable {
-    let cats: [Cat]
-    let onSelectCat: (Cat) -> Void
-    let onSelectCluster: ([Cat]) -> Void
+    let pins: [MapPin]
+    let onSelectPin: (MapPin) -> Void
+    let onSelectCluster: ([MapPin]) -> Void
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(onSelectCat: onSelectCat, onSelectCluster: onSelectCluster)
+        Coordinator(onSelectPin: onSelectPin, onSelectCluster: onSelectCluster)
     }
 
     func makeUIView(context: Context) -> MKMapView {
@@ -53,24 +63,23 @@ struct ClusterMapView: UIViewRepresentable {
     }
 
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        let snapshot = cats.map { CatSnapshot(cat: $0) }
+        let snapshot = pins.map { PinSnapshot(pin: $0) }
         guard snapshot != context.coordinator.lastSnapshot else { return }
         context.coordinator.lastSnapshot = snapshot
         context.coordinator.isSpiderfied = false
         context.coordinator.isUpdatingRegion = false
 
-        // Remove all custom annotations
         let old = mapView.annotations.filter { $0 is CatAnnotation || $0 is OverflowAnnotation || $0 is MKClusterAnnotation }
         mapView.removeAnnotations(old)
-        context.coordinator.allCats = cats
+        context.coordinator.allPins = pins
 
         var annotations: [CatAnnotation] = []
-        for cat in cats {
-            guard let lat = cat.location.latitude, let lng = cat.location.longitude else { continue }
+        for pin in pins {
+            guard let coordinate = pin.coordinate else { continue }
             let a = CatAnnotation()
-            a.cat = cat
-            a.title = cat.displayName
-            a.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+            a.pin = pin
+            a.title = pin.displayName
+            a.coordinate = coordinate
             annotations.append(a)
         }
 
@@ -85,16 +94,16 @@ struct ClusterMapView: UIViewRepresentable {
     // MARK: Coordinator
 
     class Coordinator: NSObject, MKMapViewDelegate {
-        let onSelectCat: (Cat) -> Void
-        let onSelectCluster: ([Cat]) -> Void
-        var lastSnapshot: [CatSnapshot] = []
+        let onSelectPin: (MapPin) -> Void
+        let onSelectCluster: ([MapPin]) -> Void
+        var lastSnapshot: [PinSnapshot] = []
         var needsInitialZoom = true
-        var allCats: [Cat] = []
+        var allPins: [MapPin] = []
         var isSpiderfied = false
         var isUpdatingRegion = false
 
-        init(onSelectCat: @escaping (Cat) -> Void, onSelectCluster: @escaping ([Cat]) -> Void) {
-            self.onSelectCat = onSelectCat
+        init(onSelectPin: @escaping (MapPin) -> Void, onSelectCluster: @escaping ([MapPin]) -> Void) {
+            self.onSelectPin = onSelectPin
             self.onSelectCluster = onSelectCluster
         }
 
@@ -124,16 +133,15 @@ struct ClusterMapView: UIViewRepresentable {
             mapView.deselectAnnotation(view.annotation, animated: false)
 
             if let cluster = view.annotation as? MKClusterAnnotation {
-                // Zoom in toward the cluster to trigger spiderfy
                 let region = MKCoordinateRegion(
                     center: cluster.coordinate,
                     span: MKCoordinateSpan(latitudeDelta: MapConfig.clusterZoomSpan, longitudeDelta: MapConfig.clusterZoomSpan)
                 )
                 mapView.setRegion(region, animated: true)
             } else if let overflow = view.annotation as? OverflowAnnotation {
-                onSelectCluster(overflow.overflowCats)
-            } else if let catAnnotation = view.annotation as? CatAnnotation, let cat = catAnnotation.cat {
-                onSelectCat(cat)
+                onSelectCluster(overflow.overflowPins)
+            } else if let catAnnotation = view.annotation as? CatAnnotation, let pin = catAnnotation.pin {
+                onSelectPin(pin)
             }
         }
 
@@ -157,11 +165,9 @@ struct ClusterMapView: UIViewRepresentable {
             isUpdatingRegion = true
             isSpiderfied = true
 
-            // Remove all cat annotations and re-add WITHOUT clustering
             let annotations = mapView.annotations.compactMap { $0 as? CatAnnotation }
             let clusterAnnotations = mapView.annotations.compactMap { $0 as? MKClusterAnnotation }
 
-            // Gather all CatAnnotations (visible + inside clusters)
             var allAnnotations: [CatAnnotation] = annotations
             for cluster in clusterAnnotations {
                 for member in cluster.memberAnnotations {
@@ -171,7 +177,6 @@ struct ClusterMapView: UIViewRepresentable {
                 }
             }
 
-            // Remove everything
             mapView.removeAnnotations(mapView.annotations.filter { $0 is CatAnnotation || $0 is MKClusterAnnotation })
 
             let groups = findOverlappingGroups(allAnnotations)
@@ -182,8 +187,8 @@ struct ClusterMapView: UIViewRepresentable {
                 let centerLat = group.map(\.coordinate.latitude).reduce(0, +) / Double(group.count)
                 let centerLng = group.map(\.coordinate.longitude).reduce(0, +) / Double(group.count)
 
-                // Sort by encounter count (most encounters first)
-                let sorted = group.sorted { ($0.cat?.encounters.count ?? 0) > ($1.cat?.encounters.count ?? 0) }
+                // Local cats with more encounters surface first; remote pins sort to the end
+                let sorted = group.sorted { ($0.pin?.encounterSortWeight ?? 0) > ($1.pin?.encounterSortWeight ?? 0) }
                 let visible = Array(sorted.prefix(maxSpiderfyCount))
                 let overflow = Array(sorted.dropFirst(maxSpiderfyCount))
 
@@ -197,7 +202,6 @@ struct ClusterMapView: UIViewRepresentable {
                     )
                 }
 
-                // Hide overflow annotations and show a "+N" bubble at center
                 for ann in overflow {
                     ann.originalCoordinate = ann.coordinate
                     ann.isSpread = true
@@ -207,17 +211,15 @@ struct ClusterMapView: UIViewRepresentable {
                 if !overflow.isEmpty {
                     let overflowPin = OverflowAnnotation()
                     overflowPin.coordinate = CLLocationCoordinate2D(latitude: centerLat, longitude: centerLng)
-                    overflowPin.overflowCats = overflow.compactMap(\.cat)
+                    overflowPin.overflowPins = overflow.compactMap(\.pin)
                     mapView.addAnnotation(overflowPin)
                 }
             }
 
-            // Re-add visible annotations (skip hidden overflow ones)
             for annotation in allAnnotations where !hiddenAnnotations.contains(ObjectIdentifier(annotation)) {
                 mapView.addAnnotation(annotation)
             }
 
-            // Disable clustering on spread annotations
             DispatchQueue.main.async {
                 for annotation in allAnnotations where annotation.isSpread && !hiddenAnnotations.contains(ObjectIdentifier(annotation)) {
                     if let view = mapView.view(for: annotation) as? CatAnnotationView {
@@ -232,22 +234,19 @@ struct ClusterMapView: UIViewRepresentable {
             isUpdatingRegion = true
             isSpiderfied = false
 
-            // Remove overflow bubbles
             let overflows = mapView.annotations.compactMap { $0 as? OverflowAnnotation }
             mapView.removeAnnotations(overflows)
 
-            // Remove visible cat annotations
             let annotations = mapView.annotations.compactMap { $0 as? CatAnnotation }
             mapView.removeAnnotations(annotations)
 
-            // Rebuild all annotations from allCats (includes ones that were hidden)
             var restored: [CatAnnotation] = []
-            for cat in allCats {
-                guard let lat = cat.location.latitude, let lng = cat.location.longitude else { continue }
+            for pin in allPins {
+                guard let coordinate = pin.coordinate else { continue }
                 let a = CatAnnotation()
-                a.cat = cat
-                a.title = cat.displayName
-                a.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+                a.pin = pin
+                a.title = pin.displayName
+                a.coordinate = coordinate
                 restored.append(a)
             }
 

@@ -19,5 +19,11 @@ extension CatchStrings {
         static func catsNotShown(_ count: Int) -> String {
             String(localized: "\(count) cat\(count == 1 ? "" : "s") not shown")
         }
+
+        // Remote cat detail
+        static let lastSeen = String(localized: "last seen")
+        static func spottedBy(_ name: String) -> String {
+            String(localized: "spotted by \(name)")
+        }
     }
 }
