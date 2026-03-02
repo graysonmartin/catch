@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Location: Codable, Hashable {
+public struct Location: Codable, Hashable, Sendable {
     public var name: String
     public var latitude: Double?
     public var longitude: Double?
