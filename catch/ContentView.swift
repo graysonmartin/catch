@@ -5,17 +5,16 @@ struct ContentView: View {
     @Environment(CKFollowService.self) private var followService
     @Environment(AppleAuthService.self) private var authService
     @State private var selectedTab = 0
-    @State private var feedScrollToTop = false
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            FeedView(scrollToTop: $feedScrollToTop, selectedTab: $selectedTab)
+            FeedView()
                 .tabItem {
                     Label(CatchStrings.Tabs.feed, systemImage: "pawprint.fill")
                 }
                 .tag(0)
 
-            AddEncounterView(selectedTab: $selectedTab, feedScrollToTop: $feedScrollToTop)
+            AddEncounterView()
                 .tabItem {
                     Label(CatchStrings.Tabs.log, systemImage: "plus.circle.fill")
                 }
