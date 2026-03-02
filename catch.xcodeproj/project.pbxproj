@@ -174,6 +174,12 @@
 		E8SI0000010B /* CommentThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000B /* CommentThreadView.swift */; };
 		E8SI00000208 /* MockSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000C /* MockSocialInteractionService.swift */; };
 		E8SP00000001 /* CatchSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SP00000010 /* CatchSpacing.swift */; };
+		E8TM00000101 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
+		E8TM00000102 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000002 /* ToastView.swift */; };
+		E8TM00000103 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
+		E8TM00000201 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
+		E8TM00000203 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
+		E8TM00000204 /* ToastManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000004 /* ToastManagerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -308,6 +314,10 @@
 		E8SI0000000B /* CommentThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentThreadView.swift; sourceTree = "<group>"; };
 		E8SI0000000C /* MockSocialInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialInteractionService.swift; sourceTree = "<group>"; };
 		E8SP00000010 /* CatchSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSpacing.swift; sourceTree = "<group>"; };
+		E8TM00000001 /* ToastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
+		E8TM00000002 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		E8TM00000003 /* CatchStrings+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Toast.swift"; sourceTree = "<group>"; };
+		E8TM00000004 /* ToastManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManagerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -431,6 +441,8 @@
 				E8D800000001 /* StevenEasterEggView.swift */,
 				E8SI00000009 /* InteractionBar.swift */,
 				E8CL00000004 /* CollectionSortFilterBar.swift */,
+				E8TM00000001 /* ToastManager.swift */,
+				E8TM00000002 /* ToastView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -452,6 +464,7 @@
 				E8CS0000000B /* CatchStrings+Components.swift */,
 				E8CS0000000C /* CatchStrings+Diary.swift */,
 				E8SI00000008 /* CatchStrings+Interaction.swift */,
+				E8TM00000003 /* CatchStrings+Toast.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -495,6 +508,7 @@
 			isa = PBXGroup;
 			children = (
 				E8A100000017 /* ImageDownsamplerTests.swift */,
+				E8TM00000004 /* ToastManagerTests.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1007,6 +1021,9 @@
 				E8SF00000102 /* SocialFeedService.swift in Sources */,
 				E8SF00000103 /* CKSocialFeedService.swift in Sources */,
 				E8SF00000104 /* SocialFeedItemView.swift in Sources */,
+				E8TM00000101 /* ToastManager.swift in Sources */,
+				E8TM00000102 /* ToastView.swift in Sources */,
+				E8TM00000103 /* CatchStrings+Toast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1081,6 +1098,9 @@
 				E8CL00000202 /* CollectionFilter.swift in Sources */,
 				E8CL00000203 /* CollectionSortFilterService.swift in Sources */,
 				E8CL00000204 /* CollectionSortFilterServiceTests.swift in Sources */,
+				E8TM00000201 /* ToastManager.swift in Sources */,
+				E8TM00000203 /* CatchStrings+Toast.swift in Sources */,
+				E8TM00000204 /* ToastManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

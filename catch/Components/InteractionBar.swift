@@ -7,6 +7,7 @@ struct InteractionBar: View {
     var ownerRoute: RemoteProfileRoute?
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+    @Environment(ToastManager.self) private var toastManager
 
     var body: some View {
         HStack(spacing: CatchSpacing.space16) {
@@ -25,7 +26,11 @@ struct InteractionBar: View {
         Button {
             guard let socialService else { return }
             Task {
-                try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                do {
+                    try await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                } catch {
+                    toastManager.showError(CatchStrings.Toast.likeFailed)
+                }
             }
         } label: {
             HStack(spacing: CatchSpacing.space4) {

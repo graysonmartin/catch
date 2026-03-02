@@ -7,6 +7,7 @@ struct OwnProfileContent: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(AppleAuthService.self) var authService
     @Environment(CKFollowService.self) var followService
+    @Environment(ToastManager.self) private var toastManager
     @Query private var profiles: [UserProfile]
     @Query(sort: \Cat.name) var cats: [Cat]
     @Query var encounters: [Encounter]
@@ -345,7 +346,7 @@ struct OwnProfileContent: View {
                 )
                 profile.cloudKitRecordName = recordName
             } catch {
-                // CloudKit sync failure is non-fatal
+                toastManager.showError(CatchStrings.Toast.profileSaveFailed)
             }
         }
     }

@@ -5,6 +5,7 @@ import CatchCore
 struct FeedView: View {
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
+    @Environment(ToastManager.self) private var toastManager
     private var feedItems: [FeedItem] {
         (socialFeedService?.remoteEncounters ?? []).sorted { $0.date > $1.date }
     }
@@ -60,6 +61,10 @@ struct FeedView: View {
         guard let socialService else { return }
         let recordNames = socialFeedService?.remoteEncounters.compactMap(\.encounterRecordName) ?? []
         guard !recordNames.isEmpty else { return }
-        try? await socialService.loadInteractionData(for: recordNames)
+        do {
+            try await socialService.loadInteractionData(for: recordNames)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.feedLoadFailed)
+        }
     }
 }

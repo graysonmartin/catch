@@ -6,6 +6,7 @@ struct CommentThreadView: View {
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(AppleAuthService.self) private var authService
+    @Environment(ToastManager.self) private var toastManager
 
     @State private var comments: [EncounterComment] = []
     @State private var newCommentText = ""
@@ -138,17 +139,24 @@ struct CommentThreadView: View {
             comments.insert(comment, at: 0)
         } catch {
             newCommentText = text
+            toastManager.showError(CatchStrings.Toast.commentFailed)
         }
     }
 
     private func deleteComment(_ comment: EncounterComment) {
         guard let socialService else { return }
+        let removedComment = comment
         comments.removeAll { $0.id == comment.id }
         Task {
-            try? await socialService.deleteComment(
-                recordName: comment.id,
-                encounterRecordName: encounterRecordName
-            )
+            do {
+                try await socialService.deleteComment(
+                    recordName: removedComment.id,
+                    encounterRecordName: encounterRecordName
+                )
+            } catch {
+                comments.insert(removedComment, at: 0)
+                toastManager.showError(CatchStrings.Toast.commentDeleteFailed)
+            }
         }
     }
 }
