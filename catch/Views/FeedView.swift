@@ -5,6 +5,8 @@ import CatchCore
 struct FeedView: View {
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
+    @State private var selectedRemoteCat: RemotePinSelection?
+
     private var feedItems: [FeedItem] {
         (socialFeedService?.remoteEncounters ?? []).sorted { $0.date > $1.date }
     }
@@ -27,7 +29,19 @@ struct FeedView: View {
                         LazyVStack(spacing: CatchSpacing.space16) {
                             ForEach(feedItems) { item in
                                 if case .remote(let encounter, let cat, let owner, let isFirstEncounter) = item {
-                                    SocialFeedItemView(encounter: encounter, cat: cat, owner: owner, isFirstEncounter: isFirstEncounter)
+                                    SocialFeedItemView(
+                                        encounter: encounter,
+                                        cat: cat,
+                                        owner: owner,
+                                        isFirstEncounter: isFirstEncounter,
+                                        onTapCatPhoto: cat != nil ? {
+                                            selectedRemoteCat = RemotePinSelection(
+                                                cat: cat,
+                                                encounters: allEncounters(forCatRecord: encounter.catRecordName),
+                                                owner: owner
+                                            )
+                                        } : nil
+                                    )
                                 }
                             }
                         }
@@ -44,6 +58,15 @@ struct FeedView: View {
                     initialDisplayName: route.displayName
                 )
             }
+            .navigationDestination(item: $selectedRemoteCat) { selection in
+                if let cat = selection.cat {
+                    RemoteCatProfileView(
+                        cat: cat,
+                        encounters: selection.encounters,
+                        ownerName: selection.owner.displayName
+                    )
+                }
+            }
             .refreshable {
                 await socialFeedService?.refresh()
             }
@@ -51,6 +74,16 @@ struct FeedView: View {
                 await socialFeedService?.refresh()
                 await loadInteractionData()
             }
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func allEncounters(forCatRecord recordName: String) -> [CloudEncounter] {
+        feedItems.compactMap { item in
+            guard case .remote(let encounter, _, _, _) = item,
+                  encounter.catRecordName == recordName else { return nil }
+            return encounter
         }
     }
 

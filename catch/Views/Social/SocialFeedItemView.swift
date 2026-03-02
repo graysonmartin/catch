@@ -17,6 +17,7 @@ struct SocialFeedItemView: View {
     let cat: CloudCat?
     let owner: CloudUserProfile
     let isFirstEncounter: Bool
+    var onTapCatPhoto: (() -> Void)?
 
     @State private var showComments = false
 
@@ -49,7 +50,13 @@ struct SocialFeedItemView: View {
 
     private var catHeader: some View {
         HStack(spacing: CatchSpacing.space12) {
-            CatPhotoView(photoData: cat?.photos.first, size: Layout.thumbnailSize)
+            Button {
+                onTapCatPhoto?()
+            } label: {
+                CatPhotoView(photoData: cat?.photos.first, size: Layout.thumbnailSize)
+            }
+            .buttonStyle(.plain)
+            .disabled(onTapCatPhoto == nil)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack(spacing: CatchSpacing.space4) {
