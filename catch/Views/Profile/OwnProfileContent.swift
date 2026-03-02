@@ -34,6 +34,9 @@ struct OwnProfileContent: View {
                     searchText: searchText
                 )
 
+                DataExportButton()
+                    .padding(.horizontal, CatchSpacing.space20)
+
                 if let profile {
                     authSection(profile)
                     joinDateSection(profile)
