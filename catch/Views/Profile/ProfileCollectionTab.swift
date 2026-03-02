@@ -93,7 +93,6 @@ struct ProfileCollectionTab: View {
             } else {
                 VStack(spacing: 0) {
                     CollectionSortFilterBar(
-                        selectedSort: $sortOption,
                         activeFilters: $activeFilters
                     )
 
@@ -119,7 +118,35 @@ struct ProfileCollectionTab: View {
         .background(CatchTheme.background)
         .navigationTitle(CatchStrings.Profile.collectionTab)
         .navigationBarTitleDisplayMode(.large)
-        .searchable(text: $searchText, prompt: CatchStrings.Collection.searchPrompt)
+        .searchable(text: \$searchText, prompt: CatchStrings.Collection.searchPrompt)\
+        .toolbar {\
+            ToolbarItem(placement: .topBarTrailing) {\
+                Menu {\
+                    Picker(CatchStrings.Common.sortBy, selection: \$sortOption) {\
+                        ForEach(CollectionSortOption.allCases) { option in\
+                            Text(option.displayName).tag(option)\
+                        }\
+                    }\
+                } label: {\
+                    Image(systemName: "arrow.up.arrow.down")\
+                        .foregroundStyle(CatchTheme.primary)\
+                }\
+            }\
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Picker(CatchStrings.Common.sortBy, selection: $sortOption) {
+                        ForEach(CollectionSortOption.allCases) { option in
+                            Text(option.displayName).tag(option)
+                        }
+                    }
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                        .foregroundStyle(CatchTheme.primary)
+                }
+            }
+        }
     }
 
     // MARK: - Filter Empty State
