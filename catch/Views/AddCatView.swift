@@ -62,11 +62,6 @@ struct AddCatView: View {
                         .lineLimit(3...6)
                 }
 
-                Section(CatchStrings.Log.firstEncounter) {
-                    Text(CatchStrings.Log.firstEncounterHint)
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                }
             }
             .navigationTitle(CatchStrings.Log.newCat)
             .navigationBarTitleDisplayMode(.inline)
