@@ -116,19 +116,18 @@ struct PhotoPickerView: View {
         selectedPhotos.count <= minimumPhotos
     }
 
-    @ViewBuilder
     private func deleteButton(index: Int) -> some View {
-        if !isAtMinimum {
-            Button {
-                withAnimation {
-                    _ = selectedPhotos.remove(at: index)
-                }
-            } label: {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.white, .black.opacity(0.5))
+        Button {
+            withAnimation {
+                _ = selectedPhotos.remove(at: index)
             }
-            .offset(x: CatchSpacing.space4, y: -CatchSpacing.space4)
+        } label: {
+            Image(systemName: "xmark.circle.fill")
+                .foregroundStyle(.white, .black.opacity(0.5))
         }
+        .disabled(isAtMinimum)
+        .opacity(isAtMinimum ? 0.3 : 1.0)
+        .offset(x: CatchSpacing.space4, y: -CatchSpacing.space4)
     }
 }
 
