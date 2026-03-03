@@ -184,6 +184,7 @@
 		E8CL00000204 /* CollectionSortFilterServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000006 /* CollectionSortFilterServiceTests.swift */; };
 		E8SI00000108 /* CatchStrings+Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000008 /* CatchStrings+Interaction.swift */; };
 		E8SI00000109 /* InteractionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000009 /* InteractionBar.swift */; };
+		E8CI00000101 /* CommentInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CI00000001 /* CommentInputBar.swift */; };
 		E8EI00000101 /* EngagementIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EI00000001 /* EngagementIndicator.swift */; };
 		E8TI00000101 /* LimitedTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000001 /* LimitedTextFieldView.swift */; };
 		E8TI00000102 /* LimitedSingleLineFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000002 /* LimitedSingleLineFieldView.swift */; };
@@ -335,6 +336,7 @@
 		E8CL00000006 /* CollectionSortFilterServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterServiceTests.swift; sourceTree = "<group>"; };
 		E8SI00000008 /* CatchStrings+Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Interaction.swift"; sourceTree = "<group>"; };
 		E8SI00000009 /* InteractionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionBar.swift; sourceTree = "<group>"; };
+		E8CI00000001 /* CommentInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputBar.swift; sourceTree = "<group>"; };
 		E8EI00000001 /* EngagementIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagementIndicator.swift; sourceTree = "<group>"; };
 		E8TI00000001 /* LimitedTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTextFieldView.swift; sourceTree = "<group>"; };
 		E8TI00000002 /* LimitedSingleLineFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedSingleLineFieldView.swift; sourceTree = "<group>"; };
@@ -466,6 +468,7 @@
 				E8SC00000001 /* StatCardView.swift */,
 				E8D800000001 /* StevenEasterEggView.swift */,
 				E8SI00000009 /* InteractionBar.swift */,
+				E8CI00000001 /* CommentInputBar.swift */,
 				E8EI00000001 /* EngagementIndicator.swift */,
 				E8CL00000004 /* CollectionSortFilterBar.swift */,
 				E8TI00000001 /* LimitedTextFieldView.swift */,
@@ -1046,6 +1049,7 @@
 				E8CS0000010C /* CatchStrings+Diary.swift in Sources */,
 				E8SI00000108 /* CatchStrings+Interaction.swift in Sources */,
 				E8SI00000109 /* InteractionBar.swift in Sources */,
+				E8CI00000101 /* CommentInputBar.swift in Sources */,
 				E8EI00000101 /* EngagementIndicator.swift in Sources */,
 				E8SI0000010A /* CommentRowView.swift in Sources */,
 				E8SI0000010B /* CommentThreadView.swift in Sources */,
