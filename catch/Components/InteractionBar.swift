@@ -24,6 +24,7 @@ struct InteractionBar: View {
     private var likeButton: some View {
         Button {
             guard let socialService else { return }
+            HapticService.fire(.medium)
             Task {
                 try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
             }

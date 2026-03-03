@@ -33,6 +33,9 @@ struct SocialView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
             .padding(.vertical, CatchSpacing.space8)
+            .onChange(of: selectedTab) {
+                HapticService.fire(.selection)
+            }
 
             List {
                 switch selectedTab {

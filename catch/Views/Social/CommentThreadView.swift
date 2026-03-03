@@ -171,8 +171,10 @@ struct CommentThreadView: View {
                 text: text
             )
             comments.insert(comment, at: 0)
+            HapticService.fire(.success)
         } catch {
             newCommentText = text
+            HapticService.fire(.warning)
         }
     }
 

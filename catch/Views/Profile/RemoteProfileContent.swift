@@ -230,6 +230,7 @@ struct RemoteProfileContent: View {
                     titleVisibility: .visible
                 ) {
                     Button(CatchStrings.Social.unfollow, role: .destructive) {
+                        HapticService.fire(.medium)
                         Task {
                             try? await followService.unfollow(targetID: userID, by: currentUserID)
                         }
@@ -243,6 +244,7 @@ struct RemoteProfileContent: View {
                     .foregroundStyle(CatchTheme.textSecondary)
             } else {
                 Button {
+                    HapticService.fire(.medium)
                     Task {
                         let isPrivate = data?.profile.isPrivate ?? false
                         try? await followService.follow(
@@ -280,6 +282,7 @@ struct RemoteProfileContent: View {
                     .clipShape(Capsule())
             } else {
                 Button(CatchStrings.Social.follow) {
+                    HapticService.fire(.medium)
                     Task {
                         let isPrivate = data?.profile.isPrivate ?? false
                         try? await followService.follow(

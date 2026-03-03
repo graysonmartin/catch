@@ -33,8 +33,10 @@ struct OnboardingView: View {
 
                     Button {
                         if currentPage < 2 {
+                            HapticService.fire(.light)
                             currentPage += 1
                         } else {
+                            HapticService.fire(.success)
                             hasCompletedOnboarding = true
                         }
                     } label: {
@@ -184,6 +186,7 @@ struct OnboardingView: View {
 
             if !locationManager.hasRequested {
                 Button {
+                    HapticService.fire(.medium)
                     locationManager.requestPermission()
                 } label: {
                     HStack {

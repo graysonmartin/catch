@@ -26,6 +26,7 @@ struct PendingRequestRowView: View {
             Spacer()
 
             Button {
+                HapticService.fire(.medium)
                 Task { try? await onApprove() }
             } label: {
                 Image(systemName: "checkmark.circle.fill")
@@ -35,6 +36,7 @@ struct PendingRequestRowView: View {
             .buttonStyle(.plain)
 
             Button {
+                HapticService.fire(.light)
                 Task { try? await onDecline() }
             } label: {
                 Image(systemName: "xmark.circle.fill")

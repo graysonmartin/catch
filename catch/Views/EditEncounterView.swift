@@ -63,6 +63,7 @@ struct EditEncounterView: View {
     }
 
     private func save() {
+        HapticService.fire(.success)
         encounter.date = date
         encounter.location = location
         encounter.notes = notes

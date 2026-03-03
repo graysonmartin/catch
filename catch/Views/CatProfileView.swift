@@ -74,6 +74,7 @@ struct CatProfileView: View {
             Section {
                 HStack(spacing: CatchSpacing.space12) {
                     Button {
+                        HapticService.fire(.light)
                         showingEdit = true
                     } label: {
                         Label(CatchStrings.Common.edit, systemImage: "pencil")
@@ -86,6 +87,7 @@ struct CatProfileView: View {
                     }
 
                     Button {
+                        HapticService.fire(.medium)
                         showingLogEncounter = true
                     } label: {
                         Label(CatchStrings.CatProfile.spotted, systemImage: "eye.fill")
@@ -124,6 +126,7 @@ struct CatProfileView: View {
                         encounterRow(encounter)
                             .contentShape(Rectangle())
                             .onTapGesture {
+                                HapticService.fire(.light)
                                 encounterToEdit = encounter
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {

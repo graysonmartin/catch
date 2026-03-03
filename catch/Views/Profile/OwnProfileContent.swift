@@ -50,6 +50,7 @@ struct OwnProfileContent: View {
             if profile != nil {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
+                        HapticService.fire(.light)
                         isShowingEditSheet = true
                     } label: {
                         Image(systemName: "pencil")

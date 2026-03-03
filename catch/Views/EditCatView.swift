@@ -92,6 +92,7 @@ struct EditCatView: View {
     }
 
     private func save() {
+        HapticService.fire(.success)
         cat.name = isUnnamed ? nil : name.trimmingCharacters(in: .whitespaces)
         cat.breed = breed
         cat.estimatedAge = estimatedAge

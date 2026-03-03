@@ -153,6 +153,7 @@ struct ProfileCollectionTab: View {
     }
 
     private func handleSortTap(_ option: CollectionSortOption) {
+        HapticService.fire(.selection)
         if option == sortOption {
             sortDirection = sortDirection.toggled
         } else {

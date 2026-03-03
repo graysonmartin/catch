@@ -43,6 +43,7 @@ struct BreedLogView: View {
                         BreedLogCardView(entry: entry)
                             .onTapGesture {
                                 if entry.isDiscovered {
+                                    HapticService.fire(.light)
                                     selectedEntry = entry
                                 }
                             }
@@ -90,6 +91,7 @@ struct BreedLogView: View {
     }
 
     private func handleSortTap(_ option: BreedLogSortOption) {
+        HapticService.fire(.selection)
         if option == sortOption {
             sortDirection = sortDirection.toggled
         } else {

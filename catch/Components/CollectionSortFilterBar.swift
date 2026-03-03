@@ -47,6 +47,7 @@ struct CollectionSortFilterBar: View {
     // MARK: - Helpers
 
     private func toggleFilter(_ filter: CollectionFilter) {
+        HapticService.fire(.selection)
         if activeFilters.contains(filter) {
             activeFilters.remove(filter)
         } else {
