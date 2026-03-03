@@ -15,6 +15,7 @@ struct LogEncounterView: View {
     @State private var photos: [Data] = []
     @State private var showingAddCat = false
 
+    var onSave: (() -> Void)?
     var preselectedCat: Cat? = nil
 
     var body: some View {
@@ -131,6 +132,7 @@ struct LogEncounterView: View {
         )
         modelContext.insert(encounter)
         Task { await encounterSyncService?.syncNewEncounter(encounter, for: cat) }
+        onSave?()
         dismiss()
     }
 }

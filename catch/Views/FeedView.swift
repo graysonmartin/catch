@@ -5,6 +5,8 @@ import CatchCore
 struct FeedView: View {
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
+    @Binding var scrollToTop: Bool
+
     private var feedItems: [FeedItem] {
         (socialFeedService?.remoteEncounters ?? []).sorted { $0.date > $1.date }
     }
@@ -21,23 +23,34 @@ struct FeedView: View {
                         subtitle: CatchStrings.Feed.socialEmptySubtitle
                     )
                 } else {
-                    ScrollView {
-                        LazyVStack(spacing: CatchSpacing.space16) {
-                            ForEach(feedItems) { item in
-                                if case .remote(let encounter, let cat, let owner, let isFirstEncounter) = item {
-                                    SocialFeedItemView(
-                                        encounter: encounter,
-                                        cat: cat,
-                                        owner: owner,
-                                        isFirstEncounter: isFirstEncounter,
-                                        catEncounters: allEncounters(forCatRecord: encounter.catRecordName)
-                                    )
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            LazyVStack(spacing: CatchSpacing.space16) {
+                                ForEach(feedItems) { item in
+                                    if case .remote(let encounter, let cat, let owner, let isFirstEncounter) = item {
+                                        SocialFeedItemView(
+                                            encounter: encounter,
+                                            cat: cat,
+                                            owner: owner,
+                                            isFirstEncounter: isFirstEncounter,
+                                            catEncounters: allEncounters(forCatRecord: encounter.catRecordName)
+                                        )
+                                    }
                                 }
 
                                 loadMoreSection
                             }
+                            .padding()
+                            .id("feedTop")
                         }
-                        .padding()
+                        .onChange(of: scrollToTop) {
+                            if scrollToTop {
+                                withAnimation {
+                                    proxy.scrollTo("feedTop", anchor: .top)
+                                }
+                                scrollToTop = false
+                            }
+                        }
                     }
                 }
             }
