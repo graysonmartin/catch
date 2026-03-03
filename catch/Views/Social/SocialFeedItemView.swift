@@ -20,17 +20,21 @@ struct SocialFeedItemView: View {
     let catEncounters: [CloudEncounter]
 
     @State private var showComments = false
+    @State private var showDetail = false
 
     private var isUnnamed: Bool {
         cat?.isUnnamed ?? true
+    }
+
+    private var detailData: EncounterDetailData {
+        EncounterDetailData(remote: encounter, cat: cat, isFirstEncounter: isFirstEncounter)
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
             catHeader
             photos
-            location
-            notes
+            encounterMetadata
             InteractionBar(
                 encounterRecordName: encounter.recordName,
                 showComments: $showComments,
@@ -41,8 +45,13 @@ struct SocialFeedItemView: View {
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
+        .contentShape(Rectangle())
+        .onTapGesture { showDetail = true }
         .sheet(isPresented: $showComments) {
             CommentThreadView(encounterRecordName: encounter.recordName)
+        }
+        .sheet(isPresented: $showDetail) {
+            EncounterDetailSheet(data: detailData)
         }
     }
 
@@ -114,6 +123,8 @@ struct SocialFeedItemView: View {
             )
     }
 
+    // MARK: - Photos
+
     @ViewBuilder
     private var photos: some View {
         let allPhotos = !encounter.photos.isEmpty ? encounter.photos : (cat?.photos ?? [])
@@ -123,6 +134,25 @@ struct SocialFeedItemView: View {
                 height: Layout.carouselHeight,
                 cornerRadius: CatchTheme.cornerRadiusSmall
             )
+        }
+    }
+
+    // MARK: - Encounter Metadata
+
+    private var encounterMetadata: some View {
+        VStack(alignment: .leading, spacing: CatchSpacing.space4) {
+            breed
+            location
+            notes
+        }
+    }
+
+    @ViewBuilder
+    private var breed: some View {
+        if let breedName = cat?.breed, !breedName.isEmpty {
+            Label(breedName, systemImage: "pawprint.fill")
+                .font(.subheadline)
+                .foregroundStyle(CatchTheme.textSecondary)
         }
     }
 
@@ -141,6 +171,7 @@ struct SocialFeedItemView: View {
             Text(encounter.notes)
                 .font(.subheadline)
                 .foregroundStyle(CatchTheme.textPrimary)
+                .lineLimit(3)
         }
     }
 }
