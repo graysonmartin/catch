@@ -11,6 +11,7 @@ extension CatchStrings {
         static let send = String(localized: "send")
         static let deleteComment = String(localized: "delete comment")
         static let deleteCommentConfirm = String(localized: "this can't be undone")
+        static let sending = String(localized: "sending...")
 
         // Liked-by list
         static let likedBy = String(localized: "liked by")

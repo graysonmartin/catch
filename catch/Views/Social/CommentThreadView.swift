@@ -13,7 +13,6 @@ struct CommentThreadView: View {
     @State private var isLoading = false
     @State private var isLoadingMore = false
     @State private var cursor: String?
-    @FocusState private var isInputFocused: Bool
 
     private var currentUserID: String? {
         authService.authState.user?.userIdentifier
@@ -32,16 +31,16 @@ struct CommentThreadView: View {
                 }
                 commentList
                 Divider()
-                inputBar
+                CommentInputBar(text: $newCommentText) {
+                    Task { await submitComment() }
+                }
             }
             .background(CatchTheme.background)
             .navigationTitle(CatchStrings.Interaction.comments)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(CatchStrings.Common.done) {
-                        isInputFocused = false
-                    }
+                    Button(CatchStrings.Common.done) {}
                 }
             }
             .task {
@@ -110,7 +109,7 @@ struct CommentThreadView: View {
         socialService?.commentCount(for: encounterRecordName) ?? 0
     }
 
-    // MARK: - Subviews
+    // MARK: - Comment List
 
     private var commentList: some View {
         Group {
@@ -162,67 +161,7 @@ struct CommentThreadView: View {
         }
     }
 
-    private var inputBar: some View {
-        VStack(alignment: .trailing, spacing: CatchSpacing.space2) {
-            HStack(spacing: CatchSpacing.space8) {
-                TextField(CatchStrings.Interaction.addComment, text: $newCommentText, axis: .vertical)
-                    .textFieldStyle(.plain)
-                    .lineLimit(1...4)
-                    .font(.subheadline)
-                    .focused($isInputFocused)
-                    .onChange(of: newCommentText) { _, newValue in
-                        if newValue.count > TextInputLimits.comment {
-                            newCommentText = TextInputLimits.enforceLimit(
-                                text: newValue,
-                                limit: TextInputLimits.comment
-                            )
-                        }
-                    }
-
-                Button {
-                    Task { await submitComment() }
-                } label: {
-                    Image(systemName: "arrow.up.circle.fill")
-                        .font(.title2)
-                        .foregroundStyle(canSubmit ? CatchTheme.primary : CatchTheme.textSecondary.opacity(0.3))
-                }
-                .disabled(!canSubmit)
-                .buttonStyle(.plain)
-            }
-
-            if TextInputLimits.shouldShowCount(text: newCommentText, limit: TextInputLimits.comment) {
-                commentCounter
-            }
-        }
-        .padding(.horizontal)
-        .padding(.vertical, CatchSpacing.space8)
-        .background(CatchTheme.cardBackground)
-    }
-
-    private var commentCounter: some View {
-        Text(commentCounterText)
-            .font(.caption2)
-            .foregroundStyle(
-                TextInputLimits.isAtLimit(text: newCommentText, limit: TextInputLimits.comment)
-                    ? CatchTheme.primary
-                    : CatchTheme.textSecondary
-            )
-            .monospacedDigit()
-    }
-
-    private var commentCounterText: String {
-        let remaining = TextInputLimits.remaining(text: newCommentText, limit: TextInputLimits.comment)
-        if remaining == 0 {
-            return CatchStrings.TextInput.limitReached
-        }
-        return CatchStrings.TextInput.charactersRemaining(remaining)
-    }
-
-    // MARK: - Helpers
-
-    private var canSubmit: Bool {
-        !newCommentText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
+    // MARK: - Actions
 
     private func loadComments() async {
         guard let socialService else { return }
@@ -260,16 +199,32 @@ struct CommentThreadView: View {
 
     private func submitComment() async {
         guard let socialService else { return }
-        let text = newCommentText
+        let text = newCommentText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
         newCommentText = ""
 
+        let pendingComment = EncounterComment.pending(
+            encounterRecordName: encounterRecordName,
+            userID: currentUserID ?? "",
+            text: text
+        )
+
+        withAnimation(.easeInOut(duration: 0.2)) {
+            comments.insert(pendingComment, at: 0)
+        }
+
         do {
-            let comment = try await socialService.addComment(
+            let confirmed = try await socialService.addComment(
                 encounterRecordName: encounterRecordName,
                 text: text
             )
-            comments.insert(comment, at: 0)
+            if let index = comments.firstIndex(where: { $0.id == pendingComment.id }) {
+                comments[index] = confirmed
+            }
         } catch {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                comments.removeAll { $0.id == pendingComment.id }
+            }
             newCommentText = text
         }
     }

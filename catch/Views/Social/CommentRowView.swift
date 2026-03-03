@@ -25,11 +25,17 @@ struct CommentRowView: View {
                     Text(comment.userID.prefix(8))
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(CatchTheme.textPrimary)
-                    Text(comment.createdAt.formatted(.relative(presentation: .named)))
-                        .font(.caption2)
-                        .foregroundStyle(CatchTheme.textSecondary)
+                    if comment.isPending {
+                        Text(CatchStrings.Interaction.sending)
+                            .font(.caption2)
+                            .foregroundStyle(CatchTheme.textSecondary)
+                    } else {
+                        Text(comment.createdAt.formatted(.relative(presentation: .named)))
+                            .font(.caption2)
+                            .foregroundStyle(CatchTheme.textSecondary)
+                    }
                     Spacer()
-                    if isOwnComment {
+                    if isOwnComment && !comment.isPending {
                         Button {
                             showDeleteConfirm = true
                         } label: {
@@ -45,6 +51,7 @@ struct CommentRowView: View {
                     .foregroundStyle(CatchTheme.textPrimary)
             }
         }
+        .opacity(comment.isPending ? 0.6 : 1.0)
         .alert(CatchStrings.Interaction.deleteComment, isPresented: $showDeleteConfirm) {
             Button(CatchStrings.Common.delete, role: .destructive) {
                 onDelete()

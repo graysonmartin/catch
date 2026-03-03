@@ -184,6 +184,7 @@
 		E8CL00000204 /* CollectionSortFilterServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000006 /* CollectionSortFilterServiceTests.swift */; };
 		E8SI00000108 /* CatchStrings+Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000008 /* CatchStrings+Interaction.swift */; };
 		E8SI00000109 /* InteractionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000009 /* InteractionBar.swift */; };
+		E8CI00000101 /* CommentInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CI00000001 /* CommentInputBar.swift */; };
 		E8EI00000101 /* EngagementIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EI00000001 /* EngagementIndicator.swift */; };
 		E8TI00000101 /* LimitedTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000001 /* LimitedTextFieldView.swift */; };
 		E8TI00000102 /* LimitedSingleLineFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000002 /* LimitedSingleLineFieldView.swift */; };
@@ -194,6 +195,7 @@
 		E8SP00000001 /* CatchSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SP00000010 /* CatchSpacing.swift */; };
 		E8ED00000101 /* EncounterDetailData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ED00000001 /* EncounterDetailData.swift */; };
 		E8ES00000101 /* EncounterDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ES00000001 /* EncounterDetailSheet.swift */; };
+		E8LB00000101 /* LikedByListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8LB00000001 /* LikedByListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -289,6 +291,7 @@
 		E8DM00000012 /* ProfileDisplayDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDisplayDataTests.swift; sourceTree = "<group>"; };
 		E8ED00000001 /* EncounterDetailData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailData.swift; sourceTree = "<group>"; };
 		E8ES00000001 /* EncounterDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailSheet.swift; sourceTree = "<group>"; };
+		E8LB00000001 /* LikedByListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedByListView.swift; sourceTree = "<group>"; };
 		E8FI00000011 /* FeedItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemTests.swift; sourceTree = "<group>"; };
 		E8DR00000001 /* DiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEntryRow.swift; sourceTree = "<group>"; };
 		E8DR00000002 /* RemoteDiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDiaryEntryRow.swift; sourceTree = "<group>"; };
@@ -335,6 +338,7 @@
 		E8CL00000006 /* CollectionSortFilterServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterServiceTests.swift; sourceTree = "<group>"; };
 		E8SI00000008 /* CatchStrings+Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Interaction.swift"; sourceTree = "<group>"; };
 		E8SI00000009 /* InteractionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionBar.swift; sourceTree = "<group>"; };
+		E8CI00000001 /* CommentInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputBar.swift; sourceTree = "<group>"; };
 		E8EI00000001 /* EngagementIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagementIndicator.swift; sourceTree = "<group>"; };
 		E8TI00000001 /* LimitedTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTextFieldView.swift; sourceTree = "<group>"; };
 		E8TI00000002 /* LimitedSingleLineFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedSingleLineFieldView.swift; sourceTree = "<group>"; };
@@ -466,6 +470,7 @@
 				E8SC00000001 /* StatCardView.swift */,
 				E8D800000001 /* StevenEasterEggView.swift */,
 				E8SI00000009 /* InteractionBar.swift */,
+				E8CI00000001 /* CommentInputBar.swift */,
 				E8EI00000001 /* EngagementIndicator.swift */,
 				E8CL00000004 /* CollectionSortFilterBar.swift */,
 				E8TI00000001 /* LimitedTextFieldView.swift */,
@@ -734,6 +739,7 @@
 				E8SI0000000A /* CommentRowView.swift */,
 				E8SI0000000B /* CommentThreadView.swift */,
 				E8ES00000001 /* EncounterDetailSheet.swift */,
+				E8LB00000001 /* LikedByListView.swift */,
 			);
 			path = Social;
 			sourceTree = "<group>";
@@ -1046,11 +1052,13 @@
 				E8CS0000010C /* CatchStrings+Diary.swift in Sources */,
 				E8SI00000108 /* CatchStrings+Interaction.swift in Sources */,
 				E8SI00000109 /* InteractionBar.swift in Sources */,
+				E8CI00000101 /* CommentInputBar.swift in Sources */,
 				E8EI00000101 /* EngagementIndicator.swift in Sources */,
 				E8SI0000010A /* CommentRowView.swift in Sources */,
 				E8SI0000010B /* CommentThreadView.swift in Sources */,
 				E8ED00000101 /* EncounterDetailData.swift in Sources */,
 				E8ES00000101 /* EncounterDetailSheet.swift in Sources */,
+				E8LB00000101 /* LikedByListView.swift in Sources */,
 				E8SF00000101 /* FeedItem.swift in Sources */,
 				E8SF00000102 /* SocialFeedService.swift in Sources */,
 				E8SF00000103 /* CKSocialFeedService.swift in Sources */,
