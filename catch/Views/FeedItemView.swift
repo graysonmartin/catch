@@ -41,25 +41,13 @@ struct FeedItemView: View {
                         Text(encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat)
                             .font(.headline)
                             .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
-                        Text(isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat)
-                            .font(.system(size: PillLayout.fontSize, weight: .bold))
-                            .foregroundStyle(isFirstEncounter ? CatchTheme.primary : CatchTheme.textSecondary)
-                            .padding(.horizontal, PillLayout.horizontalPadding)
-                            .padding(.vertical, PillLayout.verticalPadding)
-                            .background(
-                                RoundedRectangle(cornerRadius: PillLayout.cornerRadius)
-                                    .fill(isFirstEncounter ? CatchTheme.primary.opacity(PillLayout.activeBackgroundOpacity) : CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity))
-                            )
+                        pill(
+                            text: isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat,
+                            isActive: isFirstEncounter
+                        )
+                        pill(text: CatchStrings.Feed.pillYou, isActive: false)
                         if isUnnamed {
-                            Text(CatchStrings.Feed.pillStray)
-                                .font(.system(size: PillLayout.fontSize, weight: .bold))
-                                .foregroundStyle(CatchTheme.textSecondary)
-                                .padding(.horizontal, PillLayout.horizontalPadding)
-                                .padding(.vertical, PillLayout.verticalPadding)
-                                .background(
-                                    RoundedRectangle(cornerRadius: PillLayout.cornerRadius)
-                                        .fill(CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity))
-                                )
+                            pill(text: CatchStrings.Feed.pillStray, isActive: false)
                         }
                     }
                     Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
@@ -110,5 +98,23 @@ struct FeedItemView: View {
                 CommentThreadView(encounterRecordName: recordName)
             }
         }
+    }
+
+    // MARK: - Helpers
+
+    private func pill(text: String, isActive: Bool) -> some View {
+        Text(text)
+            .font(.system(size: PillLayout.fontSize, weight: .bold))
+            .foregroundStyle(isActive ? CatchTheme.primary : CatchTheme.textSecondary)
+            .padding(.horizontal, PillLayout.horizontalPadding)
+            .padding(.vertical, PillLayout.verticalPadding)
+            .background(
+                RoundedRectangle(cornerRadius: PillLayout.cornerRadius)
+                    .fill(
+                        isActive
+                            ? CatchTheme.primary.opacity(PillLayout.activeBackgroundOpacity)
+                            : CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity)
+                    )
+            )
     }
 }
