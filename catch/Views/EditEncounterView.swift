@@ -35,7 +35,12 @@ struct EditEncounterView: View {
                 }
 
                 Section(CatchStrings.Log.detailsSection) {
-                    DatePicker(CatchStrings.Common.date, selection: $date, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker(
+                        CatchStrings.Common.date,
+                        selection: $date,
+                        in: EncounterDateValidator.allowedRange,
+                        displayedComponents: [.date, .hourAndMinute]
+                    )
                     LocationPickerView(location: $location)
                 }
 
