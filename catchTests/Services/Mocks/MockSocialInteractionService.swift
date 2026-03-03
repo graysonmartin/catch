@@ -13,12 +13,14 @@ final class MockSocialInteractionService: SocialInteractionService {
     private(set) var addCommentCalls: [(encounterRecordName: String, text: String)] = []
     private(set) var deleteCommentCalls: [(recordName: String, encounterRecordName: String)] = []
     private(set) var fetchCommentsCalls: [(encounterRecordName: String, cursor: String?)] = []
+    private(set) var fetchLikesCalls: [(encounterRecordName: String, cursor: String?)] = []
     private(set) var loadInteractionDataCalls: [[String]] = []
 
     var toggleLikeError: SocialInteractionError?
     var addCommentError: SocialInteractionError?
     var deleteCommentError: SocialInteractionError?
     var fetchCommentsResult: ([EncounterComment], String?) = ([], nil)
+    var fetchLikesResult: ([LikedByUser], String?) = ([], nil)
 
     func toggleLike(encounterRecordName: String) async throws {
         toggleLikeCalls.append(encounterRecordName)
@@ -67,6 +69,11 @@ final class MockSocialInteractionService: SocialInteractionService {
         return fetchCommentsResult
     }
 
+    func fetchLikes(encounterRecordName: String, cursor: String?) async throws -> ([LikedByUser], String?) {
+        fetchLikesCalls.append((encounterRecordName, cursor))
+        return fetchLikesResult
+    }
+
     func commentCount(for encounterRecordName: String) -> Int {
         commentCounts[encounterRecordName, default: 0]
     }
@@ -85,10 +92,12 @@ final class MockSocialInteractionService: SocialInteractionService {
         addCommentCalls = []
         deleteCommentCalls = []
         fetchCommentsCalls = []
+        fetchLikesCalls = []
         loadInteractionDataCalls = []
         toggleLikeError = nil
         addCommentError = nil
         deleteCommentError = nil
         fetchCommentsResult = ([], nil)
+        fetchLikesResult = ([], nil)
     }
 }

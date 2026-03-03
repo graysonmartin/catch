@@ -9,6 +9,7 @@ public protocol SocialInteractionService: Observable, Sendable {
     func toggleLike(encounterRecordName: String) async throws
     func isLiked(_ encounterRecordName: String) -> Bool
     func likeCount(for encounterRecordName: String) -> Int
+    func fetchLikes(encounterRecordName: String, cursor: String?) async throws -> ([LikedByUser], String?)
 
     func addComment(encounterRecordName: String, text: String) async throws -> EncounterComment
     func deleteComment(recordName: String, encounterRecordName: String) async throws

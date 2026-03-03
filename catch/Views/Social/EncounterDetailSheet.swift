@@ -11,6 +11,7 @@ struct EncounterDetailSheet: View {
     @State private var comments: [EncounterComment] = []
     @State private var newCommentText = ""
     @State private var isLoading = false
+    @State private var showLikedBySheet = false
     @FocusState private var isInputFocused: Bool
 
     private var currentUserID: String? {
@@ -164,31 +165,40 @@ struct EncounterDetailSheet: View {
 
     private var interactionRow: some View {
         HStack(spacing: CatchSpacing.space16) {
-            likeButton
+            likeSection
             commentCountLabel
             Spacer()
         }
+        .sheet(isPresented: $showLikedBySheet) {
+            LikedByListView(encounterRecordName: encounterRecordName)
+        }
     }
 
-    private var likeButton: some View {
-        Button {
-            guard let socialService else { return }
-            Task {
-                try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
-            }
-        } label: {
-            HStack(spacing: CatchSpacing.space4) {
+    private var likeSection: some View {
+        HStack(spacing: CatchSpacing.space4) {
+            Button {
+                guard let socialService else { return }
+                Task {
+                    try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                }
+            } label: {
                 Image(systemName: isLikedByCurrentUser ? "heart.fill" : "heart")
                     .foregroundStyle(isLikedByCurrentUser ? CatchTheme.primary : CatchTheme.textSecondary)
                     .contentTransition(.symbolEffect(.replace))
-                if totalLikeCount > 0 {
+            }
+            .buttonStyle(.plain)
+
+            if totalLikeCount > 0 {
+                Button {
+                    showLikedBySheet = true
+                } label: {
                     Text("\(totalLikeCount)")
                         .font(.subheadline)
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
+                .buttonStyle(.plain)
             }
         }
-        .buttonStyle(.plain)
     }
 
     private var commentCountLabel: some View {
