@@ -35,6 +35,15 @@ struct EncounterDetailSheet: View {
                 }
             }
             .task { await loadComments() }
+            .simultaneousGesture(
+                DragGesture(minimumDistance: 60)
+                    .onEnded { value in
+                        let horizontal = value.translation.width
+                        if horizontal > 100, horizontal > abs(value.translation.height) {
+                            dismiss()
+                        }
+                    }
+            )
         }
     }
 

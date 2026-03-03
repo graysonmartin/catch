@@ -354,7 +354,7 @@ struct RemoteProfileContent: View {
                 }
             }
         }
-        .fullScreenCover(isPresented: isShowingDetail) {
+        .sheet(isPresented: isShowingDetail) {
             if let detail = selectedEncounterDetail {
                 EncounterDetailSheet(data: detail)
             }

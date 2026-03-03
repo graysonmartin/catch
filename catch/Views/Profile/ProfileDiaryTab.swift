@@ -81,7 +81,7 @@ struct ProfileDiaryTab: View {
             .task {
                 await loadInteractionData()
             }
-            .fullScreenCover(isPresented: isShowingDetail) {
+            .sheet(isPresented: isShowingDetail) {
                 if let detail = selectedEncounterDetail {
                     EncounterDetailSheet(data: detail)
                 }
