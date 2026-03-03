@@ -11,7 +11,8 @@ final class FollowServiceErrorTests: XCTestCase {
             .alreadyFollowing,
             .requestAlreadyPending,
             .followNotFound,
-            .unauthorized
+            .unauthorized,
+            .rateLimited(retryAfter: 10)
         ]
         for error in cases {
             XCTAssertNotNil(error.errorDescription)

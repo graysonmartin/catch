@@ -7,16 +7,28 @@ struct InteractionBar: View {
     var ownerRoute: RemoteProfileRoute?
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+    @State private var rateLimitMessage: String?
+    @State private var isLikeDisabled = false
 
     var body: some View {
-        HStack(spacing: CatchSpacing.space16) {
-            likeButton
-            commentButton
-            Spacer()
-            if let ownerRoute {
-                ownerLink(route: ownerRoute)
+        VStack(alignment: .leading, spacing: CatchSpacing.space4) {
+            HStack(spacing: CatchSpacing.space16) {
+                likeButton
+                commentButton
+                Spacer()
+                if let ownerRoute {
+                    ownerLink(route: ownerRoute)
+                }
+            }
+
+            if let rateLimitMessage {
+                Text(rateLimitMessage)
+                    .font(.caption2)
+                    .foregroundStyle(CatchTheme.textSecondary)
+                    .transition(.opacity)
             }
         }
+        .animation(.easeInOut(duration: 0.2), value: rateLimitMessage)
     }
 
     // MARK: - Subviews
@@ -24,8 +36,18 @@ struct InteractionBar: View {
     private var likeButton: some View {
         Button {
             guard let socialService else { return }
+            guard !isLikeDisabled else { return }
             Task {
-                try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                do {
+                    try await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                    dismissRateLimitMessage()
+                } catch let error as SocialInteractionError {
+                    if case .rateLimited = error {
+                        showRateLimitFeedback(CatchStrings.RateLimit.likeCooldown)
+                    }
+                } catch {
+                    // Non-rate-limit errors silently ignored (network, etc.)
+                }
             }
         } label: {
             HStack(spacing: CatchSpacing.space4) {
@@ -40,6 +62,7 @@ struct InteractionBar: View {
             }
         }
         .buttonStyle(.plain)
+        .opacity(isLikeDisabled ? 0.5 : 1.0)
     }
 
     private var commentButton: some View {
@@ -86,5 +109,19 @@ struct InteractionBar: View {
 
     private var commentCount: Int {
         socialService?.commentCount(for: encounterRecordName) ?? 0
+    }
+
+    private func showRateLimitFeedback(_ message: String) {
+        rateLimitMessage = message
+        isLikeDisabled = true
+        Task {
+            try? await Task.sleep(for: .seconds(3))
+            dismissRateLimitMessage()
+        }
+    }
+
+    private func dismissRateLimitMessage() {
+        rateLimitMessage = nil
+        isLikeDisabled = false
     }
 }
