@@ -151,8 +151,7 @@ struct SocialView: View {
         if isLoadingMoreFollowers {
             HStack {
                 Spacer()
-                ProgressView()
-                    .tint(CatchTheme.primary)
+                PawLoadingView(size: .inline)
                 Spacer()
             }
             .listRowBackground(Color.clear)
@@ -171,8 +170,7 @@ struct SocialView: View {
         if isLoadingMoreFollowing {
             HStack {
                 Spacer()
-                ProgressView()
-                    .tint(CatchTheme.primary)
+                PawLoadingView(size: .inline)
                 Spacer()
             }
             .listRowBackground(Color.clear)

@@ -50,14 +50,7 @@ struct RemoteProfileContent: View {
     // MARK: - States
 
     private var loadingState: some View {
-        VStack(spacing: CatchSpacing.space12) {
-            ProgressView()
-                .tint(CatchTheme.primary)
-            Text(CatchStrings.Social.loadingProfile)
-                .font(.subheadline)
-                .foregroundStyle(CatchTheme.textSecondary)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        PawLoadingView(label: CatchStrings.Social.loadingProfile)
     }
 
     private func errorState(_ error: UserBrowseError) -> some View {

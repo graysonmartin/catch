@@ -13,9 +13,7 @@ struct FeedView: View {
         NavigationStack {
             Group {
                 if socialFeedService?.isLoading == true && (socialFeedService?.remoteEncounters.isEmpty ?? true) {
-                    ProgressView()
-                        .tint(CatchTheme.primary)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    PawLoadingView()
                 } else if socialFeedService?.remoteEncounters.isEmpty ?? true {
                     EmptyStateView(
                         icon: "person.2.circle",
@@ -68,8 +66,7 @@ struct FeedView: View {
     private var loadMoreSection: some View {
         if socialFeedService?.hasMorePages == true {
             if socialFeedService?.isLoadingMore == true {
-                ProgressView()
-                    .tint(CatchTheme.primary)
+                PawLoadingView(size: .inline)
                     .padding()
             } else {
                 Color.clear

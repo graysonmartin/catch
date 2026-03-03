@@ -15,6 +15,7 @@
 		E8000001AA000002 /* Encounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000011 /* Encounter.swift */; };
 		E8000001AA000004 /* CatchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000013 /* CatchTheme.swift */; };
 		E8000001AA000005 /* CatPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000014 /* CatPhotoView.swift */; };
+		E8PL00000002 /* PawLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000001 /* PawLoadingView.swift */; };
 		E8000001AA000006 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000015 /* PhotoPickerView.swift */; };
 		E8000001AA000007 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000016 /* EmptyStateView.swift */; };
 		E8000001AA000008 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000017 /* FeedView.swift */; };
@@ -198,6 +199,7 @@
 		E8000001AA000011 /* Encounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encounter.swift; sourceTree = "<group>"; };
 		E8000001AA000013 /* CatchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchTheme.swift; sourceTree = "<group>"; };
 		E8000001AA000014 /* CatPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatPhotoView.swift; sourceTree = "<group>"; };
+		E8PL00000001 /* PawLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PawLoadingView.swift; sourceTree = "<group>"; };
 		E8000001AA000015 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		E8000001AA000016 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		E8000001AA000017 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 				E8B700000005 /* BreedSuggestionView.swift */,
 				E8000001AA000014 /* CatPhotoView.swift */,
 				E8DR00000001 /* DiaryEntryRow.swift */,
+				E8PL00000001 /* PawLoadingView.swift */,
 				E8000001AA000028 /* PhotoCarouselView.swift */,
 				E8000001AA000015 /* PhotoPickerView.swift */,
 				E8000001AA000016 /* EmptyStateView.swift */,
@@ -961,6 +964,7 @@
 				E8CS0000010B /* CatchStrings+Components.swift in Sources */,
 				E8SC00000100 /* StatCardView.swift in Sources */,
 				E8000001AA000005 /* CatPhotoView.swift in Sources */,
+				E8PL00000002 /* PawLoadingView.swift in Sources */,
 				E8000001AA000006 /* PhotoPickerView.swift in Sources */,
 				E8000001AA000007 /* EmptyStateView.swift in Sources */,
 				E8000001AA000008 /* FeedView.swift in Sources */,

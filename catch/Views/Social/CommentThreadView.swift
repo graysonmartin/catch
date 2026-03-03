@@ -50,12 +50,7 @@ struct CommentThreadView: View {
     private var commentList: some View {
         Group {
             if isLoading && comments.isEmpty {
-                VStack {
-                    Spacer()
-                    ProgressView()
-                        .tint(CatchTheme.primary)
-                    Spacer()
-                }
+                PawLoadingView()
             } else if comments.isEmpty {
                 VStack {
                     Spacer()
@@ -90,13 +85,8 @@ struct CommentThreadView: View {
     private var loadMoreSection: some View {
         if hasMoreComments {
             if isLoadingMore {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                        .tint(CatchTheme.primary)
-                    Spacer()
-                }
-                .padding(.vertical, CatchSpacing.space8)
+                PawLoadingView(size: .inline)
+                    .padding(.vertical, CatchSpacing.space8)
             } else {
                 Color.clear
                     .frame(height: 1)
