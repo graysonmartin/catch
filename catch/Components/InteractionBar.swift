@@ -3,7 +3,7 @@ import CatchCore
 
 struct InteractionBar: View {
     let encounterRecordName: String
-    @Binding var showComments: Bool
+    @Binding var showDetail: Bool
     var ownerRoute: RemoteProfileRoute?
     var isOwnEncounter: Bool = false
 
@@ -47,7 +47,7 @@ struct InteractionBar: View {
 
     private var commentButton: some View {
         Button {
-            showComments = true
+            showDetail = true
         } label: {
             HStack(spacing: CatchSpacing.space4) {
                 Image(systemName: "bubble.right")

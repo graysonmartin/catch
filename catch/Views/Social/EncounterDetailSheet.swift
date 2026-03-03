@@ -61,6 +61,12 @@ struct EncounterDetailSheet: View {
                     .padding(.horizontal)
                     .padding(.bottom, CatchSpacing.space8)
 
+                if !data.breed.isEmpty {
+                    breedRow
+                        .padding(.horizontal)
+                        .padding(.bottom, CatchSpacing.space8)
+                }
+
                 if !data.locationName.isEmpty {
                     locationRow
                         .padding(.horizontal)
@@ -134,7 +140,13 @@ struct EncounterDetailSheet: View {
             )
     }
 
-    // MARK: - Location & Notes
+    // MARK: - Breed, Location & Notes
+
+    private var breedRow: some View {
+        Label(data.breed, systemImage: "pawprint.fill")
+            .font(.subheadline)
+            .foregroundStyle(CatchTheme.textSecondary)
+    }
 
     private var locationRow: some View {
         Label(data.locationName, systemImage: "mappin")

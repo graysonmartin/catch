@@ -5,6 +5,7 @@ struct EncounterDetailData: Identifiable {
     let id: String
     let catName: String
     let catPhotoData: Data?
+    let breed: String
     let isFirstEncounter: Bool
     let isUnnamed: Bool
     let isOwned: Bool
@@ -19,6 +20,7 @@ struct EncounterDetailData: Identifiable {
         self.id = encounter.cloudKitRecordName ?? UUID().uuidString
         self.catName = encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat
         self.catPhotoData = encounter.cat?.photos.first
+        self.breed = encounter.cat?.breed ?? ""
         self.isFirstEncounter = isFirstEncounter
         self.isUnnamed = encounter.cat?.isUnnamed ?? false
         self.isOwned = encounter.cat?.isOwned ?? false
@@ -34,6 +36,7 @@ struct EncounterDetailData: Identifiable {
         self.id = encounter.recordName
         self.catName = cat?.displayName ?? CatchStrings.Social.unknownCat
         self.catPhotoData = cat?.photos.first
+        self.breed = cat?.breed ?? ""
         self.isFirstEncounter = isFirstEncounter
         self.isUnnamed = cat?.isUnnamed ?? false
         self.isOwned = cat?.isOwned ?? false
