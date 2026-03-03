@@ -15,6 +15,7 @@ struct RemoteProfileContent: View {
     @State private var isShowingCollection = false
     @State private var isShowingBreedLog = false
     @State private var isShowingUnfollowConfirmation = false
+    @State private var selectedEncounterRecordName: String?
 
     var body: some View {
         Group {
@@ -308,6 +309,13 @@ struct RemoteProfileContent: View {
 
     // MARK: - Diary Feed
 
+    private var isShowingDiaryComments: Binding<Bool> {
+        Binding(
+            get: { selectedEncounterRecordName != nil },
+            set: { if !$0 { selectedEncounterRecordName = nil } }
+        )
+    }
+
     private func diaryFeed(data: UserBrowseData) -> some View {
         Group {
             if data.encounters.isEmpty {
@@ -325,7 +333,7 @@ struct RemoteProfileContent: View {
                         Section {
                             ForEach(group.encounters, id: \.recordName) { encounter in
                                 let cat = data.cats.first { $0.recordName == encounter.catRecordName }
-                                RemoteDiaryEntryRow(
+                                remoteDiaryRow(
                                     encounter: encounter,
                                     cat: cat,
                                     isFirstEncounter: firstEncounterIDs.contains(encounter.recordName)
@@ -341,8 +349,38 @@ struct RemoteProfileContent: View {
                     }
                 }
                 .padding(.horizontal)
+                .task {
+                    await loadInteractionData(for: data.encounters)
+                }
             }
         }
+        .sheet(isPresented: isShowingDiaryComments) {
+            if let recordName = selectedEncounterRecordName {
+                CommentThreadView(
+                    encounterRecordName: recordName,
+                    showInteractionBar: true
+                )
+            }
+        }
+    }
+
+    private func remoteDiaryRow(
+        encounter: CloudEncounter,
+        cat: CloudCat?,
+        isFirstEncounter: Bool
+    ) -> some View {
+        Button {
+            selectedEncounterRecordName = encounter.recordName
+        } label: {
+            RemoteDiaryEntryRow(
+                encounter: encounter,
+                cat: cat,
+                isFirstEncounter: isFirstEncounter,
+                likeCount: socialService?.likeCount(for: encounter.recordName) ?? 0,
+                commentCount: socialService?.commentCount(for: encounter.recordName) ?? 0
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     private func earliestEncounterIDs(_ encounters: [CloudEncounter]) -> Set<String> {
@@ -409,5 +447,12 @@ struct RemoteProfileContent: View {
         } catch {
             loadError = .networkError(error.localizedDescription)
         }
+    }
+
+    private func loadInteractionData(for encounters: [CloudEncounter]) async {
+        guard let socialService else { return }
+        let recordNames = encounters.map(\.recordName)
+        guard !recordNames.isEmpty else { return }
+        try? await socialService.loadInteractionData(for: recordNames)
     }
 }

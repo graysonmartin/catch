@@ -3,6 +3,7 @@ import CatchCore
 
 struct CommentThreadView: View {
     let encounterRecordName: String
+    var showInteractionBar: Bool = false
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(AppleAuthService.self) private var authService
@@ -20,6 +21,10 @@ struct CommentThreadView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
+                if showInteractionBar {
+                    interactionHeader
+                    Divider()
+                }
                 commentList
                 Divider()
                 inputBar
@@ -38,6 +43,66 @@ struct CommentThreadView: View {
                 await loadComments()
             }
         }
+    }
+
+    // MARK: - Interaction Header
+
+    @ViewBuilder
+    private var interactionHeader: some View {
+        if showInteractionBar {
+            HStack(spacing: CatchSpacing.space16) {
+                likeToggleButton
+                commentSummaryLabel
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.vertical, CatchSpacing.space12)
+        }
+    }
+
+    private var likeToggleButton: some View {
+        Button {
+            guard let socialService else { return }
+            Task {
+                try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
+            }
+        } label: {
+            HStack(spacing: CatchSpacing.space4) {
+                Image(systemName: isLikedByCurrentUser ? "heart.fill" : "heart")
+                    .foregroundStyle(isLikedByCurrentUser ? CatchTheme.primary : CatchTheme.textSecondary)
+                    .contentTransition(.symbolEffect(.replace))
+                if totalLikeCount > 0 {
+                    Text("\(totalLikeCount)")
+                        .font(.subheadline)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var commentSummaryLabel: some View {
+        HStack(spacing: CatchSpacing.space4) {
+            Image(systemName: "bubble.right")
+                .foregroundStyle(CatchTheme.textSecondary)
+            if totalCommentCount > 0 {
+                Text("\(totalCommentCount)")
+                    .font(.subheadline)
+                    .foregroundStyle(CatchTheme.textSecondary)
+            }
+        }
+    }
+
+    private var isLikedByCurrentUser: Bool {
+        socialService?.isLiked(encounterRecordName) ?? false
+    }
+
+    private var totalLikeCount: Int {
+        socialService?.likeCount(for: encounterRecordName) ?? 0
+    }
+
+    private var totalCommentCount: Int {
+        socialService?.commentCount(for: encounterRecordName) ?? 0
     }
 
     // MARK: - Subviews

@@ -14,6 +14,8 @@ private enum DiaryRowLayout {
 struct DiaryEntryRow: View {
     let encounter: Encounter
     let isFirstEncounter: Bool
+    var likeCount: Int = 0
+    var commentCount: Int = 0
 
     private var cat: Cat? { encounter.cat }
 
@@ -45,6 +47,8 @@ struct DiaryEntryRow: View {
                     }
 
                     Spacer()
+
+                    EngagementIndicator(likeCount: likeCount, commentCount: commentCount)
 
                     Text(encounter.date.formatted(date: .omitted, time: .shortened))
                         .font(.caption)

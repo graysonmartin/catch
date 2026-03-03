@@ -5,6 +5,8 @@ struct RemoteDiaryEntryRow: View {
     let encounter: CloudEncounter
     let cat: CloudCat?
     let isFirstEncounter: Bool
+    var likeCount: Int = 0
+    var commentCount: Int = 0
 
     private enum Layout {
         static let thumbnailSize: CGFloat = 48
@@ -40,6 +42,8 @@ struct RemoteDiaryEntryRow: View {
                     }
 
                     Spacer()
+
+                    EngagementIndicator(likeCount: likeCount, commentCount: commentCount)
 
                     Text(encounter.date.formatted(date: .omitted, time: .shortened))
                         .font(.caption)
