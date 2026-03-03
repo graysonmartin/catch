@@ -45,7 +45,12 @@ struct EditCatView: View {
                 }
 
                 Section(CatchStrings.Common.photos) {
-                    PhotoPickerView(selectedPhotos: $photos)
+                    PhotoPickerView(selectedPhotos: $photos, minimumPhotos: 1)
+                    if photos.isEmpty {
+                        Text(CatchStrings.Log.photoRequired)
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.primary)
+                    }
                     if breed == nil && !isDismissedSuggestion {
                         BreedSuggestionView(
                             prediction: breedSuggestion,
@@ -75,7 +80,7 @@ struct EditCatView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(CatchStrings.Common.save) { save() }
-                        .disabled(!isUnnamed && name.trimmingCharacters(in: .whitespaces).isEmpty)
+                        .disabled(!canSave)
                         .fontWeight(.semibold)
                 }
             }
@@ -89,6 +94,10 @@ struct EditCatView: View {
                 }
             }
         }
+    }
+
+    private var canSave: Bool {
+        (isUnnamed || !name.trimmingCharacters(in: .whitespaces).isEmpty) && !photos.isEmpty
     }
 
     private func save() {
