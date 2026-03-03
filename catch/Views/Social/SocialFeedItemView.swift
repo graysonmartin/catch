@@ -19,7 +19,6 @@ struct SocialFeedItemView: View {
     let isFirstEncounter: Bool
     let catEncounters: [CloudEncounter]
 
-    @State private var showComments = false
     @State private var showDetail = false
 
     private var isUnnamed: Bool {
@@ -37,7 +36,7 @@ struct SocialFeedItemView: View {
             encounterMetadata
             InteractionBar(
                 encounterRecordName: encounter.recordName,
-                showComments: $showComments,
+                showDetail: $showDetail,
                 ownerRoute: RemoteProfileRoute(userID: owner.appleUserID, displayName: owner.displayName)
             )
         }
@@ -47,9 +46,6 @@ struct SocialFeedItemView: View {
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
         .contentShape(Rectangle())
         .onTapGesture { showDetail = true }
-        .sheet(isPresented: $showComments) {
-            CommentThreadView(encounterRecordName: encounter.recordName)
-        }
         .sheet(isPresented: $showDetail) {
             EncounterDetailSheet(data: detailData)
         }

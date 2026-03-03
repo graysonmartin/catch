@@ -18,7 +18,6 @@ private enum FeedItemLayout {
 struct FeedItemView: View {
     let encounter: Encounter
 
-    @State private var showComments = false
     @State private var showDetail = false
 
     private var isFirstEncounter: Bool {
@@ -48,11 +47,6 @@ struct FeedItemView: View {
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
         .contentShape(Rectangle())
         .onTapGesture { showDetail = true }
-        .sheet(isPresented: $showComments) {
-            if let recordName = encounter.cloudKitRecordName {
-                CommentThreadView(encounterRecordName: recordName)
-            }
-        }
         .sheet(isPresented: $showDetail) {
             EncounterDetailSheet(data: detailData)
         }
@@ -145,7 +139,7 @@ struct FeedItemView: View {
     @ViewBuilder
     private var interactionSection: some View {
         if let recordName = encounter.cloudKitRecordName {
-            InteractionBar(encounterRecordName: recordName, showComments: $showComments, isOwnEncounter: true)
+            InteractionBar(encounterRecordName: recordName, showDetail: $showDetail, isOwnEncounter: true)
         } else {
             HStack {
                 Spacer()
