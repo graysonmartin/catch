@@ -8,7 +8,6 @@ final class AppleAuthService: AuthService {
     private(set) var authState: AuthState = .unknown
 
     private static let keychainKey = "catch.appleUser"
-    private static let legacyUserDefaultsKey = "catch.appleUser"
 
     @ObservationIgnored
     private let keychain: any KeychainService
@@ -18,7 +17,6 @@ final class AppleAuthService: AuthService {
 
     init(keychain: any KeychainService = KeychainServiceImpl()) {
         self.keychain = keychain
-        migrateFromUserDefaultsIfNeeded()
 
         if let user = Self.loadPersistedUser(from: keychain) {
             authState = .signedIn(user)
@@ -116,28 +114,6 @@ final class AppleAuthService: AuthService {
 
     private static func clearPersistedUser(from keychain: any KeychainService) {
         try? keychain.delete(forKey: keychainKey)
-    }
-
-    // MARK: - Migration
-
-    /// Migrates auth data from UserDefaults to Keychain for existing users.
-    /// After a successful migration, the UserDefaults entry is removed.
-    private func migrateFromUserDefaultsIfNeeded() {
-        let defaults = UserDefaults.standard
-        guard let legacyData = defaults.data(forKey: Self.legacyUserDefaultsKey) else { return }
-        guard (try? JSONDecoder().decode(AppleUser.self, from: legacyData)) != nil else {
-            // Corrupted data — just clean it up
-            defaults.removeObject(forKey: Self.legacyUserDefaultsKey)
-            return
-        }
-
-        // Only migrate if Keychain doesn't already have the data
-        let existingKeychainData = try? keychain.load(forKey: Self.keychainKey)
-        if existingKeychainData == nil {
-            try? keychain.save(legacyData, forKey: Self.keychainKey)
-        }
-
-        defaults.removeObject(forKey: Self.legacyUserDefaultsKey)
     }
 
     // MARK: - Revocation

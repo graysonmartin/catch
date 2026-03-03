@@ -2,8 +2,6 @@ import Foundation
 
 /// Errors that can occur during Keychain operations.
 public enum KeychainError: Error, Equatable, Sendable {
-    case encodingFailed
-    case decodingFailed
     case unexpectedStatus(Int32)
 }
 

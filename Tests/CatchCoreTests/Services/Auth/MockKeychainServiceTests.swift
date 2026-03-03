@@ -1,7 +1,7 @@
 import XCTest
 @testable import CatchCore
 
-final class KeychainServiceTests: XCTestCase {
+final class MockKeychainServiceTests: XCTestCase {
 
     private var sut: MockKeychainService!
 
@@ -139,10 +139,7 @@ final class KeychainServiceTests: XCTestCase {
     // MARK: - KeychainError Equatable
 
     func test_keychainError_equatable() {
-        XCTAssertEqual(KeychainError.encodingFailed, KeychainError.encodingFailed)
-        XCTAssertEqual(KeychainError.decodingFailed, KeychainError.decodingFailed)
         XCTAssertEqual(KeychainError.unexpectedStatus(42), KeychainError.unexpectedStatus(42))
-        XCTAssertNotEqual(KeychainError.encodingFailed, KeychainError.decodingFailed)
         XCTAssertNotEqual(KeychainError.unexpectedStatus(1), KeychainError.unexpectedStatus(2))
     }
 

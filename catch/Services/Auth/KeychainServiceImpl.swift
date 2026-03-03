@@ -3,7 +3,7 @@ import Security
 import CatchCore
 
 /// Keychain-backed implementation of `KeychainService` using the Security framework.
-final class KeychainServiceImpl: KeychainService {
+final class KeychainServiceImpl: KeychainService, Sendable {
     private let serviceName: String
 
     init(serviceName: String = "com.catch.auth") {
@@ -71,7 +71,8 @@ final class KeychainServiceImpl: KeychainService {
         [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: serviceName,
-            kSecAttrAccount as String: key
+            kSecAttrAccount as String: key,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         ]
     }
 }
