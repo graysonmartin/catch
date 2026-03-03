@@ -7,13 +7,20 @@ import CatchCore
 final class AppleAuthService: AuthService {
     private(set) var authState: AuthState = .unknown
 
-    private static let userDefaultsKey = "catch.appleUser"
+    private static let keychainKey = "catch.appleUser"
+    private static let legacyUserDefaultsKey = "catch.appleUser"
+
+    @ObservationIgnored
+    private let keychain: any KeychainService
 
     @ObservationIgnored
     private nonisolated(unsafe) var revocationObserver: (any NSObjectProtocol)?
 
-    init() {
-        if let user = Self.loadPersistedUser() {
+    init(keychain: any KeychainService = KeychainServiceImpl()) {
+        self.keychain = keychain
+        migrateFromUserDefaultsIfNeeded()
+
+        if let user = Self.loadPersistedUser(from: keychain) {
             authState = .signedIn(user)
         } else {
             authState = .signedOut
@@ -51,13 +58,13 @@ final class AppleAuthService: AuthService {
             email: credential.email ?? authState.user?.email
         )
 
-        Self.persistUser(user)
+        Self.persistUser(user, to: keychain)
         authState = .signedIn(user)
         return user
     }
 
     func signOut() {
-        Self.clearPersistedUser()
+        Self.clearPersistedUser(from: keychain)
         authState = .signedOut
     }
 
@@ -68,7 +75,7 @@ final class AppleAuthService: AuthService {
             fullName: "Debug User",
             email: "debug@catch.test"
         )
-        Self.persistUser(user)
+        Self.persistUser(user, to: keychain)
         authState = .signedIn(user)
     }
     #endif
@@ -97,18 +104,40 @@ final class AppleAuthService: AuthService {
 
     // MARK: - Persistence
 
-    private static func persistUser(_ user: AppleUser) {
+    private static func persistUser(_ user: AppleUser, to keychain: any KeychainService) {
         guard let data = try? JSONEncoder().encode(user) else { return }
-        UserDefaults.standard.set(data, forKey: userDefaultsKey)
+        try? keychain.save(data, forKey: keychainKey)
     }
 
-    private static func loadPersistedUser() -> AppleUser? {
-        guard let data = UserDefaults.standard.data(forKey: userDefaultsKey) else { return nil }
+    private static func loadPersistedUser(from keychain: any KeychainService) -> AppleUser? {
+        guard let data = try? keychain.load(forKey: keychainKey) else { return nil }
         return try? JSONDecoder().decode(AppleUser.self, from: data)
     }
 
-    private static func clearPersistedUser() {
-        UserDefaults.standard.removeObject(forKey: userDefaultsKey)
+    private static func clearPersistedUser(from keychain: any KeychainService) {
+        try? keychain.delete(forKey: keychainKey)
+    }
+
+    // MARK: - Migration
+
+    /// Migrates auth data from UserDefaults to Keychain for existing users.
+    /// After a successful migration, the UserDefaults entry is removed.
+    private func migrateFromUserDefaultsIfNeeded() {
+        let defaults = UserDefaults.standard
+        guard let legacyData = defaults.data(forKey: Self.legacyUserDefaultsKey) else { return }
+        guard (try? JSONDecoder().decode(AppleUser.self, from: legacyData)) != nil else {
+            // Corrupted data — just clean it up
+            defaults.removeObject(forKey: Self.legacyUserDefaultsKey)
+            return
+        }
+
+        // Only migrate if Keychain doesn't already have the data
+        let existingKeychainData = try? keychain.load(forKey: Self.keychainKey)
+        if existingKeychainData == nil {
+            try? keychain.save(legacyData, forKey: Self.keychainKey)
+        }
+
+        defaults.removeObject(forKey: Self.legacyUserDefaultsKey)
     }
 
     // MARK: - Revocation
