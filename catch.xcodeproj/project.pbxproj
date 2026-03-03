@@ -175,6 +175,8 @@
 		E8SI0000010B /* CommentThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000B /* CommentThreadView.swift */; };
 		E8SI00000208 /* MockSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000C /* MockSocialInteractionService.swift */; };
 		E8SP00000001 /* CatchSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SP00000010 /* CatchSpacing.swift */; };
+		E8ED00000101 /* EncounterDetailData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ED00000001 /* EncounterDetailData.swift */; };
+		E8ES00000101 /* EncounterDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ES00000001 /* EncounterDetailSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -267,6 +269,8 @@
 		E8DM00000002 /* ProfileDisplayData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDisplayData.swift; sourceTree = "<group>"; };
 		E8DM00000011 /* CatDisplayDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDisplayDataTests.swift; sourceTree = "<group>"; };
 		E8DM00000012 /* ProfileDisplayDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDisplayDataTests.swift; sourceTree = "<group>"; };
+		E8ED00000001 /* EncounterDetailData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailData.swift; sourceTree = "<group>"; };
+		E8ES00000001 /* EncounterDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailSheet.swift; sourceTree = "<group>"; };
 		E8DR00000001 /* DiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEntryRow.swift; sourceTree = "<group>"; };
 		E8DR00000002 /* RemoteDiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDiaryEntryRow.swift; sourceTree = "<group>"; };
 		E8E500000007 /* SocialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialView.swift; sourceTree = "<group>"; };
@@ -669,6 +673,7 @@
 			isa = PBXGroup;
 			children = (
 				E8DM00000001 /* CatDisplayData.swift */,
+				E8ED00000001 /* EncounterDetailData.swift */,
 				E8SF00000001 /* FeedItem.swift */,
 				E8DM00000002 /* ProfileDisplayData.swift */,
 			);
@@ -694,6 +699,7 @@
 				E8SF00000004 /* SocialFeedItemView.swift */,
 				E8SI0000000A /* CommentRowView.swift */,
 				E8SI0000000B /* CommentThreadView.swift */,
+				E8ES00000001 /* EncounterDetailSheet.swift */,
 			);
 			path = Social;
 			sourceTree = "<group>";
@@ -1007,6 +1013,8 @@
 				E8EI00000101 /* EngagementIndicator.swift in Sources */,
 				E8SI0000010A /* CommentRowView.swift in Sources */,
 				E8SI0000010B /* CommentThreadView.swift in Sources */,
+				E8ED00000101 /* EncounterDetailData.swift in Sources */,
+				E8ES00000101 /* EncounterDetailSheet.swift in Sources */,
 				E8SF00000101 /* FeedItem.swift in Sources */,
 				E8SF00000102 /* SocialFeedService.swift in Sources */,
 				E8SF00000103 /* CKSocialFeedService.swift in Sources */,

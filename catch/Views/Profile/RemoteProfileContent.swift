@@ -15,7 +15,7 @@ struct RemoteProfileContent: View {
     @State private var isShowingCollection = false
     @State private var isShowingBreedLog = false
     @State private var isShowingUnfollowConfirmation = false
-    @State private var selectedEncounterRecordName: String?
+    @State private var selectedEncounterDetail: EncounterDetailData?
 
     var body: some View {
         Group {
@@ -309,10 +309,10 @@ struct RemoteProfileContent: View {
 
     // MARK: - Diary Feed
 
-    private var isShowingDiaryComments: Binding<Bool> {
+    private var isShowingDetail: Binding<Bool> {
         Binding(
-            get: { selectedEncounterRecordName != nil },
-            set: { if !$0 { selectedEncounterRecordName = nil } }
+            get: { selectedEncounterDetail != nil },
+            set: { if !$0 { selectedEncounterDetail = nil } }
         )
     }
 
@@ -354,12 +354,9 @@ struct RemoteProfileContent: View {
                 }
             }
         }
-        .sheet(isPresented: isShowingDiaryComments) {
-            if let recordName = selectedEncounterRecordName {
-                CommentThreadView(
-                    encounterRecordName: recordName,
-                    showInteractionBar: true
-                )
+        .sheet(isPresented: isShowingDetail) {
+            if let detail = selectedEncounterDetail {
+                EncounterDetailSheet(data: detail)
             }
         }
     }
@@ -370,7 +367,11 @@ struct RemoteProfileContent: View {
         isFirstEncounter: Bool
     ) -> some View {
         Button {
-            selectedEncounterRecordName = encounter.recordName
+            selectedEncounterDetail = EncounterDetailData(
+                remote: encounter,
+                cat: cat,
+                isFirstEncounter: isFirstEncounter
+            )
         } label: {
             RemoteDiaryEntryRow(
                 encounter: encounter,

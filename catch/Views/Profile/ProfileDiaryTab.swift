@@ -8,7 +8,7 @@ struct ProfileDiaryTab: View {
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
 
-    @State private var selectedEncounterRecordName: String?
+    @State private var selectedEncounterDetail: EncounterDetailData?
 
     private var filteredEncounters: [Encounter] {
         guard !searchText.isEmpty else { return encounters }
@@ -41,10 +41,10 @@ struct ProfileDiaryTab: View {
         return ids
     }
 
-    private var isShowingComments: Binding<Bool> {
+    private var isShowingDetail: Binding<Bool> {
         Binding(
-            get: { selectedEncounterRecordName != nil },
-            set: { if !$0 { selectedEncounterRecordName = nil } }
+            get: { selectedEncounterDetail != nil },
+            set: { if !$0 { selectedEncounterDetail = nil } }
         )
     }
 
@@ -81,12 +81,9 @@ struct ProfileDiaryTab: View {
             .task {
                 await loadInteractionData()
             }
-            .sheet(isPresented: isShowingComments) {
-                if let recordName = selectedEncounterRecordName {
-                    CommentThreadView(
-                        encounterRecordName: recordName,
-                        showInteractionBar: true
-                    )
+            .sheet(isPresented: isShowingDetail) {
+                if let detail = selectedEncounterDetail {
+                    EncounterDetailSheet(data: detail)
                 }
             }
         }
@@ -101,9 +98,12 @@ struct ProfileDiaryTab: View {
         let comments = commentCount(for: recordName)
         let isFirst = earliestEncounterIDs.contains(encounter.persistentModelID)
 
-        if encounter.cat != nil, let recordName {
+        if encounter.cat != nil, let _ = recordName {
             Button {
-                selectedEncounterRecordName = recordName
+                selectedEncounterDetail = EncounterDetailData(
+                    local: encounter,
+                    isFirstEncounter: isFirst
+                )
             } label: {
                 DiaryEntryRow(
                     encounter: encounter,

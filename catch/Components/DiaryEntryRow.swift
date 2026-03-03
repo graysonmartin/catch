@@ -47,15 +47,13 @@ struct DiaryEntryRow: View {
                     }
 
                     Spacer()
-
-                    EngagementIndicator(likeCount: likeCount, commentCount: commentCount)
-
-                    Text(encounter.date.formatted(date: .omitted, time: .shortened))
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary)
                 }
 
-                contextLine
+                HStack {
+                    EngagementIndicator(likeCount: likeCount, commentCount: commentCount)
+                    Spacer()
+                    contextLine
+                }
             }
         }
         .padding(.vertical, CatchSpacing.space4)
@@ -99,11 +97,15 @@ struct DiaryEntryRow: View {
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
                 .lineLimit(1)
+                .truncationMode(.tail)
+                .frame(maxWidth: .infinity, alignment: .trailing)
         } else if !encounter.notes.isEmpty {
             Text(encounter.notes)
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
                 .lineLimit(1)
+                .truncationMode(.tail)
+                .frame(maxWidth: .infinity, alignment: .trailing)
         }
     }
 }
