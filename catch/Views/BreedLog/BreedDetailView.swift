@@ -45,7 +45,7 @@ struct BreedDetailView: View {
     @ViewBuilder
     private var headerImage: some View {
         if let photoData = entry.previewPhotoData,
-           let uiImage = ImageDownsampler.downsample(data: photoData, to: CGSize(width: 160, height: 160)) {
+           let uiImage = ImageDownsampler.shared.downsample(data: photoData, to: CGSize(width: 160, height: 160)) {
             Image(uiImage: uiImage)
                 .resizable()
                 .scaledToFill()

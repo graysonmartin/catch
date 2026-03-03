@@ -102,7 +102,7 @@ class CatAnnotationView: MKAnnotationView {
 
         image = renderer.image { ctx in
             if let photoData = pin.photoData,
-               let photo = ImageDownsampler.downsample(data: photoData, to: CGSize(width: size, height: size)) {
+               let photo = ImageDownsampler.shared.downsample(data: photoData, to: CGSize(width: size, height: size)) {
                 let path = UIBezierPath(ovalIn: CGRect(x: inset, y: inset, width: size - inset * 2, height: size - inset * 2))
                 ctx.cgContext.saveGState()
                 path.addClip()
