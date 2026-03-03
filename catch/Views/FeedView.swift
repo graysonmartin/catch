@@ -5,8 +5,6 @@ import CatchCore
 struct FeedView: View {
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
-    @State private var selectedRemoteCat: RemotePinSelection?
-
     private var feedItems: [FeedItem] {
         (socialFeedService?.remoteEncounters ?? []).sorted { $0.date > $1.date }
     }
@@ -34,13 +32,7 @@ struct FeedView: View {
                                         cat: cat,
                                         owner: owner,
                                         isFirstEncounter: isFirstEncounter,
-                                        onTapCatPhoto: cat != nil ? {
-                                            selectedRemoteCat = RemotePinSelection(
-                                                cat: cat,
-                                                encounters: allEncounters(forCatRecord: encounter.catRecordName),
-                                                owner: owner
-                                            )
-                                        } : nil
+                                        catEncounters: allEncounters(forCatRecord: encounter.catRecordName)
                                     )
                                 }
                             }
@@ -57,15 +49,6 @@ struct FeedView: View {
                     userID: route.userID,
                     initialDisplayName: route.displayName
                 )
-            }
-            .navigationDestination(item: $selectedRemoteCat) { selection in
-                if let cat = selection.cat {
-                    RemoteCatProfileView(
-                        cat: cat,
-                        encounters: selection.encounters,
-                        ownerName: selection.owner.displayName
-                    )
-                }
             }
             .refreshable {
                 await socialFeedService?.refresh()
