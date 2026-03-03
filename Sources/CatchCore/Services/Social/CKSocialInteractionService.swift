@@ -85,7 +85,7 @@ public final class CKSocialInteractionService: SocialInteractionService {
 
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { throw SocialInteractionError.commentEmpty }
-        guard trimmed.count <= 500 else { throw SocialInteractionError.commentTooLong }
+        guard trimmed.count <= TextInputLimits.comment else { throw SocialInteractionError.commentTooLong }
 
         let comment = EncounterComment(
             id: "\(userID)_comment_\(UUID().uuidString)",

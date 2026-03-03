@@ -97,8 +97,11 @@ struct LogEncounterView: View {
                 }
 
                 Section(CatchStrings.Common.notes) {
-                    TextField(CatchStrings.Log.whatHappened, text: $notes, axis: .vertical)
-                        .lineLimit(3...6)
+                    LimitedTextFieldView(
+                        CatchStrings.Log.whatHappened,
+                        text: $notes,
+                        limit: TextInputLimits.encounterNotes
+                    )
                 }
             }
             .navigationTitle(CatchStrings.Log.logEncounterTitle)

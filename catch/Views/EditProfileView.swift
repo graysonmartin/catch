@@ -116,8 +116,11 @@ struct EditProfileView: View {
                 }
                 usernameStatusView
             }
-            TextField(CatchStrings.Profile.bio, text: $bio, axis: .vertical)
-                .lineLimit(3...6)
+            LimitedTextFieldView(
+                CatchStrings.Profile.bio,
+                text: $bio,
+                limit: TextInputLimits.bio
+            )
         } header: {
             Text(CatchStrings.Profile.info)
         } footer: {

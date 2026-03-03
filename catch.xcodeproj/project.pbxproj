@@ -185,6 +185,9 @@
 		E8SI00000108 /* CatchStrings+Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000008 /* CatchStrings+Interaction.swift */; };
 		E8SI00000109 /* InteractionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000009 /* InteractionBar.swift */; };
 		E8EI00000101 /* EngagementIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EI00000001 /* EngagementIndicator.swift */; };
+		E8TI00000101 /* LimitedTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000001 /* LimitedTextFieldView.swift */; };
+		E8TI00000102 /* LimitedSingleLineFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000002 /* LimitedSingleLineFieldView.swift */; };
+		E8TI00000103 /* CatchStrings+TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000003 /* CatchStrings+TextInput.swift */; };
 		E8SI0000010A /* CommentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000A /* CommentRowView.swift */; };
 		E8SI0000010B /* CommentThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000B /* CommentThreadView.swift */; };
 		E8SI00000208 /* MockSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000C /* MockSocialInteractionService.swift */; };
@@ -333,6 +336,9 @@
 		E8SI00000008 /* CatchStrings+Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Interaction.swift"; sourceTree = "<group>"; };
 		E8SI00000009 /* InteractionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionBar.swift; sourceTree = "<group>"; };
 		E8EI00000001 /* EngagementIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagementIndicator.swift; sourceTree = "<group>"; };
+		E8TI00000001 /* LimitedTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTextFieldView.swift; sourceTree = "<group>"; };
+		E8TI00000002 /* LimitedSingleLineFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedSingleLineFieldView.swift; sourceTree = "<group>"; };
+		E8TI00000003 /* CatchStrings+TextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+TextInput.swift"; sourceTree = "<group>"; };
 		E8SI0000000A /* CommentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRowView.swift; sourceTree = "<group>"; };
 		E8SI0000000B /* CommentThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentThreadView.swift; sourceTree = "<group>"; };
 		E8SI0000000C /* MockSocialInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialInteractionService.swift; sourceTree = "<group>"; };
@@ -462,6 +468,8 @@
 				E8SI00000009 /* InteractionBar.swift */,
 				E8EI00000001 /* EngagementIndicator.swift */,
 				E8CL00000004 /* CollectionSortFilterBar.swift */,
+				E8TI00000001 /* LimitedTextFieldView.swift */,
+				E8TI00000002 /* LimitedSingleLineFieldView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -483,6 +491,7 @@
 				E8CS0000000B /* CatchStrings+Components.swift */,
 				E8CS0000000C /* CatchStrings+Diary.swift */,
 				E8SI00000008 /* CatchStrings+Interaction.swift */,
+				E8TI00000003 /* CatchStrings+TextInput.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -1046,6 +1055,9 @@
 				E8SF00000102 /* SocialFeedService.swift in Sources */,
 				E8SF00000103 /* CKSocialFeedService.swift in Sources */,
 				E8SF00000104 /* SocialFeedItemView.swift in Sources */,
+				E8TI00000101 /* LimitedTextFieldView.swift in Sources */,
+				E8TI00000102 /* LimitedSingleLineFieldView.swift in Sources */,
+				E8TI00000103 /* CatchStrings+TextInput.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
