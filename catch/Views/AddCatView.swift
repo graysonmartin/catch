@@ -37,7 +37,7 @@ struct AddCatView: View {
                 }
 
                 Section(CatchStrings.Common.photos) {
-                    PhotoPickerView(selectedPhotos: $photos)
+                    PhotoPickerView(selectedPhotos: $photos, minimumPhotos: 1)
                     if photos.isEmpty {
                         Text(CatchStrings.Log.photoRequired)
                             .font(.caption)

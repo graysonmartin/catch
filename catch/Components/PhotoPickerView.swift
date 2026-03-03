@@ -5,8 +5,14 @@ import CatchCore
 
 struct PhotoPickerView: View {
     @Binding var selectedPhotos: [Data]
+    private let minimumPhotos: Int
     @State private var pickerItems: [PhotosPickerItem] = []
     @State private var draggingIndex: Int?
+
+    init(selectedPhotos: Binding<[Data]>, minimumPhotos: Int = 0) {
+        _selectedPhotos = selectedPhotos
+        self.minimumPhotos = minimumPhotos
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
@@ -106,6 +112,10 @@ struct PhotoPickerView: View {
         .padding(CatchSpacing.space4)
     }
 
+    private var isAtMinimum: Bool {
+        selectedPhotos.count <= minimumPhotos
+    }
+
     private func deleteButton(index: Int) -> some View {
         Button {
             withAnimation {
@@ -115,6 +125,8 @@ struct PhotoPickerView: View {
             Image(systemName: "xmark.circle.fill")
                 .foregroundStyle(.white, .black.opacity(0.5))
         }
+        .disabled(isAtMinimum)
+        .opacity(isAtMinimum ? 0.3 : 1.0)
         .offset(x: CatchSpacing.space4, y: -CatchSpacing.space4)
     }
 }
