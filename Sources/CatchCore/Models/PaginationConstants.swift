@@ -8,6 +8,9 @@ public enum PaginationConstants {
     /// Page size for comment threads.
     public static let commentsPageSize = 20
 
+    /// Page size for the liked-by user list.
+    public static let likesPageSize = 20
+
     /// Maximum encounters fetched per user in the social feed.
     public static let maxEncountersPerUser = 20
 }
