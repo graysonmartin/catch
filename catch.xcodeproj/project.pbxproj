@@ -194,6 +194,11 @@
 		E8SP00000001 /* CatchSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SP00000010 /* CatchSpacing.swift */; };
 		E8ED00000101 /* EncounterDetailData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ED00000001 /* EncounterDetailData.swift */; };
 		E8ES00000101 /* EncounterDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ES00000001 /* EncounterDetailSheet.swift */; };
+		E8FP00000101 /* FullScreenPhotoViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000001 /* FullScreenPhotoViewer.swift */; };
+		E8FP00000102 /* ZoomablePhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000002 /* ZoomablePhotoView.swift */; };
+		E8FP00000103 /* PhotoViewerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000003 /* PhotoViewerState.swift */; };
+		E8FP00000201 /* PhotoViewerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000003 /* PhotoViewerState.swift */; };
+		E8FP00000211 /* PhotoViewerStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000011 /* PhotoViewerStateTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -343,6 +348,10 @@
 		E8SI0000000B /* CommentThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentThreadView.swift; sourceTree = "<group>"; };
 		E8SI0000000C /* MockSocialInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialInteractionService.swift; sourceTree = "<group>"; };
 		E8SP00000010 /* CatchSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSpacing.swift; sourceTree = "<group>"; };
+		E8FP00000001 /* FullScreenPhotoViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPhotoViewer.swift; sourceTree = "<group>"; };
+		E8FP00000002 /* ZoomablePhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomablePhotoView.swift; sourceTree = "<group>"; };
+		E8FP00000003 /* PhotoViewerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerState.swift; sourceTree = "<group>"; };
+		E8FP00000011 /* PhotoViewerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerStateTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -470,6 +479,9 @@
 				E8CL00000004 /* CollectionSortFilterBar.swift */,
 				E8TI00000001 /* LimitedTextFieldView.swift */,
 				E8TI00000002 /* LimitedSingleLineFieldView.swift */,
+				E8FP00000001 /* FullScreenPhotoViewer.swift */,
+				E8FP00000002 /* ZoomablePhotoView.swift */,
+				E8FP00000003 /* PhotoViewerState.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -536,6 +548,7 @@
 			isa = PBXGroup;
 			children = (
 				E8A100000017 /* ImageDownsamplerTests.swift */,
+				E8FP00000011 /* PhotoViewerStateTests.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1051,6 +1064,9 @@
 				E8SI0000010B /* CommentThreadView.swift in Sources */,
 				E8ED00000101 /* EncounterDetailData.swift in Sources */,
 				E8ES00000101 /* EncounterDetailSheet.swift in Sources */,
+				E8FP00000101 /* FullScreenPhotoViewer.swift in Sources */,
+				E8FP00000102 /* ZoomablePhotoView.swift in Sources */,
+				E8FP00000103 /* PhotoViewerState.swift in Sources */,
 				E8SF00000101 /* FeedItem.swift in Sources */,
 				E8SF00000102 /* SocialFeedService.swift in Sources */,
 				E8SF00000103 /* CKSocialFeedService.swift in Sources */,
@@ -1084,6 +1100,8 @@
 				E8A100000008 /* Encounter.swift in Sources */,
 				E8A10000000B /* ImageDownsampler.swift in Sources */,
 				E8A10000000C /* ImageDownsamplerTests.swift in Sources */,
+				E8FP00000201 /* PhotoViewerState.swift in Sources */,
+				E8FP00000211 /* PhotoViewerStateTests.swift in Sources */,
 				E8A10000000D /* UserProfile.swift in Sources */,
 				E8A10000000E /* UserProfileTests.swift in Sources */,
 				E8A10000000F /* CatchSchema.swift in Sources */,

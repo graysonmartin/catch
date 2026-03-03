@@ -44,5 +44,12 @@ extension CatchStrings {
 
         // StevenEasterEggView
         static let youFoundHim = String(localized: "you found him.")
+
+        // FullScreenPhotoViewer
+        static let closePhotoViewer = String(localized: "close")
+
+        static func photoPageIndicator(_ current: Int, _ total: Int) -> String {
+            String(localized: "\(current) of \(total)")
+        }
     }
 }
