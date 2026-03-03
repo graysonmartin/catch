@@ -44,8 +44,11 @@ struct EditEncounterView: View {
                 }
 
                 Section(CatchStrings.Log.notesSection) {
-                    TextField(CatchStrings.Log.whatHappenedLower, text: $notes, axis: .vertical)
-                        .lineLimit(3...6)
+                    LimitedTextFieldView(
+                        CatchStrings.Log.whatHappenedLower,
+                        text: $notes,
+                        limit: TextInputLimits.encounterNotes
+                    )
                 }
             }
             .navigationTitle(CatchStrings.Log.editEncounterTitle)

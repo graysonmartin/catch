@@ -36,7 +36,11 @@ struct EditCatView: View {
                 Section(CatchStrings.Common.catInfo) {
                     Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
                     if !isUnnamed {
-                        TextField(CatchStrings.Common.name, text: $name)
+                        LimitedSingleLineFieldView(
+                            CatchStrings.Common.name,
+                            text: $name,
+                            limit: TextInputLimits.catName
+                        )
                     }
                     BreedPickerView(breed: $breed)
                     TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
@@ -63,8 +67,11 @@ struct EditCatView: View {
                 }
 
                 Section(CatchStrings.Common.notes) {
-                    TextField(CatchStrings.Common.notesPlaceholder, text: $notes, axis: .vertical)
-                        .lineLimit(3...6)
+                    LimitedTextFieldView(
+                        CatchStrings.Common.notesPlaceholder,
+                        text: $notes,
+                        limit: TextInputLimits.catNotes
+                    )
                 }
             }
             .navigationTitle(CatchStrings.Log.editCatTitle)

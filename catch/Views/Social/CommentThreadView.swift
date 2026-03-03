@@ -163,26 +163,59 @@ struct CommentThreadView: View {
     }
 
     private var inputBar: some View {
-        HStack(spacing: CatchSpacing.space8) {
-            TextField(CatchStrings.Interaction.addComment, text: $newCommentText, axis: .vertical)
-                .textFieldStyle(.plain)
-                .lineLimit(1...4)
-                .font(.subheadline)
-                .focused($isInputFocused)
+        VStack(alignment: .trailing, spacing: CatchSpacing.space2) {
+            HStack(spacing: CatchSpacing.space8) {
+                TextField(CatchStrings.Interaction.addComment, text: $newCommentText, axis: .vertical)
+                    .textFieldStyle(.plain)
+                    .lineLimit(1...4)
+                    .font(.subheadline)
+                    .focused($isInputFocused)
+                    .onChange(of: newCommentText) { _, newValue in
+                        if newValue.count > TextInputLimits.comment {
+                            newCommentText = TextInputLimits.enforceLimit(
+                                text: newValue,
+                                limit: TextInputLimits.comment
+                            )
+                        }
+                    }
 
-            Button {
-                Task { await submitComment() }
-            } label: {
-                Image(systemName: "arrow.up.circle.fill")
-                    .font(.title2)
-                    .foregroundStyle(canSubmit ? CatchTheme.primary : CatchTheme.textSecondary.opacity(0.3))
+                Button {
+                    Task { await submitComment() }
+                } label: {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(canSubmit ? CatchTheme.primary : CatchTheme.textSecondary.opacity(0.3))
+                }
+                .disabled(!canSubmit)
+                .buttonStyle(.plain)
             }
-            .disabled(!canSubmit)
-            .buttonStyle(.plain)
+
+            if TextInputLimits.shouldShowCount(text: newCommentText, limit: TextInputLimits.comment) {
+                commentCounter
+            }
         }
         .padding(.horizontal)
         .padding(.vertical, CatchSpacing.space8)
         .background(CatchTheme.cardBackground)
+    }
+
+    private var commentCounter: some View {
+        Text(commentCounterText)
+            .font(.caption2)
+            .foregroundStyle(
+                TextInputLimits.isAtLimit(text: newCommentText, limit: TextInputLimits.comment)
+                    ? CatchTheme.primary
+                    : CatchTheme.textSecondary
+            )
+            .monospacedDigit()
+    }
+
+    private var commentCounterText: String {
+        let remaining = TextInputLimits.remaining(text: newCommentText, limit: TextInputLimits.comment)
+        if remaining == 0 {
+            return CatchStrings.TextInput.limitReached
+        }
+        return CatchStrings.TextInput.charactersRemaining(remaining)
     }
 
     // MARK: - Helpers
