@@ -45,7 +45,6 @@ struct FeedItemView: View {
                             text: isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat,
                             isActive: isFirstEncounter
                         )
-                        pill(text: CatchStrings.Feed.pillYou, isActive: false)
                         if isUnnamed {
                             pill(text: CatchStrings.Feed.pillStray, isActive: false)
                         }
@@ -84,9 +83,18 @@ struct FeedItemView: View {
                     .foregroundStyle(CatchTheme.textPrimary)
             }
 
-            // Interaction bar — only for synced encounters
+            // Interaction bar
             if let recordName = encounter.cloudKitRecordName {
-                InteractionBar(encounterRecordName: recordName, showComments: $showComments)
+                InteractionBar(encounterRecordName: recordName, showComments: $showComments, isOwnEncounter: true)
+            } else {
+                HStack {
+                    Spacer()
+                    (Text(CatchStrings.Feed.spottedByPrefix)
+                        .foregroundStyle(CatchTheme.textSecondary) +
+                    Text(CatchStrings.Social.you)
+                        .foregroundStyle(CatchTheme.primary))
+                        .font(.caption.weight(.medium))
+                }
             }
         }
         .padding()

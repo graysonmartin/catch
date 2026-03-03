@@ -18,6 +18,8 @@ extension CatchStrings {
         static let socialEmptyTitle = String(localized: "ghost town")
         static let socialEmptySubtitle = String(localized: "follow some people and their cat encounters will show up here")
 
+        static let spottedByPrefix = String(localized: "spotted by ")
+
         static func spottedBy(_ name: String) -> String {
             String(localized: "spotted by \(name)")
         }
