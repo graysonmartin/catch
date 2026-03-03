@@ -10,11 +10,16 @@ struct CommentThreadView: View {
     @State private var comments: [EncounterComment] = []
     @State private var newCommentText = ""
     @State private var isLoading = false
+    @State private var isLoadingMore = false
     @State private var cursor: String?
     @FocusState private var isInputFocused: Bool
 
     private var currentUserID: String? {
         authService.authState.user?.userIdentifier
+    }
+
+    private var hasMoreComments: Bool {
+        cursor != nil
     }
 
     var body: some View {
@@ -45,12 +50,7 @@ struct CommentThreadView: View {
     private var commentList: some View {
         Group {
             if isLoading && comments.isEmpty {
-                VStack {
-                    Spacer()
-                    ProgressView()
-                        .tint(CatchTheme.primary)
-                    Spacer()
-                }
+                PawLoadingView()
             } else if comments.isEmpty {
                 VStack {
                     Spacer()
@@ -71,12 +71,30 @@ struct CommentThreadView: View {
                                 onDelete: { deleteComment(comment) }
                             )
                         }
+
+                        loadMoreSection
                     }
                     .padding()
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    @ViewBuilder
+    private var loadMoreSection: some View {
+        if hasMoreComments {
+            if isLoadingMore {
+                PawLoadingView(size: .inline)
+                    .padding(.vertical, CatchSpacing.space8)
+            } else {
+                Color.clear
+                    .frame(height: 1)
+                    .onAppear {
+                        Task { await loadMoreComments() }
+                    }
+            }
+        }
     }
 
     private var inputBar: some View {
@@ -122,6 +140,23 @@ struct CommentThreadView: View {
             cursor = newCursor
         } catch {
             // Comments fail silently — not critical
+        }
+    }
+
+    private func loadMoreComments() async {
+        guard let socialService, hasMoreComments, !isLoadingMore else { return }
+        isLoadingMore = true
+        defer { isLoadingMore = false }
+
+        do {
+            let (fetched, newCursor) = try await socialService.fetchComments(
+                encounterRecordName: encounterRecordName,
+                cursor: cursor
+            )
+            comments.append(contentsOf: fetched)
+            cursor = newCursor
+        } catch {
+            // Load-more failure is non-critical
         }
     }
 

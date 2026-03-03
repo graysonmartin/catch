@@ -15,6 +15,7 @@
 		E8000001AA000002 /* Encounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000011 /* Encounter.swift */; };
 		E8000001AA000004 /* CatchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000013 /* CatchTheme.swift */; };
 		E8000001AA000005 /* CatPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000014 /* CatPhotoView.swift */; };
+		E8PL00000002 /* PawLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000001 /* PawLoadingView.swift */; };
 		E8000001AA000006 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000015 /* PhotoPickerView.swift */; };
 		E8000001AA000007 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000016 /* EmptyStateView.swift */; };
 		E8000001AA000008 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000017 /* FeedView.swift */; };
@@ -168,6 +169,18 @@
 		E8SF00000203 /* CKSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000003 /* CKSocialFeedService.swift */; };
 		E8SF00000204 /* MockSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000005 /* MockSocialFeedService.swift */; };
 		E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000006 /* CKSocialFeedServiceTests.swift */; };
+		E8PG00000207 /* CKSocialFeedServicePaginationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PG00000007 /* CKSocialFeedServicePaginationTests.swift */; };
+		E8PKG0000020 /* CatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = E8PKG0000010 /* CatchCore */; };
+		E8PKG0000021 /* CatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = E8PKG0000011 /* CatchCore */; };
+		E8CL00000101 /* CollectionSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000001 /* CollectionSortOption.swift */; };
+		E8CL00000102 /* CollectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000002 /* CollectionFilter.swift */; };
+		E8CL00000103 /* CollectionSortFilterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000003 /* CollectionSortFilterService.swift */; };
+		E8CL00000104 /* CollectionSortFilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000004 /* CollectionSortFilterBar.swift */; };
+		E8CL00000105 /* RemoteCollectionTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000005 /* RemoteCollectionTab.swift */; };
+		E8CL00000201 /* CollectionSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000001 /* CollectionSortOption.swift */; };
+		E8CL00000202 /* CollectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000002 /* CollectionFilter.swift */; };
+		E8CL00000203 /* CollectionSortFilterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000003 /* CollectionSortFilterService.swift */; };
+		E8CL00000204 /* CollectionSortFilterServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000006 /* CollectionSortFilterServiceTests.swift */; };
 		E8SI00000108 /* CatchStrings+Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000008 /* CatchStrings+Interaction.swift */; };
 		E8SI00000109 /* InteractionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000009 /* InteractionBar.swift */; };
 		E8SI0000010A /* CommentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000A /* CommentRowView.swift */; };
@@ -186,6 +199,7 @@
 		E8000001AA000011 /* Encounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encounter.swift; sourceTree = "<group>"; };
 		E8000001AA000013 /* CatchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchTheme.swift; sourceTree = "<group>"; };
 		E8000001AA000014 /* CatPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatPhotoView.swift; sourceTree = "<group>"; };
+		E8PL00000001 /* PawLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PawLoadingView.swift; sourceTree = "<group>"; };
 		E8000001AA000015 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		E8000001AA000016 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		E8000001AA000017 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -302,6 +316,13 @@
 		E8SF00000004 /* SocialFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialFeedItemView.swift; sourceTree = "<group>"; };
 		E8SF00000005 /* MockSocialFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialFeedService.swift; sourceTree = "<group>"; };
 		E8SF00000006 /* CKSocialFeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialFeedServiceTests.swift; sourceTree = "<group>"; };
+		E8PG00000007 /* CKSocialFeedServicePaginationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialFeedServicePaginationTests.swift; sourceTree = "<group>"; };
+		E8CL00000001 /* CollectionSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortOption.swift; sourceTree = "<group>"; };
+		E8CL00000002 /* CollectionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionFilter.swift; sourceTree = "<group>"; };
+		E8CL00000003 /* CollectionSortFilterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterService.swift; sourceTree = "<group>"; };
+		E8CL00000004 /* CollectionSortFilterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterBar.swift; sourceTree = "<group>"; };
+		E8CL00000005 /* RemoteCollectionTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCollectionTab.swift; sourceTree = "<group>"; };
+		E8CL00000006 /* CollectionSortFilterServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterServiceTests.swift; sourceTree = "<group>"; };
 		E8SI00000008 /* CatchStrings+Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Interaction.swift"; sourceTree = "<group>"; };
 		E8SI00000009 /* InteractionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionBar.swift; sourceTree = "<group>"; };
 		E8SI0000000A /* CommentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRowView.swift; sourceTree = "<group>"; };
@@ -418,6 +439,7 @@
 				E8B700000005 /* BreedSuggestionView.swift */,
 				E8000001AA000014 /* CatPhotoView.swift */,
 				E8DR00000001 /* DiaryEntryRow.swift */,
+				E8PL00000001 /* PawLoadingView.swift */,
 				E8000001AA000028 /* PhotoCarouselView.swift */,
 				E8000001AA000015 /* PhotoPickerView.swift */,
 				E8000001AA000016 /* EmptyStateView.swift */,
@@ -779,6 +801,7 @@
 			isa = PBXGroup;
 			children = (
 				E8SF00000006 /* CKSocialFeedServiceTests.swift */,
+				E8PG00000007 /* CKSocialFeedServicePaginationTests.swift */,
 			);
 			path = SocialFeed;
 			sourceTree = "<group>";
@@ -941,6 +964,7 @@
 				E8CS0000010B /* CatchStrings+Components.swift in Sources */,
 				E8SC00000100 /* StatCardView.swift in Sources */,
 				E8000001AA000005 /* CatPhotoView.swift in Sources */,
+				E8PL00000002 /* PawLoadingView.swift in Sources */,
 				E8000001AA000006 /* PhotoPickerView.swift in Sources */,
 				E8000001AA000007 /* EmptyStateView.swift in Sources */,
 				E8000001AA000008 /* FeedView.swift in Sources */,
@@ -1077,6 +1101,7 @@
 				E8SF00000203 /* CKSocialFeedService.swift in Sources */,
 				E8SF00000204 /* MockSocialFeedService.swift in Sources */,
 				E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */,
+				E8PG00000207 /* CKSocialFeedServicePaginationTests.swift in Sources */,
 				E8CL00000201 /* CollectionSortOption.swift in Sources */,
 				E8CL00000202 /* CollectionFilter.swift in Sources */,
 				E8CL00000203 /* CollectionSortFilterService.swift in Sources */,

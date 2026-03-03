@@ -21,8 +21,7 @@ struct BreedSuggestionView: View {
 
     private var classifyingState: some View {
         HStack(spacing: CatchSpacing.space8) {
-            ProgressView()
-                .tint(CatchTheme.primary)
+            PawLoadingView(size: .inline)
             Text(CatchStrings.Components.analyzingCreature)
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)

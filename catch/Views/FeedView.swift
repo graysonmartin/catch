@@ -13,9 +13,7 @@ struct FeedView: View {
         NavigationStack {
             Group {
                 if socialFeedService?.isLoading == true && (socialFeedService?.remoteEncounters.isEmpty ?? true) {
-                    ProgressView()
-                        .tint(CatchTheme.primary)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    PawLoadingView()
                 } else if socialFeedService?.remoteEncounters.isEmpty ?? true {
                     EmptyStateView(
                         icon: "person.2.circle",
@@ -35,6 +33,8 @@ struct FeedView: View {
                                         catEncounters: allEncounters(forCatRecord: encounter.catRecordName)
                                     )
                                 }
+
+                                loadMoreSection
                             }
                         }
                         .padding()
@@ -56,6 +56,24 @@ struct FeedView: View {
             .task(id: socialFeedService != nil) {
                 await socialFeedService?.refresh()
                 await loadInteractionData()
+            }
+        }
+    }
+
+    // MARK: - Load More
+
+    @ViewBuilder
+    private var loadMoreSection: some View {
+        if socialFeedService?.hasMorePages == true {
+            if socialFeedService?.isLoadingMore == true {
+                PawLoadingView(size: .inline)
+                    .padding()
+            } else {
+                Color.clear
+                    .frame(height: 1)
+                    .onAppear {
+                        Task { await socialFeedService?.loadMore() }
+                    }
             }
         }
     }

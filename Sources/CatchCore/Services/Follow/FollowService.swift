@@ -7,6 +7,8 @@ public protocol FollowService: Observable, Sendable {
     var outgoingPending: [Follow] { get }
     var pendingRequests: [Follow] { get }
     var isLoading: Bool { get }
+    var hasMoreFollowers: Bool { get }
+    var hasMoreFollowing: Bool { get }
 
     func follow(targetID: String, by userID: String, isTargetPrivate: Bool) async throws
     func unfollow(targetID: String, by userID: String) async throws
@@ -14,6 +16,8 @@ public protocol FollowService: Observable, Sendable {
     func declineRequest(_ follow: Follow) async throws
     func removeFollower(_ follow: Follow) async throws
     func refresh(for userID: String) async throws
+    func loadMoreFollowers(for userID: String) async throws
+    func loadMoreFollowing(for userID: String) async throws
     func fetchFollowCounts(for userID: String) async throws -> (followers: Int, following: Int)
     func isFollowing(_ targetID: String) -> Bool
     func pendingRequestTo(_ targetID: String) -> Follow?

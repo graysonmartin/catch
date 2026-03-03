@@ -11,6 +11,9 @@ public final class CKSocialInteractionService: SocialInteractionService {
     private static let containerID = "iCloud.com.catch.catch"
     private let getCurrentUserID: () -> String?
 
+    /// Stores active CK cursors keyed by encounter record name for comment pagination.
+    private var commentCursors: [String: CKQueryOperation.Cursor] = [:]
+
     private var database: CKDatabase {
         CKContainer(identifier: Self.containerID).publicCloudDatabase
     }
@@ -119,18 +122,37 @@ public final class CKSocialInteractionService: SocialInteractionService {
         encounterRecordName: String,
         cursor: String?
     ) async throws -> ([EncounterComment], String?) {
-        let predicate = NSPredicate(format: "encounterRecordName == %@", encounterRecordName)
-        let query = CKQuery(recordType: CommentRecordMapper.recordType, predicate: predicate)
-        query.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let results: [(CKRecord.ID, Result<CKRecord, any Error>)]
+        let queryCursor: CKQueryOperation.Cursor?
 
-        let (results, queryCursor) = try await database.records(matching: query, resultsLimit: 50)
+        if cursor != nil, let activeCursor = commentCursors[encounterRecordName] {
+            (results, queryCursor) = try await database.records(
+                continuingMatchFrom: activeCursor,
+                resultsLimit: PaginationConstants.commentsPageSize
+            )
+        } else {
+            let predicate = NSPredicate(format: "encounterRecordName == %@", encounterRecordName)
+            let query = CKQuery(recordType: CommentRecordMapper.recordType, predicate: predicate)
+            query.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+
+            (results, queryCursor) = try await database.records(
+                matching: query,
+                resultsLimit: PaginationConstants.commentsPageSize
+            )
+        }
 
         let comments = results.compactMap { _, result -> EncounterComment? in
             guard case .success(let record) = result else { return nil }
             return CommentRecordMapper.comment(from: record)
         }
 
-        let cursorString = queryCursor != nil ? "has_more" : nil
+        if let queryCursor {
+            commentCursors[encounterRecordName] = queryCursor
+        } else {
+            commentCursors.removeValue(forKey: encounterRecordName)
+        }
+
+        let cursorString: String? = queryCursor != nil ? "has_more" : nil
         return (comments, cursorString)
     }
 
