@@ -5,9 +5,6 @@ import CatchCore
 struct FeedView: View {
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
-    @Binding var scrollToTop: Bool
-    @Binding var selectedTab: Int
-
     private var feedItems: [FeedItem] {
         (socialFeedService?.remoteEncounters ?? []).sorted { $0.date > $1.date }
     }
@@ -26,28 +23,23 @@ struct FeedView: View {
                         subtitle: CatchStrings.Feed.socialEmptySubtitle
                     )
                 } else {
-                    ScrollViewReader { proxy in
-                        ScrollView {
-                            LazyVStack(spacing: CatchSpacing.space16) {
-                                ForEach(feedItems) { item in
-                                    if case .remote(let encounter, let cat, let owner, let isFirstEncounter) = item {
-                                        SocialFeedItemView(encounter: encounter, cat: cat, owner: owner, isFirstEncounter: isFirstEncounter)
-                                    }
+                    ScrollView {
+                        LazyVStack(spacing: CatchSpacing.space16) {
+                            ForEach(feedItems) { item in
+                                if case .remote(let encounter, let cat, let owner, let isFirstEncounter) = item {
+                                    SocialFeedItemView(
+                                        encounter: encounter,
+                                        cat: cat,
+                                        owner: owner,
+                                        isFirstEncounter: isFirstEncounter,
+                                        catEncounters: allEncounters(forCatRecord: encounter.catRecordName)
+                                    )
                                 }
 
                                 loadMoreSection
                             }
-                            .padding()
-                            .id("feedTop")
                         }
-                        .onChange(of: scrollToTop) {
-                            if scrollToTop {
-                                withAnimation {
-                                    proxy.scrollTo("feedTop", anchor: .top)
-                                }
-                                scrollToTop = false
-                            }
-                        }
+                        .padding()
                     }
                 }
             }
@@ -86,6 +78,16 @@ struct FeedView: View {
                         Task { await socialFeedService?.loadMore() }
                     }
             }
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func allEncounters(forCatRecord recordName: String) -> [CloudEncounter] {
+        feedItems.compactMap { item in
+            guard case .remote(let encounter, _, _, _) = item,
+                  encounter.catRecordName == recordName else { return nil }
+            return encounter
         }
     }
 

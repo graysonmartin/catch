@@ -17,6 +17,7 @@ struct SocialFeedItemView: View {
     let cat: CloudCat?
     let owner: CloudUserProfile
     let isFirstEncounter: Bool
+    let catEncounters: [CloudEncounter]
 
     @State private var showComments = false
 
@@ -49,7 +50,7 @@ struct SocialFeedItemView: View {
 
     private var catHeader: some View {
         HStack(spacing: CatchSpacing.space12) {
-            CatPhotoView(photoData: cat?.photos.first, size: Layout.thumbnailSize)
+            catPhotoLink
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack(spacing: CatchSpacing.space4) {
@@ -76,6 +77,24 @@ struct SocialFeedItemView: View {
                     .foregroundStyle(CatchTheme.primary)
                     .font(.caption)
             }
+        }
+    }
+
+    @ViewBuilder
+    private var catPhotoLink: some View {
+        if let cat {
+            NavigationLink {
+                RemoteCatProfileView(
+                    cat: cat,
+                    encounters: catEncounters,
+                    ownerName: owner.displayName
+                )
+            } label: {
+                CatPhotoView(photoData: cat.photos.first, size: Layout.thumbnailSize)
+            }
+            .buttonStyle(.plain)
+        } else {
+            CatPhotoView(photoData: nil, size: Layout.thumbnailSize)
         }
     }
 

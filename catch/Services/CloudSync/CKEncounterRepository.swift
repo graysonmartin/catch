@@ -7,7 +7,7 @@ import CatchCore
 @MainActor
 final class CKEncounterRepository: EncounterRepository {
     private let container = CKContainer(identifier: "iCloud.com.catch.catch")
-    private let logger = Logger(subsystem: "com.catch.catch", category: "CKEncounterRepository")
+    private let logger = Logger(subsystem: "com.graysonmartin.catch", category: "CKEncounterRepository")
 
     private var database: CKDatabase {
         container.publicCloudDatabase

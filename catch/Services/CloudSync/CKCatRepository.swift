@@ -7,7 +7,7 @@ import CatchCore
 @MainActor
 final class CKCatRepository: CatRepository {
     private let container = CKContainer(identifier: "iCloud.com.catch.catch")
-    private let logger = Logger(subsystem: "com.catch.catch", category: "CKCatRepository")
+    private let logger = Logger(subsystem: "com.graysonmartin.catch", category: "CKCatRepository")
 
     private var database: CKDatabase {
         container.publicCloudDatabase

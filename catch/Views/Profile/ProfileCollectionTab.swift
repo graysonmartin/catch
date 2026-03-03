@@ -8,7 +8,8 @@ struct ProfileCollectionTab: View {
 
     @Binding var selectedTab: Int
     @State private var searchText = ""
-    @State private var sortOption: CollectionSortOption = .mostRecent
+    @State private var sortOption: CollectionSortOption = .lastSeen
+    @State private var sortDirection: CollectionSortDirection = CollectionSortOption.lastSeen.defaultDirection
     @State private var activeFilters: Set<CollectionFilter> = []
 
     private let service: CollectionSortFilterService = DefaultCollectionSortFilterService()
@@ -64,6 +65,7 @@ struct ProfileCollectionTab: View {
 
         let sortedItems = service.apply(
             sort: sortOption,
+            direction: sortDirection,
             filters: activeFilters,
             to: items,
             now: Date()
@@ -93,9 +95,9 @@ struct ProfileCollectionTab: View {
             } else {
                 VStack(spacing: 0) {
                     CollectionSortFilterBar(
-                        selectedSort: $sortOption,
                         activeFilters: $activeFilters
                     )
+                    .zIndex(1)
 
                     if processedCats.isEmpty {
                         filterEmptyState
@@ -120,6 +122,43 @@ struct ProfileCollectionTab: View {
         .navigationTitle(CatchStrings.Profile.collectionTab)
         .navigationBarTitleDisplayMode(.large)
         .searchable(text: $searchText, prompt: CatchStrings.Collection.searchPrompt)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                sortMenu
+            }
+        }
+    }
+
+    // MARK: - Sort Menu
+
+    private var sortMenu: some View {
+        Menu {
+            ForEach(CollectionSortOption.allCases) { option in
+                Button {
+                    handleSortTap(option)
+                } label: {
+                    Label {
+                        Text(option.displayName)
+                    } icon: {
+                        if option == sortOption {
+                            Image(systemName: sortDirection.chevronSymbol)
+                        }
+                    }
+                }
+            }
+        } label: {
+            Image(systemName: "arrow.up.arrow.down")
+                .foregroundStyle(CatchTheme.primary)
+        }
+    }
+
+    private func handleSortTap(_ option: CollectionSortOption) {
+        if option == sortOption {
+            sortDirection = sortDirection.toggled
+        } else {
+            sortOption = option
+            sortDirection = option.defaultDirection
+        }
     }
 
     // MARK: - Filter Empty State

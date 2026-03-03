@@ -6,20 +6,14 @@ struct CatProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Bindable var cat: Cat
-    @Query private var encounters: [Encounter]
     @State private var showingEdit = false
     @State private var showingDeleteCat = false
     @State private var encounterToEdit: Encounter?
     @State private var showingLogEncounter = false
     @State private var encounterToDelete: Encounter?
 
-    init(cat: Cat) {
-        self.cat = cat
-        let catID = cat.persistentModelID
-        _encounters = Query(
-            filter: #Predicate<Encounter> { $0.cat?.persistentModelID == catID },
-            sort: [SortDescriptor(\Encounter.date, order: .reverse)]
-        )
+    private var sortedEncounters: [Encounter] {
+        cat.encounters.sorted { $0.date > $1.date }
     }
 
     var body: some View {
@@ -111,7 +105,7 @@ struct CatProfileView: View {
 
             // Encounters section
             Section {
-                if encounters.isEmpty {
+                if sortedEncounters.isEmpty {
                     VStack(spacing: CatchSpacing.space8) {
                         Text(CatchStrings.CatProfile.noEncountersLogged)
                             .font(.subheadline)
@@ -126,7 +120,7 @@ struct CatProfileView: View {
                     }
                     .listRowBackground(CatchTheme.background)
                 } else {
-                    ForEach(encounters) { encounter in
+                    ForEach(sortedEncounters) { encounter in
                         encounterRow(encounter)
                             .contentShape(Rectangle())
                             .onTapGesture {
@@ -140,7 +134,7 @@ struct CatProfileView: View {
                     }
                 }
             } header: {
-                Text(CatchStrings.CatProfile.encountersHeader(encounters.count))
+                Text(CatchStrings.CatProfile.encountersHeader(sortedEncounters.count))
                     .font(.headline)
                     .foregroundStyle(CatchTheme.textPrimary)
                     .textCase(nil)

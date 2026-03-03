@@ -1,4 +1,5 @@
 import MapKit
+import CatchCore
 
 enum AnnotationLayout {
     static let catPinSize: CGFloat = 40
@@ -12,16 +13,59 @@ enum AnnotationLayout {
     static let clusteringID = "catCluster"
 }
 
+// MARK: - Unified pin model
+
+enum MapPin {
+    case local(Cat)
+    case remote(encounter: CloudEncounter, cat: CloudCat?, owner: CloudUserProfile)
+
+    var photoData: Data? {
+        switch self {
+        case .local(let cat): return cat.photos.first
+        case .remote(_, let cat, _): return cat?.photos.first
+        }
+    }
+
+    var displayName: String {
+        switch self {
+        case .local(let cat): return cat.displayName
+        case .remote(_, let cat, _): return cat?.displayName ?? CatchStrings.Common.unnamedCatFallback
+        }
+    }
+
+    var isRemote: Bool {
+        if case .remote = self { return true }
+        return false
+    }
+
+    /// Used for spiderfy sort order — local cats with more encounters surface first
+    var encounterSortWeight: Int {
+        if case .local(let cat) = self { return cat.encounters.count }
+        return 0
+    }
+
+    var coordinate: CLLocationCoordinate2D? {
+        switch self {
+        case .local(let cat):
+            guard let lat = cat.location.latitude, let lng = cat.location.longitude else { return nil }
+            return CLLocationCoordinate2D(latitude: lat, longitude: lng)
+        case .remote(let encounter, _, _):
+            guard let lat = encounter.locationLatitude, let lng = encounter.locationLongitude else { return nil }
+            return CLLocationCoordinate2D(latitude: lat, longitude: lng)
+        }
+    }
+}
+
 // MARK: - Annotation models
 
 class CatAnnotation: MKPointAnnotation {
-    var cat: Cat?
+    var pin: MapPin?
     var originalCoordinate: CLLocationCoordinate2D?
     var isSpread = false
 }
 
 class OverflowAnnotation: MKPointAnnotation {
-    var overflowCats: [Cat] = []
+    var overflowPins: [MapPin] = []
 }
 
 // MARK: - Individual cat pin
@@ -49,14 +93,15 @@ class CatAnnotationView: MKAnnotationView {
     }
 
     private func render() {
-        guard let catAnnotation = annotation as? CatAnnotation, let cat = catAnnotation.cat else { return }
+        guard let catAnnotation = annotation as? CatAnnotation, let pin = catAnnotation.pin else { return }
 
         let size = AnnotationLayout.catPinSize
         let inset = AnnotationLayout.catPinBorderInset
+        let borderColor = pin.isRemote ? CatchTheme.remotePinUIColor : CatchTheme.primaryUIColor
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
 
         image = renderer.image { ctx in
-            if let photoData = cat.photos.first,
+            if let photoData = pin.photoData,
                let photo = ImageDownsampler.downsample(data: photoData, to: CGSize(width: size, height: size)) {
                 let path = UIBezierPath(ovalIn: CGRect(x: inset, y: inset, width: size - inset * 2, height: size - inset * 2))
                 ctx.cgContext.saveGState()
@@ -72,10 +117,10 @@ class CatAnnotationView: MKAnnotationView {
                 }
                 photo.draw(in: drawRect)
                 ctx.cgContext.restoreGState()
-                CatchTheme.primaryUIColor.setStroke()
+                borderColor.setStroke()
                 UIBezierPath(ovalIn: CGRect(x: inset, y: inset, width: size - inset * 2, height: size - inset * 2)).stroke()
             } else {
-                CatchTheme.primaryUIColor.setFill()
+                borderColor.setFill()
                 UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: size, height: size)).fill()
                 let config = UIImage.SymbolConfiguration(pointSize: AnnotationLayout.catIconPointSize, weight: .medium)
                 if let icon = UIImage(systemName: "cat.fill", withConfiguration: config)?
@@ -108,7 +153,7 @@ class OverflowAnnotationView: MKAnnotationView {
 
     private func render() {
         guard let overflow = annotation as? OverflowAnnotation else { return }
-        let count = overflow.overflowCats.count
+        let count = overflow.overflowPins.count
 
         let size = AnnotationLayout.overflowBubbleSize
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))

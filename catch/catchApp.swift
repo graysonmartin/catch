@@ -83,19 +83,20 @@ struct catchApp: App {
                                 encounterRepository: encRepo,
                                 getUserID: getUserID
                             )
-                            userBrowseService = CKUserBrowseService(
+                            let browseService = CKUserBrowseService(
                                 cloudKitService: CKCloudKitService(),
                                 catRepository: catRepo,
                                 encounterRepository: encRepo,
                                 followService: followService,
                                 currentUserIDProvider: getUserID
                             )
+                            userBrowseService = browseService
                             socialInteractionService = CKSocialInteractionService(
                                 getCurrentUserID: getUserID
                             )
                             socialFeedService = CKSocialFeedService(
                                 followService: followService,
-                                userBrowseService: userBrowseService!
+                                userBrowseService: browseService
                             )
 
                             #if DEBUG

@@ -7,13 +7,27 @@ enum CatchTheme {
 
     static let primary = Color(red: 1.0, green: 0.6, blue: 0.2)       // warm orange
     static let secondary = Color(red: 1.0, green: 0.8, blue: 0.6)     // peach
-    static let background = Color(red: 0.98, green: 0.96, blue: 0.93) // warm off-white
-    static let cardBackground = Color.white
-    static let textPrimary = Color(red: 0.2, green: 0.15, blue: 0.1)
-    static let textSecondary = Color(red: 0.5, green: 0.4, blue: 0.35)
+
+    /// Warm off-white in light mode; system dark background in dark mode.
+    static let background = Color(uiColor: .catchBackground)
+
+    /// White in light mode; elevated surface in dark mode.
+    static let cardBackground = Color(uiColor: .catchCardBackground)
+
+    /// Dark brown in light mode; `.label` (white) in dark mode.
+    static let textPrimary = Color(.label)
+
+    /// Muted brown in light mode; `.secondaryLabel` in dark mode.
+    static let textSecondary = Color(.secondaryLabel)
 
     /// UIColor version of `primary` for UIKit contexts (MapKit annotations, etc.)
     static let primaryUIColor = UIColor(red: 1.0, green: 0.6, blue: 0.2, alpha: 1.0)
+
+    /// UIColor version for remote (friend's) cat pins — muted brown to distinguish from own cats
+    static let remotePinUIColor = UIColor(red: 0.5, green: 0.4, blue: 0.35, alpha: 1.0)
+
+    /// SwiftUI Color version for remote cat pins
+    static let remotePinColor = Color(red: 0.5, green: 0.4, blue: 0.35)
 
     // MARK: - Corner Radii
 
@@ -31,4 +45,23 @@ enum CatchTheme {
 
     static let jpegCompressionQuality: CGFloat = 0.7
     static let maxPhotoSelection = 5
+}
+
+// MARK: - Adaptive UIColors
+
+extension UIColor {
+
+    /// Warm off-white in light mode; `systemBackground` in dark mode.
+    static let catchBackground = UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? .systemBackground
+            : UIColor(red: 0.98, green: 0.96, blue: 0.93, alpha: 1.0)
+    }
+
+    /// Pure white in light mode; `secondarySystemBackground` in dark mode.
+    static let catchCardBackground = UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? .secondarySystemBackground
+            : .white
+    }
 }
