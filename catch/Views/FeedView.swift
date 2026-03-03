@@ -6,6 +6,7 @@ struct FeedView: View {
     @Query(sort: \Encounter.date, order: .reverse) private var localEncounters: [Encounter]
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
+    @Binding var scrollToTop: Bool
 
     private var feedItems: [FeedItem] {
         let local = localEncounters.map { FeedItem.local($0) }
@@ -25,9 +26,7 @@ struct FeedView: View {
         NavigationStack {
             Group {
                 if isInitialLoad {
-                    ProgressView()
-                        .tint(CatchTheme.primary)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    PawLoadingView()
                 } else if isEmpty {
                     EmptyStateView(
                         icon: "pawprint.circle",
@@ -60,24 +59,55 @@ struct FeedView: View {
     // MARK: - Subviews
 
     private var feedList: some View {
-        ScrollView {
-            LazyVStack(spacing: CatchSpacing.space16) {
-                ForEach(feedItems) { item in
-                    switch item {
-                    case .local(let encounter):
-                        FeedItemView(encounter: encounter)
-                    case .remote(let encounter, let cat, let owner, let isFirstEncounter):
-                        SocialFeedItemView(
-                            encounter: encounter,
-                            cat: cat,
-                            owner: owner,
-                            isFirstEncounter: isFirstEncounter,
-                            catEncounters: allEncounters(forCatRecord: encounter.catRecordName)
-                        )
+        ScrollViewReader { proxy in
+            ScrollView {
+                LazyVStack(spacing: CatchSpacing.space16) {
+                    ForEach(feedItems) { item in
+                        switch item {
+                        case .local(let encounter):
+                            FeedItemView(encounter: encounter)
+                        case .remote(let encounter, let cat, let owner, let isFirstEncounter):
+                            SocialFeedItemView(
+                                encounter: encounter,
+                                cat: cat,
+                                owner: owner,
+                                isFirstEncounter: isFirstEncounter,
+                                catEncounters: allEncounters(forCatRecord: encounter.catRecordName)
+                            )
+                        }
                     }
+
+                    loadMoreSection
+                }
+                .padding()
+                .id("feedTop")
+            }
+            .onChange(of: scrollToTop) {
+                if scrollToTop {
+                    withAnimation {
+                        proxy.scrollTo("feedTop", anchor: .top)
+                    }
+                    scrollToTop = false
                 }
             }
-            .padding()
+        }
+    }
+
+    // MARK: - Load More
+
+    @ViewBuilder
+    private var loadMoreSection: some View {
+        if socialFeedService?.hasMorePages == true {
+            if socialFeedService?.isLoadingMore == true {
+                PawLoadingView(size: .inline)
+                    .padding()
+            } else {
+                Color.clear
+                    .frame(height: 1)
+                    .onAppear {
+                        Task { await socialFeedService?.loadMore() }
+                    }
+            }
         }
     }
 

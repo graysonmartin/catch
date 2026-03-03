@@ -8,6 +8,8 @@ struct AddCatView: View {
     @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
     @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
 
+    var onSave: (() -> Void)?
+
     @State private var isUnnamed = false
     @State private var name = ""
     @State private var breed: String?
@@ -121,6 +123,8 @@ struct AddCatView: View {
         modelContext.insert(encounter)
 
         Task { await catSyncService?.syncNewCat(cat, firstEncounter: encounter) }
+
+        onSave?()
 
         if cat.isSteven {
             showStevenEasterEgg = true

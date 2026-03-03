@@ -140,6 +140,81 @@ final class ProfileDiaryTabTests: XCTestCase {
         XCTAssertEqual(filtered.count, 2)
     }
 
+    // MARK: - First encounter detection
+
+    func testEarliestEncounterIDsForMultipleCats() throws {
+        let mochi = Fixtures.cat(name: "Mochi", in: context)
+        let luna = Fixtures.cat(name: "Luna", in: context)
+
+        let mochiFirst = Fixtures.encounter(
+            for: mochi,
+            date: Date().addingTimeInterval(-3600),
+            in: context
+        )
+        let mochiSecond = Fixtures.encounter(
+            for: mochi,
+            date: Date(),
+            in: context
+        )
+        let lunaFirst = Fixtures.encounter(
+            for: luna,
+            date: Date().addingTimeInterval(-7200),
+            in: context
+        )
+
+        let encounters = try context.fetch(FetchDescriptor<Encounter>())
+        let firstIDs = earliestEncounterIDs(encounters)
+
+        XCTAssertTrue(firstIDs.contains(mochiFirst.persistentModelID))
+        XCTAssertFalse(firstIDs.contains(mochiSecond.persistentModelID))
+        XCTAssertTrue(firstIDs.contains(lunaFirst.persistentModelID))
+    }
+
+    // MARK: - Engagement count lookup
+
+    func testLikeCountReturnsZeroForNilRecordName() {
+        let count = lookupLikeCount(for: nil, likeCounts: ["enc1": 5])
+        XCTAssertEqual(count, 0)
+    }
+
+    func testLikeCountReturnsValueForKnownRecordName() {
+        let count = lookupLikeCount(for: "enc1", likeCounts: ["enc1": 5, "enc2": 3])
+        XCTAssertEqual(count, 5)
+    }
+
+    func testLikeCountReturnsZeroForUnknownRecordName() {
+        let count = lookupLikeCount(for: "enc99", likeCounts: ["enc1": 5])
+        XCTAssertEqual(count, 0)
+    }
+
+    func testCommentCountReturnsZeroForNilRecordName() {
+        let count = lookupCommentCount(for: nil, commentCounts: ["enc1": 2])
+        XCTAssertEqual(count, 0)
+    }
+
+    func testCommentCountReturnsValueForKnownRecordName() {
+        let count = lookupCommentCount(for: "enc1", commentCounts: ["enc1": 2])
+        XCTAssertEqual(count, 2)
+    }
+
+    // MARK: - Engagement indicator visibility
+
+    func testEngagementIsVisibleWhenLikeCountAboveZero() {
+        XCTAssertTrue(hasEngagement(likeCount: 3, commentCount: 0))
+    }
+
+    func testEngagementIsVisibleWhenCommentCountAboveZero() {
+        XCTAssertTrue(hasEngagement(likeCount: 0, commentCount: 1))
+    }
+
+    func testEngagementIsHiddenWhenBothCountsZero() {
+        XCTAssertFalse(hasEngagement(likeCount: 0, commentCount: 0))
+    }
+
+    func testEngagementIsVisibleWhenBothCountsAboveZero() {
+        XCTAssertTrue(hasEngagement(likeCount: 2, commentCount: 4))
+    }
+
     // MARK: - Helpers (mirror ProfileDiaryTab logic)
 
     private func groupEncountersByDay(_ encounters: [Encounter]) -> [(date: Date, encounters: [Encounter])] {
@@ -167,5 +242,32 @@ final class ProfileDiaryTabTests: XCTestCase {
         } else {
             return date.formatted(.dateTime.month(.abbreviated).day().year()).lowercased()
         }
+    }
+
+    private func earliestEncounterIDs(_ encounters: [Encounter]) -> Set<PersistentIdentifier> {
+        var ids = Set<PersistentIdentifier>()
+        var seenCats = Set<PersistentIdentifier>()
+        let allSorted = encounters.sorted { $0.date < $1.date }
+        for encounter in allSorted {
+            if let catID = encounter.cat?.persistentModelID, !seenCats.contains(catID) {
+                seenCats.insert(catID)
+                ids.insert(encounter.persistentModelID)
+            }
+        }
+        return ids
+    }
+
+    private func lookupLikeCount(for recordName: String?, likeCounts: [String: Int]) -> Int {
+        guard let recordName else { return 0 }
+        return likeCounts[recordName, default: 0]
+    }
+
+    private func lookupCommentCount(for recordName: String?, commentCounts: [String: Int]) -> Int {
+        guard let recordName else { return 0 }
+        return commentCounts[recordName, default: 0]
+    }
+
+    private func hasEngagement(likeCount: Int, commentCount: Int) -> Bool {
+        likeCount > 0 || commentCount > 0
     }
 }

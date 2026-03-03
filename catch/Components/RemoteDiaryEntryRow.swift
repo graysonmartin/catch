@@ -5,6 +5,8 @@ struct RemoteDiaryEntryRow: View {
     let encounter: CloudEncounter
     let cat: CloudCat?
     let isFirstEncounter: Bool
+    var likeCount: Int = 0
+    var commentCount: Int = 0
 
     private enum Layout {
         static let thumbnailSize: CGFloat = 48
@@ -40,13 +42,13 @@ struct RemoteDiaryEntryRow: View {
                     }
 
                     Spacer()
-
-                    Text(encounter.date.formatted(date: .omitted, time: .shortened))
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary)
                 }
 
-                contextLine
+                HStack {
+                    EngagementIndicator(likeCount: likeCount, commentCount: commentCount)
+                    Spacer()
+                    contextLine
+                }
             }
         }
         .padding(.vertical, CatchSpacing.space4)
@@ -90,11 +92,15 @@ struct RemoteDiaryEntryRow: View {
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
                 .lineLimit(1)
+                .truncationMode(.tail)
+                .frame(maxWidth: .infinity, alignment: .trailing)
         } else if !encounter.notes.isEmpty {
             Text(encounter.notes)
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
                 .lineLimit(1)
+                .truncationMode(.tail)
+                .frame(maxWidth: .infinity, alignment: .trailing)
         }
     }
 }

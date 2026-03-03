@@ -3,6 +3,7 @@ import CatchCore
 
 struct CommentThreadView: View {
     let encounterRecordName: String
+    var showInteractionBar: Bool = false
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(AppleAuthService.self) private var authService
@@ -10,6 +11,7 @@ struct CommentThreadView: View {
     @State private var comments: [EncounterComment] = []
     @State private var newCommentText = ""
     @State private var isLoading = false
+    @State private var isLoadingMore = false
     @State private var cursor: String?
     @FocusState private var isInputFocused: Bool
 
@@ -17,9 +19,17 @@ struct CommentThreadView: View {
         authService.authState.user?.userIdentifier
     }
 
+    private var hasMoreComments: Bool {
+        cursor != nil
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
+                if showInteractionBar {
+                    interactionHeader
+                    Divider()
+                }
                 commentList
                 Divider()
                 inputBar
@@ -40,17 +50,72 @@ struct CommentThreadView: View {
         }
     }
 
+    // MARK: - Interaction Header
+
+    @ViewBuilder
+    private var interactionHeader: some View {
+        if showInteractionBar {
+            HStack(spacing: CatchSpacing.space16) {
+                likeToggleButton
+                commentSummaryLabel
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.vertical, CatchSpacing.space12)
+        }
+    }
+
+    private var likeToggleButton: some View {
+        Button {
+            guard let socialService else { return }
+            Task {
+                try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
+            }
+        } label: {
+            HStack(spacing: CatchSpacing.space4) {
+                Image(systemName: isLikedByCurrentUser ? "heart.fill" : "heart")
+                    .foregroundStyle(isLikedByCurrentUser ? CatchTheme.primary : CatchTheme.textSecondary)
+                    .contentTransition(.symbolEffect(.replace))
+                if totalLikeCount > 0 {
+                    Text("\(totalLikeCount)")
+                        .font(.subheadline)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var commentSummaryLabel: some View {
+        HStack(spacing: CatchSpacing.space4) {
+            Image(systemName: "bubble.right")
+                .foregroundStyle(CatchTheme.textSecondary)
+            if totalCommentCount > 0 {
+                Text("\(totalCommentCount)")
+                    .font(.subheadline)
+                    .foregroundStyle(CatchTheme.textSecondary)
+            }
+        }
+    }
+
+    private var isLikedByCurrentUser: Bool {
+        socialService?.isLiked(encounterRecordName) ?? false
+    }
+
+    private var totalLikeCount: Int {
+        socialService?.likeCount(for: encounterRecordName) ?? 0
+    }
+
+    private var totalCommentCount: Int {
+        socialService?.commentCount(for: encounterRecordName) ?? 0
+    }
+
     // MARK: - Subviews
 
     private var commentList: some View {
         Group {
             if isLoading && comments.isEmpty {
-                VStack {
-                    Spacer()
-                    ProgressView()
-                        .tint(CatchTheme.primary)
-                    Spacer()
-                }
+                PawLoadingView()
             } else if comments.isEmpty {
                 VStack {
                     Spacer()
@@ -71,12 +136,30 @@ struct CommentThreadView: View {
                                 onDelete: { deleteComment(comment) }
                             )
                         }
+
+                        loadMoreSection
                     }
                     .padding()
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    @ViewBuilder
+    private var loadMoreSection: some View {
+        if hasMoreComments {
+            if isLoadingMore {
+                PawLoadingView(size: .inline)
+                    .padding(.vertical, CatchSpacing.space8)
+            } else {
+                Color.clear
+                    .frame(height: 1)
+                    .onAppear {
+                        Task { await loadMoreComments() }
+                    }
+            }
+        }
     }
 
     private var inputBar: some View {
@@ -122,6 +205,23 @@ struct CommentThreadView: View {
             cursor = newCursor
         } catch {
             // Comments fail silently — not critical
+        }
+    }
+
+    private func loadMoreComments() async {
+        guard let socialService, hasMoreComments, !isLoadingMore else { return }
+        isLoadingMore = true
+        defer { isLoadingMore = false }
+
+        do {
+            let (fetched, newCursor) = try await socialService.fetchComments(
+                encounterRecordName: encounterRecordName,
+                cursor: cursor
+            )
+            comments.append(contentsOf: fetched)
+            cursor = newCursor
+        } catch {
+            // Load-more failure is non-critical
         }
     }
 
