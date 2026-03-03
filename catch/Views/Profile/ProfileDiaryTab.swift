@@ -81,7 +81,7 @@ struct ProfileDiaryTab: View {
             .task {
                 await loadInteractionData()
             }
-            .sheet(isPresented: isShowingDetail) {
+            .fullScreenCover(isPresented: isShowingDetail) {
                 if let detail = selectedEncounterDetail {
                     EncounterDetailSheet(data: detail)
                 }
@@ -98,23 +98,13 @@ struct ProfileDiaryTab: View {
         let comments = commentCount(for: recordName)
         let isFirst = earliestEncounterIDs.contains(encounter.persistentModelID)
 
-        if encounter.cat != nil, let _ = recordName {
+        if encounter.cat != nil {
             Button {
                 selectedEncounterDetail = EncounterDetailData(
                     local: encounter,
                     isFirstEncounter: isFirst
                 )
             } label: {
-                DiaryEntryRow(
-                    encounter: encounter,
-                    isFirstEncounter: isFirst,
-                    likeCount: likes,
-                    commentCount: comments
-                )
-            }
-            .buttonStyle(.plain)
-        } else if let cat = encounter.cat {
-            NavigationLink(value: cat) {
                 DiaryEntryRow(
                     encounter: encounter,
                     isFirstEncounter: isFirst,

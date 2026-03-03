@@ -34,7 +34,6 @@ struct EncounterDetailSheet: View {
                     Button(CatchStrings.Common.done) { dismiss() }
                 }
             }
-            .presentationDetents([.medium, .large])
             .task { await loadComments() }
         }
     }
@@ -213,7 +212,8 @@ struct EncounterDetailSheet: View {
                 title: CatchStrings.Interaction.noCommentsTitle,
                 subtitle: CatchStrings.Interaction.noCommentsSubtitle
             )
-            .padding(.vertical, CatchSpacing.space12)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.vertical, CatchSpacing.space32)
         } else {
             LazyVStack(alignment: .leading, spacing: CatchSpacing.space12) {
                 ForEach(comments) { comment in
