@@ -123,6 +123,7 @@
 		E8DM00000202 /* ProfileDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000002 /* ProfileDisplayData.swift */; };
 		E8DM00000301 /* CatDisplayDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000011 /* CatDisplayDataTests.swift */; };
 		E8DM00000302 /* ProfileDisplayDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000012 /* ProfileDisplayDataTests.swift */; };
+		E8FI00000301 /* FeedItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FI00000011 /* FeedItemTests.swift */; };
 		E8DR00000101 /* DiaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DR00000001 /* DiaryEntryRow.swift */; };
 		E8DR00000102 /* RemoteDiaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DR00000002 /* RemoteDiaryEntryRow.swift */; };
 		E8E600000007 /* SocialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000007 /* SocialView.swift */; };
@@ -285,6 +286,7 @@
 		E8DM00000012 /* ProfileDisplayDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDisplayDataTests.swift; sourceTree = "<group>"; };
 		E8ED00000001 /* EncounterDetailData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailData.swift; sourceTree = "<group>"; };
 		E8ES00000001 /* EncounterDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailSheet.swift; sourceTree = "<group>"; };
+		E8FI00000011 /* FeedItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemTests.swift; sourceTree = "<group>"; };
 		E8DR00000001 /* DiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEntryRow.swift; sourceTree = "<group>"; };
 		E8DR00000002 /* RemoteDiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDiaryEntryRow.swift; sourceTree = "<group>"; };
 		E8E500000007 /* SocialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialView.swift; sourceTree = "<group>"; };
@@ -507,6 +509,7 @@
 				E8D800000002 /* CatStevenTests.swift */,
 				E8DM00000011 /* CatDisplayDataTests.swift */,
 				E8DM00000012 /* ProfileDisplayDataTests.swift */,
+				E8FI00000011 /* FeedItemTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1105,6 +1108,7 @@
 				E8DM00000202 /* ProfileDisplayData.swift in Sources */,
 				E8DM00000301 /* CatDisplayDataTests.swift in Sources */,
 				E8DM00000302 /* ProfileDisplayDataTests.swift in Sources */,
+				E8FI00000301 /* FeedItemTests.swift in Sources */,
 				E8PT00000212 /* ProfileDiaryTabTests.swift in Sources */,
 				E8CS0000030C /* CatchStrings+Diary.swift in Sources */,
 				E8SI00000208 /* MockSocialInteractionService.swift in Sources */,

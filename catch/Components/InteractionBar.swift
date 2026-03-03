@@ -5,6 +5,7 @@ struct InteractionBar: View {
     let encounterRecordName: String
     @Binding var showComments: Bool
     var ownerRoute: RemoteProfileRoute?
+    var isOwnEncounter: Bool = false
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
 
@@ -15,6 +16,8 @@ struct InteractionBar: View {
             Spacer()
             if let ownerRoute {
                 ownerLink(route: ownerRoute)
+            } else if isOwnEncounter {
+                spottedByYouLabel
             }
         }
     }
@@ -57,6 +60,14 @@ struct InteractionBar: View {
             }
         }
         .buttonStyle(.plain)
+    }
+
+    private var spottedByYouLabel: some View {
+        (Text(CatchStrings.Feed.spottedByPrefix)
+            .foregroundStyle(CatchTheme.textSecondary) +
+        Text(CatchStrings.Social.you)
+            .foregroundStyle(CatchTheme.primary))
+            .font(.caption.weight(.medium))
     }
 
     private func ownerLink(route: RemoteProfileRoute) -> some View {
