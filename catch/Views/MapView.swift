@@ -158,7 +158,7 @@ struct MissingLocationSheet: View {
                 } label: {
                     HStack(spacing: CatchSpacing.space12) {
                         if let photoData = cat.photos.first,
-                           let uiImage = ImageDownsampler.downsample(data: photoData, to: CGSize(width: 44, height: 44)) {
+                           let uiImage = ImageDownsampler.shared.downsample(data: photoData, to: CGSize(width: 44, height: 44)) {
                             Image(uiImage: uiImage)
                                 .resizable()
                                 .scaledToFill()
@@ -255,7 +255,7 @@ struct ClusterListSheet: View {
     @ViewBuilder
     private func pinPhoto(_ pin: MapPin) -> some View {
         if let photoData = pin.photoData,
-           let uiImage = ImageDownsampler.downsample(data: photoData, to: CGSize(width: 44, height: 44)) {
+           let uiImage = ImageDownsampler.shared.downsample(data: photoData, to: CGSize(width: 44, height: 44)) {
             Image(uiImage: uiImage)
                 .resizable()
                 .scaledToFill()

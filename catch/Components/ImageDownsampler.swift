@@ -1,12 +1,22 @@
 import UIKit
-import CryptoKit
+import CommonCrypto
 import ImageIO
 
-enum ImageDownsampler {
+// MARK: - ImageDownsamplingService Protocol
 
-    // MARK: - Cache
+protocol ImageDownsamplingService {
+    func downsample(data: Data, to pointSize: CGSize, scale: CGFloat) -> UIImage?
+}
 
-    private static let cache = ImageCache()
+// MARK: - ImageDownsampler
+
+final class ImageDownsampler: ImageDownsamplingService {
+
+    static let shared = ImageDownsampler()
+
+    private let cache = ImageCache()
+
+    private init() {}
 
     /// Decodes image data at the target display size using `CGImageSource`,
     /// avoiding a full-resolution bitmap allocation. Results are cached
@@ -17,7 +27,7 @@ enum ImageDownsampler {
     ///   - pointSize: Target display size in points
     ///   - scale: Screen scale factor (defaults to main screen)
     /// - Returns: A `UIImage` sized for the target display, or `nil` if decoding fails
-    static func downsample(
+    func downsample(
         data: Data,
         to pointSize: CGSize,
         scale: CGFloat = UIScreen.main.scale
@@ -37,14 +47,14 @@ enum ImageDownsampler {
         return image
     }
 
-    /// Removes all cached images. Primarily useful for testing.
-    static func clearCache() {
+    // internal for testability
+    func clearCache() {
         cache.removeAll()
     }
 
     // MARK: - Decoding
 
-    private static func decode(data: Data, maxPixelDimension: CGFloat) -> UIImage? {
+    private func decode(data: Data, maxPixelDimension: CGFloat) -> UIImage? {
         let sourceOptions: [CFString: Any] = [
             kCGImageSourceShouldCache: false
         ]
@@ -77,11 +87,12 @@ enum ImageDownsampler {
     /// Produces a stable 64-bit hash of image data using SHA-256 (truncated).
     /// SHA-256 is used instead of `Data.hashValue` because the latter is
     /// randomized per process and would break cross-render cache hits.
-    private static func stableHash(for data: Data) -> UInt64 {
-        let digest = SHA256.hash(data: data)
-        return digest.withUnsafeBytes { buffer in
-            buffer.load(as: UInt64.self)
+    private func stableHash(for data: Data) -> UInt64 {
+        var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        data.withUnsafeBytes { buffer in
+            _ = CC_SHA256(buffer.baseAddress, CC_LONG(buffer.count), &digest)
         }
+        return digest.withUnsafeBytes { $0.loadUnaligned(as: UInt64.self) }
     }
 }
 
@@ -118,7 +129,7 @@ private final class NSCacheKeyWrapper: NSObject {
 // MARK: - ImageCache
 
 /// Thread-safe, memory-pressure-aware image cache backed by `NSCache`.
-/// Stores downsampled `UIImage` results keyed by content hash + target size.
+/// `NSCache` is thread-safe for all operations, so `@unchecked Sendable` is valid.
 private final class ImageCache: @unchecked Sendable {
 
     private static let defaultCostLimit = 75 * 1024 * 1024 // 75 MB

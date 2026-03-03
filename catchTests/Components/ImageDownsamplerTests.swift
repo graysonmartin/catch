@@ -18,25 +18,30 @@ final class ImageDownsamplerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        ImageDownsampler.clearCache()
+        ImageDownsampler.shared.clearCache()
+    }
+
+    override func tearDown() {
+        ImageDownsampler.shared.clearCache()
+        super.tearDown()
     }
 
     // MARK: - Downsample Tests
 
     func test_downsample_returnsNonNilForValidData() {
         let jpeg = makeTestJPEG(width: 400, height: 400)
-        let result = ImageDownsampler.downsample(data: jpeg, to: CGSize(width: 40, height: 40), scale: 1.0)
+        let result = ImageDownsampler.shared.downsample(data: jpeg, to: CGSize(width: 40, height: 40), scale: 1.0)
         XCTAssertNotNil(result)
     }
 
     func test_downsample_returnsNilForEmptyData() {
-        let result = ImageDownsampler.downsample(data: Data(), to: CGSize(width: 40, height: 40), scale: 1.0)
+        let result = ImageDownsampler.shared.downsample(data: Data(), to: CGSize(width: 40, height: 40), scale: 1.0)
         XCTAssertNil(result)
     }
 
     func test_downsample_returnsNilForGarbageData() {
         let garbage = Data([0x00, 0x01, 0x02, 0x03, 0x04])
-        let result = ImageDownsampler.downsample(data: garbage, to: CGSize(width: 40, height: 40), scale: 1.0)
+        let result = ImageDownsampler.shared.downsample(data: garbage, to: CGSize(width: 40, height: 40), scale: 1.0)
         XCTAssertNil(result)
     }
 
@@ -44,7 +49,7 @@ final class ImageDownsamplerTests: XCTestCase {
         let jpeg = makeTestJPEG(width: 800, height: 600)
         let targetSize = CGSize(width: 80, height: 80)
 
-        let result = ImageDownsampler.downsample(data: jpeg, to: targetSize, scale: 1.0)
+        let result = ImageDownsampler.shared.downsample(data: jpeg, to: targetSize, scale: 1.0)
         XCTAssertNotNil(result)
 
         // The downsampled image's largest dimension should be <= target max pixel size
@@ -56,8 +61,8 @@ final class ImageDownsamplerTests: XCTestCase {
         let jpeg = makeTestJPEG(width: 800, height: 800)
         let targetSize = CGSize(width: 40, height: 40)
 
-        let result1x = ImageDownsampler.downsample(data: jpeg, to: targetSize, scale: 1.0)
-        let result3x = ImageDownsampler.downsample(data: jpeg, to: targetSize, scale: 3.0)
+        let result1x = ImageDownsampler.shared.downsample(data: jpeg, to: targetSize, scale: 1.0)
+        let result3x = ImageDownsampler.shared.downsample(data: jpeg, to: targetSize, scale: 3.0)
 
         XCTAssertNotNil(result1x)
         XCTAssertNotNil(result3x)
@@ -72,19 +77,19 @@ final class ImageDownsamplerTests: XCTestCase {
         let jpeg = makeTestJPEG(width: 20, height: 20)
         let targetSize = CGSize(width: 200, height: 200)
 
-        let result = ImageDownsampler.downsample(data: jpeg, to: targetSize, scale: 1.0)
+        let result = ImageDownsampler.shared.downsample(data: jpeg, to: targetSize, scale: 1.0)
         XCTAssertNotNil(result)
 
         // Should not be larger than the original
-        XCTAssertLessThanOrEqual(result!.size.width, 200)
-        XCTAssertLessThanOrEqual(result!.size.height, 200)
+        XCTAssertLessThanOrEqual(result!.size.width, 20)
+        XCTAssertLessThanOrEqual(result!.size.height, 20)
     }
 
     func test_downsample_preservesAspectRatio() {
         let jpeg = makeTestJPEG(width: 800, height: 400)
         let targetSize = CGSize(width: 80, height: 80)
 
-        let result = ImageDownsampler.downsample(data: jpeg, to: targetSize, scale: 1.0)
+        let result = ImageDownsampler.shared.downsample(data: jpeg, to: targetSize, scale: 1.0)
         XCTAssertNotNil(result)
 
         let ratio = result!.size.width / result!.size.height
@@ -97,8 +102,8 @@ final class ImageDownsamplerTests: XCTestCase {
         let jpeg = makeTestJPEG(width: 400, height: 400)
         let size = CGSize(width: 40, height: 40)
 
-        let first = ImageDownsampler.downsample(data: jpeg, to: size, scale: 1.0)
-        let second = ImageDownsampler.downsample(data: jpeg, to: size, scale: 1.0)
+        let first = ImageDownsampler.shared.downsample(data: jpeg, to: size, scale: 1.0)
+        let second = ImageDownsampler.shared.downsample(data: jpeg, to: size, scale: 1.0)
 
         XCTAssertNotNil(first)
         XCTAssertNotNil(second)
@@ -108,8 +113,8 @@ final class ImageDownsamplerTests: XCTestCase {
     func test_cache_returnsDistinctImagesForDifferentSizes() {
         let jpeg = makeTestJPEG(width: 800, height: 800)
 
-        let small = ImageDownsampler.downsample(data: jpeg, to: CGSize(width: 40, height: 40), scale: 1.0)
-        let large = ImageDownsampler.downsample(data: jpeg, to: CGSize(width: 200, height: 200), scale: 1.0)
+        let small = ImageDownsampler.shared.downsample(data: jpeg, to: CGSize(width: 40, height: 40), scale: 1.0)
+        let large = ImageDownsampler.shared.downsample(data: jpeg, to: CGSize(width: 200, height: 200), scale: 1.0)
 
         XCTAssertNotNil(small)
         XCTAssertNotNil(large)
@@ -121,8 +126,8 @@ final class ImageDownsamplerTests: XCTestCase {
         let blueJPEG = makeTestJPEG(width: 400, height: 400, color: .blue)
         let size = CGSize(width: 40, height: 40)
 
-        let orangeResult = ImageDownsampler.downsample(data: orangeJPEG, to: size, scale: 1.0)
-        let blueResult = ImageDownsampler.downsample(data: blueJPEG, to: size, scale: 1.0)
+        let orangeResult = ImageDownsampler.shared.downsample(data: orangeJPEG, to: size, scale: 1.0)
+        let blueResult = ImageDownsampler.shared.downsample(data: blueJPEG, to: size, scale: 1.0)
 
         XCTAssertNotNil(orangeResult)
         XCTAssertNotNil(blueResult)
@@ -133,8 +138,8 @@ final class ImageDownsamplerTests: XCTestCase {
         let jpeg = makeTestJPEG(width: 800, height: 800)
         let size = CGSize(width: 40, height: 40)
 
-        let result1x = ImageDownsampler.downsample(data: jpeg, to: size, scale: 1.0)
-        let result2x = ImageDownsampler.downsample(data: jpeg, to: size, scale: 2.0)
+        let result1x = ImageDownsampler.shared.downsample(data: jpeg, to: size, scale: 1.0)
+        let result2x = ImageDownsampler.shared.downsample(data: jpeg, to: size, scale: 2.0)
 
         XCTAssertNotNil(result1x)
         XCTAssertNotNil(result2x)
@@ -148,12 +153,12 @@ final class ImageDownsamplerTests: XCTestCase {
         let jpeg = makeTestJPEG(width: 400, height: 400)
         let size = CGSize(width: 40, height: 40)
 
-        let first = ImageDownsampler.downsample(data: jpeg, to: size, scale: 1.0)
+        let first = ImageDownsampler.shared.downsample(data: jpeg, to: size, scale: 1.0)
         XCTAssertNotNil(first)
 
-        ImageDownsampler.clearCache()
+        ImageDownsampler.shared.clearCache()
 
-        let second = ImageDownsampler.downsample(data: jpeg, to: size, scale: 1.0)
+        let second = ImageDownsampler.shared.downsample(data: jpeg, to: size, scale: 1.0)
         XCTAssertNotNil(second)
 
         // After clearing, we should get a freshly decoded image (different instance)
@@ -164,11 +169,32 @@ final class ImageDownsamplerTests: XCTestCase {
         let garbage = Data([0x00, 0x01, 0x02, 0x03])
         let size = CGSize(width: 40, height: 40)
 
-        let first = ImageDownsampler.downsample(data: garbage, to: size, scale: 1.0)
-        let second = ImageDownsampler.downsample(data: garbage, to: size, scale: 1.0)
+        let first = ImageDownsampler.shared.downsample(data: garbage, to: size, scale: 1.0)
+        let second = ImageDownsampler.shared.downsample(data: garbage, to: size, scale: 1.0)
 
         XCTAssertNil(first)
         XCTAssertNil(second)
+    }
+
+    func test_cache_concurrentAccessDoesNotCrash() {
+        let jpeg = makeTestJPEG(width: 400, height: 400)
+        let size = CGSize(width: 40, height: 40)
+        let expectation = expectation(description: "Concurrent access completes")
+        let group = DispatchGroup()
+
+        for _ in 0..<100 {
+            group.enter()
+            DispatchQueue.global().async {
+                _ = ImageDownsampler.shared.downsample(data: jpeg, to: size, scale: 1.0)
+                group.leave()
+            }
+        }
+
+        group.notify(queue: .main) {
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 10)
     }
 }
 
