@@ -33,23 +33,12 @@ struct EditCatView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(CatchStrings.Common.catInfo) {
-                    Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
-                    if !isUnnamed {
-                        LimitedSingleLineFieldView(
-                            CatchStrings.Common.name,
-                            text: $name,
-                            limit: TextInputLimits.catName
-                        )
-                    }
-                    BreedPickerView(breed: $breed)
-                    TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
-                    LocationPickerView(location: $location)
-                    Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
-                }
-
                 Section(CatchStrings.Common.photos) {
-                    PhotoPickerView(selectedPhotos: $photos, minimumPhotos: 1)
+                    PhotoPickerView(
+                        selectedPhotos: $photos,
+                        minimumPhotos: 1,
+                        thumbnailSize: 120
+                    )
                     if photos.isEmpty {
                         Text(CatchStrings.Log.photoRequired)
                             .font(.caption)
@@ -65,6 +54,21 @@ struct EditCatView: View {
                             onDismiss: { isDismissedSuggestion = true; breedSuggestion = nil }
                         )
                     }
+                }
+
+                Section(CatchStrings.Common.catInfo) {
+                    Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
+                    if !isUnnamed {
+                        LimitedSingleLineFieldView(
+                            CatchStrings.Common.name,
+                            text: $name,
+                            limit: TextInputLimits.catName
+                        )
+                    }
+                    BreedPickerView(breed: $breed)
+                    TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
+                    LocationPickerView(location: $location)
+                    Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
                 }
 
                 Section(CatchStrings.Common.notes) {
