@@ -1,9 +1,6 @@
 import SwiftUI
 import SwiftData
-import OSLog
 import CatchCore
-
-private let logger = Logger(subsystem: "com.catch.app", category: "Database")
 
 @main
 struct catchApp: App {
@@ -106,81 +103,5 @@ struct catchApp: App {
             "sophi-enc-1", "sophi-enc-2"
         ])
         #endif
-    }
-}
-
-// MARK: - Database State
-
-@Observable
-@MainActor
-private final class DatabaseState {
-    private(set) var status: Status
-
-    enum Status {
-        case ready(ModelContainer)
-        case failed(String)
-    }
-
-    init() {
-        status = Self.attemptInit()
-    }
-
-    func retry() {
-        logger.info("Retrying ModelContainer initialization")
-        status = Self.attemptInit()
-    }
-
-    func resetAndRetry() {
-        logger.warning("Wiping database store and retrying ModelContainer initialization")
-        Self.deleteStoreFiles()
-        status = Self.attemptInit()
-    }
-
-    // MARK: - Private
-
-    private static func attemptInit() -> Status {
-        let schema = Schema(versionedSchema: CatchSchemaV6.self)
-        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
-        do {
-            let container = try ModelContainer(
-                for: schema,
-                migrationPlan: CatchMigrationPlan.self,
-                configurations: config
-            )
-            logger.info("ModelContainer initialized successfully")
-            return .ready(container)
-        } catch {
-            #if DEBUG
-            logger.error("ModelContainer init failed (DEBUG), attempting auto-wipe: \(error.localizedDescription, privacy: .public)")
-            deleteStoreFiles()
-            do {
-                let container = try ModelContainer(
-                    for: schema,
-                    migrationPlan: CatchMigrationPlan.self,
-                    configurations: config
-                )
-                logger.info("ModelContainer recovered after auto-wipe")
-                return .ready(container)
-            } catch {
-                logger.fault("ModelContainer failed even after auto-wipe: \(error.localizedDescription, privacy: .public)")
-                return .failed(error.localizedDescription)
-            }
-            #else
-            logger.fault("ModelContainer init failed in production: \(error.localizedDescription, privacy: .public)")
-            return .failed(error.localizedDescription)
-            #endif
-        }
-    }
-
-    private static func deleteStoreFiles() {
-        let schema = Schema(versionedSchema: CatchSchemaV6.self)
-        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
-        let url = config.url
-        let fm = FileManager.default
-        for suffix in ["", "-wal", "-shm"] {
-            let path = suffix.isEmpty ? url : URL(fileURLWithPath: url.path + suffix)
-            try? fm.removeItem(at: path)
-        }
-        logger.info("Database store files deleted")
     }
 }

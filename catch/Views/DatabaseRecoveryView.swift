@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct DatabaseRecoveryView: View {
     let errorMessage: String
@@ -15,17 +16,13 @@ struct DatabaseRecoveryView: View {
 
             ScrollView {
                 VStack(spacing: CatchSpacing.space32) {
-                    Spacer()
-                        .frame(height: CatchSpacing.space48)
-
                     iconSection
                     textSection
                     actionsSection
                     detailsSection
-
-                    Spacer()
                 }
                 .padding(.horizontal, CatchSpacing.space32)
+                .padding(.top, CatchSpacing.space48)
             }
         }
         .alert(
