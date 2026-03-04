@@ -5,14 +5,14 @@ import CatchCore
 @main
 struct catchApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
-    @State private var authService = AppleAuthService()
-    @State private var followService = CKFollowService()
+    @State private var authService: AppleAuthService
+    @State private var followService: CKFollowService
     @State private var breedClassifier = VisionBreedClassifierService()
-    @State private var catSyncService: CKCatSyncService?
-    @State private var encounterSyncService: CKEncounterSyncService?
-    @State private var userBrowseService: CKUserBrowseService?
-    @State private var socialInteractionService: CKSocialInteractionService?
-    @State private var socialFeedService: CKSocialFeedService?
+    @State private var catSyncService: CKCatSyncService
+    @State private var encounterSyncService: CKEncounterSyncService
+    @State private var userBrowseService: CKUserBrowseService
+    @State private var socialInteractionService: CKSocialInteractionService
+    @State private var socialFeedService: CKSocialFeedService
     @State private var toastManager = ToastManager()
     let modelContainer: ModelContainer
 
@@ -39,9 +39,47 @@ struct catchApp: App {
                 fatalError("Failed to create ModelContainer after wipe: \(error)")
             }
             #else
-            fatalError("Failed to create ModelContainer: \(error)") 
+            fatalError("Failed to create ModelContainer: \(error)")
             #endif
         }
+
+        let auth = AppleAuthService()
+        let follow = CKFollowService()
+        let catRepo = CKCatRepository()
+        let encRepo = CKEncounterRepository()
+
+        let getUserID: @Sendable () -> String? = { [auth] in
+            auth.authState.user?.userIdentifier
+        }
+
+        let browseService = CKUserBrowseService(
+            cloudKitService: CKCloudKitService(),
+            catRepository: catRepo,
+            encounterRepository: encRepo,
+            followService: follow,
+            currentUserIDProvider: getUserID
+        )
+
+        _authService = State(initialValue: auth)
+        _followService = State(initialValue: follow)
+        _catSyncService = State(initialValue: CKCatSyncService(
+            catRepository: catRepo,
+            encounterRepository: encRepo,
+            getUserID: getUserID
+        ))
+        _encounterSyncService = State(initialValue: CKEncounterSyncService(
+            encounterRepository: encRepo,
+            getUserID: getUserID
+        ))
+        _userBrowseService = State(initialValue: browseService)
+        _socialInteractionService = State(initialValue: CKSocialInteractionService(
+            getCurrentUserID: getUserID,
+            cloudKitService: CKCloudKitService()
+        ))
+        _socialFeedService = State(initialValue: CKSocialFeedService(
+            followService: follow,
+            userBrowseService: browseService
+        ))
     }
 
     #if DEBUG
@@ -71,49 +109,9 @@ struct catchApp: App {
                     .toastOverlay()
                     .task {
                         await authService.checkCredentialState()
-                        if catSyncService == nil {
-                            let catRepo = CKCatRepository()
-                            let encRepo = CKEncounterRepository()
-                            let getUserID: () -> String? = { [authService] in
-                                authService.authState.user?.userIdentifier
-                            }
-                            catSyncService = CKCatSyncService(
-                                catRepository: catRepo,
-                                encounterRepository: encRepo,
-                                getUserID: getUserID
-                            )
-                            encounterSyncService = CKEncounterSyncService(
-                                encounterRepository: encRepo,
-                                getUserID: getUserID
-                            )
-                            let browseService = CKUserBrowseService(
-                                cloudKitService: CKCloudKitService(),
-                                catRepository: catRepo,
-                                encounterRepository: encRepo,
-                                followService: followService,
-                                currentUserIDProvider: getUserID
-                            )
-                            userBrowseService = browseService
-                            socialInteractionService = CKSocialInteractionService(
-                                getCurrentUserID: getUserID,
-                                cloudKitService: CKCloudKitService()
-                            )
-                            socialFeedService = CKSocialFeedService(
-                                followService: followService,
-                                userBrowseService: browseService
-                            )
-
-                            #if DEBUG
-                            DataSeeder.seedIfEmpty(context: modelContainer.mainContext)
-                            let fakeUserID = authService.authState.user?.userIdentifier ?? "debug-user"
-                            followService.seedFakeFollows(currentUserID: fakeUserID)
-                            userBrowseService?.seedFakeUsers()
-                            socialInteractionService?.seedFakeInteractions(encounterRecordNames: [
-                                "tuong-enc-1", "tuong-enc-2", "tuong-enc-3", "tuong-enc-4",
-                                "sophi-enc-1", "sophi-enc-2"
-                            ])
-                            #endif
-                        }
+                        #if DEBUG
+                        seedDebugData()
+                        #endif
                     }
             } else {
                 OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
@@ -121,4 +119,17 @@ struct catchApp: App {
         }
         .modelContainer(modelContainer)
     }
+
+    #if DEBUG
+    private func seedDebugData() {
+        DataSeeder.seedIfEmpty(context: modelContainer.mainContext)
+        let fakeUserID = authService.authState.user?.userIdentifier ?? "debug-user"
+        followService.seedFakeFollows(currentUserID: fakeUserID)
+        userBrowseService.seedFakeUsers()
+        socialInteractionService.seedFakeInteractions(encounterRecordNames: [
+            "tuong-enc-1", "tuong-enc-2", "tuong-enc-3", "tuong-enc-4",
+            "sophi-enc-1", "sophi-enc-2"
+        ])
+    }
+    #endif
 }
