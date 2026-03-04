@@ -30,14 +30,13 @@ final class DatabaseState {
 
     // MARK: - Private
 
-    private static let schema = Schema(versionedSchema: CatchSchemaV6.self)
+    private static let schema = CatchSchema.current
     private static let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
 
     private static func attemptInit() -> Status {
         do {
             let container = try ModelContainer(
                 for: schema,
-                migrationPlan: CatchMigrationPlan.self,
                 configurations: config
             )
             logger.info("ModelContainer initialized successfully")
@@ -49,7 +48,6 @@ final class DatabaseState {
             do {
                 let container = try ModelContainer(
                     for: schema,
-                    migrationPlan: CatchMigrationPlan.self,
                     configurations: config
                 )
                 logger.info("ModelContainer recovered after auto-wipe")
