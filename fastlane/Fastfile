@@ -1,0 +1,113 @@
+# Fastfile — automated TestFlight distribution for Catch
+# Docs: https://docs.fastlane.tools
+#
+# ============================================================================
+# PREREQUISITES
+# ============================================================================
+#
+# 1. Apple Developer account with App Store Connect access
+#
+# 2. App Store Connect API key (recommended over Apple ID for automation):
+#    - Go to https://appstoreconnect.apple.com/access/integrations/api
+#    - Create a new key with "App Manager" role (or higher)
+#    - Download the .p8 file and note the Key ID and Issuer ID
+#    - Create a JSON key file (see below) or set env vars
+#
+#    JSON key file format (save as e.g. ~/.appstoreconnect/api_key.json):
+#      {
+#        "key_id": "XXXXXXXXXX",
+#        "issuer_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+#        "key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----",
+#        "in_house": false
+#      }
+#
+#    Then set: export FASTLANE_API_KEY_PATH=~/.appstoreconnect/api_key.json
+#
+# 3. Match repo for code signing (see fastlane/Matchfile):
+#    - Create a private repo: graysonmartin/catch-certificates
+#    - Run: bundle exec fastlane match appstore
+#    - Set MATCH_PASSWORD env var for the encryption passphrase
+#
+# 4. Install dependencies:
+#    - bundle install (installs Fastlane from Gemfile)
+#
+# ============================================================================
+# USAGE
+# ============================================================================
+#
+#   make release            # Build + upload to TestFlight (convenience wrapper)
+#   bundle exec fastlane beta   # Same thing, called directly
+#
+# ============================================================================
+
+default_platform(:ios)
+
+platform :ios do
+
+  # --------------------------------------------------------------------------
+  # beta — Build and upload to TestFlight
+  # --------------------------------------------------------------------------
+  desc "Build the app and upload to TestFlight"
+  lane :beta do
+
+    # Load App Store Connect API key if available
+    if ENV["FASTLANE_API_KEY_PATH"]
+      app_store_connect_api_key(
+        key_filepath: ENV["FASTLANE_API_KEY_PATH"],
+        in_house: false
+      )
+    end
+
+    # Sync code signing certificates and provisioning profiles via match
+    match(type: "appstore")
+
+    # Increment build number to current timestamp (ensures unique build numbers)
+    increment_build_number(
+      build_number: Time.now.strftime("%Y%m%d%H%M"),
+      xcodeproj: "catch.xcodeproj"
+    )
+
+    # Build the app for App Store / TestFlight distribution
+    gym(
+      project: "catch.xcodeproj",
+      scheme: "catch",
+      configuration: "Release",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "catch.ipa",
+      clean: true,
+      skip_package_dependencies_resolution: false
+    )
+
+    # Upload to TestFlight
+    pilot(
+      skip_waiting_for_build_processing: true,
+      skip_submission: false,
+      distribute_external: false,
+      notify_external_testers: false
+    )
+
+    UI.success("Build uploaded to TestFlight successfully!")
+  end
+
+  # --------------------------------------------------------------------------
+  # match_readonly — Fetch signing certs without generating new ones
+  # --------------------------------------------------------------------------
+  desc "Fetch code signing certificates (read-only, no generation)"
+  lane :match_readonly do
+    match(type: "appstore", readonly: true)
+  end
+
+  # --------------------------------------------------------------------------
+  # increment_version — Bump the version number
+  # --------------------------------------------------------------------------
+  desc "Bump the app version number (e.g. bump_type:patch)"
+  lane :increment_version do |options|
+    bump_type = options[:bump_type] || "patch"
+    increment_version_number(
+      bump_type: bump_type,
+      xcodeproj: "catch.xcodeproj"
+    )
+  end
+
+end

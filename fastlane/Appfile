@@ -1,0 +1,20 @@
+# App identifier (bundle ID)
+app_identifier("com.graysonmartin.catch")
+
+# Apple Developer Portal team ID
+team_id("SZC3MJ9V7Y")
+
+# App Store Connect team ID (same as Dev Portal for individual accounts)
+itc_team_id("SZC3MJ9V7Y")
+
+# --- Authentication ---
+#
+# For CI / automated runs, use an App Store Connect API key instead of
+# Apple ID credentials. Generate one at:
+#   https://appstoreconnect.apple.com/access/integrations/api
+#
+# Then either:
+#   1. Set the FASTLANE_API_KEY_PATH env var pointing to the .json key file, or
+#   2. Pass it in the Fastfile via app_store_connect_api_key()
+#
+# For local runs, Fastlane will prompt for Apple ID if no API key is set.

@@ -5,7 +5,7 @@ TEST_SCHEME = catchTests
 BUNDLE_ID = com.graysonmartin.catch
 APP_PATH = $(shell find ~/Library/Developer/Xcode/DerivedData/catch-*/Build/Products/Debug-iphonesimulator/catch.app -maxdepth 0 2>/dev/null | head -1)
 
-.PHONY: test test-fast test-all test-verbose test-serial boot-sim kill-sim clean-build build run install reset-sim
+.PHONY: test test-fast test-all test-verbose test-serial boot-sim kill-sim clean-build build run install reset-sim release
 
 # --- Simulator ---
 
@@ -82,6 +82,14 @@ test-serial: boot-sim
 		-destination 'id=$(SIMULATOR_ID)' \
 		-enableCodeCoverage NO \
 		CODE_SIGNING_ALLOWED=NO
+
+# --- Release ---
+
+# Build and upload to TestFlight via Fastlane
+# Prerequisites: bundle install, match setup, API key configured
+# See fastlane/Fastfile for full setup instructions
+release:
+	bundle exec fastlane beta
 
 # --- Cleanup ---
 
