@@ -97,6 +97,7 @@ struct catchApp: App {
         WindowGroup {
             if hasCompletedOnboarding {
                 ContentView()
+                    .toastOverlay()
                     .environment(breedClassifier)
                     .environment(authService)
                     .environment(followService)
@@ -106,7 +107,6 @@ struct catchApp: App {
                     .environment(socialInteractionService)
                     .environment(socialFeedService)
                     .environment(toastManager)
-                    .toastOverlay()
                     .task {
                         await authService.checkCredentialState()
                         #if DEBUG
