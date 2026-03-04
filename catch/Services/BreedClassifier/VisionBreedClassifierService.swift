@@ -9,6 +9,9 @@ import CatchCore
 @MainActor
 final class VisionBreedClassifierService: BreedClassifierService {
     private(set) var isClassifying = false
+    #if DEBUG
+    private(set) var debugTopPredictions: [BreedPrediction] = []
+    #endif
 
     private let logger = Logger(subsystem: "com.catch.catch", category: "BreedClassifier")
     private let coreMLModel: VNCoreMLModel?
@@ -40,7 +43,7 @@ final class VisionBreedClassifierService: BreedClassifierService {
         isClassifying = true
         defer { isClassifying = false }
 
-        var best: BreedPrediction?
+        var bestPredictions: [BreedPrediction] = []
         for data in imageDataArray {
             let predictions = await withCheckedContinuation { continuation in
                 DispatchQueue.global(qos: .userInitiated).async {
@@ -49,11 +52,14 @@ final class VisionBreedClassifierService: BreedClassifierService {
                 }
             }
             if let top = predictions.first,
-               top.confidence > (best?.confidence ?? 0) {
-                best = top
+               top.confidence > (bestPredictions.first?.confidence ?? 0) {
+                bestPredictions = predictions
             }
         }
-        return best
+        #if DEBUG
+        debugTopPredictions = Array(bestPredictions.prefix(2))
+        #endif
+        return bestPredictions.first
     }
 
     // MARK: - Private

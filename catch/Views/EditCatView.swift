@@ -59,6 +59,13 @@ struct EditCatView: View {
                         BreedSuggestionView(
                             prediction: breedSuggestion,
                             isClassifying: breedClassifier?.isClassifying ?? false,
+                            debugPredictions: {
+                                #if DEBUG
+                                return breedClassifier?.debugTopPredictions ?? []
+                                #else
+                                return []
+                                #endif
+                            }(),
                             onConfirm: { confirmedBreed in
                                 breed = confirmedBreed
                                 breedSuggestion = nil

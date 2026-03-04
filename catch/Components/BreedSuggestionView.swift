@@ -4,6 +4,7 @@ import CatchCore
 struct BreedSuggestionView: View {
     let prediction: BreedPrediction?
     let isClassifying: Bool
+    var debugPredictions: [BreedPrediction] = []
     let onConfirm: (String) -> Void
     let onDismiss: () -> Void
 
@@ -14,6 +15,11 @@ struct BreedSuggestionView: View {
             } else if let prediction {
                 suggestionState(prediction)
             }
+            #if DEBUG
+            if !debugPredictions.isEmpty {
+                debugResultsView
+            }
+            #endif
         }
     }
 
@@ -71,4 +77,29 @@ struct BreedSuggestionView: View {
         }
         .padding(.vertical, CatchSpacing.space4)
     }
+
+    // MARK: - Debug
+
+    #if DEBUG
+    private var debugResultsView: some View {
+        VStack(alignment: .leading, spacing: CatchSpacing.space4) {
+            Text("top predictions")
+                .font(.caption2.weight(.semibold).monospaced())
+                .foregroundStyle(CatchTheme.textSecondary)
+            ForEach(debugPredictions, id: \.rawIdentifier) { p in
+                HStack {
+                    Text(p.breed)
+                        .font(.caption.monospaced())
+                    Spacer()
+                    Text(String(format: "%.1f%%", p.confidence * 100))
+                        .font(.caption.weight(.medium).monospaced())
+                        .foregroundStyle(p.confidence >= 0.5 ? CatchTheme.primary : CatchTheme.textSecondary)
+                }
+            }
+        }
+        .padding(CatchSpacing.space8)
+        .background(CatchTheme.background.opacity(0.6))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+    #endif
 }
