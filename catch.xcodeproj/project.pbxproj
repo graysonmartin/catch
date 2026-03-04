@@ -218,6 +218,11 @@
 		E8ST00000203 /* MockSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000005 /* MockSettingsService.swift */; };
 		E8ST00000204 /* UserDefaultsSettingsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000006 /* UserDefaultsSettingsServiceTests.swift */; };
 		E8ST00000205 /* CatchStrings+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000004 /* CatchStrings+Settings.swift */; };
+		E8RV00000101 /* DatabaseRecoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RV00000001 /* DatabaseRecoveryView.swift */; };
+		E8RV00000102 /* CatchStrings+Recovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RV00000002 /* CatchStrings+Recovery.swift */; };
+		E8DB00000101 /* DatabaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000001 /* DatabaseState.swift */; };
+		E8DB00000102 /* DatabaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000001 /* DatabaseState.swift */; };
+		E8DB00000201 /* DatabaseStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000002 /* DatabaseStateTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -269,6 +274,10 @@
 		E8ST00000004 /* CatchStrings+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Settings.swift"; sourceTree = "<group>"; };
 		E8ST00000005 /* MockSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsService.swift; sourceTree = "<group>"; };
 		E8ST00000006 /* UserDefaultsSettingsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsSettingsServiceTests.swift; sourceTree = "<group>"; };
+		E8RV00000001 /* DatabaseRecoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseRecoveryView.swift; sourceTree = "<group>"; };
+		E8RV00000002 /* CatchStrings+Recovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Recovery.swift"; sourceTree = "<group>"; };
+		E8DB00000001 /* DatabaseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseState.swift; sourceTree = "<group>"; };
+		E8DB00000002 /* DatabaseStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseStateTests.swift; sourceTree = "<group>"; };
 		E8B700000003 /* VisionBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionBreedClassifierService.swift; sourceTree = "<group>"; };
 		E8B70000000A /* catBreedDetection.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = catBreedDetection.mlmodel; sourceTree = "<group>"; };
 		E8B70000000B /* BreedPredictionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPredictionCard.swift; sourceTree = "<group>"; };
@@ -421,6 +430,7 @@
 			children = (
 				E80000012B5A00000010 /* catchApp.swift */,
 				E80000012B5A00000011 /* ContentView.swift */,
+				E8DB00000001 /* DatabaseState.swift */,
 				E8000001BB000001 /* DataSeeder.swift */,
 				E8000001AA000030 /* Models */,
 				E8000001AA000031 /* Views */,
@@ -480,6 +490,7 @@
 				E8000001AA00002F /* MapAnnotations.swift */,
 				E8000001AA000072 /* RemoteCatMapSheet.swift */,
 				E8000001AA00002A /* OnboardingView.swift */,
+				E8RV00000001 /* DatabaseRecoveryView.swift */,
 				E8000001AA000062 /* EditProfileView.swift */,
 				E8PF0000F001 /* Profile */,
 				E8BL0000F002 /* BreedLog */,
@@ -543,6 +554,7 @@
 				E8TM00000003 /* CatchStrings+Toast.swift */,
 				E8TI00000003 /* CatchStrings+TextInput.swift */,
 				E8ST00000004 /* CatchStrings+Settings.swift */,
+				E8RV00000002 /* CatchStrings+Recovery.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -656,6 +668,7 @@
 		E8C17FF134EEE52DB9FA0D4A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				E8DB00000002 /* DatabaseStateTests.swift */,
 				E8CF211849B3A47ED1640CA4 /* Auth */,
 				E8CL0000F002 /* Collection */,
 				E8B700000011 /* BreedClassifier */,
@@ -1041,6 +1054,7 @@
 			files = (
 				E80000012B5A00000002 /* ContentView.swift in Sources */,
 				E80000012B5A00000001 /* catchApp.swift in Sources */,
+				E8DB00000101 /* DatabaseState.swift in Sources */,
 				E8BL00000101 /* BreedRarity.swift in Sources */,
 				E8BL00000102 /* BreedCatalogEntry.swift in Sources */,
 				E8BL00000103 /* BreedCatalog.swift in Sources */,
@@ -1156,6 +1170,8 @@
 				E8ST00000102 /* UserDefaultsSettingsService.swift in Sources */,
 				E8ST00000103 /* SettingsView.swift in Sources */,
 				E8ST00000104 /* CatchStrings+Settings.swift in Sources */,
+				E8RV00000101 /* DatabaseRecoveryView.swift in Sources */,
+				E8RV00000102 /* CatchStrings+Recovery.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1242,6 +1258,8 @@
 				E8ST00000203 /* MockSettingsService.swift in Sources */,
 				E8ST00000204 /* UserDefaultsSettingsServiceTests.swift in Sources */,
 				E8ST00000205 /* CatchStrings+Settings.swift in Sources */,
+				E8DB00000102 /* DatabaseState.swift in Sources */,
+				E8DB00000201 /* DatabaseStateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

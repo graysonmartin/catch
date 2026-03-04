@@ -14,34 +14,10 @@ struct catchApp: App {
     @State private var socialInteractionService: CKSocialInteractionService
     @State private var socialFeedService: CKSocialFeedService
     @State private var toastManager = ToastManager()
-    let modelContainer: ModelContainer
+    @State private var databaseState: DatabaseState
 
     init() {
-        let schema = Schema(versionedSchema: CatchSchemaV6.self)
-        let config = ModelConfiguration(schema: schema, cloudKitDatabase: .none)
-        do {
-            modelContainer = try ModelContainer(
-                for: schema,
-                migrationPlan: CatchMigrationPlan.self,
-                configurations: config
-            )
-        } catch {
-            #if DEBUG
-            Self.deleteStoreFiles(for: config)
-            do {
-                modelContainer = try ModelContainer(
-                    for: schema,
-                    migrationPlan: CatchMigrationPlan.self,
-                    configurations: config
-                )
-                print("[catch] wiped stale store and recovered")
-            } catch {
-                fatalError("Failed to create ModelContainer after wipe: \(error)")
-            }
-            #else
-            fatalError("Failed to create ModelContainer: \(error)")
-            #endif
-        }
+        _databaseState = State(initialValue: DatabaseState())
 
         let auth = AppleAuthService()
         let follow = CKFollowService()
@@ -82,47 +58,50 @@ struct catchApp: App {
         ))
     }
 
-    #if DEBUG
-    private static func deleteStoreFiles(for config: ModelConfiguration) {
-        let url = config.url
-        let fm = FileManager.default
-        for suffix in ["", "-wal", "-shm"] {
-            let path = suffix.isEmpty ? url : URL(fileURLWithPath: url.path + suffix)
-            try? fm.removeItem(at: path)
-        }
-    }
-    #endif
-
     var body: some Scene {
         WindowGroup {
-            if hasCompletedOnboarding {
-                ContentView()
-                    .toastOverlay()
-                    .environment(breedClassifier)
-                    .environment(authService)
-                    .environment(followService)
-                    .environment(catSyncService)
-                    .environment(encounterSyncService)
-                    .environment(userBrowseService)
-                    .environment(socialInteractionService)
-                    .environment(socialFeedService)
-                    .environment(toastManager)
-                    .task {
-                        await authService.checkCredentialState()
-                        #if DEBUG
-                        seedDebugData()
-                        #endif
-                    }
-            } else {
-                OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
+            switch databaseState.status {
+            case .ready(let container):
+                mainContent(container: container)
+                    .modelContainer(container)
+            case .failed(let errorDescription):
+                DatabaseRecoveryView(
+                    errorMessage: errorDescription,
+                    onRetry: { databaseState.retry() },
+                    onReset: { databaseState.resetAndRetry() }
+                )
             }
         }
-        .modelContainer(modelContainer)
+    }
+
+    @ViewBuilder
+    private func mainContent(container: ModelContainer) -> some View {
+        if hasCompletedOnboarding {
+            ContentView()
+                .toastOverlay()
+                .environment(breedClassifier)
+                .environment(authService)
+                .environment(followService)
+                .environment(catSyncService)
+                .environment(encounterSyncService)
+                .environment(userBrowseService)
+                .environment(socialInteractionService)
+                .environment(socialFeedService)
+                .environment(toastManager)
+                .task {
+                    await authService.checkCredentialState()
+                    #if DEBUG
+                    seedDebugData(context: container.mainContext)
+                    #endif
+                }
+        } else {
+            OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
+        }
     }
 
     #if DEBUG
-    private func seedDebugData() {
-        DataSeeder.seedIfEmpty(context: modelContainer.mainContext)
+    private func seedDebugData(context: ModelContext) {
+        DataSeeder.seedIfEmpty(context: context)
         let fakeUserID = authService.authState.user?.userIdentifier ?? "debug-user"
         followService.seedFakeFollows(currentUserID: fakeUserID)
         userBrowseService.seedFakeUsers()
