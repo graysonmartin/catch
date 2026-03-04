@@ -16,6 +16,7 @@ struct catchApp: App {
     @State private var userBrowseService: CKUserBrowseService?
     @State private var socialInteractionService: CKSocialInteractionService?
     @State private var socialFeedService: CKSocialFeedService?
+    @State private var toastManager = ToastManager()
     @State private var databaseState: DatabaseState
 
     init() {
@@ -50,6 +51,8 @@ struct catchApp: App {
                 .environment(userBrowseService)
                 .environment(socialInteractionService)
                 .environment(socialFeedService)
+                .environment(toastManager)
+                .toastOverlay()
                 .task {
                     await authService.checkCredentialState()
                     if catSyncService == nil {

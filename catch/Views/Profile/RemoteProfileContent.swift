@@ -9,6 +9,7 @@ struct RemoteProfileContent: View {
     @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
     @Environment(AppleAuthService.self) private var authService
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+    @Environment(ToastManager.self) private var toastManager
 
     @State private var data: UserBrowseData?
     @State private var loadError: UserBrowseError?
@@ -232,7 +233,11 @@ struct RemoteProfileContent: View {
                 ) {
                     Button(CatchStrings.Social.unfollow, role: .destructive) {
                         Task {
-                            try? await followService.unfollow(targetID: userID, by: currentUserID)
+                            do {
+                                try await followService.unfollow(targetID: userID, by: currentUserID)
+                            } catch {
+                                toastManager.showError(CatchStrings.Toast.unfollowFailed)
+                            }
                         }
                     }
                 } message: {
@@ -245,12 +250,16 @@ struct RemoteProfileContent: View {
             } else {
                 Button {
                     Task {
-                        let isPrivate = data?.profile.isPrivate ?? false
-                        try? await followService.follow(
-                            targetID: userID,
-                            by: currentUserID,
-                            isTargetPrivate: isPrivate
-                        )
+                        do {
+                            let isPrivate = data?.profile.isPrivate ?? false
+                            try await followService.follow(
+                                targetID: userID,
+                                by: currentUserID,
+                                isTargetPrivate: isPrivate
+                            )
+                        } catch {
+                            toastManager.showError(CatchStrings.Toast.followFailed)
+                        }
                     }
                 } label: {
                     Text(CatchStrings.Social.follow)
@@ -282,12 +291,16 @@ struct RemoteProfileContent: View {
             } else {
                 Button(CatchStrings.Social.follow) {
                     Task {
-                        let isPrivate = data?.profile.isPrivate ?? false
-                        try? await followService.follow(
-                            targetID: userID,
-                            by: currentUserID,
-                            isTargetPrivate: isPrivate
-                        )
+                        do {
+                            let isPrivate = data?.profile.isPrivate ?? false
+                            try await followService.follow(
+                                targetID: userID,
+                                by: currentUserID,
+                                isTargetPrivate: isPrivate
+                            )
+                        } catch {
+                            toastManager.showError(CatchStrings.Toast.followFailed)
+                        }
                     }
                 }
                 .font(.subheadline.weight(.medium))
@@ -447,6 +460,10 @@ struct RemoteProfileContent: View {
         guard let socialService else { return }
         let recordNames = encounters.map(\.recordName)
         guard !recordNames.isEmpty else { return }
-        try? await socialService.loadInteractionData(for: recordNames)
+        do {
+            try await socialService.loadInteractionData(for: recordNames)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.feedLoadFailed)
+        }
     }
 }
