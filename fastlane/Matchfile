@@ -1,0 +1,26 @@
+# Match configuration for automated code signing
+# Docs: https://docs.fastlane.tools/actions/match/
+
+# --- First-Time Setup ---
+#
+# 1. Create a private Git repo for certificates/profiles (e.g. graysonmartin/catch-certificates)
+# 2. Update the git_url below to point to that repo
+# 3. Run: bundle exec fastlane match appstore
+#    This generates (or fetches) the App Store distribution cert + provisioning profile
+#    and stores them encrypted in the match repo.
+# 4. On CI, set MATCH_PASSWORD env var to the encryption passphrase you chose.
+#
+# After initial setup, `match` is called automatically in the beta lane.
+
+git_url("https://github.com/graysonmartin/catch-certificates.git")
+
+storage_mode("git")
+
+type("appstore")
+
+app_identifier("com.graysonmartin.catch")
+
+team_id("SZC3MJ9V7Y")
+
+# Readonly in CI to prevent accidental cert regeneration
+readonly(is_ci)

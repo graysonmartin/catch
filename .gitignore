@@ -63,6 +63,13 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+fastlane/README.md
+
+# Fastlane build output
+build/
+
+# Ruby / Bundler
+vendor/bundle
 
 # Claude Code
 CLAUDE.md
