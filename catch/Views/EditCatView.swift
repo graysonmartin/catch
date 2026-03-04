@@ -55,18 +55,14 @@ struct EditCatView: View {
                             .font(.caption)
                             .foregroundStyle(CatchTheme.primary)
                     }
-                    if breed == nil && !isDismissedSuggestion {
-                        BreedSuggestionView(
-                            prediction: breedSuggestion,
+                    if breed == nil && !isDismissedSuggestion
+                        && (breedSuggestion != nil || breedClassifier?.isClassifying == true)
+                    {
+                        BreedPredictionCard(
+                            predictions: breedClassifier?.topPredictions ?? [],
                             isClassifying: breedClassifier?.isClassifying ?? false,
-                            onConfirm: { confirmedBreed in
-                                breed = confirmedBreed
-                                breedSuggestion = nil
-                            },
-                            onDismiss: {
-                                isDismissedSuggestion = true
-                                breedSuggestion = nil
-                            }
+                            onSelect: { breed = $0; breedSuggestion = nil },
+                            onDismiss: { isDismissedSuggestion = true; breedSuggestion = nil }
                         )
                     }
                 }

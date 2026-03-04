@@ -1,4 +1,5 @@
 import Foundation
+import CoreML
 import Observation
 import Vision
 import os
@@ -8,8 +9,19 @@ import CatchCore
 @MainActor
 final class VisionBreedClassifierService: BreedClassifierService {
     private(set) var isClassifying = false
+    private(set) var topPredictions: [BreedPrediction] = []
 
     private let logger = Logger(subsystem: "com.catch.catch", category: "BreedClassifier")
+    private let coreMLModel: VNCoreMLModel?
+
+    init() {
+        let config = MLModelConfiguration()
+        if let model = try? catBreedDetection(configuration: config) {
+            self.coreMLModel = try? VNCoreMLModel(for: model.model)
+        } else {
+            self.coreMLModel = nil
+        }
+    }
 
     func classify(imageData: Data) async -> [BreedPrediction] {
         isClassifying = true
@@ -29,7 +41,7 @@ final class VisionBreedClassifierService: BreedClassifierService {
         isClassifying = true
         defer { isClassifying = false }
 
-        var best: BreedPrediction?
+        var bestPredictions: [BreedPrediction] = []
         for data in imageDataArray {
             let predictions = await withCheckedContinuation { continuation in
                 DispatchQueue.global(qos: .userInitiated).async {
@@ -38,11 +50,12 @@ final class VisionBreedClassifierService: BreedClassifierService {
                 }
             }
             if let top = predictions.first,
-               top.confidence > (best?.confidence ?? 0) {
-                best = top
+               top.confidence > (bestPredictions.first?.confidence ?? 0) {
+                bestPredictions = predictions
             }
         }
-        return best
+        topPredictions = Array(bestPredictions.prefix(3))
+        return bestPredictions.first
     }
 
     // MARK: - Private
@@ -50,32 +63,40 @@ final class VisionBreedClassifierService: BreedClassifierService {
     private nonisolated func performClassification(imageData: Data) -> [BreedPrediction] {
         let logger = Logger(subsystem: "com.catch.catch", category: "BreedClassifier")
 
+        guard let visionModel = coreMLModel else {
+            logger.error("core ml model not loaded — breed classification unavailable")
+            return []
+        }
+
         guard let handler = try? VNImageRequestHandler(data: imageData, options: [:]) else {
             logger.error("failed to create image request handler")
             return []
         }
 
-        let request = VNClassifyImageRequest()
+        let request = VNCoreMLRequest(model: visionModel)
+        request.imageCropAndScaleOption = .centerCrop
+
         do {
             try handler.perform([request])
         } catch {
-            logger.error("vision classification failed: \(error.localizedDescription)")
+            logger.error("core ml classification failed: \(error.localizedDescription)")
             return []
         }
 
-        guard let observations = request.results else { return [] }
+        guard let observations = request.results as? [VNClassificationObservation] else {
+            return []
+        }
 
         #if DEBUG
-        let top = observations.filter { $0.confidence > 0.01 }.prefix(20)
+        let top = observations.filter { $0.confidence > 0.01 }.prefix(12)
         for obs in top {
-            logger.debug("vision: \(obs.identifier) — \(String(format: "%.3f", obs.confidence))")
+            logger.debug("coreml: \(obs.identifier) — \(String(format: "%.3f", obs.confidence))")
         }
         #endif
 
         return observations
             .compactMap { observation -> BreedPrediction? in
-                guard BreedLabelMapper.isCatBreed(observation.identifier),
-                      observation.confidence > 0.01,
+                guard observation.confidence > 0.05,
                       let displayName = BreedLabelMapper.displayName(for: observation.identifier)
                 else { return nil }
 
@@ -87,5 +108,4 @@ final class VisionBreedClassifierService: BreedClassifierService {
             }
             .sorted { $0.confidence > $1.confidence }
     }
-
 }
