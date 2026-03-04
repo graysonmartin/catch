@@ -6,28 +6,25 @@ Catch
 
 ## Subtitle (30 chars max)
 
-log every cat you meet
+Log every cat you meet! 
 
 ## Short Description
 
-track and collect the cats you encounter in the wild.
+Track and collect the cats you encounter in the wild & share with friends
 
 ## Long Description
 
-catch is the cat tracker you didn't know you needed.
+catch is a cat tracker
 
-spot a cat? log it. snap a photo, drop a pin, let the app figure out the breed. every encounter gets saved — where you were, what the cat looked like, whether it gave you the time of day or simply walked away mid-pet.
+spot a cat? log it. snap a photo, drop a pin, let the app figure out the breed. every encounter gets saved: where you were, what the cat looked like, whether it gave you the time of day or simply walked away mid-pet.
 
 features:
 - log cat encounters with photos, location, and notes
 - automatic breed identification powered by on-device AI
 - map view showing every cat you've ever crossed paths with
-- breed collection log — gotta catch them all (sorry)
+- breed collection log
 - social feed — follow friends, like their sightings, leave comments
 - full encounter history for every cat you track
-- works offline. syncs via iCloud when you're back
-
-built for people who stop what they're doing when they see a cat. if that's you, welcome. steven (our mascot, an orange tabby with zero interest in your approval) would nod at you, if he cared enough to look up.
 
 no ads. no tracking. no subscriptions. just cats.
 
