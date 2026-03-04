@@ -1,3 +1,4 @@
+import CatchCore
 import SwiftUI
 
 /// A full-screen overlay for viewing photos at full resolution.

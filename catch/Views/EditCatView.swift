@@ -33,6 +33,29 @@ struct EditCatView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section(CatchStrings.Common.photos) {
+                    PhotoPickerView(
+                        selectedPhotos: $photos,
+                        minimumPhotos: 1,
+                        thumbnailSize: 120
+                    )
+                    if photos.isEmpty {
+                        Text(CatchStrings.Log.photoRequired)
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                    if breed == nil && !isDismissedSuggestion
+                        && (breedSuggestion != nil || breedClassifier?.isClassifying == true)
+                    {
+                        BreedPredictionCard(
+                            predictions: breedClassifier?.topPredictions ?? [],
+                            isClassifying: breedClassifier?.isClassifying ?? false,
+                            onSelect: { breed = $0; breedSuggestion = nil },
+                            onDismiss: { isDismissedSuggestion = true; breedSuggestion = nil }
+                        )
+                    }
+                }
+
                 Section(CatchStrings.Common.catInfo) {
                     Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
                     if !isUnnamed {
@@ -46,29 +69,6 @@ struct EditCatView: View {
                     TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
                     LocationPickerView(location: $location)
                     Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
-                }
-
-                Section(CatchStrings.Common.photos) {
-                    PhotoPickerView(selectedPhotos: $photos, minimumPhotos: 1)
-                    if photos.isEmpty {
-                        Text(CatchStrings.Log.photoRequired)
-                            .font(.caption)
-                            .foregroundStyle(CatchTheme.primary)
-                    }
-                    if breed == nil && !isDismissedSuggestion {
-                        BreedSuggestionView(
-                            prediction: breedSuggestion,
-                            isClassifying: breedClassifier?.isClassifying ?? false,
-                            onConfirm: { confirmedBreed in
-                                breed = confirmedBreed
-                                breedSuggestion = nil
-                            },
-                            onDismiss: {
-                                isDismissedSuggestion = true
-                                breedSuggestion = nil
-                            }
-                        )
-                    }
                 }
 
                 Section(CatchStrings.Common.notes) {

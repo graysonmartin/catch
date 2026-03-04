@@ -6,12 +6,14 @@ import CatchCore
 struct PhotoPickerView: View {
     @Binding var selectedPhotos: [Data]
     private let minimumPhotos: Int
+    private let thumbnailSize: CGFloat
     @State private var pickerItems: [PhotosPickerItem] = []
     @State private var draggingIndex: Int?
 
-    init(selectedPhotos: Binding<[Data]>, minimumPhotos: Int = 0) {
+    init(selectedPhotos: Binding<[Data]>, minimumPhotos: Int = 0, thumbnailSize: CGFloat = 100) {
         _selectedPhotos = selectedPhotos
         self.minimumPhotos = minimumPhotos
+        self.thumbnailSize = thumbnailSize
     }
 
     var body: some View {
@@ -73,7 +75,7 @@ struct PhotoPickerView: View {
         let isPrimary = index == 0
 
         ZStack(alignment: .topTrailing) {
-            CatPhotoView(photoData: selectedPhotos[index], size: 100)
+            CatPhotoView(photoData: selectedPhotos[index], size: thumbnailSize)
                 .overlay(alignment: .bottomLeading) {
                     if isPrimary {
                         primaryBadge

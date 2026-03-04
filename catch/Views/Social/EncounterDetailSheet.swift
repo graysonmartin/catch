@@ -11,7 +11,7 @@ struct EncounterDetailSheet: View {
     @State private var comments: [EncounterComment] = []
     @State private var newCommentText = ""
     @State private var isLoading = false
-    @FocusState private var isInputFocused: Bool
+    @State private var showLikedBySheet = false
 
     private var currentUserID: String? {
         authService.authState.user?.userIdentifier
@@ -24,7 +24,9 @@ struct EncounterDetailSheet: View {
             VStack(spacing: 0) {
                 scrollContent
                 Divider()
-                inputBar
+                CommentInputBar(text: $newCommentText) {
+                    Task { await submitComment() }
+                }
             }
             .background(CatchTheme.background)
             .navigationTitle(CatchStrings.Diary.encounterDetail)
@@ -164,31 +166,40 @@ struct EncounterDetailSheet: View {
 
     private var interactionRow: some View {
         HStack(spacing: CatchSpacing.space16) {
-            likeButton
+            likeSection
             commentCountLabel
             Spacer()
         }
+        .sheet(isPresented: $showLikedBySheet) {
+            LikedByListView(encounterRecordName: encounterRecordName)
+        }
     }
 
-    private var likeButton: some View {
-        Button {
-            guard let socialService else { return }
-            Task {
-                try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
-            }
-        } label: {
-            HStack(spacing: CatchSpacing.space4) {
+    private var likeSection: some View {
+        HStack(spacing: CatchSpacing.space4) {
+            Button {
+                guard let socialService else { return }
+                Task {
+                    try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                }
+            } label: {
                 Image(systemName: isLikedByCurrentUser ? "heart.fill" : "heart")
                     .foregroundStyle(isLikedByCurrentUser ? CatchTheme.primary : CatchTheme.textSecondary)
                     .contentTransition(.symbolEffect(.replace))
-                if totalLikeCount > 0 {
+            }
+            .buttonStyle(.plain)
+
+            if totalLikeCount > 0 {
+                Button {
+                    showLikedBySheet = true
+                } label: {
                     Text("\(totalLikeCount)")
                         .font(.subheadline)
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
+                .buttonStyle(.plain)
             }
         }
-        .buttonStyle(.plain)
     }
 
     private var commentCountLabel: some View {
@@ -248,35 +259,6 @@ struct EncounterDetailSheet: View {
         }
     }
 
-    // MARK: - Input Bar
-
-    private var inputBar: some View {
-        HStack(spacing: CatchSpacing.space8) {
-            TextField(CatchStrings.Interaction.addComment, text: $newCommentText, axis: .vertical)
-                .textFieldStyle(.plain)
-                .lineLimit(1...4)
-                .font(.subheadline)
-                .focused($isInputFocused)
-
-            Button {
-                Task { await submitComment() }
-            } label: {
-                Image(systemName: "arrow.up.circle.fill")
-                    .font(.title2)
-                    .foregroundStyle(canSubmit ? CatchTheme.primary : CatchTheme.textSecondary.opacity(0.3))
-            }
-            .disabled(!canSubmit)
-            .buttonStyle(.plain)
-        }
-        .padding(.horizontal)
-        .padding(.vertical, CatchSpacing.space8)
-        .background(CatchTheme.cardBackground)
-    }
-
-    private var canSubmit: Bool {
-        !newCommentText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
-
     // MARK: - Actions
 
     private func loadComments() async {
@@ -297,16 +279,32 @@ struct EncounterDetailSheet: View {
 
     private func submitComment() async {
         guard let socialService else { return }
-        let text = newCommentText
+        let text = newCommentText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
         newCommentText = ""
 
+        let pendingComment = EncounterComment.pending(
+            encounterRecordName: encounterRecordName,
+            userID: currentUserID ?? "",
+            text: text
+        )
+
+        withAnimation(.easeInOut(duration: 0.2)) {
+            comments.insert(pendingComment, at: 0)
+        }
+
         do {
-            let comment = try await socialService.addComment(
+            let confirmed = try await socialService.addComment(
                 encounterRecordName: encounterRecordName,
                 text: text
             )
-            comments.insert(comment, at: 0)
+            if let index = comments.firstIndex(where: { $0.id == pendingComment.id }) {
+                comments[index] = confirmed
+            }
         } catch {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                comments.removeAll { $0.id == pendingComment.id }
+            }
             newCommentText = text
         }
     }

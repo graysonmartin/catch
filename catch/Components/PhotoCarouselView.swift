@@ -6,6 +6,7 @@ struct PhotoCarouselView: View {
     var cornerRadius: CGFloat = 12
     var showsIndicator: Bool = true
     var isTappable: Bool = false
+    var onTap: (() -> Void)?
     var accentColor: Color = CatchTheme.primary
     var emptyBackgroundColor: Color = CatchTheme.secondary.opacity(0.3)
 
@@ -50,7 +51,7 @@ struct PhotoCarouselView: View {
             .clipped()
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             .contentShape(Rectangle())
-            .onTapGesture { if isTappable { isShowingFullScreen = true } }
+            .onTapGesture { handleTap() }
             .fullScreenCover(isPresented: $isShowingFullScreen) {
                 FullScreenPhotoViewer(photos: photos, initialIndex: 0) {
                     isShowingFullScreen = false
@@ -64,13 +65,12 @@ struct PhotoCarouselView: View {
                 ForEach(photos.indices, id: \.self) { index in
                     photoImage(photos[index])
                         .tag(index)
-                        .contentShape(Rectangle())
-                        .onTapGesture { if isTappable { isShowingFullScreen = true } }
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .frame(height: height)
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .onTapGesture { handleTap() }
 
             if showsIndicator {
                 pageIndicator
@@ -97,9 +97,17 @@ struct PhotoCarouselView: View {
         .background(Capsule().fill(.black.opacity(Layout.indicatorBackgroundOpacity)))
     }
 
+    private func handleTap() {
+        if let onTap {
+            onTap()
+        } else if isTappable {
+            isShowingFullScreen = true
+        }
+    }
+
     private func photoImage(_ data: Data) -> some View {
         Group {
-            if let uiImage = ImageDownsampler.downsample(data: data, to: CGSize(width: height * 2, height: height)) {
+            if let uiImage = ImageDownsampler.shared.downsample(data: data, to: CGSize(width: height * 2, height: height)) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()

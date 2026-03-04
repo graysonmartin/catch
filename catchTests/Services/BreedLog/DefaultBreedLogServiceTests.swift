@@ -26,7 +26,7 @@ final class DefaultBreedLogServiceTests: XCTestCase {
 
     func test_buildBreedLog_emptyCats_returnsAllUndiscovered() {
         let log = service.buildBreedLog(from: [Cat]())
-        XCTAssertEqual(log.count, 27)
+        XCTAssertEqual(log.count, 28)
         XCTAssertTrue(log.allSatisfy { !$0.isDiscovered })
         XCTAssertTrue(log.allSatisfy { $0.catCount == 0 })
         XCTAssertTrue(log.allSatisfy { $0.firstDiscoveredDate == nil })
@@ -43,7 +43,7 @@ final class DefaultBreedLogServiceTests: XCTestCase {
         XCTAssertNotNil(ragdoll!.firstDiscoveredDate)
 
         let undiscoveredCount = log.filter { !$0.isDiscovered }.count
-        XCTAssertEqual(undiscoveredCount, 26)
+        XCTAssertEqual(undiscoveredCount, 27)
     }
 
     func test_buildBreedLog_multipleCatsSameBreed() {
@@ -95,7 +95,7 @@ final class DefaultBreedLogServiceTests: XCTestCase {
         XCTAssertEqual(siamese?.firstDiscoveredDate, earlier)
     }
 
-    func test_buildBreedLog_returnsAll27Entries() {
+    func test_buildBreedLog_returnsAll28Entries() {
         let log = service.buildBreedLog(from: [Cat]())
         XCTAssertEqual(log.count, BreedCatalog.count)
     }

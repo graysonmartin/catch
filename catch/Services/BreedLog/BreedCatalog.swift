@@ -60,6 +60,14 @@ enum BreedCatalog {
             icon: "figure.stand"
         ),
         BreedCatalogEntry(
+            id: "Domestic Shorthair",
+            displayName: "Domestic Shorthair",
+            description: "the mutt of cats. no pedigree, all personality. literally every other cat you've ever met.",
+            funFact: "make up about 95% of cats in the US. they're the main characters and they know it",
+            rarity: .common,
+            icon: "house.fill"
+        ),
+        BreedCatalogEntry(
             id: "Egyptian Mau",
             displayName: "Egyptian Mau",
             description: "the fastest domestic cat. spots are natural, not a filter. ancient egyptian royalty.",

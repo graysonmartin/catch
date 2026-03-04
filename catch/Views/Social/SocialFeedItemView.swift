@@ -128,7 +128,8 @@ struct SocialFeedItemView: View {
             PhotoCarouselView(
                 photos: allPhotos,
                 height: Layout.carouselHeight,
-                cornerRadius: CatchTheme.cornerRadiusSmall
+                cornerRadius: CatchTheme.cornerRadiusSmall,
+                onTap: { showDetail = true }
             )
         }
     }

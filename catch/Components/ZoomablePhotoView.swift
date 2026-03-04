@@ -12,8 +12,8 @@ struct ZoomablePhotoView: UIViewRepresentable {
 
     private static let doubleTapScale: CGFloat = 3.0
 
-    func makeUIView(context: Context) -> UIScrollView {
-        let scrollView = UIScrollView()
+    func makeUIView(context: Context) -> LayoutAwareScrollView {
+        let scrollView = LayoutAwareScrollView()
         scrollView.delegate = context.coordinator
         scrollView.minimumZoomScale = PhotoViewerState.minZoomScale
         scrollView.maximumZoomScale = PhotoViewerState.maxZoomScale
@@ -42,12 +42,20 @@ struct ZoomablePhotoView: UIViewRepresentable {
 
         context.coordinator.scrollView = scrollView
 
+        scrollView.onLayoutChanged = { [weak scrollView] in
+            guard let scrollView,
+                  let imageView = scrollView.viewWithTag(100) as? UIImageView,
+                  let imageSize = imageView.image?.size else { return }
+            updateZoomScale(for: scrollView, imageSize: imageSize)
+            centerImage(in: scrollView)
+        }
+
         loadImage(into: imageView, scrollView: scrollView)
 
         return scrollView
     }
 
-    func updateUIView(_ scrollView: UIScrollView, context: Context) {
+    func updateUIView(_ scrollView: LayoutAwareScrollView, context: Context) {
         guard let imageView = scrollView.viewWithTag(100) as? UIImageView else { return }
 
         // Only reload if the data actually changed
@@ -200,5 +208,23 @@ struct ZoomablePhotoView: UIViewRepresentable {
             let velocity = pan.velocity(in: scrollView)
             return abs(velocity.y) > abs(velocity.x)
         }
+    }
+}
+
+// MARK: - Layout-Aware Scroll View
+
+/// UIScrollView subclass that notifies when bounds change,
+/// so we can recalculate zoom scale once the view has real dimensions.
+final class LayoutAwareScrollView: UIScrollView {
+
+    var onLayoutChanged: (() -> Void)?
+    private var lastBoundsSize: CGSize = .zero
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard bounds.size != lastBoundsSize,
+              bounds.size.width > 0, bounds.size.height > 0 else { return }
+        lastBoundsSize = bounds.size
+        onLayoutChanged?()
     }
 }
