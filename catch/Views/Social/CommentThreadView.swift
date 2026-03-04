@@ -69,7 +69,11 @@ struct CommentThreadView: View {
         Button {
             guard let socialService else { return }
             Task {
-                try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                do {
+                    try await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                } catch {
+                    toastManager.showError(CatchStrings.Toast.likeFailed)
+                }
             }
         } label: {
             HStack(spacing: CatchSpacing.space4) {

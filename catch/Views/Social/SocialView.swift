@@ -234,13 +234,21 @@ struct SocialView: View {
         guard !isLoadingMoreFollowers else { return }
         isLoadingMoreFollowers = true
         defer { isLoadingMoreFollowers = false }
-        try? await followService.loadMoreFollowers(for: currentUserID)
+        do {
+            try await followService.loadMoreFollowers(for: currentUserID)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.syncFailed)
+        }
     }
 
     private func loadMoreFollowing() async {
         guard !isLoadingMoreFollowing else { return }
         isLoadingMoreFollowing = true
         defer { isLoadingMoreFollowing = false }
-        try? await followService.loadMoreFollowing(for: currentUserID)
+        do {
+            try await followService.loadMoreFollowing(for: currentUserID)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.syncFailed)
+        }
     }
 }

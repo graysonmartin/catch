@@ -7,7 +7,7 @@ final class ToastManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        sut = ToastManager()
+        sut = ToastManager(autoDismissDelay: .milliseconds(100))
     }
 
     override func tearDown() {
@@ -106,9 +106,29 @@ final class ToastManagerTests: XCTestCase {
         sut.showError("temporary")
         XCTAssertNotNil(sut.currentToast)
 
-        // Wait longer than the auto-dismiss delay (3 seconds)
-        try? await Task.sleep(for: .seconds(4))
+        // Wait longer than the auto-dismiss delay (100ms in tests)
+        try? await Task.sleep(for: .milliseconds(200))
 
+        XCTAssertNil(sut.currentToast)
+    }
+
+    func testNewToastCancelsPreviousAutoDismissTimer() async {
+        sut.showError("first")
+        let firstID = sut.currentToast?.id
+
+        // Show second toast before first auto-dismisses
+        try? await Task.sleep(for: .milliseconds(50))
+        sut.showSuccess("second")
+        let secondID = sut.currentToast?.id
+        XCTAssertNotEqual(firstID, secondID)
+
+        // Wait past when first timer would have fired, but before second expires
+        try? await Task.sleep(for: .milliseconds(80))
+        XCTAssertNotNil(sut.currentToast, "Second toast should still be visible — first timer must not dismiss it")
+        XCTAssertEqual(sut.currentToast?.id, secondID)
+
+        // Wait for second timer to expire
+        try? await Task.sleep(for: .milliseconds(100))
         XCTAssertNil(sut.currentToast)
     }
 

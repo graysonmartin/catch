@@ -88,7 +88,6 @@ struct ToastOverlayModifier: ViewModifier {
                     }
                     .padding(.top, CatchSpacing.space8)
                     .transition(.move(edge: .top).combined(with: .opacity))
-                    .animation(.spring(duration: 0.3), value: toastManager.currentToast)
                     .zIndex(999)
                 }
             }

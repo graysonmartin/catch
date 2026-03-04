@@ -7,6 +7,7 @@ struct ProfileDiaryTab: View {
     let searchText: String
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+    @Environment(ToastManager.self) private var toastManager
 
     @State private var selectedEncounterDetail: EncounterDetailData?
 
@@ -148,6 +149,10 @@ struct ProfileDiaryTab: View {
         guard let socialService else { return }
         let recordNames = encounters.compactMap(\.cloudKitRecordName)
         guard !recordNames.isEmpty else { return }
-        try? await socialService.loadInteractionData(for: recordNames)
+        do {
+            try await socialService.loadInteractionData(for: recordNames)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.feedLoadFailed)
+        }
     }
 }

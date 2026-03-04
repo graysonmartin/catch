@@ -460,6 +460,10 @@ struct RemoteProfileContent: View {
         guard let socialService else { return }
         let recordNames = encounters.map(\.recordName)
         guard !recordNames.isEmpty else { return }
-        try? await socialService.loadInteractionData(for: recordNames)
+        do {
+            try await socialService.loadInteractionData(for: recordNames)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.feedLoadFailed)
+        }
     }
 }

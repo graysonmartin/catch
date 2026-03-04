@@ -16,7 +16,7 @@ final class ToastManager {
         let id: UUID
         let message: String
         let style: ToastStyle
-        var retryAction: (() -> Void)?
+        let retryAction: (() -> Void)?
 
         static func == (lhs: Toast, rhs: Toast) -> Bool {
             lhs.id == rhs.id
@@ -27,8 +27,13 @@ final class ToastManager {
 
     private(set) var currentToast: Toast?
     private var dismissTask: Task<Void, Never>?
+    private let autoDismissDelay: Duration
 
-    private static let autoDismissDelay: Duration = .seconds(3)
+    // MARK: - Init
+
+    init(autoDismissDelay: Duration = .seconds(3)) {
+        self.autoDismissDelay = autoDismissDelay
+    }
 
     // MARK: - Public API
 
@@ -63,8 +68,9 @@ final class ToastManager {
         )
         currentToast = toast
 
+        let delay = autoDismissDelay
         dismissTask = Task { [weak self] in
-            try? await Task.sleep(for: Self.autoDismissDelay)
+            try? await Task.sleep(for: delay)
             guard !Task.isCancelled else { return }
             self?.currentToast = nil
         }
