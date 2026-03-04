@@ -223,6 +223,8 @@
 		E8DB00000101 /* DatabaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000001 /* DatabaseState.swift */; };
 		E8DB00000102 /* DatabaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000001 /* DatabaseState.swift */; };
 		E8DB00000201 /* DatabaseStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000002 /* DatabaseStateTests.swift */; };
+		E8PS00000101 /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PS00000001 /* ProfileSetupView.swift */; };
+		E8PS00000102 /* CatchStrings+ProfileSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PS00000002 /* CatchStrings+ProfileSetup.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -278,6 +280,8 @@
 		E8RV00000002 /* CatchStrings+Recovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Recovery.swift"; sourceTree = "<group>"; };
 		E8DB00000001 /* DatabaseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseState.swift; sourceTree = "<group>"; };
 		E8DB00000002 /* DatabaseStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseStateTests.swift; sourceTree = "<group>"; };
+		E8PS00000001 /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
+		E8PS00000002 /* CatchStrings+ProfileSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+ProfileSetup.swift"; sourceTree = "<group>"; };
 		E8B700000003 /* VisionBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionBreedClassifierService.swift; sourceTree = "<group>"; };
 		E8B70000000A /* catBreedDetection.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = catBreedDetection.mlmodel; sourceTree = "<group>"; };
 		E8B70000000B /* BreedPredictionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPredictionCard.swift; sourceTree = "<group>"; };
@@ -490,6 +494,7 @@
 				E8000001AA00002F /* MapAnnotations.swift */,
 				E8000001AA000072 /* RemoteCatMapSheet.swift */,
 				E8000001AA00002A /* OnboardingView.swift */,
+				E8PS00000001 /* ProfileSetupView.swift */,
 				E8RV00000001 /* DatabaseRecoveryView.swift */,
 				E8000001AA000062 /* EditProfileView.swift */,
 				E8PF0000F001 /* Profile */,
@@ -554,6 +559,7 @@
 				E8TM00000003 /* CatchStrings+Toast.swift */,
 				E8TI00000003 /* CatchStrings+TextInput.swift */,
 				E8ST00000004 /* CatchStrings+Settings.swift */,
+				E8PS00000002 /* CatchStrings+ProfileSetup.swift */,
 				E8RV00000002 /* CatchStrings+Recovery.swift */,
 			);
 			path = Theme;
@@ -1172,6 +1178,8 @@
 				E8ST00000104 /* CatchStrings+Settings.swift in Sources */,
 				E8RV00000101 /* DatabaseRecoveryView.swift in Sources */,
 				E8RV00000102 /* CatchStrings+Recovery.swift in Sources */,
+				E8PS00000101 /* ProfileSetupView.swift in Sources */,
+				E8PS00000102 /* CatchStrings+ProfileSetup.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
