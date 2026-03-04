@@ -9,9 +9,7 @@ import CatchCore
 @MainActor
 final class VisionBreedClassifierService: BreedClassifierService {
     private(set) var isClassifying = false
-    #if DEBUG
-    private(set) var debugTopPredictions: [BreedPrediction] = []
-    #endif
+    private(set) var topPredictions: [BreedPrediction] = []
 
     private let logger = Logger(subsystem: "com.catch.catch", category: "BreedClassifier")
     private let coreMLModel: VNCoreMLModel?
@@ -56,9 +54,7 @@ final class VisionBreedClassifierService: BreedClassifierService {
                 bestPredictions = predictions
             }
         }
-        #if DEBUG
-        debugTopPredictions = Array(bestPredictions.prefix(2))
-        #endif
+        topPredictions = Array(bestPredictions.prefix(3))
         return bestPredictions.first
     }
 

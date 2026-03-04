@@ -54,7 +54,7 @@
 		E8A100000025 /* CatchSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000019 /* CatchSchemaTests.swift */; };
 		E8B700000103 /* VisionBreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000003 /* VisionBreedClassifierService.swift */; };
 		E8B70000010A /* catBreedDetection.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E8B70000000A /* catBreedDetection.mlmodel */; };
-		E8B700000105 /* BreedSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000005 /* BreedSuggestionView.swift */; };
+		E8B70000010B /* BreedPredictionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B70000000B /* BreedPredictionCard.swift */; };
 		E8B700000106 /* BreedPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000006 /* BreedPickerView.swift */; };
 		E8B700000203 /* MockBreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000009 /* MockBreedClassifierService.swift */; };
 		E8BL00000101 /* BreedRarity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000001 /* BreedRarity.swift */; };
@@ -244,7 +244,7 @@
 		E8A100000019 /* CatchSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchemaTests.swift; sourceTree = "<group>"; };
 		E8B700000003 /* VisionBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionBreedClassifierService.swift; sourceTree = "<group>"; };
 		E8B70000000A /* catBreedDetection.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = catBreedDetection.mlmodel; sourceTree = "<group>"; };
-		E8B700000005 /* BreedSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedSuggestionView.swift; sourceTree = "<group>"; };
+		E8B70000000B /* BreedPredictionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPredictionCard.swift; sourceTree = "<group>"; };
 		E8B700000006 /* BreedPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPickerView.swift; sourceTree = "<group>"; };
 		E8B700000009 /* MockBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedClassifierService.swift; sourceTree = "<group>"; };
 		E8BL00000001 /* BreedRarity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedRarity.swift; sourceTree = "<group>"; };
@@ -456,7 +456,7 @@
 			isa = PBXGroup;
 			children = (
 				E8B700000006 /* BreedPickerView.swift */,
-				E8B700000005 /* BreedSuggestionView.swift */,
+				E8B70000000B /* BreedPredictionCard.swift */,
 				E8000001AA000014 /* CatPhotoView.swift */,
 				E8DR00000001 /* DiaryEntryRow.swift */,
 				E8PL00000001 /* PawLoadingView.swift */,
@@ -1034,7 +1034,7 @@
 				E8E600000037 /* RemoteFeedItemView.swift in Sources */,
 				E8B700000103 /* VisionBreedClassifierService.swift in Sources */,
 				E8B70000010A /* catBreedDetection.mlmodel in Sources */,
-				E8B700000105 /* BreedSuggestionView.swift in Sources */,
+				E8B70000010B /* BreedPredictionCard.swift in Sources */,
 				E8B700000106 /* BreedPickerView.swift in Sources */,
 				E8D800000101 /* StevenEasterEggView.swift in Sources */,
 				E8DM00000101 /* CatDisplayData.swift in Sources */,
