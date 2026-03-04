@@ -195,6 +195,12 @@
 		E8SI0000010B /* CommentThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000B /* CommentThreadView.swift */; };
 		E8SI00000208 /* MockSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000C /* MockSocialInteractionService.swift */; };
 		E8SP00000001 /* CatchSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SP00000010 /* CatchSpacing.swift */; };
+		E8TM00000101 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
+		E8TM00000102 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000002 /* ToastView.swift */; };
+		E8TM00000103 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
+		E8TM00000201 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
+		E8TM00000203 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
+		E8TM00000204 /* ToastManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000004 /* ToastManagerTests.swift */; };
 		E8ED00000101 /* EncounterDetailData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ED00000001 /* EncounterDetailData.swift */; };
 		E8ES00000101 /* EncounterDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ES00000001 /* EncounterDetailSheet.swift */; };
 		E8FP00000101 /* FullScreenPhotoViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000001 /* FullScreenPhotoViewer.swift */; };
@@ -371,6 +377,10 @@
 		E8SI0000000B /* CommentThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentThreadView.swift; sourceTree = "<group>"; };
 		E8SI0000000C /* MockSocialInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialInteractionService.swift; sourceTree = "<group>"; };
 		E8SP00000010 /* CatchSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSpacing.swift; sourceTree = "<group>"; };
+		E8TM00000001 /* ToastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
+		E8TM00000002 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		E8TM00000003 /* CatchStrings+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Toast.swift"; sourceTree = "<group>"; };
+		E8TM00000004 /* ToastManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManagerTests.swift; sourceTree = "<group>"; };
 		E8FP00000001 /* FullScreenPhotoViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPhotoViewer.swift; sourceTree = "<group>"; };
 		E8FP00000002 /* ZoomablePhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomablePhotoView.swift; sourceTree = "<group>"; };
 		E8FP00000003 /* PhotoViewerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerState.swift; sourceTree = "<group>"; };
@@ -502,6 +512,8 @@
 				E8CI00000001 /* CommentInputBar.swift */,
 				E8EI00000001 /* EngagementIndicator.swift */,
 				E8CL00000004 /* CollectionSortFilterBar.swift */,
+				E8TM00000001 /* ToastManager.swift */,
+				E8TM00000002 /* ToastView.swift */,
 				E8TI00000001 /* LimitedTextFieldView.swift */,
 				E8TI00000002 /* LimitedSingleLineFieldView.swift */,
 				E8FP00000001 /* FullScreenPhotoViewer.swift */,
@@ -528,6 +540,7 @@
 				E8CS0000000B /* CatchStrings+Components.swift */,
 				E8CS0000000C /* CatchStrings+Diary.swift */,
 				E8SI00000008 /* CatchStrings+Interaction.swift */,
+				E8TM00000003 /* CatchStrings+Toast.swift */,
 				E8TI00000003 /* CatchStrings+TextInput.swift */,
 				E8ST00000004 /* CatchStrings+Settings.swift */,
 			);
@@ -574,6 +587,7 @@
 			isa = PBXGroup;
 			children = (
 				E8A100000017 /* ImageDownsamplerTests.swift */,
+				E8TM00000004 /* ToastManagerTests.swift */,
 				E8FP00000011 /* PhotoViewerStateTests.swift */,
 			);
 			path = Components;
@@ -1132,6 +1146,9 @@
 				E8SF00000102 /* SocialFeedService.swift in Sources */,
 				E8SF00000103 /* CKSocialFeedService.swift in Sources */,
 				E8SF00000104 /* SocialFeedItemView.swift in Sources */,
+				E8TM00000101 /* ToastManager.swift in Sources */,
+				E8TM00000102 /* ToastView.swift in Sources */,
+				E8TM00000103 /* CatchStrings+Toast.swift in Sources */,
 				E8TI00000101 /* LimitedTextFieldView.swift in Sources */,
 				E8TI00000102 /* LimitedSingleLineFieldView.swift in Sources */,
 				E8TI00000103 /* CatchStrings+TextInput.swift in Sources */,
@@ -1217,6 +1234,9 @@
 				E8CL00000202 /* CollectionFilter.swift in Sources */,
 				E8CL00000203 /* CollectionSortFilterService.swift in Sources */,
 				E8CL00000204 /* CollectionSortFilterServiceTests.swift in Sources */,
+				E8TM00000201 /* ToastManager.swift in Sources */,
+				E8TM00000203 /* CatchStrings+Toast.swift in Sources */,
+				E8TM00000204 /* ToastManagerTests.swift in Sources */,
 				E8ST00000201 /* SettingsService.swift in Sources */,
 				E8ST00000202 /* UserDefaultsSettingsService.swift in Sources */,
 				E8ST00000203 /* MockSettingsService.swift in Sources */,

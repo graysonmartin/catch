@@ -6,6 +6,8 @@ struct PendingRequestRowView: View {
     let onApprove: () async throws -> Void
     let onDecline: () async throws -> Void
 
+    @Environment(ToastManager.self) private var toastManager
+
     var body: some View {
         HStack(spacing: CatchSpacing.space12) {
             Image(systemName: "person.crop.circle.badge.questionmark")
@@ -26,7 +28,13 @@ struct PendingRequestRowView: View {
             Spacer()
 
             Button {
-                Task { try? await onApprove() }
+                Task {
+                    do {
+                        try await onApprove()
+                    } catch {
+                        toastManager.showError(CatchStrings.Toast.approveFailed)
+                    }
+                }
             } label: {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.title3)
@@ -35,7 +43,13 @@ struct PendingRequestRowView: View {
             .buttonStyle(.plain)
 
             Button {
-                Task { try? await onDecline() }
+                Task {
+                    do {
+                        try await onDecline()
+                    } catch {
+                        toastManager.showError(CatchStrings.Toast.declineFailed)
+                    }
+                }
             } label: {
                 Image(systemName: "xmark.circle.fill")
                     .font(.title3)

@@ -6,6 +6,7 @@ struct FeedView: View {
     @Query(sort: \Encounter.date, order: .reverse) private var localEncounters: [Encounter]
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
+    @Environment(ToastManager.self) private var toastManager
     @Binding var scrollToTop: Bool
 
     private var feedItems: [FeedItem] {
@@ -127,6 +128,10 @@ struct FeedView: View {
         guard let socialService else { return }
         let recordNames = feedItems.compactMap(\.encounterRecordName)
         guard !recordNames.isEmpty else { return }
-        try? await socialService.loadInteractionData(for: recordNames)
+        do {
+            try await socialService.loadInteractionData(for: recordNames)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.feedLoadFailed)
+        }
     }
 }

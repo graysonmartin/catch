@@ -8,6 +8,7 @@ struct FollowRowView: View {
     let onAction: () async throws -> Void
 
     @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
+    @Environment(ToastManager.self) private var toastManager
     @State private var isShowingConfirmation = false
     @State private var resolvedName: String?
     @State private var resolvedUsername: String?
@@ -67,7 +68,16 @@ struct FollowRowView: View {
         }
         .confirmationDialog(actionLabel, isPresented: $isShowingConfirmation) {
             Button(actionLabel, role: .destructive) {
-                Task { try? await onAction() }
+                Task {
+                    do {
+                        try await onAction()
+                    } catch {
+                        let message = isFollowerRow
+                            ? CatchStrings.Toast.removeFollowerFailed
+                            : CatchStrings.Toast.unfollowFailed
+                        toastManager.showError(message)
+                    }
+                }
             }
         } message: {
             Text(CatchStrings.Social.areYouSure)

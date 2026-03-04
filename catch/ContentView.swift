@@ -37,7 +37,11 @@ struct ContentView: View {
         .tint(CatchTheme.primary)
         .task {
             guard let userID = authService.authState.user?.userIdentifier else { return }
-            try? await followService.refresh(for: userID)
+            do {
+                try await followService.refresh(for: userID)
+            } catch {
+                // Initial refresh failure is non-critical — user can pull to refresh
+            }
         }
     }
 }

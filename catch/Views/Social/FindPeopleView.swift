@@ -5,6 +5,7 @@ struct FindPeopleView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(CKFollowService.self) private var followService
     @Environment(AppleAuthService.self) private var authService
+    @Environment(ToastManager.self) private var toastManager
 
     @State private var searchText = ""
     @State private var results: [CloudUserProfile] = []
@@ -136,7 +137,12 @@ struct FindPeopleView: View {
         isSearching = true
         defer { isSearching = false }
 
-        results = (try? await cloudKitService.searchUsers(query: query)) ?? []
+        do {
+            results = try await cloudKitService.searchUsers(query: query)
+        } catch {
+            results = []
+            toastManager.showError(CatchStrings.Toast.searchFailed)
+        }
     }
 
     private func performFollow(targetID: String, isPrivate: Bool) {
@@ -151,7 +157,7 @@ struct FindPeopleView: View {
                     sentFollowIDs.insert(targetID)
                 }
             } catch {
-                // Follow failed — button stays visible so user can retry
+                toastManager.showError(CatchStrings.Toast.followFailed)
             }
         }
     }

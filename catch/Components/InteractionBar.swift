@@ -8,6 +8,7 @@ struct InteractionBar: View {
     var isOwnEncounter: Bool = false
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+    @Environment(ToastManager.self) private var toastManager
 
     @State private var showLikedBySheet = false
 
@@ -34,7 +35,11 @@ struct InteractionBar: View {
             Button {
                 guard let socialService else { return }
                 Task {
-                    try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                    do {
+                        try await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                    } catch {
+                        toastManager.showError(CatchStrings.Toast.likeFailed)
+                    }
                 }
             } label: {
                 Image(systemName: isLiked ? "heart.fill" : "heart")

@@ -18,6 +18,7 @@ enum SocialTab: String, CaseIterable, Identifiable {
 struct SocialView: View {
     @Environment(CKFollowService.self) private var followService
     @Environment(AppleAuthService.self) private var authService
+    @Environment(ToastManager.self) private var toastManager
     @State private var isShowingFindPeople = false
     @State private var isLoadingMoreFollowers = false
     @State private var isLoadingMoreFollowing = false
@@ -222,20 +223,32 @@ struct SocialView: View {
 
     private func refresh() async {
         guard let userID = authService.authState.user?.userIdentifier else { return }
-        try? await followService.refresh(for: userID)
+        do {
+            try await followService.refresh(for: userID)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.syncFailed)
+        }
     }
 
     private func loadMoreFollowers() async {
         guard !isLoadingMoreFollowers else { return }
         isLoadingMoreFollowers = true
         defer { isLoadingMoreFollowers = false }
-        try? await followService.loadMoreFollowers(for: currentUserID)
+        do {
+            try await followService.loadMoreFollowers(for: currentUserID)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.syncFailed)
+        }
     }
 
     private func loadMoreFollowing() async {
         guard !isLoadingMoreFollowing else { return }
         isLoadingMoreFollowing = true
         defer { isLoadingMoreFollowing = false }
-        try? await followService.loadMoreFollowing(for: currentUserID)
+        do {
+            try await followService.loadMoreFollowing(for: currentUserID)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.syncFailed)
+        }
     }
 }

@@ -6,6 +6,7 @@ struct EncounterDetailSheet: View {
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(AppleAuthService.self) private var authService
+    @Environment(ToastManager.self) private var toastManager
     @Environment(\.dismiss) private var dismiss
 
     @State private var comments: [EncounterComment] = []
@@ -180,7 +181,11 @@ struct EncounterDetailSheet: View {
             Button {
                 guard let socialService else { return }
                 Task {
-                    try? await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                    do {
+                        try await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                    } catch {
+                        toastManager.showError(CatchStrings.Toast.likeFailed)
+                    }
                 }
             } label: {
                 Image(systemName: isLikedByCurrentUser ? "heart.fill" : "heart")
@@ -306,17 +311,24 @@ struct EncounterDetailSheet: View {
                 comments.removeAll { $0.id == pendingComment.id }
             }
             newCommentText = text
+            toastManager.showError(CatchStrings.Toast.commentFailed)
         }
     }
 
     private func deleteComment(_ comment: EncounterComment) {
         guard let socialService else { return }
+        let removedComment = comment
         comments.removeAll { $0.id == comment.id }
         Task {
-            try? await socialService.deleteComment(
-                recordName: comment.id,
-                encounterRecordName: encounterRecordName
-            )
+            do {
+                try await socialService.deleteComment(
+                    recordName: removedComment.id,
+                    encounterRecordName: encounterRecordName
+                )
+            } catch {
+                comments.insert(removedComment, at: 0)
+                toastManager.showError(CatchStrings.Toast.commentDeleteFailed)
+            }
         }
     }
 }
