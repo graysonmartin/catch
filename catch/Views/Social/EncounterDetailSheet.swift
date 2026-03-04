@@ -55,7 +55,7 @@ struct EncounterDetailSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 if !data.photos.isEmpty {
-                    PhotoCarouselView(photos: data.photos, height: 220)
+                    PhotoCarouselView(photos: data.photos, height: 260, isTappable: true)
                         .padding(.bottom, CatchSpacing.space12)
                 }
 

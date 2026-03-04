@@ -92,7 +92,7 @@ struct FeedItemView: View {
     private var photoSection: some View {
         if let photos = (!encounter.photos.isEmpty ? encounter.photos : encounter.cat?.photos),
            !photos.isEmpty {
-            PhotoCarouselView(photos: photos, height: FeedItemLayout.carouselHeight, cornerRadius: CatchTheme.cornerRadiusSmall)
+            PhotoCarouselView(photos: photos, height: FeedItemLayout.carouselHeight, cornerRadius: CatchTheme.cornerRadiusSmall, onTap: { showDetail = true })
         }
     }
 
