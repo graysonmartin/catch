@@ -83,6 +83,7 @@
 		E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */; };
+		E8KC00000101 /* KeychainServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8KC00000001 /* KeychainServiceImpl.swift */; };
 		E8C45823BB168636E9BDC605 /* MockCloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */; };
 		E8CF9FE9B8D8EB743AC8A414 /* MockAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB34FA781359331A3ED13A /* MockAuthService.swift */; };
 		E8CL00000101 /* CollectionSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000001 /* CollectionSortOption.swift */; };
@@ -265,6 +266,7 @@
 		E8BL00000022 /* MockBreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedLogService.swift; sourceTree = "<group>"; };
 		E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCloudKitService.swift; sourceTree = "<group>"; };
 		E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthService.swift; sourceTree = "<group>"; };
+		E8KC00000001 /* KeychainServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainServiceImpl.swift; sourceTree = "<group>"; };
 		E8CA167FE482ED4A92C8C805 /* catch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = catch.entitlements; sourceTree = "<group>"; };
 		E8CB34FA781359331A3ED13A /* MockAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthService.swift; sourceTree = "<group>"; };
 		E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -638,6 +640,7 @@
 			children = (
 				E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */,
 				E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */,
+				E8KC00000001 /* KeychainServiceImpl.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -1021,6 +1024,7 @@
 				E8000001AA000055 /* CatchSchema.swift in Sources */,
 				E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */,
 				E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */,
+				E8KC00000101 /* KeychainServiceImpl.swift in Sources */,
 				E8F600000103 /* CloudKitAssetManager.swift in Sources */,
 				E8F600000104 /* CKCatRepository.swift in Sources */,
 				E8F600000105 /* CKEncounterRepository.swift in Sources */,
