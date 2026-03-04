@@ -155,6 +155,10 @@ struct EditProfileView: View {
                 Text(CatchStrings.Profile.usernameTaken)
                     .font(.caption)
                     .foregroundStyle(.red)
+            case .error:
+                Text(CatchStrings.Profile.usernameCheckFailed)
+                    .font(.caption)
+                    .foregroundStyle(.orange)
             }
         }
     }
@@ -183,9 +187,14 @@ struct EditProfileView: View {
         usernameCheckTask = Task {
             try? await Task.sleep(for: .milliseconds(500))
             guard !Task.isCancelled else { return }
-            let isAvailable = (try? await cloudKitService.checkUsernameAvailability(current)) ?? false
-            guard !Task.isCancelled else { return }
-            usernameAvailability = isAvailable ? .available : .taken
+            do {
+                let isAvailable = try await cloudKitService.checkUsernameAvailability(current)
+                guard !Task.isCancelled else { return }
+                usernameAvailability = isAvailable ? .available : .taken
+            } catch {
+                guard !Task.isCancelled else { return }
+                usernameAvailability = .error
+            }
         }
     }
 

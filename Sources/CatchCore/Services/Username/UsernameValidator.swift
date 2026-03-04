@@ -5,6 +5,7 @@ public enum UsernameAvailability {
     case checking
     case available
     case taken
+    case error
 }
 
 public enum UsernameValidationResult: Equatable {

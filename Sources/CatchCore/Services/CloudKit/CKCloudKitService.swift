@@ -77,13 +77,22 @@ public final class CKCloudKitService: CloudKitService {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return [] }
 
-        let namePredicate = NSPredicate(format: "displayName BEGINSWITH[cd] %@", trimmed)
-        let usernamePredicate = NSPredicate(format: "username BEGINSWITH[cd] %@", trimmed.lowercased())
-        let predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [namePredicate, usernamePredicate])
+        // CloudKit doesn't support OR predicates — run two queries and merge
+        async let nameResults = fetchProfiles(
+            predicate: NSPredicate(format: "displayName BEGINSWITH[cd] %@", trimmed)
+        )
+        async let usernameResults = fetchProfiles(
+            predicate: NSPredicate(format: "username BEGINSWITH[cd] %@", trimmed.lowercased())
+        )
 
+        let combined = try await nameResults + usernameResults
+        var seen = Set<String>()
+        return combined.filter { seen.insert($0.recordName).inserted }
+    }
+
+    private func fetchProfiles(predicate: NSPredicate) async throws -> [CloudUserProfile] {
         let ckQuery = CKQuery(recordType: Self.recordType, predicate: predicate)
         ckQuery.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
-
         let (results, _) = try await database.records(matching: ckQuery, resultsLimit: 20)
 
         return results.compactMap { _, result in

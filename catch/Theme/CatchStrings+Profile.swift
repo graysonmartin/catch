@@ -44,6 +44,7 @@ extension CatchStrings {
         static let usernameTooLong = String(localized: "too long (20 max)")
         static let usernameInvalidChars = String(localized: "letters, numbers, underscores only")
         static let usernameChecking = String(localized: "checking...")
+        static let usernameCheckFailed = String(localized: "couldn't check, try again")
         static let bio = String(localized: "bio")
         static let privateProfile = String(localized: "private profile")
         static let privateFooter = String(localized: "when private, people have to send a request before they can see your cats. you're basically famous.")
