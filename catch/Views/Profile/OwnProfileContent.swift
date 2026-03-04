@@ -57,7 +57,7 @@ struct OwnProfileContent: View {
                 }
             }
 
-            if profile != nil {
+            if profile != nil, authService.authState.isSignedIn {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         isShowingEditSheet = true
