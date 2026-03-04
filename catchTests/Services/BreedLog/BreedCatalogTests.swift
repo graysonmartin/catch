@@ -3,9 +3,9 @@ import CatchCore
 
 final class BreedCatalogTests: XCTestCase {
 
-    func test_catalogHas27Breeds() {
-        XCTAssertEqual(BreedCatalog.count, 27)
-        XCTAssertEqual(BreedCatalog.allBreeds.count, 27)
+    func test_catalogHas28Breeds() {
+        XCTAssertEqual(BreedCatalog.count, 28)
+        XCTAssertEqual(BreedCatalog.allBreeds.count, 28)
     }
 
     func test_allIdsAreUnique() {

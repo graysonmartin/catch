@@ -2,45 +2,63 @@ import Foundation
 
 public enum BreedLabelMapper {
 
-    private static let mapping: [String: String] = [
-        "Egyptian_cat": "Egyptian Mau",
-        "Persian_cat": "Persian",
-        "Siamese_cat": "Siamese",
-        "tabby": "Tabby",
-        "tiger_cat": "Tiger Tabby",
-        "Angora": "Angora",
-        "Birman": "Birman",
-        "Bombay": "Bombay",
-        "Burmese_cat": "Burmese",
-        "Havana_Brown": "Havana Brown",
-        "Japanese_Bobtail": "Japanese Bobtail",
-        "Korat": "Korat",
-        "Maine_Coon": "Maine Coon",
-        "Manx": "Manx",
-        "Norwegian_Forest_Cat": "Norwegian Forest Cat",
-        "Ocicat": "Ocicat",
-        "Ragdoll": "Ragdoll",
-        "Russian_Blue": "Russian Blue",
-        "Singapura": "Singapura",
-        "Snowshoe": "Snowshoe",
-        "Somali": "Somali",
-        "Turkish_Angora": "Turkish Angora",
+    /// Labels the Create ML model can predict → display names.
+    private static let modelMapping: [String: String] = [
         "Abyssinian": "Abyssinian",
         "Bengal": "Bengal",
+        "Bombay": "Bombay",
         "British_Shorthair": "British Shorthair",
+        "Domestic_Shorthair": "Domestic Shorthair",
+        "Maine_Coon": "Maine Coon",
+        "Persian": "Persian",
+        "Ragdoll": "Ragdoll",
+        "Russian_Blue": "Russian Blue",
         "Scottish_Fold": "Scottish Fold",
+        "Siamese": "Siamese",
         "Sphynx": "Sphynx",
     ]
 
+    /// Broader curated breed list for the manual picker (superset of model labels).
+    private static let curatedBreeds: [String] = [
+        "Abyssinian",
+        "Angora",
+        "Bengal",
+        "Birman",
+        "Bombay",
+        "British Shorthair",
+        "Burmese",
+        "Domestic Shorthair",
+        "Egyptian Mau",
+        "Havana Brown",
+        "Japanese Bobtail",
+        "Korat",
+        "Maine Coon",
+        "Manx",
+        "Norwegian Forest Cat",
+        "Ocicat",
+        "Persian",
+        "Ragdoll",
+        "Russian Blue",
+        "Scottish Fold",
+        "Siamese",
+        "Singapura",
+        "Snowshoe",
+        "Somali",
+        "Sphynx",
+        "Tabby",
+        "Tiger Tabby",
+        "Turkish Angora",
+    ]
+
     public static func displayName(for rawIdentifier: String) -> String? {
-        mapping[rawIdentifier]
+        modelMapping[rawIdentifier]
     }
 
     public static func isCatBreed(_ rawIdentifier: String) -> Bool {
-        mapping[rawIdentifier] != nil
+        modelMapping[rawIdentifier] != nil
     }
 
     public static var allDisplayNames: [String] {
-        mapping.values.sorted()
+        curatedBreeds
     }
 }

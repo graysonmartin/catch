@@ -5,10 +5,13 @@ struct PhotoCarouselView: View {
     var height: CGFloat = 200
     var cornerRadius: CGFloat = 12
     var showsIndicator: Bool = true
+    var isTappable: Bool = false
+    var onTap: (() -> Void)?
     var accentColor: Color = CatchTheme.primary
     var emptyBackgroundColor: Color = CatchTheme.secondary.opacity(0.3)
 
     @State private var currentPage = 0
+    @State private var isShowingFullScreen = false
 
     private enum Layout {
         static let dotSize: CGFloat = 6
@@ -45,7 +48,15 @@ struct PhotoCarouselView: View {
         photoImage(photos[0])
             .frame(maxWidth: .infinity)
             .frame(height: height)
+            .clipped()
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .contentShape(Rectangle())
+            .onTapGesture { handleTap() }
+            .fullScreenCover(isPresented: $isShowingFullScreen) {
+                FullScreenPhotoViewer(photos: photos, initialIndex: 0) {
+                    isShowingFullScreen = false
+                }
+            }
     }
 
     private var carousel: some View {
@@ -59,10 +70,16 @@ struct PhotoCarouselView: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .frame(height: height)
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .onTapGesture { handleTap() }
 
             if showsIndicator {
                 pageIndicator
                     .padding(.bottom, Layout.indicatorBottomPadding)
+            }
+        }
+        .fullScreenCover(isPresented: $isShowingFullScreen) {
+            FullScreenPhotoViewer(photos: photos, initialIndex: currentPage) {
+                isShowingFullScreen = false
             }
         }
     }
@@ -80,9 +97,17 @@ struct PhotoCarouselView: View {
         .background(Capsule().fill(.black.opacity(Layout.indicatorBackgroundOpacity)))
     }
 
+    private func handleTap() {
+        if let onTap {
+            onTap()
+        } else if isTappable {
+            isShowingFullScreen = true
+        }
+    }
+
     private func photoImage(_ data: Data) -> some View {
         Group {
-            if let uiImage = ImageDownsampler.downsample(data: data, to: CGSize(width: height * 1.5, height: height)) {
+            if let uiImage = ImageDownsampler.shared.downsample(data: data, to: CGSize(width: height * 2, height: height)) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()

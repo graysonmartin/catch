@@ -17,22 +17,26 @@ struct SocialFeedItemView: View {
     let cat: CloudCat?
     let owner: CloudUserProfile
     let isFirstEncounter: Bool
+    let catEncounters: [CloudEncounter]
 
-    @State private var showComments = false
+    @State private var showDetail = false
 
     private var isUnnamed: Bool {
         cat?.isUnnamed ?? true
+    }
+
+    private var detailData: EncounterDetailData {
+        EncounterDetailData(remote: encounter, cat: cat, isFirstEncounter: isFirstEncounter)
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
             catHeader
             photos
-            location
-            notes
+            encounterMetadata
             InteractionBar(
                 encounterRecordName: encounter.recordName,
-                showComments: $showComments,
+                showDetail: $showDetail,
                 ownerRoute: RemoteProfileRoute(userID: owner.appleUserID, displayName: owner.displayName)
             )
         }
@@ -40,8 +44,10 @@ struct SocialFeedItemView: View {
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
-        .sheet(isPresented: $showComments) {
-            CommentThreadView(encounterRecordName: encounter.recordName)
+        .contentShape(Rectangle())
+        .onTapGesture { showDetail = true }
+        .sheet(isPresented: $showDetail) {
+            EncounterDetailSheet(data: detailData)
         }
     }
 
@@ -49,7 +55,7 @@ struct SocialFeedItemView: View {
 
     private var catHeader: some View {
         HStack(spacing: CatchSpacing.space12) {
-            CatPhotoView(photoData: cat?.photos.first, size: Layout.thumbnailSize)
+            catPhotoLink
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack(spacing: CatchSpacing.space4) {
@@ -79,6 +85,24 @@ struct SocialFeedItemView: View {
         }
     }
 
+    @ViewBuilder
+    private var catPhotoLink: some View {
+        if let cat {
+            NavigationLink {
+                RemoteCatProfileView(
+                    cat: cat,
+                    encounters: catEncounters,
+                    ownerName: owner.displayName
+                )
+            } label: {
+                CatPhotoView(photoData: cat.photos.first, size: Layout.thumbnailSize)
+            }
+            .buttonStyle(.plain)
+        } else {
+            CatPhotoView(photoData: nil, size: Layout.thumbnailSize)
+        }
+    }
+
     private func pill(text: String, isActive: Bool) -> some View {
         Text(text)
             .font(.system(size: Layout.pillFontSize, weight: .bold))
@@ -95,6 +119,8 @@ struct SocialFeedItemView: View {
             )
     }
 
+    // MARK: - Photos
+
     @ViewBuilder
     private var photos: some View {
         let allPhotos = !encounter.photos.isEmpty ? encounter.photos : (cat?.photos ?? [])
@@ -102,8 +128,28 @@ struct SocialFeedItemView: View {
             PhotoCarouselView(
                 photos: allPhotos,
                 height: Layout.carouselHeight,
-                cornerRadius: CatchTheme.cornerRadiusSmall
+                cornerRadius: CatchTheme.cornerRadiusSmall,
+                onTap: { showDetail = true }
             )
+        }
+    }
+
+    // MARK: - Encounter Metadata
+
+    private var encounterMetadata: some View {
+        VStack(alignment: .leading, spacing: CatchSpacing.space4) {
+            breed
+            location
+            notes
+        }
+    }
+
+    @ViewBuilder
+    private var breed: some View {
+        if let breedName = cat?.breed, !breedName.isEmpty {
+            Label(breedName, systemImage: "pawprint.fill")
+                .font(.subheadline)
+                .foregroundStyle(CatchTheme.textSecondary)
         }
     }
 
@@ -122,6 +168,7 @@ struct SocialFeedItemView: View {
             Text(encounter.notes)
                 .font(.subheadline)
                 .foregroundStyle(CatchTheme.textPrimary)
+                .lineLimit(3)
         }
     }
 }

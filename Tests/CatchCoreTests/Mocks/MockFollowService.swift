@@ -10,6 +10,8 @@ final class MockFollowService: FollowService {
     var outgoingPending: [Follow] = []
     var pendingRequests: [Follow] = []
     var isLoading = false
+    var hasMoreFollowers = false
+    var hasMoreFollowing = false
 
     private(set) var followCalls: [(targetID: String, userID: String, isTargetPrivate: Bool)] = []
     private(set) var unfollowCalls: [(targetID: String, userID: String)] = []
@@ -18,6 +20,8 @@ final class MockFollowService: FollowService {
     private(set) var removeFollowerCalls: [Follow] = []
     private(set) var refreshCalls: [String] = []
     private(set) var fetchFollowCountsCalls: [String] = []
+    private(set) var loadMoreFollowersCalls: [String] = []
+    private(set) var loadMoreFollowingCalls: [String] = []
 
     var stubbedFollowCounts: (followers: Int, following: Int) = (0, 0)
     var followError: FollowServiceError?
@@ -53,6 +57,14 @@ final class MockFollowService: FollowService {
 
     func refresh(for userID: String) async throws {
         refreshCalls.append(userID)
+    }
+
+    func loadMoreFollowers(for userID: String) async throws {
+        loadMoreFollowersCalls.append(userID)
+    }
+
+    func loadMoreFollowing(for userID: String) async throws {
+        loadMoreFollowingCalls.append(userID)
     }
 
     func fetchFollowCounts(for userID: String) async throws -> (followers: Int, following: Int) {
@@ -105,6 +117,8 @@ final class MockFollowService: FollowService {
         following = []
         outgoingPending = []
         pendingRequests = []
+        hasMoreFollowers = false
+        hasMoreFollowing = false
         followCalls = []
         unfollowCalls = []
         approveRequestCalls = []
@@ -112,6 +126,8 @@ final class MockFollowService: FollowService {
         removeFollowerCalls = []
         refreshCalls = []
         fetchFollowCountsCalls = []
+        loadMoreFollowersCalls = []
+        loadMoreFollowingCalls = []
         stubbedFollowCounts = (0, 0)
         followError = nil
         unfollowError = nil

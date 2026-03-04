@@ -10,7 +10,7 @@ struct RemoteFeedItemView: View {
     let encounter: CloudEncounter
     let cat: CloudCat?
 
-    @State private var showComments = false
+    @State private var showDetail = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
@@ -18,14 +18,16 @@ struct RemoteFeedItemView: View {
             photos
             location
             notes
-            InteractionBar(encounterRecordName: encounter.recordName, showComments: $showComments)
+            InteractionBar(encounterRecordName: encounter.recordName, showDetail: $showDetail)
         }
         .padding()
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
-        .sheet(isPresented: $showComments) {
-            CommentThreadView(encounterRecordName: encounter.recordName)
+        .sheet(isPresented: $showDetail) {
+            EncounterDetailSheet(
+                data: EncounterDetailData(remote: encounter, cat: cat, isFirstEncounter: false)
+            )
         }
     }
 
@@ -61,7 +63,8 @@ struct RemoteFeedItemView: View {
             PhotoCarouselView(
                 photos: allPhotos,
                 height: Layout.carouselHeight,
-                cornerRadius: CatchTheme.cornerRadiusSmall
+                cornerRadius: CatchTheme.cornerRadiusSmall,
+                onTap: { showDetail = true }
             )
         }
     }

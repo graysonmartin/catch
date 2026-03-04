@@ -18,7 +18,7 @@ private enum FeedItemLayout {
 struct FeedItemView: View {
     let encounter: Encounter
 
-    @State private var showComments = false
+    @State private var showDetail = false
 
     private var isFirstEncounter: Bool {
         guard let cat = encounter.cat else { return false }
@@ -30,85 +30,143 @@ struct FeedItemView: View {
         encounter.cat?.isUnnamed ?? false
     }
 
+    private var detailData: EncounterDetailData {
+        EncounterDetailData(local: encounter, isFirstEncounter: isFirstEncounter)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
-            // Header: photo + name + date
-            HStack(spacing: CatchSpacing.space12) {
-                CatPhotoView(photoData: encounter.cat?.photos.first, size: FeedItemLayout.thumbnailSize)
-
-                VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                    HStack(spacing: CatchSpacing.space4) {
-                        Text(encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat)
-                            .font(.headline)
-                            .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
-                        Text(isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat)
-                            .font(.system(size: PillLayout.fontSize, weight: .bold))
-                            .foregroundStyle(isFirstEncounter ? CatchTheme.primary : CatchTheme.textSecondary)
-                            .padding(.horizontal, PillLayout.horizontalPadding)
-                            .padding(.vertical, PillLayout.verticalPadding)
-                            .background(
-                                RoundedRectangle(cornerRadius: PillLayout.cornerRadius)
-                                    .fill(isFirstEncounter ? CatchTheme.primary.opacity(PillLayout.activeBackgroundOpacity) : CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity))
-                            )
-                        if isUnnamed {
-                            Text(CatchStrings.Feed.pillStray)
-                                .font(.system(size: PillLayout.fontSize, weight: .bold))
-                                .foregroundStyle(CatchTheme.textSecondary)
-                                .padding(.horizontal, PillLayout.horizontalPadding)
-                                .padding(.vertical, PillLayout.verticalPadding)
-                                .background(
-                                    RoundedRectangle(cornerRadius: PillLayout.cornerRadius)
-                                        .fill(CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity))
-                                )
-                        }
-                    }
-                    Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                }
-
-                Spacer()
-
-                if encounter.cat?.isOwned == true {
-                    Image(systemName: "heart.fill")
-                        .foregroundStyle(CatchTheme.primary)
-                        .font(.caption)
-                }
-            }
-
-            // Photos — prefer encounter-specific photos, fall back to cat's photos
-            if let photos = (!encounter.photos.isEmpty ? encounter.photos : encounter.cat?.photos),
-               !photos.isEmpty {
-                PhotoCarouselView(photos: photos, height: FeedItemLayout.carouselHeight, cornerRadius: CatchTheme.cornerRadiusSmall)
-            }
-
-            // Location
-            if !encounter.location.name.isEmpty {
-                Label(encounter.location.name, systemImage: "mappin.circle.fill")
-                    .font(.subheadline)
-                    .foregroundStyle(CatchTheme.textSecondary)
-            }
-
-            // Notes
-            if !encounter.notes.isEmpty {
-                Text(encounter.notes)
-                    .font(.subheadline)
-                    .foregroundStyle(CatchTheme.textPrimary)
-            }
-
-            // Interaction bar — only for synced encounters
-            if let recordName = encounter.cloudKitRecordName {
-                InteractionBar(encounterRecordName: recordName, showComments: $showComments)
-            }
+            header
+            photoSection
+            encounterMetadata
+            interactionSection
         }
         .padding()
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
-        .sheet(isPresented: $showComments) {
-            if let recordName = encounter.cloudKitRecordName {
-                CommentThreadView(encounterRecordName: recordName)
+        .contentShape(Rectangle())
+        .onTapGesture { showDetail = true }
+        .sheet(isPresented: $showDetail) {
+            EncounterDetailSheet(data: detailData)
+        }
+    }
+
+    // MARK: - Header
+
+    private var header: some View {
+        HStack(spacing: CatchSpacing.space12) {
+            CatPhotoView(photoData: encounter.cat?.photos.first, size: FeedItemLayout.thumbnailSize)
+
+            VStack(alignment: .leading, spacing: CatchSpacing.space2) {
+                HStack(spacing: CatchSpacing.space4) {
+                    Text(encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat)
+                        .font(.headline)
+                        .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
+                    pill(
+                        text: isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat,
+                        isActive: isFirstEncounter
+                    )
+                    if isUnnamed {
+                        pill(text: CatchStrings.Feed.pillStray, isActive: false)
+                    }
+                }
+                Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
+                    .font(.caption)
+                    .foregroundStyle(CatchTheme.textSecondary)
+            }
+
+            Spacer()
+
+            if encounter.cat?.isOwned == true {
+                Image(systemName: "heart.fill")
+                    .foregroundStyle(CatchTheme.primary)
+                    .font(.caption)
             }
         }
+    }
+
+    // MARK: - Photos
+
+    @ViewBuilder
+    private var photoSection: some View {
+        if let photos = (!encounter.photos.isEmpty ? encounter.photos : encounter.cat?.photos),
+           !photos.isEmpty {
+            PhotoCarouselView(photos: photos, height: FeedItemLayout.carouselHeight, cornerRadius: CatchTheme.cornerRadiusSmall, onTap: { showDetail = true })
+        }
+    }
+
+    // MARK: - Encounter Metadata
+
+    private var encounterMetadata: some View {
+        VStack(alignment: .leading, spacing: CatchSpacing.space4) {
+            breed
+            location
+            notes
+        }
+    }
+
+    @ViewBuilder
+    private var breed: some View {
+        if let breedName = encounter.cat?.breed, !breedName.isEmpty {
+            Label(breedName, systemImage: "pawprint.fill")
+                .font(.subheadline)
+                .foregroundStyle(CatchTheme.textSecondary)
+        }
+    }
+
+    @ViewBuilder
+    private var location: some View {
+        if !encounter.location.name.isEmpty {
+            Label(encounter.location.name, systemImage: "mappin.circle.fill")
+                .font(.subheadline)
+                .foregroundStyle(CatchTheme.textSecondary)
+        }
+    }
+
+    @ViewBuilder
+    private var notes: some View {
+        if !encounter.notes.isEmpty {
+            Text(encounter.notes)
+                .font(.subheadline)
+                .foregroundStyle(CatchTheme.textPrimary)
+                .lineLimit(3)
+        }
+    }
+
+    // MARK: - Interaction
+
+    @ViewBuilder
+    private var interactionSection: some View {
+        if let recordName = encounter.cloudKitRecordName {
+            InteractionBar(encounterRecordName: recordName, showDetail: $showDetail, isOwnEncounter: true)
+        } else {
+            HStack {
+                Spacer()
+                (Text(CatchStrings.Feed.spottedByPrefix)
+                    .foregroundStyle(CatchTheme.textSecondary) +
+                Text(CatchStrings.Social.you)
+                    .foregroundStyle(CatchTheme.primary))
+                    .font(.caption.weight(.medium))
+            }
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func pill(text: String, isActive: Bool) -> some View {
+        Text(text)
+            .font(.system(size: PillLayout.fontSize, weight: .bold))
+            .foregroundStyle(isActive ? CatchTheme.primary : CatchTheme.textSecondary)
+            .padding(.horizontal, PillLayout.horizontalPadding)
+            .padding(.vertical, PillLayout.verticalPadding)
+            .background(
+                RoundedRectangle(cornerRadius: PillLayout.cornerRadius)
+                    .fill(
+                        isActive
+                            ? CatchTheme.primary.opacity(PillLayout.activeBackgroundOpacity)
+                            : CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity)
+                    )
+            )
     }
 }

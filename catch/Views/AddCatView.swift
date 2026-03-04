@@ -8,6 +8,8 @@ struct AddCatView: View {
     @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
     @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
 
+    var onSave: (() -> Void)?
+
     @State private var isUnnamed = false
     @State private var name = ""
     @State private var breed: String?
@@ -23,10 +25,37 @@ struct AddCatView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section(CatchStrings.Common.photos) {
+                    PhotoPickerView(
+                        selectedPhotos: $photos,
+                        minimumPhotos: 1,
+                        thumbnailSize: 120
+                    )
+                    if photos.isEmpty {
+                        Text(CatchStrings.Log.photoRequired)
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                    if breed == nil && !isDismissedSuggestion
+                        && (breedSuggestion != nil || breedClassifier?.isClassifying == true)
+                    {
+                        BreedPredictionCard(
+                            predictions: breedClassifier?.topPredictions ?? [],
+                            isClassifying: breedClassifier?.isClassifying ?? false,
+                            onSelect: { breed = $0; breedSuggestion = nil },
+                            onDismiss: { isDismissedSuggestion = true; breedSuggestion = nil }
+                        )
+                    }
+                }
+
                 Section(CatchStrings.Common.catInfo) {
                     Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
                     if !isUnnamed {
-                        TextField(CatchStrings.Common.name, text: $name)
+                        LimitedSingleLineFieldView(
+                            CatchStrings.Common.name,
+                            text: $name,
+                            limit: TextInputLimits.catName
+                        )
                     }
                     BreedPickerView(breed: $breed)
                     TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
@@ -34,32 +63,12 @@ struct AddCatView: View {
                     Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
                 }
 
-                Section(CatchStrings.Common.photos) {
-                    PhotoPickerView(selectedPhotos: $photos)
-                    if photos.isEmpty {
-                        Text(CatchStrings.Log.photoRequired)
-                            .font(.caption)
-                            .foregroundStyle(CatchTheme.primary)
-                    }
-                    if breed == nil && !isDismissedSuggestion {
-                        BreedSuggestionView(
-                            prediction: breedSuggestion,
-                            isClassifying: breedClassifier?.isClassifying ?? false,
-                            onConfirm: { confirmedBreed in
-                                breed = confirmedBreed
-                                breedSuggestion = nil
-                            },
-                            onDismiss: {
-                                isDismissedSuggestion = true
-                                breedSuggestion = nil
-                            }
-                        )
-                    }
-                }
-
                 Section(CatchStrings.Common.notes) {
-                    TextField(CatchStrings.Common.notesPlaceholder, text: $notes, axis: .vertical)
-                        .lineLimit(3...6)
+                    LimitedTextFieldView(
+                        CatchStrings.Common.notesPlaceholder,
+                        text: $notes,
+                        limit: TextInputLimits.catNotes
+                    )
                 }
 
             }
@@ -121,6 +130,8 @@ struct AddCatView: View {
         modelContext.insert(encounter)
 
         Task { await catSyncService?.syncNewCat(cat, firstEncounter: encounter) }
+
+        onSave?()
 
         if cat.isSteven {
             showStevenEasterEgg = true

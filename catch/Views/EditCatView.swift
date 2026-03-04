@@ -33,10 +33,37 @@ struct EditCatView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section(CatchStrings.Common.photos) {
+                    PhotoPickerView(
+                        selectedPhotos: $photos,
+                        minimumPhotos: 1,
+                        thumbnailSize: 120
+                    )
+                    if photos.isEmpty {
+                        Text(CatchStrings.Log.photoRequired)
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                    if breed == nil && !isDismissedSuggestion
+                        && (breedSuggestion != nil || breedClassifier?.isClassifying == true)
+                    {
+                        BreedPredictionCard(
+                            predictions: breedClassifier?.topPredictions ?? [],
+                            isClassifying: breedClassifier?.isClassifying ?? false,
+                            onSelect: { breed = $0; breedSuggestion = nil },
+                            onDismiss: { isDismissedSuggestion = true; breedSuggestion = nil }
+                        )
+                    }
+                }
+
                 Section(CatchStrings.Common.catInfo) {
                     Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
                     if !isUnnamed {
-                        TextField(CatchStrings.Common.name, text: $name)
+                        LimitedSingleLineFieldView(
+                            CatchStrings.Common.name,
+                            text: $name,
+                            limit: TextInputLimits.catName
+                        )
                     }
                     BreedPickerView(breed: $breed)
                     TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
@@ -44,27 +71,12 @@ struct EditCatView: View {
                     Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
                 }
 
-                Section(CatchStrings.Common.photos) {
-                    PhotoPickerView(selectedPhotos: $photos)
-                    if breed == nil && !isDismissedSuggestion {
-                        BreedSuggestionView(
-                            prediction: breedSuggestion,
-                            isClassifying: breedClassifier?.isClassifying ?? false,
-                            onConfirm: { confirmedBreed in
-                                breed = confirmedBreed
-                                breedSuggestion = nil
-                            },
-                            onDismiss: {
-                                isDismissedSuggestion = true
-                                breedSuggestion = nil
-                            }
-                        )
-                    }
-                }
-
                 Section(CatchStrings.Common.notes) {
-                    TextField(CatchStrings.Common.notesPlaceholder, text: $notes, axis: .vertical)
-                        .lineLimit(3...6)
+                    LimitedTextFieldView(
+                        CatchStrings.Common.notesPlaceholder,
+                        text: $notes,
+                        limit: TextInputLimits.catNotes
+                    )
                 }
             }
             .navigationTitle(CatchStrings.Log.editCatTitle)
@@ -75,7 +87,7 @@ struct EditCatView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(CatchStrings.Common.save) { save() }
-                        .disabled(!isUnnamed && name.trimmingCharacters(in: .whitespaces).isEmpty)
+                        .disabled(!canSave)
                         .fontWeight(.semibold)
                 }
             }
@@ -89,6 +101,10 @@ struct EditCatView: View {
                 }
             }
         }
+    }
+
+    private var canSave: Bool {
+        (isUnnamed || !name.trimmingCharacters(in: .whitespaces).isEmpty) && !photos.isEmpty
     }
 
     private func save() {

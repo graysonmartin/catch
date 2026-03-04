@@ -35,7 +35,12 @@ struct EditEncounterView: View {
                 }
 
                 Section(CatchStrings.Log.detailsSection) {
-                    DatePicker(CatchStrings.Common.date, selection: $date, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker(
+                        CatchStrings.Common.date,
+                        selection: $date,
+                        in: EncounterDateValidator.allowedRange,
+                        displayedComponents: [.date, .hourAndMinute]
+                    )
                     LocationPickerView(location: $location)
                 }
 
@@ -44,8 +49,11 @@ struct EditEncounterView: View {
                 }
 
                 Section(CatchStrings.Log.notesSection) {
-                    TextField(CatchStrings.Log.whatHappenedLower, text: $notes, axis: .vertical)
-                        .lineLimit(3...6)
+                    LimitedTextFieldView(
+                        CatchStrings.Log.whatHappenedLower,
+                        text: $notes,
+                        limit: TextInputLimits.encounterNotes
+                    )
                 }
             }
             .navigationTitle(CatchStrings.Log.editEncounterTitle)

@@ -15,6 +15,7 @@ struct LogEncounterView: View {
     @State private var photos: [Data] = []
     @State private var showingAddCat = false
 
+    var onSave: (() -> Void)?
     var preselectedCat: Cat? = nil
 
     var body: some View {
@@ -82,7 +83,12 @@ struct LogEncounterView: View {
                 }
 
                 Section(CatchStrings.Log.encounterDetails) {
-                    DatePicker(CatchStrings.Common.date, selection: $date, displayedComponents: [.date, .hourAndMinute])
+                    DatePicker(
+                        CatchStrings.Common.date,
+                        selection: $date,
+                        in: EncounterDateValidator.allowedRange,
+                        displayedComponents: [.date, .hourAndMinute]
+                    )
                     LocationPickerView(location: $location)
                 }
 
@@ -91,8 +97,11 @@ struct LogEncounterView: View {
                 }
 
                 Section(CatchStrings.Common.notes) {
-                    TextField(CatchStrings.Log.whatHappened, text: $notes, axis: .vertical)
-                        .lineLimit(3...6)
+                    LimitedTextFieldView(
+                        CatchStrings.Log.whatHappened,
+                        text: $notes,
+                        limit: TextInputLimits.encounterNotes
+                    )
                 }
             }
             .navigationTitle(CatchStrings.Log.logEncounterTitle)
@@ -131,6 +140,7 @@ struct LogEncounterView: View {
         )
         modelContext.insert(encounter)
         Task { await encounterSyncService?.syncNewEncounter(encounter, for: cat) }
+        onSave?()
         dismiss()
     }
 }

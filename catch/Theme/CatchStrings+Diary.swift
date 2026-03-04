@@ -13,5 +13,7 @@ extension CatchStrings {
         static func searchEmptySubtitle(_ query: String) -> String {
             String(localized: "nothing matching \"\(query)\" in the diary")
         }
+
+        static let encounterDetail = String(localized: "encounter details")
     }
 }

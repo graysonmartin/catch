@@ -7,7 +7,7 @@ struct CatPhotoView: View {
     var body: some View {
         Group {
             if let data = photoData,
-               let uiImage = ImageDownsampler.downsample(data: data, to: CGSize(width: size, height: size)) {
+               let uiImage = ImageDownsampler.shared.downsample(data: data, to: CGSize(width: size, height: size)) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()

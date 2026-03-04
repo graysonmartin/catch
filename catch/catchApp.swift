@@ -95,7 +95,8 @@ struct catchApp: App {
                             )
                             userBrowseService = browseService
                             socialInteractionService = CKSocialInteractionService(
-                                getCurrentUserID: getUserID
+                                getCurrentUserID: getUserID,
+                                cloudKitService: CKCloudKitService()
                             )
                             socialFeedService = CKSocialFeedService(
                                 followService: followService,

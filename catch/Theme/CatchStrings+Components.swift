@@ -24,17 +24,10 @@ extension CatchStrings {
         static let clear = String(localized: "clear")
         static let unknown = String(localized: "unknown")
 
-        // BreedSuggestionView
+        // BreedPredictionCard
         static let analyzingCreature = String(localized: "analyzing this creature...")
-        static let yep = String(localized: "yep")
-
-        static func looksLike(_ breed: String) -> String {
-            String(localized: "looks like a \(breed)")
-        }
-
-        static func maybeLike(_ breed: String) -> String {
-            String(localized: "maybe a \(breed)? honestly not sure")
-        }
+        static let weThinkThisIs = String(localized: "we think this is...")
+        static let noneOfThese = String(localized: "none of these, sorry")
 
         // CatPickerView
         static let nameOrLocation = String(localized: "name or location")
@@ -44,5 +37,12 @@ extension CatchStrings {
 
         // StevenEasterEggView
         static let youFoundHim = String(localized: "you found him.")
+
+        // FullScreenPhotoViewer
+        static let closePhotoViewer = String(localized: "close")
+
+        static func photoPageIndicator(_ current: Int, _ total: Int) -> String {
+            String(localized: "\(current) of \(total)")
+        }
     }
 }

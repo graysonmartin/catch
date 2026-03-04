@@ -11,12 +11,24 @@ public final class CKSocialInteractionService: SocialInteractionService {
     private static let containerID = "iCloud.com.catch.catch"
     private let getCurrentUserID: () -> String?
 
+    /// Stores active CK cursors keyed by encounter record name for comment pagination.
+    private var commentCursors: [String: CKQueryOperation.Cursor] = [:]
+
+    /// Stores active CK cursors keyed by encounter record name for like pagination.
+    private var likeCursors: [String: CKQueryOperation.Cursor] = [:]
+
+    private let cloudKitService: (any CloudKitService)?
+
     private var database: CKDatabase {
         CKContainer(identifier: Self.containerID).publicCloudDatabase
     }
 
-    public init(getCurrentUserID: @escaping @Sendable () -> String?) {
+    public init(
+        getCurrentUserID: @escaping @Sendable () -> String?,
+        cloudKitService: (any CloudKitService)? = nil
+    ) {
         self.getCurrentUserID = getCurrentUserID
+        self.cloudKitService = cloudKitService
     }
 
     // MARK: - Likes
@@ -73,6 +85,72 @@ public final class CKSocialInteractionService: SocialInteractionService {
         likeCounts[encounterRecordName, default: 0]
     }
 
+    public func fetchLikes(
+        encounterRecordName: String,
+        cursor: String?
+    ) async throws -> ([LikedByUser], String?) {
+        let results: [(CKRecord.ID, Result<CKRecord, any Error>)]
+        let queryCursor: CKQueryOperation.Cursor?
+
+        if cursor != nil, let activeCursor = likeCursors[encounterRecordName] {
+            (results, queryCursor) = try await database.records(
+                continuingMatchFrom: activeCursor,
+                resultsLimit: PaginationConstants.likesPageSize
+            )
+        } else {
+            let predicate = NSPredicate(format: "encounterRecordName == %@", encounterRecordName)
+            let query = CKQuery(recordType: LikeRecordMapper.recordType, predicate: predicate)
+            query.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+
+            (results, queryCursor) = try await database.records(
+                matching: query,
+                resultsLimit: PaginationConstants.likesPageSize
+            )
+        }
+
+        let likes = results.compactMap { _, result -> EncounterLike? in
+            guard case .success(let record) = result else { return nil }
+            return LikeRecordMapper.like(from: record)
+        }
+
+        if let queryCursor {
+            likeCursors[encounterRecordName] = queryCursor
+        } else {
+            likeCursors.removeValue(forKey: encounterRecordName)
+        }
+
+        let cursorString: String? = queryCursor != nil ? "has_more" : nil
+
+        let users = await resolveLikeUsers(likes)
+        return (users, cursorString)
+    }
+
+    /// Resolves EncounterLike records into LikedByUser models by fetching profile data.
+    private func resolveLikeUsers(_ likes: [EncounterLike]) async -> [LikedByUser] {
+        await withTaskGroup(of: LikedByUser?.self) { group in
+            for like in likes {
+                group.addTask { [cloudKitService] in
+                    let profile = try? await cloudKitService?.fetchUserProfile(appleUserID: like.userID)
+                    return LikedByUser(
+                        id: like.id,
+                        userID: like.userID,
+                        displayName: profile?.displayName ?? like.userID.prefix(8).description,
+                        username: profile?.username,
+                        likedAt: like.createdAt
+                    )
+                }
+            }
+
+            var users: [LikedByUser] = []
+            for await user in group {
+                if let user {
+                    users.append(user)
+                }
+            }
+            return users.sorted { $0.likedAt > $1.likedAt }
+        }
+    }
+
     // MARK: - Comments
 
     public func addComment(encounterRecordName: String, text: String) async throws -> EncounterComment {
@@ -82,7 +160,7 @@ public final class CKSocialInteractionService: SocialInteractionService {
 
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { throw SocialInteractionError.commentEmpty }
-        guard trimmed.count <= 500 else { throw SocialInteractionError.commentTooLong }
+        guard trimmed.count <= TextInputLimits.comment else { throw SocialInteractionError.commentTooLong }
 
         let comment = EncounterComment(
             id: "\(userID)_comment_\(UUID().uuidString)",
@@ -119,18 +197,37 @@ public final class CKSocialInteractionService: SocialInteractionService {
         encounterRecordName: String,
         cursor: String?
     ) async throws -> ([EncounterComment], String?) {
-        let predicate = NSPredicate(format: "encounterRecordName == %@", encounterRecordName)
-        let query = CKQuery(recordType: CommentRecordMapper.recordType, predicate: predicate)
-        query.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let results: [(CKRecord.ID, Result<CKRecord, any Error>)]
+        let queryCursor: CKQueryOperation.Cursor?
 
-        let (results, queryCursor) = try await database.records(matching: query, resultsLimit: 50)
+        if cursor != nil, let activeCursor = commentCursors[encounterRecordName] {
+            (results, queryCursor) = try await database.records(
+                continuingMatchFrom: activeCursor,
+                resultsLimit: PaginationConstants.commentsPageSize
+            )
+        } else {
+            let predicate = NSPredicate(format: "encounterRecordName == %@", encounterRecordName)
+            let query = CKQuery(recordType: CommentRecordMapper.recordType, predicate: predicate)
+            query.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+
+            (results, queryCursor) = try await database.records(
+                matching: query,
+                resultsLimit: PaginationConstants.commentsPageSize
+            )
+        }
 
         let comments = results.compactMap { _, result -> EncounterComment? in
             guard case .success(let record) = result else { return nil }
             return CommentRecordMapper.comment(from: record)
         }
 
-        let cursorString = queryCursor != nil ? "has_more" : nil
+        if let queryCursor {
+            commentCursors[encounterRecordName] = queryCursor
+        } else {
+            commentCursors.removeValue(forKey: encounterRecordName)
+        }
+
+        let cursorString: String? = queryCursor != nil ? "has_more" : nil
         return (comments, cursorString)
     }
 

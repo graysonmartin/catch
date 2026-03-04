@@ -48,6 +48,15 @@ struct OwnProfileContent: View {
         .navigationBarTitleDisplayMode(.large)
         .searchable(text: $searchText, prompt: CatchStrings.Diary.searchPrompt)
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                NavigationLink {
+                    SettingsView()
+                } label: {
+                    Image(systemName: "gearshape")
+                        .foregroundStyle(CatchTheme.primary)
+                }
+            }
+
             if profile != nil {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {

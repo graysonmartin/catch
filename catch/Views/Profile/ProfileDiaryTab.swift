@@ -6,6 +6,10 @@ struct ProfileDiaryTab: View {
     let encounters: [Encounter]
     let searchText: String
 
+    @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+
+    @State private var selectedEncounterDetail: EncounterDetailData?
+
     private var filteredEncounters: [Encounter] {
         guard !searchText.isEmpty else { return encounters }
         return encounters.filter { encounter in
@@ -37,6 +41,13 @@ struct ProfileDiaryTab: View {
         return ids
     }
 
+    private var isShowingDetail: Binding<Bool> {
+        Binding(
+            get: { selectedEncounterDetail != nil },
+            set: { if !$0 { selectedEncounterDetail = nil } }
+        )
+    }
+
     var body: some View {
         if encounters.isEmpty {
             EmptyStateView(
@@ -55,20 +66,7 @@ struct ProfileDiaryTab: View {
                 ForEach(groupedEncounters, id: \.date) { group in
                     Section {
                         ForEach(group.encounters) { encounter in
-                            if let cat = encounter.cat {
-                                NavigationLink(value: cat) {
-                                    DiaryEntryRow(
-                                        encounter: encounter,
-                                        isFirstEncounter: earliestEncounterIDs.contains(encounter.persistentModelID)
-                                    )
-                                }
-                                .buttonStyle(.plain)
-                            } else {
-                                DiaryEntryRow(
-                                    encounter: encounter,
-                                    isFirstEncounter: false
-                                )
-                            }
+                            diaryRow(for: encounter)
                         }
                     } header: {
                         Text(formattedDateHeader(group.date))
@@ -80,6 +78,48 @@ struct ProfileDiaryTab: View {
                 }
             }
             .padding(.horizontal)
+            .task {
+                await loadInteractionData()
+            }
+            .sheet(isPresented: isShowingDetail) {
+                if let detail = selectedEncounterDetail {
+                    EncounterDetailSheet(data: detail)
+                }
+            }
+        }
+    }
+
+    // MARK: - Row Builder
+
+    @ViewBuilder
+    private func diaryRow(for encounter: Encounter) -> some View {
+        let recordName = encounter.cloudKitRecordName
+        let likes = likeCount(for: recordName)
+        let comments = commentCount(for: recordName)
+        let isFirst = earliestEncounterIDs.contains(encounter.persistentModelID)
+
+        if encounter.cat != nil {
+            Button {
+                selectedEncounterDetail = EncounterDetailData(
+                    local: encounter,
+                    isFirstEncounter: isFirst
+                )
+            } label: {
+                DiaryEntryRow(
+                    encounter: encounter,
+                    isFirstEncounter: isFirst,
+                    likeCount: likes,
+                    commentCount: comments
+                )
+            }
+            .buttonStyle(.plain)
+        } else {
+            DiaryEntryRow(
+                encounter: encounter,
+                isFirstEncounter: false,
+                likeCount: likes,
+                commentCount: comments
+            )
         }
     }
 
@@ -92,5 +132,22 @@ struct ProfileDiaryTab: View {
         } else {
             return date.formatted(.dateTime.month(.abbreviated).day().year()).lowercased()
         }
+    }
+
+    private func likeCount(for recordName: String?) -> Int {
+        guard let recordName else { return 0 }
+        return socialService?.likeCount(for: recordName) ?? 0
+    }
+
+    private func commentCount(for recordName: String?) -> Int {
+        guard let recordName else { return 0 }
+        return socialService?.commentCount(for: recordName) ?? 0
+    }
+
+    private func loadInteractionData() async {
+        guard let socialService else { return }
+        let recordNames = encounters.compactMap(\.cloudKitRecordName)
+        guard !recordNames.isEmpty else { return }
+        try? await socialService.loadInteractionData(for: recordNames)
     }
 }
