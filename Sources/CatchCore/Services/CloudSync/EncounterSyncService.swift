@@ -7,7 +7,7 @@ public protocol EncounterSyncService: Observable, Sendable {
 
     var isSyncing: Bool { get }
 
-    func syncNewEncounter(_ encounter: EncounterModel, for cat: CatModel) async
-    func syncEncounterUpdate(_ encounter: EncounterModel) async
+    func syncNewEncounter(_ encounter: EncounterModel, for cat: CatModel) async throws
+    func syncEncounterUpdate(_ encounter: EncounterModel) async throws
     func deleteEncounter(recordName: String) async throws
 }

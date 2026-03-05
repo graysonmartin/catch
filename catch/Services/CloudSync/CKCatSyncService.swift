@@ -25,10 +25,9 @@ final class CKCatSyncService: CatSyncService {
 
     // MARK: - Sync New Cat + First Encounter
 
-    func syncNewCat(_ cat: Cat, firstEncounter: Encounter) async {
+    func syncNewCat(_ cat: Cat, firstEncounter: Encounter) async throws {
         guard let userID = getUserID() else {
-            logger.info("skipping cat sync — not signed in")
-            return
+            throw CloudSyncError.notSignedIn
         }
 
         isSyncing = true
@@ -48,33 +47,40 @@ final class CKCatSyncService: CatSyncService {
             photos: cat.photos
         )
 
+        let catRecordName = try await catRepository.save(catPayload, ownerID: userID)
+        cat.cloudKitRecordName = catRecordName
+
+        let encPayload = EncounterSyncPayload(
+            recordName: nil,
+            catRecordName: catRecordName,
+            date: firstEncounter.date,
+            locationName: firstEncounter.location.name,
+            locationLatitude: firstEncounter.location.latitude,
+            locationLongitude: firstEncounter.location.longitude,
+            notes: firstEncounter.notes,
+            photos: firstEncounter.photos
+        )
+
         do {
-            let catRecordName = try await catRepository.save(catPayload, ownerID: userID)
-            cat.cloudKitRecordName = catRecordName
-
-            let encPayload = EncounterSyncPayload(
-                recordName: nil,
-                catRecordName: catRecordName,
-                date: firstEncounter.date,
-                locationName: firstEncounter.location.name,
-                locationLatitude: firstEncounter.location.latitude,
-                locationLongitude: firstEncounter.location.longitude,
-                notes: firstEncounter.notes,
-                photos: firstEncounter.photos
-            )
-
             let encRecordName = try await encounterRepository.save(encPayload, ownerID: userID)
             firstEncounter.cloudKitRecordName = encRecordName
         } catch {
-            logger.error("cat sync failed: \(error.localizedDescription)")
+            // Encounter save failed — rollback the cat record
+            try? await catRepository.delete(recordName: catRecordName)
+            cat.cloudKitRecordName = nil
+            throw error
         }
     }
 
     // MARK: - Sync Cat Update
 
-    func syncCatUpdate(_ cat: Cat) async {
-        guard let userID = getUserID() else { return }
-        guard cat.cloudKitRecordName != nil else { return }
+    func syncCatUpdate(_ cat: Cat) async throws {
+        guard let userID = getUserID() else {
+            throw CloudSyncError.notSignedIn
+        }
+        guard cat.cloudKitRecordName != nil else {
+            throw CloudSyncError.recordNotFound
+        }
 
         isSyncing = true
         defer { isSyncing = false }
@@ -93,11 +99,7 @@ final class CKCatSyncService: CatSyncService {
             photos: cat.photos
         )
 
-        do {
-            _ = try await catRepository.save(payload, ownerID: userID)
-        } catch {
-            logger.error("cat update sync failed: \(error.localizedDescription)")
-        }
+        _ = try await catRepository.save(payload, ownerID: userID)
     }
 
     // MARK: - Delete

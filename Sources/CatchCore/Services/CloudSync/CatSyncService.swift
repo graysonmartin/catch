@@ -7,7 +7,7 @@ public protocol CatSyncService: Observable, Sendable {
 
     var isSyncing: Bool { get }
 
-    func syncNewCat(_ cat: CatModel, firstEncounter: EncounterModel) async
-    func syncCatUpdate(_ cat: CatModel) async
+    func syncNewCat(_ cat: CatModel, firstEncounter: EncounterModel) async throws
+    func syncCatUpdate(_ cat: CatModel) async throws
     func deleteCat(recordName: String) async throws
 }

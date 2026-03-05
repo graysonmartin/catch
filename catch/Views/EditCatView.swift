@@ -5,6 +5,7 @@ struct EditCatView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
     @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
+    @Environment(ToastManager.self) private var toastManager
     @Bindable var cat: Cat
 
     @State private var isUnnamed: Bool
@@ -17,6 +18,16 @@ struct EditCatView: View {
     @State private var photos: [Data]
     @State private var breedSuggestion: BreedPrediction?
     @State private var isDismissedSuggestion = false
+    @State private var isSaving = false
+
+    // Original values for rollback
+    private let originalName: String?
+    private let originalBreed: String?
+    private let originalEstimatedAge: String
+    private let originalLocation: Location
+    private let originalNotes: String
+    private let originalIsOwned: Bool
+    private let originalPhotos: [Data]
 
     init(cat: Cat) {
         self.cat = cat
@@ -28,6 +39,14 @@ struct EditCatView: View {
         _notes = State(initialValue: cat.notes)
         _isOwned = State(initialValue: cat.isOwned)
         _photos = State(initialValue: cat.photos)
+
+        originalName = cat.name
+        originalBreed = cat.breed
+        originalEstimatedAge = cat.estimatedAge
+        originalLocation = cat.location
+        originalNotes = cat.notes
+        originalIsOwned = cat.isOwned
+        originalPhotos = cat.photos
     }
 
     var body: some View {
@@ -84,13 +103,19 @@ struct EditCatView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(CatchStrings.Common.cancel) { dismiss() }
+                        .disabled(isSaving)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(CatchStrings.Common.save) { save() }
-                        .disabled(!canSave)
-                        .fontWeight(.semibold)
+                    if isSaving {
+                        ProgressView()
+                    } else {
+                        Button(CatchStrings.Common.save) { Task { await save() } }
+                            .disabled(!canSave)
+                            .fontWeight(.semibold)
+                    }
                 }
             }
+            .disabled(isSaving)
             .onChange(of: isUnnamed) {
                 if isUnnamed { name = "" }
             }
@@ -107,7 +132,7 @@ struct EditCatView: View {
         (isUnnamed || !name.trimmingCharacters(in: .whitespaces).isEmpty) && !photos.isEmpty
     }
 
-    private func save() {
+    private func save() async {
         cat.name = isUnnamed ? nil : name.trimmingCharacters(in: .whitespaces)
         cat.breed = breed
         cat.estimatedAge = estimatedAge
@@ -115,7 +140,25 @@ struct EditCatView: View {
         cat.notes = notes
         cat.isOwned = isOwned
         cat.photos = photos
-        Task { await catSyncService?.syncCatUpdate(cat) }
+
+        isSaving = true
+        defer { isSaving = false }
+
+        do {
+            try await catSyncService?.syncCatUpdate(cat)
+        } catch {
+            // Revert local changes
+            cat.name = originalName
+            cat.breed = originalBreed
+            cat.estimatedAge = originalEstimatedAge
+            cat.location = originalLocation
+            cat.notes = originalNotes
+            cat.isOwned = originalIsOwned
+            cat.photos = originalPhotos
+            toastManager.showError(CatchStrings.Toast.catUpdateFailed)
+            return
+        }
+
         dismiss()
     }
 }

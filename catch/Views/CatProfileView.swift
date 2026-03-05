@@ -5,12 +5,16 @@ import CatchCore
 struct CatProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
+    @Environment(CKEncounterSyncService.self) private var encounterSyncService: CKEncounterSyncService?
+    @Environment(ToastManager.self) private var toastManager
     @Bindable var cat: Cat
     @State private var showingEdit = false
     @State private var showingDeleteCat = false
     @State private var encounterToEdit: Encounter?
     @State private var showingLogEncounter = false
     @State private var encounterToDelete: Encounter?
+    @State private var isDeleting = false
 
     private var sortedEncounters: [Encounter] {
         cat.encounters.sorted { $0.date > $1.date }
@@ -150,11 +154,16 @@ struct CatProfileView: View {
                 } label: {
                     HStack {
                         Spacer()
-                        Label(CatchStrings.CatProfile.deleteThisCat, systemImage: "trash")
-                            .font(.subheadline.weight(.medium))
+                        if isDeleting {
+                            ProgressView()
+                        } else {
+                            Label(CatchStrings.CatProfile.deleteThisCat, systemImage: "trash")
+                                .font(.subheadline.weight(.medium))
+                        }
                         Spacer()
                     }
                 }
+                .disabled(isDeleting)
             }
             .listRowBackground(CatchTheme.background)
         }
@@ -178,7 +187,7 @@ struct CatProfileView: View {
         )) {
             Button(CatchStrings.Common.delete, role: .destructive) {
                 if let encounter = encounterToDelete {
-                    modelContext.delete(encounter)
+                    Task { await deleteEncounter(encounter) }
                     encounterToDelete = nil
                 }
             }
@@ -190,14 +199,60 @@ struct CatProfileView: View {
         }
         .alert(CatchStrings.CatProfile.deleteCatTitle(name: cat.displayName), isPresented: $showingDeleteCat) {
             Button(CatchStrings.Common.delete, role: .destructive) {
-                modelContext.delete(cat)
-                dismiss()
+                Task { await deleteCat() }
             }
             Button(CatchStrings.Common.cancel, role: .cancel) {}
         } message: {
             Text(CatchStrings.CatProfile.deleteCatMessage)
         }
     }
+
+    // MARK: - Delete Actions
+
+    private func deleteEncounter(_ encounter: Encounter) async {
+        if let recordName = encounter.cloudKitRecordName {
+            do {
+                try await encounterSyncService?.deleteEncounter(recordName: recordName)
+            } catch {
+                toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
+                return
+            }
+        }
+        modelContext.delete(encounter)
+    }
+
+    private func deleteCat() async {
+        isDeleting = true
+        defer { isDeleting = false }
+
+        // Delete all encounter records from CloudKit first
+        for encounter in cat.encounters {
+            if let recordName = encounter.cloudKitRecordName {
+                do {
+                    try await encounterSyncService?.deleteEncounter(recordName: recordName)
+                } catch {
+                    toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
+                    return
+                }
+            }
+        }
+
+        // Delete cat record from CloudKit
+        if let recordName = cat.cloudKitRecordName {
+            do {
+                try await catSyncService?.deleteCat(recordName: recordName)
+            } catch {
+                toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
+                return
+            }
+        }
+
+        // Delete locally
+        modelContext.delete(cat)
+        dismiss()
+    }
+
+    // MARK: - Subviews
 
     private func infoRow(icon: String, label: String, value: String) -> some View {
         HStack(alignment: .top, spacing: CatchSpacing.space8) {

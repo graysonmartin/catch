@@ -34,5 +34,12 @@ extension CatchStrings {
 
         // Social actions
         static let removeFollowerFailed = String(localized: "couldn't remove them. they're still lurking")
+
+        // CloudKit save/update/delete
+        static let catSyncFailed = String(localized: "couldn't save to the cloud. check your connection?")
+        static let encounterSyncFailed = String(localized: "encounter didn't sync. give it another shot?")
+        static let catUpdateFailed = String(localized: "update didn't stick in the cloud. try again?")
+        static let encounterUpdateFailed = String(localized: "encounter update failed to sync. try again?")
+        static let deleteSyncFailed = String(localized: "couldn't delete from the cloud. try again?")
     }
 }

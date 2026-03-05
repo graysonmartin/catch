@@ -7,6 +7,7 @@ struct AddCatView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
     @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
+    @Environment(ToastManager.self) private var toastManager
 
     var onSave: (() -> Void)?
 
@@ -21,6 +22,7 @@ struct AddCatView: View {
     @State private var breedSuggestion: BreedPrediction?
     @State private var isDismissedSuggestion = false
     @State private var showStevenEasterEgg = false
+    @State private var isSaving = false
 
     var body: some View {
         NavigationStack {
@@ -77,13 +79,19 @@ struct AddCatView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(CatchStrings.Common.cancel) { dismiss() }
+                        .disabled(isSaving)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(CatchStrings.Common.save) { save() }
-                        .disabled(!canSave)
-                        .fontWeight(.semibold)
+                    if isSaving {
+                        ProgressView()
+                    } else {
+                        Button(CatchStrings.Common.save) { Task { await save() } }
+                            .disabled(!canSave)
+                            .fontWeight(.semibold)
+                    }
                 }
             }
+            .disabled(isSaving)
             .onChange(of: isUnnamed) {
                 if isUnnamed { name = "" }
             }
@@ -107,7 +115,7 @@ struct AddCatView: View {
         (isUnnamed || !name.trimmingCharacters(in: .whitespaces).isEmpty) && !photos.isEmpty
     }
 
-    private func save() {
+    private func save() async {
         let trimmedName = isUnnamed ? nil : name.trimmingCharacters(in: .whitespaces)
         let cat = Cat(
             name: trimmedName,
@@ -118,7 +126,6 @@ struct AddCatView: View {
             isOwned: isOwned,
             photos: photos
         )
-        modelContext.insert(cat)
 
         let encounter = Encounter(
             date: Date(),
@@ -127,10 +134,19 @@ struct AddCatView: View {
             cat: cat,
             photos: photos
         )
+
+        isSaving = true
+        defer { isSaving = false }
+
+        do {
+            try await catSyncService?.syncNewCat(cat, firstEncounter: encounter)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.catSyncFailed)
+            return
+        }
+
+        modelContext.insert(cat)
         modelContext.insert(encounter)
-
-        Task { await catSyncService?.syncNewCat(cat, firstEncounter: encounter) }
-
         onSave?()
 
         if cat.isSteven {
