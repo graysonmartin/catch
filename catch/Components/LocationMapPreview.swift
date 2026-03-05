@@ -4,6 +4,7 @@ import CatchCore
 
 /// A map with a fixed center pin. User pans the map to move the location.
 /// On pan end, reverse-geocodes the center and updates the binding.
+/// Shows a neutral zoomed-out view when no coordinates are set.
 struct LocationMapPreview: UIViewRepresentable {
     @Binding var location: Location
 
@@ -25,14 +26,22 @@ struct LocationMapPreview: UIViewRepresentable {
         map.layer.cornerRadius = CatchTheme.cornerRadius
         map.clipsToBounds = true
 
+        let region: MKCoordinateRegion
         if let coordinate = coordinate {
-            let region = MKCoordinateRegion(
+            region = MKCoordinateRegion(
                 center: coordinate,
                 latitudinalMeters: 1000,
                 longitudinalMeters: 1000
             )
-            map.setRegion(region, animated: false)
+        } else {
+            // Neutral default: zoomed out to show a wide area
+            region = MKCoordinateRegion(
+                center: CLLocationCoordinate2D(latitude: 20, longitude: 0),
+                latitudinalMeters: 20_000_000,
+                longitudinalMeters: 20_000_000
+            )
         }
+        map.setRegion(region, animated: false)
 
         // Fixed pin overlay in the center of the map
         let pin = UIImageView(image: UIImage(systemName: "mappin.circle.fill")?
@@ -40,6 +49,7 @@ struct LocationMapPreview: UIViewRepresentable {
             .withTintColor(CatchTheme.primaryUIColor, renderingMode: .alwaysOriginal))
         pin.translatesAutoresizingMaskIntoConstraints = false
         pin.contentMode = .scaleAspectFit
+        pin.alpha = location.hasCoordinates ? 1 : 0
         map.addSubview(pin)
         NSLayoutConstraint.activate([
             pin.centerXAnchor.constraint(equalTo: map.centerXAnchor),
@@ -51,6 +61,14 @@ struct LocationMapPreview: UIViewRepresentable {
     }
 
     func updateUIView(_ map: MKMapView, context: Context) {
+        // Show/hide pin based on whether we have coordinates
+        let hasCoords = coordinate != nil
+        if context.coordinator.pinView?.alpha != (hasCoords ? 1 : 0) {
+            UIView.animate(withDuration: 0.2) {
+                context.coordinator.pinView?.alpha = hasCoords ? 1 : 0
+            }
+        }
+
         guard let coordinate = coordinate else { return }
         guard !context.coordinator.isPanning else { return }
 
@@ -85,7 +103,6 @@ struct LocationMapPreview: UIViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-            // Only track user-initiated pans (not programmatic region changes)
             if mapView.isUserInteracting {
                 isPanning = true
                 UIView.animate(withDuration: 0.15) {
@@ -148,7 +165,6 @@ struct LocationMapPreview: UIViewRepresentable {
 // MARK: - MKMapView user interaction detection
 
 private extension MKMapView {
-    /// Whether the map is being actively panned/zoomed by the user (not programmatic).
     var isUserInteracting: Bool {
         subviews.first?.gestureRecognizers?.contains(where: {
             $0.state == .began || $0.state == .changed

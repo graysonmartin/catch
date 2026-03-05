@@ -98,6 +98,9 @@ private struct LocationPickerSheet: View {
     private var actionButtons: some View {
         HStack(spacing: CatchSpacing.space10) {
             Button {
+                queryText = ""
+                searchService?.clear()
+                isShowingSuggestions = false
                 isSearching = true
             } label: {
                 HStack(spacing: CatchSpacing.space6) {
@@ -146,25 +149,9 @@ private struct LocationPickerSheet: View {
     // MARK: - Map Section
 
     private var mapSection: some View {
-        Group {
-            if draft.hasCoordinates {
-                LocationMapPreview(location: $draft) { newLocation in
-                    isSyncingFromBinding = true
-                    queryText = newLocation.name
-                }
-            } else {
-                Color(.secondarySystemBackground)
-                    .overlay {
-                        VStack(spacing: CatchSpacing.space8) {
-                            Image(systemName: "map")
-                                .font(.system(size: 40))
-                                .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
-                            Text(CatchStrings.Components.searchOrGPS)
-                                .font(.subheadline)
-                                .foregroundStyle(CatchTheme.textSecondary)
-                        }
-                    }
-            }
+        LocationMapPreview(location: $draft) { newLocation in
+            isSyncingFromBinding = true
+            queryText = newLocation.name
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal)
@@ -380,4 +367,5 @@ private struct LocationPickerSheet: View {
             }
         }
     }
+
 }
