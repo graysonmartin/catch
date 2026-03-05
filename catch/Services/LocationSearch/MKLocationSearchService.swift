@@ -1,6 +1,5 @@
 import MapKit
 import Observation
-import CoreLocation
 import CatchCore
 
 /// MapKit-backed location autocomplete service using `MKLocalSearchCompleter`.
@@ -36,16 +35,19 @@ final class MKLocationSearchService: NSObject, LocationSearchService {
         isResolving = true
         defer { isResolving = false }
 
-        // Use CLGeocoder with the full display name — more reliable than
-        // MKLocalSearch for disambiguating international locations
-        // (e.g. "Geneva, Switzerland" vs "Geneva, IL").
-        let geocoder = CLGeocoder()
+        // Search with a global region to prevent local bias —
+        // ensures "Geneva, Switzerland" resolves to Switzerland, not a nearby US city.
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = result.displayName
+        request.region = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: 0, longitude: 0),
+            span: MKCoordinateSpan(latitudeDelta: 180, longitudeDelta: 360)
+        )
+
         do {
-            let placemarks = try await geocoder.geocodeAddressString(result.displayName)
-            guard let placemark = placemarks.first,
-                  let coordinate = placemark.location?.coordinate else {
-                return nil
-            }
+            let response = try await MKLocalSearch(request: request).start()
+            guard let item = response.mapItems.first else { return nil }
+            let coordinate = item.placemark.coordinate
             return Location(
                 name: result.displayName,
                 latitude: coordinate.latitude,

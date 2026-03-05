@@ -6,21 +6,20 @@ struct LocationPickerView: View {
 
     @Environment(MKLocationSearchService.self) private var searchService: MKLocationSearchService?
     @State private var fetcher = LocationFetcher()
-    @State private var hasUsedGPS = false
     @State private var queryText = ""
     @State private var isShowingSuggestions = false
     @State private var debounceTask: Task<Void, Never>?
     @State private var isSyncingFromBinding = false
     @State private var isShowingMap = false
+    @State private var isEditing = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space8) {
-            gpsButton
-            gpsConfirmation
-            errorDisplay
-            searchField
-            suggestionsList
-            mapButton
+            if location.hasCoordinates, !isEditing {
+                resolvedView
+            } else {
+                editingView
+            }
         }
         .onAppear {
             if queryText.isEmpty, !location.name.isEmpty {
@@ -32,14 +31,61 @@ struct LocationPickerView: View {
             LocationMapSheet(location: $location) { newLocation in
                 isSyncingFromBinding = true
                 queryText = newLocation.name
-                hasUsedGPS = false
             }
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
         }
     }
 
-    // MARK: - GPS Button
+    // MARK: - Resolved State
+
+    private var resolvedView: some View {
+        VStack(alignment: .leading, spacing: CatchSpacing.space6) {
+            HStack {
+                Image(systemName: "mappin.circle.fill")
+                    .foregroundStyle(CatchTheme.primary)
+                Text(location.name)
+                    .font(.subheadline)
+                    .foregroundStyle(CatchTheme.textPrimary)
+                    .lineLimit(2)
+            }
+
+            HStack(spacing: CatchSpacing.space16) {
+                Button {
+                    isShowingMap = true
+                } label: {
+                    HStack(spacing: CatchSpacing.space4) {
+                        Image(systemName: "map")
+                        Text(CatchStrings.Components.viewOnMap)
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(CatchTheme.primary)
+                }
+
+                Button {
+                    startEditing()
+                } label: {
+                    HStack(spacing: CatchSpacing.space4) {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                        Text(CatchStrings.Components.changeLocation)
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(CatchTheme.primary)
+                }
+            }
+        }
+    }
+
+    // MARK: - Editing State
+
+    private var editingView: some View {
+        VStack(alignment: .leading, spacing: CatchSpacing.space8) {
+            gpsButton
+            errorDisplay
+            searchField
+            suggestionsList
+        }
+    }
 
     @ViewBuilder
     private var gpsButton: some View {
@@ -64,25 +110,6 @@ struct LocationPickerView: View {
         .disabled(fetcher.isFetchingLocation)
     }
 
-    // MARK: - GPS Confirmation
-
-    @ViewBuilder
-    private var gpsConfirmation: some View {
-        if hasUsedGPS, location.hasCoordinates {
-            HStack {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
-                Text(location.name.isEmpty
-                     ? CatchStrings.Components.coordinatesSaved
-                     : location.name)
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
-            }
-        }
-    }
-
-    // MARK: - Error Display
-
     @ViewBuilder
     private var errorDisplay: some View {
         if let error = fetcher.error {
@@ -105,16 +132,12 @@ struct LocationPickerView: View {
         }
     }
 
-    // MARK: - Search Field
-
     private var searchField: some View {
         TextField(CatchStrings.Components.typeLocationName, text: $queryText)
             .onChange(of: queryText) { _, newValue in
                 handleQueryChange(newValue)
             }
     }
-
-    // MARK: - Suggestions List
 
     @ViewBuilder
     private var suggestionsList: some View {
@@ -159,37 +182,21 @@ struct LocationPickerView: View {
                     .foregroundStyle(CatchTheme.textSecondary)
             }
         }
-
-        if location.hasCoordinates, !hasUsedGPS, !location.name.isEmpty {
-            HStack {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
-                Text(CatchStrings.Components.locationPinned)
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
-            }
-        }
-    }
-
-    // MARK: - Map Button
-
-    @ViewBuilder
-    private var mapButton: some View {
-        if location.hasCoordinates {
-            Button {
-                isShowingMap = true
-            } label: {
-                HStack(spacing: CatchSpacing.space6) {
-                    Image(systemName: "map")
-                    Text(CatchStrings.Components.viewOnMap)
-                }
-                .font(.subheadline)
-                .foregroundStyle(CatchTheme.primary)
-            }
-        }
     }
 
     // MARK: - Actions
+
+    private func startEditing() {
+        isEditing = true
+        isSyncingFromBinding = true
+        queryText = ""
+        location = Location.empty
+    }
+
+    private func finishEditing() {
+        isEditing = false
+        isShowingSuggestions = false
+    }
 
     private func handleQueryChange(_ newValue: String) {
         if isSyncingFromBinding {
@@ -197,7 +204,6 @@ struct LocationPickerView: View {
             return
         }
 
-        hasUsedGPS = false
         location.latitude = nil
         location.longitude = nil
         location.name = newValue
@@ -231,6 +237,7 @@ struct LocationPickerView: View {
                 location = Location(name: result.displayName)
             }
             searchService?.clear()
+            finishEditing()
         }
     }
 
@@ -241,9 +248,9 @@ struct LocationPickerView: View {
                 location = result
                 isSyncingFromBinding = true
                 queryText = result.name
-                hasUsedGPS = true
                 isShowingSuggestions = false
                 searchService?.clear()
+                finishEditing()
             } catch {
                 // Error already set on fetcher by fetchCurrentLocation()
             }
