@@ -55,7 +55,7 @@ final class Cat {
     }
 
     private static let stevenNames: Set<String> = ["steven", "stephen", "steve"]
-    private static let stevenBreeds: Set<String> = ["Tabby", "Tiger Tabby"]
+    private static let stevenBreeds: Set<String> = ["Domestic Shorthair"]
 
     var isSteven: Bool {
         guard let name else { return false }

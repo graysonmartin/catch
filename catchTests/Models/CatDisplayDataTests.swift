@@ -23,7 +23,7 @@ final class CatDisplayDataTests: XCTestCase {
     // MARK: - Local init
 
     func testLocalInitMapsBasicFields() {
-        let cat = Fixtures.cat(name: "Whiskers", breed: "Tabby", in: context)
+        let cat = Fixtures.cat(name: "Whiskers", breed: "Domestic Shorthair", in: context)
         cat.estimatedAge = "3"
         cat.notes = "friendly"
         cat.isOwned = true
@@ -31,7 +31,7 @@ final class CatDisplayDataTests: XCTestCase {
         let data = CatDisplayData(local: cat)
 
         XCTAssertEqual(data.name, "Whiskers")
-        XCTAssertEqual(data.breed, "Tabby")
+        XCTAssertEqual(data.breed, "Domestic Shorthair")
         XCTAssertEqual(data.estimatedAge, "3")
         XCTAssertEqual(data.notes, "friendly")
         XCTAssertTrue(data.isOwned)
@@ -77,8 +77,8 @@ final class CatDisplayDataTests: XCTestCase {
     }
 
     func testLocalInitStevenDetection() {
-        let steven = Fixtures.cat(name: "Steven", breed: "Tabby", in: context)
-        let notSteven = Fixtures.cat(name: "Mittens", breed: "Tabby", in: context)
+        let steven = Fixtures.cat(name: "Steven", breed: "Domestic Shorthair", in: context)
+        let notSteven = Fixtures.cat(name: "Mittens", breed: "Domestic Shorthair", in: context)
 
         XCTAssertTrue(CatDisplayData(local: steven).isSteven)
         XCTAssertFalse(CatDisplayData(local: notSteven).isSteven)
@@ -142,7 +142,7 @@ final class CatDisplayDataTests: XCTestCase {
     }
 
     func testRemoteInitStevenIsAlwaysFalse() {
-        let cloudCat = makeCloudCat(name: "Steven", breed: "Tabby")
+        let cloudCat = makeCloudCat(name: "Steven", breed: "Domestic Shorthair")
 
         let data = CatDisplayData(remote: cloudCat, encounterCount: 0)
 

@@ -165,7 +165,7 @@ final class CatTests: XCTestCase {
     // MARK: - isSteven with nil name
 
     func test_isSteven_falseWhenNameIsNil() {
-        let cat = Cat(breed: "Tabby")
+        let cat = Cat(breed: "Domestic Shorthair")
         XCTAssertFalse(cat.isSteven)
     }
 

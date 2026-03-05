@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct BreedRarityBadge: View {
     let rarity: BreedRarity

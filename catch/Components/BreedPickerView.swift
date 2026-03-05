@@ -3,63 +3,35 @@ import CatchCore
 
 struct BreedPickerView: View {
     @Binding var breed: String?
-    @State private var isCustomEntry = false
-    @State private var customBreed = ""
 
     private var allBreeds: [String] {
-        BreedLabelMapper.allDisplayNames
+        CatBreed.allDisplayNames
     }
 
     var body: some View {
-        if isCustomEntry {
-            HStack {
-                TextField(CatchStrings.Components.breedName, text: $customBreed)
-                    .textInputAutocapitalization(.words)
-                    .onSubmit {
-                        let trimmed = customBreed.trimmingCharacters(in: .whitespaces)
-                        breed = trimmed.isEmpty ? nil : trimmed
-                        isCustomEntry = false
-                    }
-                Button(CatchStrings.Common.done) {
-                    let trimmed = customBreed.trimmingCharacters(in: .whitespaces)
-                    breed = trimmed.isEmpty ? nil : trimmed
-                    isCustomEntry = false
+        Menu {
+            ForEach(allBreeds, id: \.self) { name in
+                Button(name) {
+                    breed = name
                 }
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(CatchTheme.primary)
             }
-        } else {
-            Menu {
-                ForEach(allBreeds, id: \.self) { name in
-                    Button(name) {
-                        breed = name
-                    }
-                }
 
+            if breed != nil {
                 Divider()
-
-                Button(CatchStrings.Components.somethingElse) {
-                    customBreed = breed ?? ""
-                    isCustomEntry = true
+                Button(CatchStrings.Components.clear, role: .destructive) {
+                    breed = nil
                 }
-
-                if breed != nil {
-                    Divider()
-                    Button(CatchStrings.Components.clear, role: .destructive) {
-                        breed = nil
-                    }
-                }
-            } label: {
-                HStack {
-                    Text(CatchStrings.Common.breed)
-                        .foregroundStyle(CatchTheme.textPrimary)
-                    Spacer()
-                    Text(breed ?? CatchStrings.Components.unknown)
-                        .foregroundStyle(breed != nil ? CatchTheme.textPrimary : CatchTheme.textSecondary)
-                    Image(systemName: "chevron.up.chevron.down")
-                        .font(.caption2)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                }
+            }
+        } label: {
+            HStack {
+                Text(CatchStrings.Common.breed)
+                    .foregroundStyle(CatchTheme.textPrimary)
+                Spacer()
+                Text(breed ?? CatchStrings.Components.unknown)
+                    .foregroundStyle(breed != nil ? CatchTheme.textPrimary : CatchTheme.textSecondary)
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.caption2)
+                    .foregroundStyle(CatchTheme.textSecondary)
             }
         }
     }
