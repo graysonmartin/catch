@@ -11,14 +11,18 @@ final class MockCatSyncService: CatSyncService {
     private(set) var syncCatUpdateCalls: [Cat] = []
     private(set) var deleteCatCalls: [String] = []
 
+    var syncNewCatError: (any Error)?
+    var syncCatUpdateError: (any Error)?
     var deleteCatError: (any Error)?
 
-    func syncNewCat(_ cat: Cat, firstEncounter: Encounter) async {
+    func syncNewCat(_ cat: Cat, firstEncounter: Encounter) async throws {
         syncNewCatCalls.append((cat, firstEncounter))
+        if let error = syncNewCatError { throw error }
     }
 
-    func syncCatUpdate(_ cat: Cat) async {
+    func syncCatUpdate(_ cat: Cat) async throws {
         syncCatUpdateCalls.append(cat)
+        if let error = syncCatUpdateError { throw error }
     }
 
     func deleteCat(recordName: String) async throws {
@@ -30,6 +34,8 @@ final class MockCatSyncService: CatSyncService {
         syncNewCatCalls = []
         syncCatUpdateCalls = []
         deleteCatCalls = []
+        syncNewCatError = nil
+        syncCatUpdateError = nil
         deleteCatError = nil
     }
 }

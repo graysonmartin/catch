@@ -30,23 +30,23 @@ final class CKCatSyncServiceTests: XCTestCase {
 
     // MARK: - syncNewCat
 
-    func test_syncNewCat_propagatesBreedInPayload() async {
+    func test_syncNewCat_propagatesBreedInPayload() async throws {
         let sut = makeSUT()
         let cat = Fixtures.cat(name: "Fancy", breed: "Persian", in: context)
         let encounter = Fixtures.encounter(for: cat, in: context)
 
-        await sut.syncNewCat(cat, firstEncounter: encounter)
+        try await sut.syncNewCat(cat, firstEncounter: encounter)
 
         XCTAssertEqual(mockCatRepo.saveCalls.count, 1)
         XCTAssertEqual(mockCatRepo.saveCalls[0].payload.breed, "Persian")
     }
 
-    func test_syncNewCat_savesCatThenEncounterSequentially() async {
+    func test_syncNewCat_savesCatThenEncounterSequentially() async throws {
         let sut = makeSUT()
         let cat = Fixtures.cat(name: "Mochi", in: context)
         let encounter = Fixtures.encounter(for: cat, in: context)
 
-        await sut.syncNewCat(cat, firstEncounter: encounter)
+        try await sut.syncNewCat(cat, firstEncounter: encounter)
 
         XCTAssertEqual(mockCatRepo.saveCalls.count, 1)
         XCTAssertEqual(mockCatRepo.saveCalls[0].payload.name, "Mochi")
@@ -60,26 +60,36 @@ final class CKCatSyncServiceTests: XCTestCase {
         XCTAssertEqual(encounter.cloudKitRecordName, "mock-enc-record")
     }
 
-    func test_syncNewCat_whenNotSignedIn_noRepoCalls() async {
+    func test_syncNewCat_whenNotSignedIn_throwsNotSignedIn() async {
         userID = nil
         let sut = makeSUT()
         let cat = Fixtures.cat(name: "Ghost", in: context)
         let encounter = Fixtures.encounter(for: cat, in: context)
 
-        await sut.syncNewCat(cat, firstEncounter: encounter)
+        do {
+            try await sut.syncNewCat(cat, firstEncounter: encounter)
+            XCTFail("Expected CloudSyncError.notSignedIn")
+        } catch {
+            XCTAssertEqual(error as? CloudSyncError, .notSignedIn)
+        }
 
         XCTAssertTrue(mockCatRepo.saveCalls.isEmpty)
         XCTAssertTrue(mockEncRepo.saveCalls.isEmpty)
         XCTAssertNil(cat.cloudKitRecordName)
     }
 
-    func test_syncNewCat_whenCatSaveFails_encounterNotAttempted() async {
+    func test_syncNewCat_whenCatSaveFails_throwsError() async {
         mockCatRepo.saveResult = .failure(CloudSyncError.uploadFailed)
         let sut = makeSUT()
         let cat = Fixtures.cat(name: "Fail", in: context)
         let encounter = Fixtures.encounter(for: cat, in: context)
 
-        await sut.syncNewCat(cat, firstEncounter: encounter)
+        do {
+            try await sut.syncNewCat(cat, firstEncounter: encounter)
+            XCTFail("Expected CloudSyncError.uploadFailed")
+        } catch {
+            XCTAssertEqual(error as? CloudSyncError, .uploadFailed)
+        }
 
         XCTAssertEqual(mockCatRepo.saveCalls.count, 1)
         XCTAssertTrue(mockEncRepo.saveCalls.isEmpty)
@@ -87,23 +97,48 @@ final class CKCatSyncServiceTests: XCTestCase {
         XCTAssertNil(encounter.cloudKitRecordName)
     }
 
+    func test_syncNewCat_whenEncounterFails_rollsBackCatRecord() async {
+        mockEncRepo.saveResult = .failure(CloudSyncError.uploadFailed)
+        let sut = makeSUT()
+        let cat = Fixtures.cat(name: "Rollback", in: context)
+        let encounter = Fixtures.encounter(for: cat, in: context)
+
+        do {
+            try await sut.syncNewCat(cat, firstEncounter: encounter)
+            XCTFail("Expected CloudSyncError.uploadFailed")
+        } catch {
+            XCTAssertEqual(error as? CloudSyncError, .uploadFailed)
+        }
+
+        // Cat was saved then rolled back
+        XCTAssertEqual(mockCatRepo.saveCalls.count, 1)
+        XCTAssertEqual(mockCatRepo.deleteCalls, ["mock-cat-record"])
+        XCTAssertNil(cat.cloudKitRecordName)
+        XCTAssertNil(encounter.cloudKitRecordName)
+    }
+
     // MARK: - syncCatUpdate
 
-    func test_syncCatUpdate_syncsWhenRecordNameExists() async {
+    func test_syncCatUpdate_syncsWhenRecordNameExists() async throws {
         let sut = makeSUT()
         let cat = Fixtures.cat(name: "Patches", cloudKitRecordName: "existing-rec", in: context)
 
-        await sut.syncCatUpdate(cat)
+        try await sut.syncCatUpdate(cat)
 
         XCTAssertEqual(mockCatRepo.saveCalls.count, 1)
         XCTAssertEqual(mockCatRepo.saveCalls[0].payload.recordName, "existing-rec")
     }
 
-    func test_syncCatUpdate_whenNoRecordName_noOps() async {
+    func test_syncCatUpdate_whenNoRecordName_throwsRecordNotFound() async {
         let sut = makeSUT()
         let cat = Fixtures.cat(name: "NoRecord", in: context)
 
-        await sut.syncCatUpdate(cat)
+        do {
+            try await sut.syncCatUpdate(cat)
+            XCTFail("Expected CloudSyncError.recordNotFound")
+        } catch {
+            XCTAssertEqual(error as? CloudSyncError, .recordNotFound)
+        }
 
         XCTAssertTrue(mockCatRepo.saveCalls.isEmpty)
     }
@@ -118,12 +153,12 @@ final class CKCatSyncServiceTests: XCTestCase {
         XCTAssertEqual(mockCatRepo.deleteCalls, ["cat-to-delete"])
     }
 
-    func test_syncNewCat_handlesNilName() async {
+    func test_syncNewCat_handlesNilName() async throws {
         let sut = makeSUT()
         let cat = Fixtures.cat(name: nil, in: context)
         let encounter = Fixtures.encounter(for: cat, in: context)
 
-        await sut.syncNewCat(cat, firstEncounter: encounter)
+        try await sut.syncNewCat(cat, firstEncounter: encounter)
 
         XCTAssertEqual(mockCatRepo.saveCalls.count, 1)
         XCTAssertNil(mockCatRepo.saveCalls[0].payload.name)
@@ -131,12 +166,12 @@ final class CKCatSyncServiceTests: XCTestCase {
 
     // MARK: - isSyncing
 
-    func test_isSyncing_isFalseAfterSync() async {
+    func test_isSyncing_isFalseAfterSync() async throws {
         let sut = makeSUT()
         let cat = Fixtures.cat(name: "Sync", cloudKitRecordName: "rec", in: context)
 
         XCTAssertFalse(sut.isSyncing)
-        await sut.syncCatUpdate(cat)
+        try await sut.syncCatUpdate(cat)
         XCTAssertFalse(sut.isSyncing)
     }
 }

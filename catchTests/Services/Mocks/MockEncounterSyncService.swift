@@ -11,14 +11,18 @@ final class MockEncounterSyncService: EncounterSyncService {
     private(set) var syncEncounterUpdateCalls: [Encounter] = []
     private(set) var deleteEncounterCalls: [String] = []
 
+    var syncNewEncounterError: (any Error)?
+    var syncEncounterUpdateError: (any Error)?
     var deleteEncounterError: (any Error)?
 
-    func syncNewEncounter(_ encounter: Encounter, for cat: Cat) async {
+    func syncNewEncounter(_ encounter: Encounter, for cat: Cat) async throws {
         syncNewEncounterCalls.append((encounter, cat))
+        if let error = syncNewEncounterError { throw error }
     }
 
-    func syncEncounterUpdate(_ encounter: Encounter) async {
+    func syncEncounterUpdate(_ encounter: Encounter) async throws {
         syncEncounterUpdateCalls.append(encounter)
+        if let error = syncEncounterUpdateError { throw error }
     }
 
     func deleteEncounter(recordName: String) async throws {
@@ -30,6 +34,8 @@ final class MockEncounterSyncService: EncounterSyncService {
         syncNewEncounterCalls = []
         syncEncounterUpdateCalls = []
         deleteEncounterCalls = []
+        syncNewEncounterError = nil
+        syncEncounterUpdateError = nil
         deleteEncounterError = nil
     }
 }

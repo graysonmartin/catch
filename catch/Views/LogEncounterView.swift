@@ -6,6 +6,7 @@ struct LogEncounterView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(CKEncounterSyncService.self) private var encounterSyncService: CKEncounterSyncService?
+    @Environment(ToastManager.self) private var toastManager
     @Query(sort: \Cat.name) private var cats: [Cat]
 
     @State private var selectedCat: Cat?
@@ -14,6 +15,7 @@ struct LogEncounterView: View {
     @State private var notes = ""
     @State private var photos: [Data] = []
     @State private var showingAddCat = false
+    @State private var isSaving = false
 
     var onSave: (() -> Void)?
     var preselectedCat: Cat? = nil
@@ -109,13 +111,19 @@ struct LogEncounterView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(CatchStrings.Common.cancel) { dismiss() }
+                        .disabled(isSaving)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(CatchStrings.Common.save) { save() }
-                        .disabled(selectedCat == nil)
-                        .fontWeight(.semibold)
+                    if isSaving {
+                        ProgressView()
+                    } else {
+                        Button(CatchStrings.Common.save) { Task { await save() } }
+                            .disabled(selectedCat == nil)
+                            .fontWeight(.semibold)
+                    }
                 }
             }
+            .disabled(isSaving)
             .onAppear {
                 if let preselectedCat {
                     selectedCat = preselectedCat
@@ -129,7 +137,7 @@ struct LogEncounterView: View {
         }
     }
 
-    private func save() {
+    private func save() async {
         guard let cat = selectedCat else { return }
         let encounter = Encounter(
             date: date,
@@ -138,8 +146,18 @@ struct LogEncounterView: View {
             cat: cat,
             photos: photos
         )
+
+        isSaving = true
+        defer { isSaving = false }
+
+        do {
+            try await encounterSyncService?.syncNewEncounter(encounter, for: cat)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.encounterSyncFailed)
+            return
+        }
+
         modelContext.insert(encounter)
-        Task { await encounterSyncService?.syncNewEncounter(encounter, for: cat) }
         onSave?()
         dismiss()
     }

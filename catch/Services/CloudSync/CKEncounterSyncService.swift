@@ -22,9 +22,13 @@ final class CKEncounterSyncService: EncounterSyncService {
 
     // MARK: - Sync New Encounter
 
-    func syncNewEncounter(_ encounter: Encounter, for cat: Cat) async {
-        guard let userID = getUserID() else { return }
-        guard let catRecordName = cat.cloudKitRecordName else { return }
+    func syncNewEncounter(_ encounter: Encounter, for cat: Cat) async throws {
+        guard let userID = getUserID() else {
+            throw CloudSyncError.notSignedIn
+        }
+        guard let catRecordName = cat.cloudKitRecordName else {
+            throw CloudSyncError.recordNotFound
+        }
 
         isSyncing = true
         defer { isSyncing = false }
@@ -40,20 +44,20 @@ final class CKEncounterSyncService: EncounterSyncService {
             photos: encounter.photos
         )
 
-        do {
-            let recordName = try await encounterRepository.save(payload, ownerID: userID)
-            encounter.cloudKitRecordName = recordName
-        } catch {
-            logger.error("encounter sync failed: \(error.localizedDescription)")
-        }
+        let recordName = try await encounterRepository.save(payload, ownerID: userID)
+        encounter.cloudKitRecordName = recordName
     }
 
     // MARK: - Sync Encounter Update
 
-    func syncEncounterUpdate(_ encounter: Encounter) async {
-        guard let userID = getUserID() else { return }
+    func syncEncounterUpdate(_ encounter: Encounter) async throws {
+        guard let userID = getUserID() else {
+            throw CloudSyncError.notSignedIn
+        }
         guard let encRecordName = encounter.cloudKitRecordName,
-              let catRecordName = encounter.cat?.cloudKitRecordName else { return }
+              let catRecordName = encounter.cat?.cloudKitRecordName else {
+            throw CloudSyncError.recordNotFound
+        }
 
         isSyncing = true
         defer { isSyncing = false }
@@ -69,11 +73,7 @@ final class CKEncounterSyncService: EncounterSyncService {
             photos: encounter.photos
         )
 
-        do {
-            _ = try await encounterRepository.save(payload, ownerID: userID)
-        } catch {
-            logger.error("encounter update sync failed: \(error.localizedDescription)")
-        }
+        _ = try await encounterRepository.save(payload, ownerID: userID)
     }
 
     // MARK: - Delete
