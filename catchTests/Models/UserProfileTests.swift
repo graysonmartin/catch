@@ -190,4 +190,66 @@ final class UserProfileTests: XCTestCase {
         let profile = UserProfile(visibilitySettings: custom)
         XCTAssertEqual(profile.visibilitySettings, custom)
     }
+
+    // MARK: - Profile Completeness
+
+    func test_isProfileComplete_falseByDefault() {
+        let profile = UserProfile()
+        XCTAssertFalse(profile.isProfileComplete)
+    }
+
+    func test_isProfileComplete_falseWithDisplayNameOnly() {
+        let profile = UserProfile(displayName: "cat fan")
+        XCTAssertFalse(profile.isProfileComplete)
+    }
+
+    func test_isProfileComplete_falseWithUsernameOnly() {
+        let profile = UserProfile(username: "cat_fan")
+        XCTAssertFalse(profile.isProfileComplete)
+    }
+
+    func test_isProfileComplete_falseWithEmptyDisplayName() {
+        let profile = UserProfile(displayName: "", username: "cat_fan")
+        XCTAssertFalse(profile.isProfileComplete)
+    }
+
+    func test_isProfileComplete_falseWithWhitespaceDisplayName() {
+        let profile = UserProfile(displayName: "   ", username: "cat_fan")
+        XCTAssertFalse(profile.isProfileComplete)
+    }
+
+    func test_isProfileComplete_falseWithEmptyUsername() {
+        let profile = UserProfile(displayName: "cat fan", username: "")
+        XCTAssertFalse(profile.isProfileComplete)
+    }
+
+    func test_isProfileComplete_falseWithInvalidUsername() {
+        let profile = UserProfile(displayName: "cat fan", username: "ab")
+        XCTAssertFalse(profile.isProfileComplete)
+    }
+
+    func test_isProfileComplete_falseWithInvalidUsernameChars() {
+        let profile = UserProfile(displayName: "cat fan", username: "cat fan!")
+        XCTAssertFalse(profile.isProfileComplete)
+    }
+
+    func test_isProfileComplete_trueWithValidFields() {
+        let profile = UserProfile(displayName: "cat fan", username: "cat_fan")
+        XCTAssertTrue(profile.isProfileComplete)
+    }
+
+    func test_isProfileComplete_trueWithMinimalValidUsername() {
+        let profile = UserProfile(displayName: "a", username: "abc")
+        XCTAssertTrue(profile.isProfileComplete)
+    }
+
+    func test_isProfileComplete_unaffectedByOptionalFields() {
+        let profile = UserProfile(
+            displayName: "cat fan",
+            bio: "",
+            username: "cat_fan",
+            avatarData: nil
+        )
+        XCTAssertTrue(profile.isProfileComplete)
+    }
 }

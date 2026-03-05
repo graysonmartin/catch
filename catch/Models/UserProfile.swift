@@ -16,6 +16,15 @@ final class UserProfile {
     @Attribute(.externalStorage)
     var avatarData: Data?
 
+    /// A profile is complete when the user has set a display name and a valid username.
+    /// These are the minimum required fields before accessing the main app.
+    var isProfileComplete: Bool {
+        let trimmedDisplayName = displayName.trimmingCharacters(in: .whitespaces)
+        guard !trimmedDisplayName.isEmpty else { return false }
+        guard let username, !username.isEmpty else { return false }
+        return UsernameValidator.validate(username) == .valid
+    }
+
     init(
         displayName: String = "",
         bio: String = "",

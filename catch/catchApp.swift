@@ -5,6 +5,7 @@ import CatchCore
 @main
 struct catchApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    @AppStorage("hasCompletedProfileSetup") private var hasCompletedProfileSetup = false
     @State private var authService: AppleAuthService
     @State private var followService: CKFollowService
     @State private var breedClassifier = VisionBreedClassifierService()
@@ -76,7 +77,15 @@ struct catchApp: App {
 
     @ViewBuilder
     private func mainContent(container: ModelContainer) -> some View {
-        if hasCompletedOnboarding {
+        if !hasCompletedOnboarding {
+            OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
+        } else if !hasCompletedProfileSetup {
+            ProfileSetupView {
+                hasCompletedProfileSetup = true
+            }
+            .environment(authService)
+            .environment(toastManager)
+        } else {
             ContentView()
                 .toastOverlay()
                 .environment(breedClassifier)
@@ -94,8 +103,6 @@ struct catchApp: App {
                     seedDebugData(context: container.mainContext)
                     #endif
                 }
-        } else {
-            OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
         }
     }
 

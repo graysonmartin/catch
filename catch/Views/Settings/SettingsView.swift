@@ -9,6 +9,8 @@ struct SettingsView: View {
 
     @Query private var profiles: [UserProfile]
 
+    @AppStorage("hasCompletedProfileSetup") private var hasCompletedProfileSetup = false
+
     @State private var settingsService: SettingsService = UserDefaultsSettingsService()
     @State private var editedDisplayName: String = ""
     @State private var isShowingDeleteConfirmation = false
@@ -165,6 +167,7 @@ struct SettingsView: View {
 
     private func performSignOut() {
         authService.signOut()
+        hasCompletedProfileSetup = false
         dismiss()
     }
 
@@ -173,6 +176,7 @@ struct SettingsView: View {
             modelContext.delete(profile)
         }
         authService.signOut()
+        hasCompletedProfileSetup = false
         dismiss()
     }
 }
