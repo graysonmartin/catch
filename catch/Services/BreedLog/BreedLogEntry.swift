@@ -1,4 +1,5 @@
 import Foundation
+import CatchCore
 
 struct BreedLogEntry: Identifiable {
     let catalogEntry: BreedCatalogEntry

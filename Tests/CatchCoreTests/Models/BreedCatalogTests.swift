@@ -1,7 +1,7 @@
 import XCTest
-import CatchCore
+@testable import CatchCore
 
-final class BreedCatalogTests: XCTestCase {
+final class BreedCatalogCoreTests: XCTestCase {
 
     func test_catalogHas28Breeds() {
         XCTAssertEqual(BreedCatalog.count, 28)
@@ -17,48 +17,32 @@ final class BreedCatalogTests: XCTestCase {
         XCTAssertEqual(Set(ids).count, ids.count, "duplicate breed IDs found")
     }
 
-    func test_allDisplayNamesAreUnique() {
-        let names = BreedCatalog.allBreeds.map(\.displayName)
-        XCTAssertEqual(Set(names).count, names.count, "duplicate display names found")
-    }
-
-    func test_idsMatchCatBreedDisplayNames() {
-        let catBreedNames = Set(CatBreed.allCases.map(\.displayName))
-        let catalogIds = Set(BreedCatalog.allBreeds.map(\.id))
-        XCTAssertEqual(catalogIds, catBreedNames, "catalog IDs must match CatBreed display names exactly")
-    }
-
-    func test_idsMatchBreedLabelMapperDisplayNames() {
-        let mapperNames = Set(BreedLabelMapper.allDisplayNames)
-        let catalogIds = Set(BreedCatalog.allBreeds.map(\.id))
-        XCTAssertEqual(catalogIds, mapperNames, "catalog IDs must match BreedLabelMapper display names exactly")
-    }
-
-    func test_entryForKnownBreedReturnsEntry() {
+    func test_entryForDisplayName_knownBreedReturns() {
         let entry = BreedCatalog.entry(for: "Tabby")
         XCTAssertNotNil(entry)
-        XCTAssertEqual(entry?.displayName, "Tabby")
-    }
-
-    func test_entryForCatBreedReturnsEntry() {
-        let entry = BreedCatalog.entry(for: .tabby)
-        XCTAssertNotNil(entry)
-        XCTAssertEqual(entry?.displayName, "Tabby")
         XCTAssertEqual(entry?.breed, .tabby)
     }
 
-    func test_entryForUnknownBreedReturnsNil() {
+    func test_entryForDisplayName_unknownReturnsNil() {
         XCTAssertNil(BreedCatalog.entry(for: "Space Cat"))
         XCTAssertNil(BreedCatalog.entry(for: ""))
     }
 
-    func test_containsReturnsTrueForCatalogBreeds() {
+    func test_entryForCatBreed_returnsMatchingEntry() {
+        for breed in CatBreed.allCases {
+            let entry = BreedCatalog.entry(for: breed)
+            XCTAssertNotNil(entry, "\(breed.displayName) missing from catalog")
+            XCTAssertEqual(entry?.breed, breed)
+        }
+    }
+
+    func test_contains_trueForCatalogBreeds() {
         XCTAssertTrue(BreedCatalog.contains("Russian Blue"))
         XCTAssertTrue(BreedCatalog.contains("Bengal"))
         XCTAssertTrue(BreedCatalog.contains("Sphynx"))
     }
 
-    func test_containsReturnsFalseForUnknownBreeds() {
+    func test_contains_falseForUnknownBreeds() {
         XCTAssertFalse(BreedCatalog.contains("Golden Retriever"))
         XCTAssertFalse(BreedCatalog.contains(""))
     }
@@ -78,5 +62,17 @@ final class BreedCatalogTests: XCTestCase {
         XCTAssertNotNil(grouped[.uncommon])
         XCTAssertNotNil(grouped[.rare])
         XCTAssertNotNil(grouped[.legendary])
+    }
+
+    func test_catalogIdsMatchBreedLabelMapperDisplayNames() {
+        let mapperNames = Set(BreedLabelMapper.allDisplayNames)
+        let catalogIds = Set(BreedCatalog.allBreeds.map(\.id))
+        XCTAssertEqual(catalogIds, mapperNames)
+    }
+
+    func test_catalogIdsMatchCatBreedDisplayNames() {
+        let catBreedNames = Set(CatBreed.allCases.map(\.displayName))
+        let catalogIds = Set(BreedCatalog.allBreeds.map(\.id))
+        XCTAssertEqual(catalogIds, catBreedNames)
     }
 }

@@ -1,24 +1,19 @@
 import XCTest
+import CatchCore
 
 final class BreedLogSortOptionTests: XCTestCase {
 
     // MARK: - Test Data
 
     private func makeEntry(
-        name: String,
-        rarity: BreedRarity,
+        breed: CatBreed,
         isDiscovered: Bool = true
     ) -> BreedLogEntry {
-        let catalog = BreedCatalogEntry(
-            id: name,
-            displayName: name,
-            description: "",
-            funFact: "",
-            rarity: rarity,
-            icon: "cat"
-        )
+        guard let catalogEntry = BreedCatalog.entry(for: breed) else {
+            fatalError("No catalog entry for breed \(breed.displayName)")
+        }
         return BreedLogEntry(
-            catalogEntry: catalog,
+            catalogEntry: catalogEntry,
             isDiscovered: isDiscovered,
             catCount: isDiscovered ? 1 : 0,
             firstDiscoveredDate: isDiscovered ? Date() : nil,
@@ -26,12 +21,13 @@ final class BreedLogSortOptionTests: XCTestCase {
         )
     }
 
+    /// Four breeds spanning all rarity tiers: common, uncommon, rare, legendary.
     private var sampleEntries: [BreedLogEntry] {
         [
-            makeEntry(name: "Bengal", rarity: .rare),
-            makeEntry(name: "Tabby", rarity: .common),
-            makeEntry(name: "Sphynx", rarity: .legendary),
-            makeEntry(name: "Abyssinian", rarity: .uncommon),
+            makeEntry(breed: .bengal),          // rare
+            makeEntry(breed: .tabby),            // common
+            makeEntry(breed: .egyptianMau),      // legendary
+            makeEntry(breed: .abyssinian),       // uncommon
         ]
     }
 
@@ -74,13 +70,13 @@ final class BreedLogSortOptionTests: XCTestCase {
     func test_rarity_descending_mostRareFirst() {
         let result = BreedLogSortOption.rarity.sorted(sampleEntries, direction: .descending)
         let names = result.map(\.catalogEntry.displayName)
-        XCTAssertEqual(names, ["Sphynx", "Bengal", "Abyssinian", "Tabby"])
+        XCTAssertEqual(names, ["Egyptian Mau", "Bengal", "Abyssinian", "Tabby"])
     }
 
     func test_rarity_ascending_leastRareFirst() {
         let result = BreedLogSortOption.rarity.sorted(sampleEntries, direction: .ascending)
         let names = result.map(\.catalogEntry.displayName)
-        XCTAssertEqual(names, ["Tabby", "Abyssinian", "Bengal", "Sphynx"])
+        XCTAssertEqual(names, ["Tabby", "Abyssinian", "Bengal", "Egyptian Mau"])
     }
 
     // MARK: - Alphabetical Sort
@@ -88,23 +84,23 @@ final class BreedLogSortOptionTests: XCTestCase {
     func test_alphabetical_ascending_aToZ() {
         let result = BreedLogSortOption.alphabetical.sorted(sampleEntries, direction: .ascending)
         let names = result.map(\.catalogEntry.displayName)
-        XCTAssertEqual(names, ["Abyssinian", "Bengal", "Sphynx", "Tabby"])
+        XCTAssertEqual(names, ["Abyssinian", "Bengal", "Egyptian Mau", "Tabby"])
     }
 
     func test_alphabetical_descending_zToA() {
         let result = BreedLogSortOption.alphabetical.sorted(sampleEntries, direction: .descending)
         let names = result.map(\.catalogEntry.displayName)
-        XCTAssertEqual(names, ["Tabby", "Sphynx", "Bengal", "Abyssinian"])
+        XCTAssertEqual(names, ["Tabby", "Egyptian Mau", "Bengal", "Abyssinian"])
     }
 
     // MARK: - Discovered First Sort
 
     func test_discoveredFirst_descending_discoveredOnTop() {
         let entries = [
-            makeEntry(name: "Bengal", rarity: .rare, isDiscovered: true),
-            makeEntry(name: "Sphynx", rarity: .legendary, isDiscovered: false),
-            makeEntry(name: "Abyssinian", rarity: .uncommon, isDiscovered: true),
-            makeEntry(name: "Tabby", rarity: .common, isDiscovered: false),
+            makeEntry(breed: .bengal, isDiscovered: true),
+            makeEntry(breed: .sphynx, isDiscovered: false),
+            makeEntry(breed: .abyssinian, isDiscovered: true),
+            makeEntry(breed: .tabby, isDiscovered: false),
         ]
 
         let result = BreedLogSortOption.discoveredFirst.sorted(entries, direction: .descending)
@@ -116,10 +112,10 @@ final class BreedLogSortOptionTests: XCTestCase {
 
     func test_discoveredFirst_ascending_undiscoveredOnTop() {
         let entries = [
-            makeEntry(name: "Bengal", rarity: .rare, isDiscovered: true),
-            makeEntry(name: "Sphynx", rarity: .legendary, isDiscovered: false),
-            makeEntry(name: "Abyssinian", rarity: .uncommon, isDiscovered: true),
-            makeEntry(name: "Tabby", rarity: .common, isDiscovered: false),
+            makeEntry(breed: .bengal, isDiscovered: true),
+            makeEntry(breed: .sphynx, isDiscovered: false),
+            makeEntry(breed: .abyssinian, isDiscovered: true),
+            makeEntry(breed: .tabby, isDiscovered: false),
         ]
 
         let result = BreedLogSortOption.discoveredFirst.sorted(entries, direction: .ascending)
@@ -142,7 +138,7 @@ final class BreedLogSortOptionTests: XCTestCase {
     // MARK: - Single Element
 
     func test_sort_singleElement_returnsSame() {
-        let single = [makeEntry(name: "Bengal", rarity: .rare)]
+        let single = [makeEntry(breed: .bengal)]
         for option in BreedLogSortOption.allCases {
             let asc = option.sorted(single, direction: .ascending)
             let desc = option.sorted(single, direction: .descending)

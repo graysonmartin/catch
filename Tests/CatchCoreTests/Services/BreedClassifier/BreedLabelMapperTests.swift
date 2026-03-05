@@ -64,6 +64,13 @@ final class BreedLabelMapperTests: XCTestCase {
         XCTAssertTrue(names.contains("Tabby"))
     }
 
+    func test_allDisplayNames_matchesCatBreedCanonicalList() {
+        let mapperNames = BreedLabelMapper.allDisplayNames
+        let catBreedNames = CatBreed.allDisplayNames
+        XCTAssertEqual(mapperNames, catBreedNames,
+                       "BreedLabelMapper.allDisplayNames must equal CatBreed.allDisplayNames")
+    }
+
     func test_allDisplayNames_isBroaderThanModelMapping() {
         let names = BreedLabelMapper.allDisplayNames
         XCTAssertGreaterThan(names.count, 12, "curated list should be larger than the 12 model labels")

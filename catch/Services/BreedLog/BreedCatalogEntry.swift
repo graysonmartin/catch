@@ -1,10 +1,3 @@
-import Foundation
-
-struct BreedCatalogEntry: Identifiable, Equatable {
-    let id: String
-    let displayName: String
-    let description: String
-    let funFact: String
-    let rarity: BreedRarity
-    let icon: String
-}
+// BreedCatalogEntry is now provided by CatchCore.
+// This file is intentionally empty — the type lives in Sources/CatchCore/Models/BreedCatalogEntry.swift.
+// Remove this file from the Xcode project when convenient.
