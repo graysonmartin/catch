@@ -17,6 +17,8 @@ extension CatchStrings {
         static let dragToAdjust = String(localized: "drag pin to adjust")
         static let viewOnMap = String(localized: "view on map")
         static let changeLocation = String(localized: "change")
+        static let tapToSetLocation = String(localized: "tap to set location")
+        static let confirmLocation = String(localized: "Confirm")
 
         // PhotoPickerView
         static let dragToReorder = String(localized: "drag to reorder -- first photo is your profile pic")

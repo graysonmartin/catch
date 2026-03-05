@@ -47,12 +47,7 @@ struct EditCatView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 0) {
-                    formSections
-                    locationSection
-                }
-            }
+            formSections
             .background(CatchTheme.background)
             .navigationTitle(CatchStrings.Log.editCatTitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -134,30 +129,11 @@ struct EditCatView: View {
                     limit: TextInputLimits.catNotes
                 )
             }
-        }
-        .scrollDisabled(true)
-        .frame(minHeight: 500)
-    }
 
-    // MARK: - Location Section (outside Form)
-
-    private var locationSection: some View {
-        VStack(alignment: .leading, spacing: CatchSpacing.space12) {
-            Text(CatchStrings.Common.location)
-                .font(.footnote)
-                .foregroundStyle(CatchTheme.textSecondary)
-                .textCase(.uppercase)
-                .padding(.horizontal, CatchSpacing.space20)
-
-            VStack(alignment: .leading, spacing: CatchSpacing.space12) {
+            Section(CatchStrings.Common.location) {
                 LocationPickerView(location: $location)
             }
-            .padding(CatchSpacing.space20)
-            .background(CatchTheme.cardBackground)
-            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
-            .padding(.horizontal)
         }
-        .padding(.bottom, CatchSpacing.space16)
     }
 
     // MARK: - Logic
