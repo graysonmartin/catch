@@ -37,8 +37,7 @@ struct LocationMapPreview: UIViewRepresentable {
             // Neutral default: zoomed out to show a wide area
             region = MKCoordinateRegion(
                 center: CLLocationCoordinate2D(latitude: 20, longitude: 0),
-                latitudinalMeters: 20_000_000,
-                longitudinalMeters: 20_000_000
+                span: MKCoordinateSpan(latitudeDelta: 120, longitudeDelta: 120)
             )
         }
         map.setRegion(region, animated: false)
