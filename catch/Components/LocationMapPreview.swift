@@ -2,7 +2,7 @@ import SwiftUI
 import MapKit
 import CatchCore
 
-/// A compact map preview with a draggable pin for adjusting a location.
+/// A map preview with a draggable pin for adjusting a location.
 /// On drag end, reverse-geocodes the new position and updates the binding.
 struct LocationMapPreview: UIViewRepresentable {
     @Binding var location: Location
@@ -26,7 +26,8 @@ struct LocationMapPreview: UIViewRepresentable {
         map.clipsToBounds = true
 
         if let coordinate = coordinate {
-            let annotation = DraggableAnnotation(coordinate: coordinate)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
             map.addAnnotation(annotation)
             context.coordinator.annotation = annotation
             let region = MKCoordinateRegion(
@@ -42,8 +43,6 @@ struct LocationMapPreview: UIViewRepresentable {
 
     func updateUIView(_ map: MKMapView, context: Context) {
         guard let coordinate = coordinate else { return }
-
-        // Skip map updates while user is dragging
         guard !context.coordinator.isDragging else { return }
 
         if let annotation = context.coordinator.annotation {
@@ -60,7 +59,8 @@ struct LocationMapPreview: UIViewRepresentable {
                 map.setRegion(region, animated: true)
             }
         } else {
-            let annotation = DraggableAnnotation(coordinate: coordinate)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
             map.addAnnotation(annotation)
             context.coordinator.annotation = annotation
             let region = MKCoordinateRegion(
@@ -77,12 +77,11 @@ struct LocationMapPreview: UIViewRepresentable {
         return CLLocationCoordinate2D(latitude: lat, longitude: lng)
     }
 
-    // MARK: - Coordinator
+    // MARK: - Coordinator (no @MainActor — matches ClusterMapView pattern)
 
-    @MainActor
-    final class Coordinator: NSObject, MKMapViewDelegate {
-        private let parent: LocationMapPreview
-        fileprivate var annotation: DraggableAnnotation?
+    class Coordinator: NSObject, MKMapViewDelegate {
+        let parent: LocationMapPreview
+        var annotation: MKPointAnnotation?
         var isDragging = false
 
         init(parent: LocationMapPreview) {
@@ -93,7 +92,7 @@ struct LocationMapPreview: UIViewRepresentable {
             _ mapView: MKMapView,
             viewFor annotation: any MKAnnotation
         ) -> MKAnnotationView? {
-            guard annotation is DraggableAnnotation else { return nil }
+            guard annotation is MKPointAnnotation else { return nil }
 
             let identifier = "DraggablePin"
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
@@ -103,7 +102,6 @@ struct LocationMapPreview: UIViewRepresentable {
             view.isDraggable = true
             view.canShowCallout = false
             view.markerTintColor = CatchTheme.primaryUIColor
-            view.glyphImage = UIImage(systemName: "mappin")
             view.animatesWhenAdded = true
             view.annotation = annotation
             return view
@@ -128,12 +126,12 @@ struct LocationMapPreview: UIViewRepresentable {
         }
 
         private func reverseGeocodeAndUpdate(_ coordinate: CLLocationCoordinate2D) {
-            Task { @MainActor in
+            Task { @MainActor [parent] in
                 let clLocation = CLLocation(
                     latitude: coordinate.latitude,
                     longitude: coordinate.longitude
                 )
-                let name = await Self.reverseGeocodeName(for: clLocation)
+                let name = await reverseGeocodeName(for: clLocation)
                 let newLocation = Location(
                     name: name,
                     latitude: coordinate.latitude,
@@ -144,7 +142,7 @@ struct LocationMapPreview: UIViewRepresentable {
             }
         }
 
-        private static func reverseGeocodeName(for location: CLLocation) async -> String {
+        private func reverseGeocodeName(for location: CLLocation) async -> String {
             let geocoder = CLGeocoder()
             do {
                 let placemarks = try await geocoder.reverseGeocodeLocation(location)
@@ -160,16 +158,5 @@ struct LocationMapPreview: UIViewRepresentable {
             }
             return ""
         }
-    }
-}
-
-// MARK: - Draggable Annotation
-
-fileprivate final class DraggableAnnotation: NSObject, MKAnnotation {
-    @objc dynamic var coordinate: CLLocationCoordinate2D
-
-    init(coordinate: CLLocationCoordinate2D) {
-        self.coordinate = coordinate
-        super.init()
     }
 }

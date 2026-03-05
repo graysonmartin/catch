@@ -25,59 +25,13 @@ struct AddCatView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section(CatchStrings.Common.photos) {
-                    PhotoPickerView(
-                        selectedPhotos: $photos,
-                        minimumPhotos: 1,
-                        thumbnailSize: 120
-                    )
-                    if photos.isEmpty {
-                        Text(CatchStrings.Log.photoRequired)
-                            .font(.caption)
-                            .foregroundStyle(CatchTheme.primary)
-                    }
-                    if breed == nil && !isDismissedSuggestion
-                        && (breedSuggestion != nil || breedClassifier?.isClassifying == true)
-                    {
-                        BreedPredictionCard(
-                            predictions: breedClassifier?.topPredictions ?? [],
-                            isClassifying: breedClassifier?.isClassifying ?? false,
-                            onSelect: { breed = $0; breedSuggestion = nil },
-                            onDismiss: { isDismissedSuggestion = true; breedSuggestion = nil }
-                        )
-                    }
+            ScrollView {
+                VStack(spacing: 0) {
+                    formSections
+                    locationSection
                 }
-
-                Section {
-                    Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
-                    Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
-                }
-
-                Section {
-                    if !isUnnamed {
-                        LimitedSingleLineFieldView(
-                            CatchStrings.Common.name,
-                            text: $name,
-                            limit: TextInputLimits.catName
-                        )
-                    }
-                    BreedPickerView(breed: $breed)
-                }
-
-                Section(CatchStrings.Common.location) {
-                    LocationPickerView(location: $location)
-                }
-
-                Section(CatchStrings.Common.notes) {
-                    LimitedTextFieldView(
-                        CatchStrings.Common.notesPlaceholder,
-                        text: $notes,
-                        limit: TextInputLimits.catNotes
-                    )
-                }
-
             }
+            .background(CatchTheme.background)
             .navigationTitle(CatchStrings.Log.newCat)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -114,6 +68,84 @@ struct AddCatView: View {
             }
         }
     }
+
+    // MARK: - Form Sections
+
+    private var formSections: some View {
+        Form {
+            Section(CatchStrings.Common.photos) {
+                PhotoPickerView(
+                    selectedPhotos: $photos,
+                    minimumPhotos: 1,
+                    thumbnailSize: 120
+                )
+                if photos.isEmpty {
+                    Text(CatchStrings.Log.photoRequired)
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.primary)
+                }
+                if breed == nil && !isDismissedSuggestion
+                    && (breedSuggestion != nil || breedClassifier?.isClassifying == true)
+                {
+                    BreedPredictionCard(
+                        predictions: breedClassifier?.topPredictions ?? [],
+                        isClassifying: breedClassifier?.isClassifying ?? false,
+                        onSelect: { breed = $0; breedSuggestion = nil },
+                        onDismiss: { isDismissedSuggestion = true; breedSuggestion = nil }
+                    )
+                }
+            }
+
+            Section {
+                Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
+                Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
+            }
+
+            Section {
+                if !isUnnamed {
+                    LimitedSingleLineFieldView(
+                        CatchStrings.Common.name,
+                        text: $name,
+                        limit: TextInputLimits.catName
+                    )
+                }
+                BreedPickerView(breed: $breed)
+            }
+
+            Section(CatchStrings.Common.notes) {
+                LimitedTextFieldView(
+                    CatchStrings.Common.notesPlaceholder,
+                    text: $notes,
+                    limit: TextInputLimits.catNotes
+                )
+            }
+        }
+        .scrollDisabled(true)
+        .frame(minHeight: 500)
+    }
+
+    // MARK: - Location Section (outside Form)
+
+    private var locationSection: some View {
+        VStack(alignment: .leading, spacing: CatchSpacing.space12) {
+            Text(CatchStrings.Common.location)
+                .font(.footnote)
+                .foregroundStyle(CatchTheme.textSecondary)
+                .textCase(.uppercase)
+                .padding(.horizontal, CatchSpacing.space20)
+
+            VStack(alignment: .leading, spacing: CatchSpacing.space12) {
+                LocationPickerView(location: $location)
+            }
+            .padding(CatchSpacing.space20)
+            .background(CatchTheme.cardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
+            .padding(.horizontal)
+        }
+        .padding(.bottom, CatchSpacing.space16)
+    }
+
+    // MARK: - Logic
 
     private var canSave: Bool {
         (isUnnamed || !name.trimmingCharacters(in: .whitespaces).isEmpty) && !photos.isEmpty
