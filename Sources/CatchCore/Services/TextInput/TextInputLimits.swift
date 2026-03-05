@@ -2,6 +2,7 @@ import Foundation
 
 /// Centralized character limits for all free-text input fields.
 public enum TextInputLimits {
+    public static let displayName = 50
     public static let catName = 50
     public static let catNotes = 500
     public static let encounterNotes = 500

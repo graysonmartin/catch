@@ -7,6 +7,7 @@ import CatchCore
 struct ProfileSetupView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(AppleAuthService.self) private var authService
+    @Environment(ToastManager.self) private var toastManager
 
     @State private var displayName = ""
     @State private var username = ""
@@ -56,6 +57,7 @@ struct ProfileSetupView: View {
             }
         }
         .onAppear { prefillFromAppleUser() }
+        .onDisappear { usernameCheckTask?.cancel() }
     }
 
     // MARK: - Header
@@ -162,8 +164,12 @@ extension ProfileSetupView {
     private var fieldsSection: some View {
         VStack(spacing: CatchSpacing.space20) {
             fieldRow(label: CatchStrings.ProfileSetup.displayNameLabel) {
-                TextField(CatchStrings.ProfileSetup.displayNamePlaceholder, text: $displayName)
-                    .textContentType(.name)
+                LimitedSingleLineFieldView(
+                    CatchStrings.ProfileSetup.displayNamePlaceholder,
+                    text: $displayName,
+                    limit: TextInputLimits.displayName
+                )
+                .textContentType(.name)
             }
             VStack(alignment: .leading, spacing: CatchSpacing.space6) {
                 Text(CatchStrings.ProfileSetup.usernameLabel)
@@ -186,8 +192,11 @@ extension ProfileSetupView {
                 usernameStatusView
             }
             fieldRow(label: CatchStrings.ProfileSetup.bioLabel) {
-                TextField(CatchStrings.ProfileSetup.bioPlaceholder, text: $bio, axis: .vertical)
-                    .lineLimit(3...5)
+                LimitedTextFieldView(
+                    CatchStrings.ProfileSetup.bioPlaceholder,
+                    text: $bio,
+                    limit: TextInputLimits.bio
+                )
             }
         }
     }
@@ -211,7 +220,7 @@ extension ProfileSetupView {
             Text(CatchStrings.Profile.usernameFooter)
                 .font(.caption).foregroundStyle(CatchTheme.textSecondary)
         } else if validation != .valid {
-            Text(validationMessage(for: validation))
+            Text(CatchStrings.Profile.validationMessage(for: validation))
                 .font(.caption).foregroundStyle(.red)
         } else {
             switch usernameAvailability {
@@ -225,15 +234,6 @@ extension ProfileSetupView {
             case .error:
                 Text(CatchStrings.Profile.usernameCheckFailed).font(.caption).foregroundStyle(.orange)
             }
-        }
-    }
-
-    private func validationMessage(for result: UsernameValidationResult) -> String {
-        switch result {
-        case .tooShort: CatchStrings.Profile.usernameTooShort
-        case .tooLong: CatchStrings.Profile.usernameTooLong
-        case .invalidCharacters: CatchStrings.Profile.usernameInvalidChars
-        case .empty, .valid: ""
         }
     }
 
@@ -291,7 +291,7 @@ extension ProfileSetupView {
                 )
                 profile.cloudKitRecordName = recordName
             } catch {
-                // Non-blocking — profile saved locally, cloud sync retries later
+                toastManager.showError(CatchStrings.Toast.profileSaveFailed)
             }
         }
     }

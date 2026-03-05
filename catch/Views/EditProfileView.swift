@@ -136,7 +136,7 @@ struct EditProfileView: View {
         if username.isEmpty {
             EmptyView()
         } else if validation != .valid {
-            Text(validationMessage(for: validation))
+            Text(CatchStrings.Profile.validationMessage(for: validation))
                 .font(.caption)
                 .foregroundStyle(.red)
         } else {
@@ -160,15 +160,6 @@ struct EditProfileView: View {
                     .font(.caption)
                     .foregroundStyle(.orange)
             }
-        }
-    }
-
-    private func validationMessage(for result: UsernameValidationResult) -> String {
-        switch result {
-        case .tooShort: CatchStrings.Profile.usernameTooShort
-        case .tooLong: CatchStrings.Profile.usernameTooLong
-        case .invalidCharacters: CatchStrings.Profile.usernameInvalidChars
-        case .empty, .valid: ""
         }
     }
 

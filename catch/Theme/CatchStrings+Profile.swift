@@ -52,5 +52,14 @@ extension CatchStrings {
         static let showEncounters = String(localized: "show encounters")
         static let visibility = String(localized: "visibility")
         static let visibilityFooter = String(localized: "controls what people see on your public profile. private mode overrides everything.")
+
+        static func validationMessage(for result: UsernameValidationResult) -> String {
+            switch result {
+            case .tooShort: usernameTooShort
+            case .tooLong: usernameTooLong
+            case .invalidCharacters: usernameInvalidChars
+            case .empty, .valid: ""
+            }
+        }
     }
 }
