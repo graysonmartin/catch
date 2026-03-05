@@ -25,11 +25,18 @@ struct FindPeopleView: View {
                     ContentUnavailableView(
                         CatchStrings.Social.noOneFound,
                         systemImage: "person.slash",
-                        description: Text(CatchStrings.Social.tryDifferentName)
+                        description: Text(CatchStrings.Social.tryDifferentUsername)
                     )
                 } else {
                     ForEach(results, id: \.recordName) { user in
-                        resultRow(for: user)
+                        NavigationLink {
+                            RemoteProfileContent(
+                                userID: user.appleUserID,
+                                initialDisplayName: user.displayName
+                            )
+                        } label: {
+                            resultRow(for: user)
+                        }
                     }
                 }
             }
@@ -43,7 +50,7 @@ struct FindPeopleView: View {
                     )
                 }
             }
-            .searchable(text: $searchText, prompt: CatchStrings.Social.searchByNameOrUsername)
+            .searchable(text: $searchText, prompt: CatchStrings.Social.searchByUsername)
             .navigationTitle(CatchStrings.Social.findPeople)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

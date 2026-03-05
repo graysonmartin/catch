@@ -19,7 +19,6 @@ struct SocialView: View {
     @Environment(CKFollowService.self) private var followService
     @Environment(AppleAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
-    @State private var isShowingFindPeople = false
     @State private var isLoadingMoreFollowers = false
     @State private var isLoadingMoreFollowing = false
     @State var selectedTab: SocialTab
@@ -53,18 +52,6 @@ struct SocialView: View {
         .background(CatchTheme.background)
         .navigationTitle(selectedTab.displayName)
         .navigationBarTitleDisplayMode(.large)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    isShowingFindPeople = true
-                } label: {
-                    Label(CatchStrings.Social.findPeople, systemImage: "magnifyingglass")
-                }
-            }
-        }
-        .sheet(isPresented: $isShowingFindPeople) {
-            FindPeopleView()
-        }
         .refreshable {
             await refresh()
         }
