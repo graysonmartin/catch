@@ -15,7 +15,6 @@
 		E8000001AA000002 /* Encounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000011 /* Encounter.swift */; };
 		E8000001AA000004 /* CatchTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000013 /* CatchTheme.swift */; };
 		E8000001AA000005 /* CatPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000014 /* CatPhotoView.swift */; };
-		E8PL00000002 /* PawLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000001 /* PawLoadingView.swift */; };
 		E8000001AA000006 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000015 /* PhotoPickerView.swift */; };
 		E8000001AA000007 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000016 /* EmptyStateView.swift */; };
 		E8000001AA000008 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000017 /* FeedView.swift */; };
@@ -33,12 +32,12 @@
 		E8000001AA000038 /* EditEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002C /* EditEncounterView.swift */; };
 		E8000001AA00003A /* ClusterMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002E /* ClusterMapView.swift */; };
 		E8000001AA00003B /* MapAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002F /* MapAnnotations.swift */; };
-		E8000001AA000071 /* RemoteCatMapSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000072 /* RemoteCatMapSheet.swift */; };
 		E8000001AA000051 /* ImageDownsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000050 /* ImageDownsampler.swift */; };
 		E8000001AA000052 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
 		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
 		E8000001AA000055 /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
 		E8000001AA000059 /* CatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000065 /* CatCardView.swift */; };
+		E8000001AA000071 /* RemoteCatMapSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000072 /* RemoteCatMapSheet.swift */; };
 		E8000001BB000002 /* DataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001BB000001 /* DataSeeder.swift */; };
 		E8A100000003 /* CatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000012 /* CatTests.swift */; };
 		E8A100000004 /* EncounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000013 /* EncounterTests.swift */; };
@@ -52,10 +51,12 @@
 		E8A10000000E /* UserProfileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000018 /* UserProfileTests.swift */; };
 		E8A10000000F /* CatchSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000070 /* CatchSchema.swift */; };
 		E8A100000025 /* CatchSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000019 /* CatchSchemaTests.swift */; };
+		E8AK00000101 /* AppStorageKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AK00000001 /* AppStorageKeys.swift */; };
+		E8AP00000101 /* AvatarPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AP00000001 /* AvatarPickerView.swift */; };
 		E8B700000103 /* VisionBreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000003 /* VisionBreedClassifierService.swift */; };
+		E8B700000106 /* BreedPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000006 /* BreedPickerView.swift */; };
 		E8B70000010A /* catBreedDetection.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E8B70000000A /* catBreedDetection.mlmodel */; };
 		E8B70000010B /* BreedPredictionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B70000000B /* BreedPredictionCard.swift */; };
-		E8B700000106 /* BreedPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000006 /* BreedPickerView.swift */; };
 		E8B700000203 /* MockBreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000009 /* MockBreedClassifierService.swift */; };
 		E8BL00000101 /* BreedRarity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000001 /* BreedRarity.swift */; };
 		E8BL00000102 /* BreedCatalogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000002 /* BreedCatalogEntry.swift */; };
@@ -75,17 +76,17 @@
 		E8BL00000204 /* BreedLogEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000004 /* BreedLogEntry.swift */; };
 		E8BL00000205 /* BreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000005 /* BreedLogService.swift */; };
 		E8BL00000206 /* DefaultBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000006 /* DefaultBreedLogService.swift */; };
+		E8BL00000215 /* BreedLogSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000015 /* BreedLogSortOption.swift */; };
 		E8BL00000220 /* BreedCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000020 /* BreedCatalogTests.swift */; };
 		E8BL00000221 /* DefaultBreedLogServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000021 /* DefaultBreedLogServiceTests.swift */; };
-		E8BL00000215 /* BreedLogSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000015 /* BreedLogSortOption.swift */; };
 		E8BL00000222 /* MockBreedLogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000022 /* MockBreedLogService.swift */; };
 		E8BL00000230 /* BreedLogSortOptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BL00000030 /* BreedLogSortOptionTests.swift */; };
 		E8C0A270635C6CD4108F5ACA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C3D74C3035DF4A6F8F1F2F /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */; };
 		E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */; };
-		E8KC00000101 /* KeychainServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8KC00000001 /* KeychainServiceImpl.swift */; };
 		E8C45823BB168636E9BDC605 /* MockCloudKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */; };
 		E8CF9FE9B8D8EB743AC8A414 /* MockAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CB34FA781359331A3ED13A /* MockAuthService.swift */; };
+		E8CI00000101 /* CommentInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CI00000001 /* CommentInputBar.swift */; };
 		E8CL00000101 /* CollectionSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000001 /* CollectionSortOption.swift */; };
 		E8CL00000102 /* CollectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000002 /* CollectionFilter.swift */; };
 		E8CL00000103 /* CollectionSortFilterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000003 /* CollectionSortFilterService.swift */; };
@@ -119,13 +120,15 @@
 		E8CS0000030C /* CatchStrings+Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000C /* CatchStrings+Diary.swift */; };
 		E8D800000101 /* StevenEasterEggView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D800000001 /* StevenEasterEggView.swift */; };
 		E8D800000201 /* CatStevenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D800000002 /* CatStevenTests.swift */; };
+		E8DB00000101 /* DatabaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000001 /* DatabaseState.swift */; };
+		E8DB00000102 /* DatabaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000001 /* DatabaseState.swift */; };
+		E8DB00000201 /* DatabaseStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000002 /* DatabaseStateTests.swift */; };
 		E8DM00000101 /* CatDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000001 /* CatDisplayData.swift */; };
 		E8DM00000102 /* ProfileDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000002 /* ProfileDisplayData.swift */; };
 		E8DM00000201 /* CatDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000001 /* CatDisplayData.swift */; };
 		E8DM00000202 /* ProfileDisplayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000002 /* ProfileDisplayData.swift */; };
 		E8DM00000301 /* CatDisplayDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000011 /* CatDisplayDataTests.swift */; };
 		E8DM00000302 /* ProfileDisplayDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DM00000012 /* ProfileDisplayDataTests.swift */; };
-		E8FI00000301 /* FeedItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FI00000011 /* FeedItemTests.swift */; };
 		E8DR00000101 /* DiaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DR00000001 /* DiaryEntryRow.swift */; };
 		E8DR00000102 /* RemoteDiaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DR00000002 /* RemoteDiaryEntryRow.swift */; };
 		E8E600000007 /* SocialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000007 /* SocialView.swift */; };
@@ -136,6 +139,10 @@
 		E8E600000036 /* RemoteCatProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000036 /* RemoteCatProfileView.swift */; };
 		E8E600000037 /* RemoteFeedItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000037 /* RemoteFeedItemView.swift */; };
 		E8E600000039 /* MockUserBrowseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E500000039 /* MockUserBrowseService.swift */; };
+		E8E60000003A /* RemoteFollowListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000003A /* RemoteFollowListView.swift */; };
+		E8ED00000101 /* EncounterDetailData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ED00000001 /* EncounterDetailData.swift */; };
+		E8EI00000101 /* EngagementIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EI00000001 /* EngagementIndicator.swift */; };
+		E8ES00000101 /* EncounterDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ES00000001 /* EncounterDetailSheet.swift */; };
 		E8F600000103 /* CloudKitAssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000103 /* CloudKitAssetManager.swift */; };
 		E8F600000104 /* CKCatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000104 /* CKCatRepository.swift */; };
 		E8F600000105 /* CKEncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000105 /* CKEncounterRepository.swift */; };
@@ -152,16 +159,33 @@
 		E8F600000316 /* MockEncounterSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000306 /* MockEncounterSyncService.swift */; };
 		E8F600000317 /* CKCatSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000307 /* CKCatSyncServiceTests.swift */; };
 		E8F600000318 /* CKEncounterSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F500000308 /* CKEncounterSyncServiceTests.swift */; };
+		E8FI00000301 /* FeedItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FI00000011 /* FeedItemTests.swift */; };
+		E8FP00000101 /* FullScreenPhotoViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000001 /* FullScreenPhotoViewer.swift */; };
+		E8FP00000102 /* ZoomablePhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000002 /* ZoomablePhotoView.swift */; };
+		E8FP00000103 /* PhotoViewerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000003 /* PhotoViewerState.swift */; };
+		E8FP00000201 /* PhotoViewerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000003 /* PhotoViewerState.swift */; };
+		E8FP00000211 /* PhotoViewerStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000011 /* PhotoViewerStateTests.swift */; };
+		E8KC00000101 /* KeychainServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8KC00000001 /* KeychainServiceImpl.swift */; };
+		E8LB00000101 /* LikedByListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8LB00000001 /* LikedByListView.swift */; };
 		E8PF00000101 /* ProfileMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000001 /* ProfileMode.swift */; };
 		E8PF00000102 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000002 /* ProfileView.swift */; };
 		E8PF00000103 /* OwnProfileContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000003 /* OwnProfileContent.swift */; };
 		E8PF00000104 /* RemoteProfileContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000004 /* RemoteProfileContent.swift */; };
 		E8PF00000105 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000005 /* ProfileHeaderView.swift */; };
+		E8PG00000207 /* CKSocialFeedServicePaginationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PG00000007 /* CKSocialFeedServicePaginationTests.swift */; };
 		E8PKG0000020 /* CatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = E8PKG0000010 /* CatchCore */; };
 		E8PKG0000021 /* CatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = E8PKG0000011 /* CatchCore */; };
+		E8PL00000002 /* PawLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PL00000001 /* PawLoadingView.swift */; };
+		E8PS00000101 /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PS00000001 /* ProfileSetupView.swift */; };
+		E8PS00000102 /* CatchStrings+ProfileSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PS00000002 /* CatchStrings+ProfileSetup.swift */; };
 		E8PT00000102 /* ProfileCollectionTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000002 /* ProfileCollectionTab.swift */; };
 		E8PT00000103 /* ProfileDiaryTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000003 /* ProfileDiaryTab.swift */; };
 		E8PT00000212 /* ProfileDiaryTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PT00000012 /* ProfileDiaryTabTests.swift */; };
+		E8PY00000101 /* ProfileSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PY00000001 /* ProfileSyncService.swift */; };
+		E8PY00000201 /* ProfileSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PY00000001 /* ProfileSyncService.swift */; };
+		E8PY00000202 /* ProfileSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PY00000002 /* ProfileSyncServiceTests.swift */; };
+		E8RV00000101 /* DatabaseRecoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RV00000001 /* DatabaseRecoveryView.swift */; };
+		E8RV00000102 /* CatchStrings+Recovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RV00000002 /* CatchStrings+Recovery.swift */; };
 		E8SC00000100 /* StatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SC00000001 /* StatCardView.swift */; };
 		E8SF00000101 /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000001 /* FeedItem.swift */; };
 		E8SF00000102 /* SocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000002 /* SocialFeedService.swift */; };
@@ -172,43 +196,12 @@
 		E8SF00000203 /* CKSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000003 /* CKSocialFeedService.swift */; };
 		E8SF00000204 /* MockSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000005 /* MockSocialFeedService.swift */; };
 		E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000006 /* CKSocialFeedServiceTests.swift */; };
-		E8PG00000207 /* CKSocialFeedServicePaginationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PG00000007 /* CKSocialFeedServicePaginationTests.swift */; };
-		E8PKG0000020 /* CatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = E8PKG0000010 /* CatchCore */; };
-		E8PKG0000021 /* CatchCore in Frameworks */ = {isa = PBXBuildFile; productRef = E8PKG0000011 /* CatchCore */; };
-		E8CL00000101 /* CollectionSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000001 /* CollectionSortOption.swift */; };
-		E8CL00000102 /* CollectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000002 /* CollectionFilter.swift */; };
-		E8CL00000103 /* CollectionSortFilterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000003 /* CollectionSortFilterService.swift */; };
-		E8CL00000104 /* CollectionSortFilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000004 /* CollectionSortFilterBar.swift */; };
-		E8CL00000105 /* RemoteCollectionTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000005 /* RemoteCollectionTab.swift */; };
-		E8CL00000201 /* CollectionSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000001 /* CollectionSortOption.swift */; };
-		E8CL00000202 /* CollectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000002 /* CollectionFilter.swift */; };
-		E8CL00000203 /* CollectionSortFilterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000003 /* CollectionSortFilterService.swift */; };
-		E8CL00000204 /* CollectionSortFilterServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CL00000006 /* CollectionSortFilterServiceTests.swift */; };
 		E8SI00000108 /* CatchStrings+Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000008 /* CatchStrings+Interaction.swift */; };
 		E8SI00000109 /* InteractionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000009 /* InteractionBar.swift */; };
-		E8CI00000101 /* CommentInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CI00000001 /* CommentInputBar.swift */; };
-		E8EI00000101 /* EngagementIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EI00000001 /* EngagementIndicator.swift */; };
-		E8TI00000101 /* LimitedTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000001 /* LimitedTextFieldView.swift */; };
-		E8TI00000102 /* LimitedSingleLineFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000002 /* LimitedSingleLineFieldView.swift */; };
-		E8TI00000103 /* CatchStrings+TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000003 /* CatchStrings+TextInput.swift */; };
 		E8SI0000010A /* CommentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000A /* CommentRowView.swift */; };
 		E8SI0000010B /* CommentThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000B /* CommentThreadView.swift */; };
 		E8SI00000208 /* MockSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000C /* MockSocialInteractionService.swift */; };
 		E8SP00000001 /* CatchSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SP00000010 /* CatchSpacing.swift */; };
-		E8TM00000101 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
-		E8TM00000102 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000002 /* ToastView.swift */; };
-		E8TM00000103 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
-		E8TM00000201 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
-		E8TM00000203 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
-		E8TM00000204 /* ToastManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000004 /* ToastManagerTests.swift */; };
-		E8ED00000101 /* EncounterDetailData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ED00000001 /* EncounterDetailData.swift */; };
-		E8ES00000101 /* EncounterDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ES00000001 /* EncounterDetailSheet.swift */; };
-		E8FP00000101 /* FullScreenPhotoViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000001 /* FullScreenPhotoViewer.swift */; };
-		E8FP00000102 /* ZoomablePhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000002 /* ZoomablePhotoView.swift */; };
-		E8FP00000103 /* PhotoViewerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000003 /* PhotoViewerState.swift */; };
-		E8FP00000201 /* PhotoViewerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000003 /* PhotoViewerState.swift */; };
-		E8FP00000211 /* PhotoViewerStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000011 /* PhotoViewerStateTests.swift */; };
-		E8LB00000101 /* LikedByListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8LB00000001 /* LikedByListView.swift */; };
 		E8ST00000101 /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000001 /* SettingsService.swift */; };
 		E8ST00000102 /* UserDefaultsSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000002 /* UserDefaultsSettingsService.swift */; };
 		E8ST00000103 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000003 /* SettingsView.swift */; };
@@ -218,19 +211,16 @@
 		E8ST00000203 /* MockSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000005 /* MockSettingsService.swift */; };
 		E8ST00000204 /* UserDefaultsSettingsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000006 /* UserDefaultsSettingsServiceTests.swift */; };
 		E8ST00000205 /* CatchStrings+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000004 /* CatchStrings+Settings.swift */; };
-		E8RV00000101 /* DatabaseRecoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RV00000001 /* DatabaseRecoveryView.swift */; };
-		E8RV00000102 /* CatchStrings+Recovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RV00000002 /* CatchStrings+Recovery.swift */; };
-		E8DB00000101 /* DatabaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000001 /* DatabaseState.swift */; };
-		E8DB00000102 /* DatabaseState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000001 /* DatabaseState.swift */; };
-		E8DB00000201 /* DatabaseStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000002 /* DatabaseStateTests.swift */; };
-		E8PS00000101 /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PS00000001 /* ProfileSetupView.swift */; };
-		E8PS00000102 /* CatchStrings+ProfileSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PS00000002 /* CatchStrings+ProfileSetup.swift */; };
-		E8AK00000101 /* AppStorageKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AK00000001 /* AppStorageKeys.swift */; };
-		E8PY00000101 /* ProfileSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PY00000001 /* ProfileSyncService.swift */; };
-		E8PY00000201 /* ProfileSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PY00000001 /* ProfileSyncService.swift */; };
-		E8AP00000101 /* AvatarPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AP00000001 /* AvatarPickerView.swift */; };
+		E8TI00000101 /* LimitedTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000001 /* LimitedTextFieldView.swift */; };
+		E8TI00000102 /* LimitedSingleLineFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000002 /* LimitedSingleLineFieldView.swift */; };
+		E8TI00000103 /* CatchStrings+TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000003 /* CatchStrings+TextInput.swift */; };
+		E8TM00000101 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
+		E8TM00000102 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000002 /* ToastView.swift */; };
+		E8TM00000103 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
+		E8TM00000201 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
+		E8TM00000203 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
+		E8TM00000204 /* ToastManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000004 /* ToastManagerTests.swift */; };
 		E8UF00000101 /* UsernameFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UF00000001 /* UsernameFieldView.swift */; };
-		E8PY00000202 /* ProfileSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PY00000002 /* ProfileSyncServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -243,7 +233,6 @@
 		E8000001AA000011 /* Encounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encounter.swift; sourceTree = "<group>"; };
 		E8000001AA000013 /* CatchTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchTheme.swift; sourceTree = "<group>"; };
 		E8000001AA000014 /* CatPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatPhotoView.swift; sourceTree = "<group>"; };
-		E8PL00000001 /* PawLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PawLoadingView.swift; sourceTree = "<group>"; };
 		E8000001AA000015 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		E8000001AA000016 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		E8000001AA000017 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
@@ -261,12 +250,12 @@
 		E8000001AA00002C /* EditEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEncounterView.swift; sourceTree = "<group>"; };
 		E8000001AA00002E /* ClusterMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterMapView.swift; sourceTree = "<group>"; };
 		E8000001AA00002F /* MapAnnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotations.swift; sourceTree = "<group>"; };
-		E8000001AA000072 /* RemoteCatMapSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCatMapSheet.swift; sourceTree = "<group>"; };
 		E8000001AA000050 /* ImageDownsampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownsampler.swift; sourceTree = "<group>"; };
 		E8000001AA000060 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		E8000001AA000062 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		E8000001AA000065 /* CatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatCardView.swift; sourceTree = "<group>"; };
 		E8000001AA000070 /* CatchSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchema.swift; sourceTree = "<group>"; };
+		E8000001AA000072 /* RemoteCatMapSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCatMapSheet.swift; sourceTree = "<group>"; };
 		E8000001BB000001 /* DataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSeeder.swift; sourceTree = "<group>"; };
 		E8A100000012 /* CatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatTests.swift; sourceTree = "<group>"; };
 		E8A100000013 /* EncounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterTests.swift; sourceTree = "<group>"; };
@@ -276,23 +265,13 @@
 		E8A100000017 /* ImageDownsamplerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownsamplerTests.swift; sourceTree = "<group>"; };
 		E8A100000018 /* UserProfileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileTests.swift; sourceTree = "<group>"; };
 		E8A100000019 /* CatchSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchemaTests.swift; sourceTree = "<group>"; };
-		E8ST00000001 /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
-		E8ST00000002 /* UserDefaultsSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsSettingsService.swift; sourceTree = "<group>"; };
-		E8ST00000003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		E8ST00000004 /* CatchStrings+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Settings.swift"; sourceTree = "<group>"; };
-		E8ST00000005 /* MockSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsService.swift; sourceTree = "<group>"; };
-		E8ST00000006 /* UserDefaultsSettingsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsSettingsServiceTests.swift; sourceTree = "<group>"; };
-		E8RV00000001 /* DatabaseRecoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseRecoveryView.swift; sourceTree = "<group>"; };
-		E8RV00000002 /* CatchStrings+Recovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Recovery.swift"; sourceTree = "<group>"; };
-		E8DB00000001 /* DatabaseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseState.swift; sourceTree = "<group>"; };
-		E8DB00000002 /* DatabaseStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseStateTests.swift; sourceTree = "<group>"; };
-		E8PS00000001 /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
-		E8PS00000002 /* CatchStrings+ProfileSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+ProfileSetup.swift"; sourceTree = "<group>"; };
+		E8AK00000001 /* AppStorageKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageKeys.swift; sourceTree = "<group>"; };
+		E8AP00000001 /* AvatarPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerView.swift; sourceTree = "<group>"; };
 		E8B700000003 /* VisionBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionBreedClassifierService.swift; sourceTree = "<group>"; };
-		E8B70000000A /* catBreedDetection.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = catBreedDetection.mlmodel; sourceTree = "<group>"; };
-		E8B70000000B /* BreedPredictionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPredictionCard.swift; sourceTree = "<group>"; };
 		E8B700000006 /* BreedPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPickerView.swift; sourceTree = "<group>"; };
 		E8B700000009 /* MockBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedClassifierService.swift; sourceTree = "<group>"; };
+		E8B70000000A /* catBreedDetection.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = catBreedDetection.mlmodel; sourceTree = "<group>"; };
+		E8B70000000B /* BreedPredictionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPredictionCard.swift; sourceTree = "<group>"; };
 		E8BL00000001 /* BreedRarity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedRarity.swift; sourceTree = "<group>"; };
 		E8BL00000002 /* BreedCatalogEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalogEntry.swift; sourceTree = "<group>"; };
 		E8BL00000003 /* BreedCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalog.swift; sourceTree = "<group>"; };
@@ -307,14 +286,14 @@
 		E8BL00000015 /* BreedLogSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogSortOption.swift; sourceTree = "<group>"; };
 		E8BL00000020 /* BreedCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedCatalogTests.swift; sourceTree = "<group>"; };
 		E8BL00000021 /* DefaultBreedLogServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBreedLogServiceTests.swift; sourceTree = "<group>"; };
-		E8BL00000030 /* BreedLogSortOptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogSortOptionTests.swift; sourceTree = "<group>"; };
 		E8BL00000022 /* MockBreedLogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedLogService.swift; sourceTree = "<group>"; };
+		E8BL00000030 /* BreedLogSortOptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedLogSortOptionTests.swift; sourceTree = "<group>"; };
 		E8C32E97CC31667BAF165D33 /* MockCloudKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCloudKitService.swift; sourceTree = "<group>"; };
 		E8C341314A5534EA92B26FA8 /* AppleAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleAuthService.swift; sourceTree = "<group>"; };
-		E8KC00000001 /* KeychainServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainServiceImpl.swift; sourceTree = "<group>"; };
 		E8CA167FE482ED4A92C8C805 /* catch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = catch.entitlements; sourceTree = "<group>"; };
 		E8CB34FA781359331A3ED13A /* MockAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthService.swift; sourceTree = "<group>"; };
 		E8CB52F511D9CB8F68D9D9B0 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		E8CI00000001 /* CommentInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputBar.swift; sourceTree = "<group>"; };
 		E8CL00000001 /* CollectionSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortOption.swift; sourceTree = "<group>"; };
 		E8CL00000002 /* CollectionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionFilter.swift; sourceTree = "<group>"; };
 		E8CL00000003 /* CollectionSortFilterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterService.swift; sourceTree = "<group>"; };
@@ -334,14 +313,12 @@
 		E8CS0000000C /* CatchStrings+Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Diary.swift"; sourceTree = "<group>"; };
 		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
+		E8DB00000001 /* DatabaseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseState.swift; sourceTree = "<group>"; };
+		E8DB00000002 /* DatabaseStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseStateTests.swift; sourceTree = "<group>"; };
 		E8DM00000001 /* CatDisplayData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDisplayData.swift; sourceTree = "<group>"; };
 		E8DM00000002 /* ProfileDisplayData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDisplayData.swift; sourceTree = "<group>"; };
 		E8DM00000011 /* CatDisplayDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDisplayDataTests.swift; sourceTree = "<group>"; };
 		E8DM00000012 /* ProfileDisplayDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDisplayDataTests.swift; sourceTree = "<group>"; };
-		E8ED00000001 /* EncounterDetailData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailData.swift; sourceTree = "<group>"; };
-		E8ES00000001 /* EncounterDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailSheet.swift; sourceTree = "<group>"; };
-		E8LB00000001 /* LikedByListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedByListView.swift; sourceTree = "<group>"; };
-		E8FI00000011 /* FeedItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemTests.swift; sourceTree = "<group>"; };
 		E8DR00000001 /* DiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryEntryRow.swift; sourceTree = "<group>"; };
 		E8DR00000002 /* RemoteDiaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDiaryEntryRow.swift; sourceTree = "<group>"; };
 		E8E500000007 /* SocialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialView.swift; sourceTree = "<group>"; };
@@ -352,6 +329,10 @@
 		E8E500000036 /* RemoteCatProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCatProfileView.swift; sourceTree = "<group>"; };
 		E8E500000037 /* RemoteFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFeedItemView.swift; sourceTree = "<group>"; };
 		E8E500000039 /* MockUserBrowseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserBrowseService.swift; sourceTree = "<group>"; };
+		E8E50000003A /* RemoteFollowListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFollowListView.swift; sourceTree = "<group>"; };
+		E8ED00000001 /* EncounterDetailData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailData.swift; sourceTree = "<group>"; };
+		E8EI00000001 /* EngagementIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagementIndicator.swift; sourceTree = "<group>"; };
+		E8ES00000001 /* EncounterDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailSheet.swift; sourceTree = "<group>"; };
 		E8F500000103 /* CloudKitAssetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitAssetManager.swift; sourceTree = "<group>"; };
 		E8F500000104 /* CKCatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatRepository.swift; sourceTree = "<group>"; };
 		E8F500000105 /* CKEncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterRepository.swift; sourceTree = "<group>"; };
@@ -363,14 +344,29 @@
 		E8F500000306 /* MockEncounterSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterSyncService.swift; sourceTree = "<group>"; };
 		E8F500000307 /* CKCatSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCatSyncServiceTests.swift; sourceTree = "<group>"; };
 		E8F500000308 /* CKEncounterSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKEncounterSyncServiceTests.swift; sourceTree = "<group>"; };
+		E8FI00000011 /* FeedItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItemTests.swift; sourceTree = "<group>"; };
+		E8FP00000001 /* FullScreenPhotoViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPhotoViewer.swift; sourceTree = "<group>"; };
+		E8FP00000002 /* ZoomablePhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomablePhotoView.swift; sourceTree = "<group>"; };
+		E8FP00000003 /* PhotoViewerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerState.swift; sourceTree = "<group>"; };
+		E8FP00000011 /* PhotoViewerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerStateTests.swift; sourceTree = "<group>"; };
+		E8KC00000001 /* KeychainServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainServiceImpl.swift; sourceTree = "<group>"; };
+		E8LB00000001 /* LikedByListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedByListView.swift; sourceTree = "<group>"; };
 		E8PF00000001 /* ProfileMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMode.swift; sourceTree = "<group>"; };
 		E8PF00000002 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		E8PF00000003 /* OwnProfileContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnProfileContent.swift; sourceTree = "<group>"; };
 		E8PF00000004 /* RemoteProfileContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteProfileContent.swift; sourceTree = "<group>"; };
 		E8PF00000005 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
+		E8PG00000007 /* CKSocialFeedServicePaginationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialFeedServicePaginationTests.swift; sourceTree = "<group>"; };
+		E8PL00000001 /* PawLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PawLoadingView.swift; sourceTree = "<group>"; };
+		E8PS00000001 /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
+		E8PS00000002 /* CatchStrings+ProfileSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+ProfileSetup.swift"; sourceTree = "<group>"; };
 		E8PT00000002 /* ProfileCollectionTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionTab.swift; sourceTree = "<group>"; };
 		E8PT00000003 /* ProfileDiaryTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDiaryTab.swift; sourceTree = "<group>"; };
 		E8PT00000012 /* ProfileDiaryTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDiaryTabTests.swift; sourceTree = "<group>"; };
+		E8PY00000001 /* ProfileSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSyncService.swift; sourceTree = "<group>"; };
+		E8PY00000002 /* ProfileSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSyncServiceTests.swift; sourceTree = "<group>"; };
+		E8RV00000001 /* DatabaseRecoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseRecoveryView.swift; sourceTree = "<group>"; };
+		E8RV00000002 /* CatchStrings+Recovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Recovery.swift"; sourceTree = "<group>"; };
 		E8SC00000001 /* StatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatCardView.swift; sourceTree = "<group>"; };
 		E8SF00000001 /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
 		E8SF00000002 /* SocialFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialFeedService.swift; sourceTree = "<group>"; };
@@ -378,37 +374,26 @@
 		E8SF00000004 /* SocialFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialFeedItemView.swift; sourceTree = "<group>"; };
 		E8SF00000005 /* MockSocialFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialFeedService.swift; sourceTree = "<group>"; };
 		E8SF00000006 /* CKSocialFeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialFeedServiceTests.swift; sourceTree = "<group>"; };
-		E8PG00000007 /* CKSocialFeedServicePaginationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialFeedServicePaginationTests.swift; sourceTree = "<group>"; };
-		E8CL00000001 /* CollectionSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortOption.swift; sourceTree = "<group>"; };
-		E8CL00000002 /* CollectionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionFilter.swift; sourceTree = "<group>"; };
-		E8CL00000003 /* CollectionSortFilterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterService.swift; sourceTree = "<group>"; };
-		E8CL00000004 /* CollectionSortFilterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterBar.swift; sourceTree = "<group>"; };
-		E8CL00000005 /* RemoteCollectionTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCollectionTab.swift; sourceTree = "<group>"; };
-		E8CL00000006 /* CollectionSortFilterServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionSortFilterServiceTests.swift; sourceTree = "<group>"; };
 		E8SI00000008 /* CatchStrings+Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Interaction.swift"; sourceTree = "<group>"; };
 		E8SI00000009 /* InteractionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionBar.swift; sourceTree = "<group>"; };
-		E8CI00000001 /* CommentInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputBar.swift; sourceTree = "<group>"; };
-		E8EI00000001 /* EngagementIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagementIndicator.swift; sourceTree = "<group>"; };
-		E8TI00000001 /* LimitedTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTextFieldView.swift; sourceTree = "<group>"; };
-		E8TI00000002 /* LimitedSingleLineFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedSingleLineFieldView.swift; sourceTree = "<group>"; };
-		E8TI00000003 /* CatchStrings+TextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+TextInput.swift"; sourceTree = "<group>"; };
 		E8SI0000000A /* CommentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRowView.swift; sourceTree = "<group>"; };
 		E8SI0000000B /* CommentThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentThreadView.swift; sourceTree = "<group>"; };
 		E8SI0000000C /* MockSocialInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialInteractionService.swift; sourceTree = "<group>"; };
 		E8SP00000010 /* CatchSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSpacing.swift; sourceTree = "<group>"; };
+		E8ST00000001 /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
+		E8ST00000002 /* UserDefaultsSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsSettingsService.swift; sourceTree = "<group>"; };
+		E8ST00000003 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E8ST00000004 /* CatchStrings+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Settings.swift"; sourceTree = "<group>"; };
+		E8ST00000005 /* MockSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsService.swift; sourceTree = "<group>"; };
+		E8ST00000006 /* UserDefaultsSettingsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsSettingsServiceTests.swift; sourceTree = "<group>"; };
+		E8TI00000001 /* LimitedTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTextFieldView.swift; sourceTree = "<group>"; };
+		E8TI00000002 /* LimitedSingleLineFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedSingleLineFieldView.swift; sourceTree = "<group>"; };
+		E8TI00000003 /* CatchStrings+TextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+TextInput.swift"; sourceTree = "<group>"; };
 		E8TM00000001 /* ToastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
 		E8TM00000002 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		E8TM00000003 /* CatchStrings+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Toast.swift"; sourceTree = "<group>"; };
 		E8TM00000004 /* ToastManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManagerTests.swift; sourceTree = "<group>"; };
-		E8FP00000001 /* FullScreenPhotoViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPhotoViewer.swift; sourceTree = "<group>"; };
-		E8FP00000002 /* ZoomablePhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomablePhotoView.swift; sourceTree = "<group>"; };
-		E8FP00000003 /* PhotoViewerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerState.swift; sourceTree = "<group>"; };
-		E8FP00000011 /* PhotoViewerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerStateTests.swift; sourceTree = "<group>"; };
-		E8AK00000001 /* AppStorageKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageKeys.swift; sourceTree = "<group>"; };
-		E8PY00000001 /* ProfileSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSyncService.swift; sourceTree = "<group>"; };
-		E8AP00000001 /* AvatarPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerView.swift; sourceTree = "<group>"; };
 		E8UF00000001 /* UsernameFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameFieldView.swift; sourceTree = "<group>"; };
-		E8PY00000002 /* ProfileSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSyncServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -685,14 +670,6 @@
 			path = BreedLog;
 			sourceTree = "<group>";
 		};
-		E8PY0000F002 /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-				E8PY00000002 /* ProfileSyncServiceTests.swift */,
-			);
-			path = Profile;
-			sourceTree = "<group>";
-		};
 		E8C17FF134EEE52DB9FA0D4A /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -730,14 +707,6 @@
 				E8KC00000001 /* KeychainServiceImpl.swift */,
 			);
 			path = Auth;
-			sourceTree = "<group>";
-		};
-		E8PY0000F001 /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-				E8PY00000001 /* ProfileSyncService.swift */,
-			);
-			path = Profile;
 			sourceTree = "<group>";
 		};
 		E8C7643E7D80FDFED273606F /* Services */ = {
@@ -839,6 +808,7 @@
 				E8E50000000A /* PendingRequestRowView.swift */,
 				E8E500000036 /* RemoteCatProfileView.swift */,
 				E8E500000037 /* RemoteFeedItemView.swift */,
+				E8E50000003A /* RemoteFollowListView.swift */,
 				E8SF00000004 /* SocialFeedItemView.swift */,
 				E8SI0000000A /* CommentRowView.swift */,
 				E8SI0000000B /* CommentThreadView.swift */,
@@ -919,6 +889,22 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		E8PY0000F001 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				E8PY00000001 /* ProfileSyncService.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		E8PY0000F002 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				E8PY00000002 /* ProfileSyncServiceTests.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		E8SF0000F001 /* SocialFeed */ = {
 			isa = PBXGroup;
 			children = (
@@ -951,20 +937,6 @@
 			path = Social;
 			sourceTree = "<group>";
 		};
-		E8UV0000F001 /* Username */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Username;
-			sourceTree = "<group>";
-		};
-		E8UV0000F002 /* Username */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Username;
-			sourceTree = "<group>";
-		};
 		E8ST0000F001 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -988,6 +960,20 @@
 				E8ST00000003 /* SettingsView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		E8UV0000F001 /* Username */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Username;
+			sourceTree = "<group>";
+		};
+		E8UV0000F002 /* Username */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Username;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1160,6 +1146,7 @@
 				E8F600000304 /* CKEncounterSyncService.swift in Sources */,
 				E8E600000036 /* RemoteCatProfileView.swift in Sources */,
 				E8E600000037 /* RemoteFeedItemView.swift in Sources */,
+				E8E60000003A /* RemoteFollowListView.swift in Sources */,
 				E8B700000103 /* VisionBreedClassifierService.swift in Sources */,
 				E8B70000010A /* catBreedDetection.mlmodel in Sources */,
 				E8B70000010B /* BreedPredictionCard.swift in Sources */,
@@ -1438,7 +1425,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = catch/catch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"catch/Preview Content\"";
 				DEVELOPMENT_TEAM = SZC3MJ9V7Y;
 				ENABLE_PREVIEWS = YES;
@@ -1470,7 +1457,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = catch/catch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"catch/Preview Content\"";
 				DEVELOPMENT_TEAM = SZC3MJ9V7Y;
 				ENABLE_PREVIEWS = YES;

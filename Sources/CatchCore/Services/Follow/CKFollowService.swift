@@ -144,6 +144,14 @@ public final class CKFollowService: FollowService {
         hasMoreFollowing = nextCursor != nil
     }
 
+    public func fetchFollowers(for userID: String) async throws -> [Follow] {
+        try await query(field: "followeeID", value: userID, status: .active)
+    }
+
+    public func fetchFollowing(for userID: String) async throws -> [Follow] {
+        try await query(field: "followerID", value: userID, status: .active)
+    }
+
     public func fetchFollowCounts(for userID: String) async throws -> (followers: Int, following: Int) {
         async let followerCount = countRecords(field: "followeeID", value: userID)
         async let followingCount = countRecords(field: "followerID", value: userID)

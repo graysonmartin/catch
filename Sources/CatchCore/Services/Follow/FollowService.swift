@@ -19,6 +19,8 @@ public protocol FollowService: Observable, Sendable {
     func loadMoreFollowers(for userID: String) async throws
     func loadMoreFollowing(for userID: String) async throws
     func fetchFollowCounts(for userID: String) async throws -> (followers: Int, following: Int)
+    func fetchFollowers(for userID: String) async throws -> [Follow]
+    func fetchFollowing(for userID: String) async throws -> [Follow]
     func isFollowing(_ targetID: String) -> Bool
     func pendingRequestTo(_ targetID: String) -> Follow?
 }

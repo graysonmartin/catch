@@ -11,6 +11,8 @@ extension CatchStrings {
         static let noFollowersSubtitle = String(localized: "your adoring public hasn't arrived")
         static let notFollowingTitle = String(localized: "not following anyone")
         static let notFollowingSubtitle = String(localized: "find some people to follow and start building your circle")
+        static let remoteNoFollowers = String(localized: "no followers to show")
+        static let remoteNotFollowing = String(localized: "not following anyone yet")
 
         // SocialTab display names
         static let followersTab = String(localized: "followers")
@@ -18,10 +20,10 @@ extension CatchStrings {
 
         // FindPeopleView
         static let noOneFound = String(localized: "no one found")
-        static let tryDifferentName = String(localized: "try a different name")
+        static let tryDifferentUsername = String(localized: "try a different username")
         static let findYourPeople = String(localized: "find your people")
-        static let findPeopleSubtitle = String(localized: "search by name to discover other cat spotters")
-        static let searchByNameOrUsername = String(localized: "search by name or username")
+        static let findPeopleSubtitle = String(localized: "search by username to discover other cat spotters")
+        static let searchByUsername = String(localized: "search by username")
         static let anonymous = String(localized: "anonymous")
         static let you = String(localized: "you")
         static let followingStatus = String(localized: "following")

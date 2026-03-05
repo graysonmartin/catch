@@ -67,6 +67,14 @@ final class MockFollowService: FollowService {
         loadMoreFollowingCalls.append(userID)
     }
 
+    func fetchFollowers(for userID: String) async throws -> [Follow] {
+        followers
+    }
+
+    func fetchFollowing(for userID: String) async throws -> [Follow] {
+        following
+    }
+
     func fetchFollowCounts(for userID: String) async throws -> (followers: Int, following: Int) {
         fetchFollowCountsCalls.append(userID)
         return stubbedFollowCounts

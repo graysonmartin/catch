@@ -15,6 +15,7 @@ struct OwnProfileContent: View {
 
     @Binding var selectedTab: Int
     @State private var isShowingEditSheet = false
+    @State private var isShowingFindPeople = false
     @State private var isShowingCollection = false
     @State private var searchText = ""
 
@@ -58,14 +59,26 @@ struct OwnProfileContent: View {
 
             if profile != nil, authService.authState.isSignedIn {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        isShowingEditSheet = true
-                    } label: {
-                        Image(systemName: "pencil")
-                            .foregroundStyle(CatchTheme.primary)
+                    HStack(spacing: CatchSpacing.space16) {
+                        Button {
+                            isShowingFindPeople = true
+                        } label: {
+                            Image(systemName: "person.badge.plus")
+                                .foregroundStyle(CatchTheme.primary)
+                        }
+
+                        Button {
+                            isShowingEditSheet = true
+                        } label: {
+                            Image(systemName: "pencil")
+                                .foregroundStyle(CatchTheme.primary)
+                        }
                     }
                 }
             }
+        }
+        .sheet(isPresented: $isShowingFindPeople) {
+            FindPeopleView()
         }
         .navigationDestination(for: Cat.self) { cat in
             CatProfileView(cat: cat)

@@ -50,11 +50,11 @@ public final class CKCloudKitService: CloudKitService {
         }
 
         guard let appleID = record["appleUserID"] as? String,
-              let displayName = record["displayName"] as? String,
-              let bio = record["bio"] as? String else {
+              let displayName = record["displayName"] as? String else {
             return nil
         }
 
+        let bio = record["bio"] as? String ?? ""
         let isPrivate = (record["isPrivate"] as? Int ?? 0) == 1
         let username = record["username"] as? String
 
@@ -74,34 +74,26 @@ public final class CKCloudKitService: CloudKitService {
     }
 
     public func searchUsers(query: String) async throws -> [CloudUserProfile] {
-        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !trimmed.isEmpty else { return [] }
 
-        // CloudKit doesn't support OR predicates — run two queries and merge
-        async let nameResults = fetchProfiles(
-            predicate: NSPredicate(format: "displayName BEGINSWITH[cd] %@", trimmed)
-        )
-        async let usernameResults = fetchProfiles(
-            predicate: NSPredicate(format: "username BEGINSWITH[cd] %@", trimmed.lowercased())
-        )
-
-        let combined = try await nameResults + usernameResults
-        var seen = Set<String>()
-        return combined.filter { seen.insert($0.recordName).inserted }
+        // CloudKit BEGINSWITH is case-sensitive and does not support [cd] modifier.
+        // Usernames are stored lowercased, so lowercase the query to match.
+        let predicate = NSPredicate(format: "username BEGINSWITH %@", trimmed)
+        return try await fetchProfiles(predicate: predicate)
     }
 
     private func fetchProfiles(predicate: NSPredicate) async throws -> [CloudUserProfile] {
         let ckQuery = CKQuery(recordType: Self.recordType, predicate: predicate)
-        ckQuery.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
         let (results, _) = try await database.records(matching: ckQuery, resultsLimit: 20)
 
         return results.compactMap { _, result in
             guard case .success(let record) = result,
                   let appleID = record["appleUserID"] as? String,
-                  let displayName = record["displayName"] as? String,
-                  let bio = record["bio"] as? String else {
+                  let displayName = record["displayName"] as? String else {
                 return nil
             }
+            let bio = record["bio"] as? String ?? ""
             let isPrivate = (record["isPrivate"] as? Int ?? 0) == 1
             let username = record["username"] as? String
             return CloudUserProfile(

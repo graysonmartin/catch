@@ -124,17 +124,35 @@ struct RemoteProfileContent: View {
 
     private func avatarWithSocial(data: UserBrowseData) -> some View {
         HStack(alignment: .center, spacing: CatchSpacing.space24) {
-            compactSocialStat(
-                count: data.followerCount,
-                label: CatchStrings.Profile.followers
-            )
+            NavigationLink {
+                RemoteFollowListView(
+                    userID: userID,
+                    displayName: data.profile.displayName,
+                    tab: .followers
+                )
+            } label: {
+                compactSocialStat(
+                    count: data.followerCount,
+                    label: CatchStrings.Profile.followers
+                )
+            }
+            .buttonStyle(.plain)
 
             avatarImage(data: data)
 
-            compactSocialStat(
-                count: data.followingCount,
-                label: CatchStrings.Profile.following
-            )
+            NavigationLink {
+                RemoteFollowListView(
+                    userID: userID,
+                    displayName: data.profile.displayName,
+                    tab: .following
+                )
+            } label: {
+                compactSocialStat(
+                    count: data.followingCount,
+                    label: CatchStrings.Profile.following
+                )
+            }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, CatchSpacing.space20)
     }
