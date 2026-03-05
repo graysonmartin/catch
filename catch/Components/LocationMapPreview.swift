@@ -105,25 +105,14 @@ struct LocationMapPreview: UIViewRepresentable {
             view.animatesWhenAdded = true
             view.annotation = annotation
 
-            // Shorter long-press to start drag (default ~0.5s feels sluggish)
-            if view.gestureRecognizers?.contains(where: { $0 is UILongPressGestureRecognizer && $0.name == "quickDrag" }) != true {
-                let quickDrag = UILongPressGestureRecognizer(
-                    target: self,
-                    action: #selector(handleQuickDrag(_:))
-                )
-                quickDrag.name = "quickDrag"
-                quickDrag.minimumPressDuration = 0.15
-                view.addGestureRecognizer(quickDrag)
+            // Shorten MapKit's built-in long-press duration for snappier drag
+            for gesture in view.gestureRecognizers ?? [] {
+                if let longPress = gesture as? UILongPressGestureRecognizer {
+                    longPress.minimumPressDuration = 0.2
+                }
             }
 
             return view
-        }
-
-        @objc func handleQuickDrag(_ gesture: UILongPressGestureRecognizer) {
-            guard let annotationView = gesture.view as? MKAnnotationView else { return }
-            if gesture.state == .began {
-                annotationView.setDragState(.starting, animated: true)
-            }
         }
 
         func mapView(
