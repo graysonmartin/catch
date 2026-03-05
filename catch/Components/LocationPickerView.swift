@@ -40,39 +40,54 @@ struct LocationPickerView: View {
     // MARK: - Resolved State
 
     private var resolvedView: some View {
-        VStack(alignment: .leading, spacing: CatchSpacing.space6) {
-            HStack {
+        VStack(alignment: .leading, spacing: CatchSpacing.space12) {
+            HStack(alignment: .top, spacing: CatchSpacing.space8) {
                 Image(systemName: "mappin.circle.fill")
                     .foregroundStyle(CatchTheme.primary)
+                    .font(.title3)
                 Text(location.name)
                     .font(.subheadline)
                     .foregroundStyle(CatchTheme.textPrimary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
-            HStack(spacing: CatchSpacing.space16) {
+            HStack(spacing: CatchSpacing.space12) {
                 Button {
                     isShowingMap = true
                 } label: {
-                    HStack(spacing: CatchSpacing.space4) {
+                    HStack(spacing: CatchSpacing.space6) {
                         Image(systemName: "map")
                         Text(CatchStrings.Components.viewOnMap)
                     }
-                    .font(.subheadline)
+                    .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.primary)
+                    .padding(.vertical, CatchSpacing.space6)
+                    .padding(.horizontal, CatchSpacing.space12)
+                    .background(
+                        RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall)
+                            .fill(CatchTheme.primary.opacity(0.12))
+                    )
                 }
 
                 Button {
                     startEditing()
                 } label: {
-                    HStack(spacing: CatchSpacing.space4) {
+                    HStack(spacing: CatchSpacing.space6) {
                         Image(systemName: "arrow.triangle.2.circlepath")
                         Text(CatchStrings.Components.changeLocation)
                     }
-                    .font(.subheadline)
-                    .foregroundStyle(CatchTheme.primary)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(CatchTheme.textSecondary)
+                    .padding(.vertical, CatchSpacing.space6)
+                    .padding(.horizontal, CatchSpacing.space12)
+                    .background(
+                        RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall)
+                            .fill(Color(.systemFill))
+                    )
                 }
             }
         }
+        .padding(.vertical, CatchSpacing.space4)
     }
 
     // MARK: - Editing State
@@ -270,27 +285,27 @@ private struct LocationMapSheet: View {
                 LocationMapPreview(location: $location) { newLocation in
                     onLocationChanged?(newLocation)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                HStack(spacing: CatchSpacing.space6) {
-                    Image(systemName: "hand.draw")
-                        .foregroundStyle(CatchTheme.textSecondary)
-                    Text(CatchStrings.Components.dragToAdjust)
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary)
+                VStack(spacing: CatchSpacing.space4) {
+                    HStack(spacing: CatchSpacing.space6) {
+                        Image(systemName: "hand.draw")
+                            .foregroundStyle(CatchTheme.textSecondary)
+                        Text(CatchStrings.Components.dragToAdjust)
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.textSecondary)
+                    }
+
+                    if !location.name.isEmpty {
+                        Text(location.name)
+                            .font(.subheadline)
+                            .foregroundStyle(CatchTheme.textPrimary)
+                            .multilineTextAlignment(.center)
+                    }
                 }
-                .padding(.top, CatchSpacing.space8)
-
-                if !location.name.isEmpty {
-                    Text(location.name)
-                        .font(.subheadline)
-                        .foregroundStyle(CatchTheme.textPrimary)
-                        .multilineTextAlignment(.center)
-                        .padding(.top, CatchSpacing.space4)
-                }
-
-                Spacer()
+                .padding(.vertical, CatchSpacing.space8)
+                .padding(.horizontal)
             }
-            .padding()
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button(CatchStrings.Common.done) { dismiss() }

@@ -1,5 +1,6 @@
 import MapKit
 import Observation
+import CoreLocation
 import CatchCore
 
 /// MapKit-backed location autocomplete service using `MKLocalSearchCompleter`.
@@ -12,9 +13,14 @@ final class MKLocationSearchService: NSObject, LocationSearchService {
     private let completer = MKLocalSearchCompleter()
     private var completerDelegate: CompleterDelegate?
 
+    /// Maps each suggestion back to its original `MKLocalSearchCompletion`
+    /// so `resolve()` can use the completion's internal identifier.
+    private var completionLookup: [LocationSearchResult: MKLocalSearchCompletion] = [:]
+
     override init() {
         super.init()
-        let delegate = CompleterDelegate { [weak self] results in
+        let delegate = CompleterDelegate { [weak self] results, completions in
+            self?.completionLookup.merge(completions) { _, new in new }
             self?.suggestions = results
         }
         completerDelegate = delegate
@@ -35,21 +41,44 @@ final class MKLocationSearchService: NSObject, LocationSearchService {
         isResolving = true
         defer { isResolving = false }
 
-        // Search with a global region to prevent local bias —
-        // ensures "Geneva, Switzerland" resolves to Switzerland, not a nearby US city.
+        // 1) Try completion-based search (uses MapKit's internal place ID)
+        if let completion = completionLookup[result] {
+            if let location = await search(MKLocalSearch.Request(completion: completion),
+                                           displayName: result.displayName) {
+                return location
+            }
+        }
+
+        // 2) Fallback: CLGeocoder with full display name
+        if let location = await geocode(result.displayName) {
+            return location
+        }
+
+        // 3) Last resort: natural language search with global region
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = result.displayName
         request.region = MKCoordinateRegion(
             center: CLLocationCoordinate2D(latitude: 0, longitude: 0),
             span: MKCoordinateSpan(latitudeDelta: 180, longitudeDelta: 360)
         )
+        return await search(request, displayName: result.displayName)
+    }
 
+    func clear() {
+        completer.cancel()
+        suggestions = []
+        completionLookup = [:]
+    }
+
+    // MARK: - Private
+
+    private func search(_ request: MKLocalSearch.Request, displayName: String) async -> Location? {
         do {
             let response = try await MKLocalSearch(request: request).start()
             guard let item = response.mapItems.first else { return nil }
             let coordinate = item.placemark.coordinate
             return Location(
-                name: result.displayName,
+                name: displayName,
                 latitude: coordinate.latitude,
                 longitude: coordinate.longitude
             )
@@ -58,36 +87,57 @@ final class MKLocationSearchService: NSObject, LocationSearchService {
         }
     }
 
-    func clear() {
-        completer.cancel()
-        suggestions = []
+    private func geocode(_ address: String) async -> Location? {
+        let geocoder = CLGeocoder()
+        do {
+            let placemarks = try await geocoder.geocodeAddressString(address)
+            guard let placemark = placemarks.first,
+                  let coordinate = placemark.location?.coordinate else { return nil }
+            return Location(
+                name: address,
+                latitude: coordinate.latitude,
+                longitude: coordinate.longitude
+            )
+        } catch {
+            return nil
+        }
     }
 }
 
 // MARK: - MKLocalSearchCompleterDelegate
 
 private final class CompleterDelegate: NSObject, MKLocalSearchCompleterDelegate {
-    private let onUpdate: @MainActor ([LocationSearchResult]) -> Void
+    private let onUpdate: @MainActor (
+        [LocationSearchResult],
+        [LocationSearchResult: MKLocalSearchCompletion]
+    ) -> Void
 
-    init(onUpdate: @escaping @MainActor ([LocationSearchResult]) -> Void) {
+    init(onUpdate: @escaping @MainActor (
+        [LocationSearchResult],
+        [LocationSearchResult: MKLocalSearchCompletion]
+    ) -> Void) {
         self.onUpdate = onUpdate
     }
 
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        let results = completer.results.prefix(5).map { completion in
-            LocationSearchResult(
+        let completions = Array(completer.results.prefix(5))
+        var lookup: [LocationSearchResult: MKLocalSearchCompletion] = [:]
+        let results = completions.map { completion in
+            let result = LocationSearchResult(
                 title: completion.title,
                 subtitle: completion.subtitle
             )
+            lookup[result] = completion
+            return result
         }
         Task { @MainActor in
-            self.onUpdate(Array(results))
+            self.onUpdate(results, lookup)
         }
     }
 
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         Task { @MainActor in
-            self.onUpdate([])
+            self.onUpdate([], [:])
         }
     }
 }
