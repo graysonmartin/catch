@@ -9,6 +9,7 @@ final class EncounterCommentTests: XCTestCase {
         let comment = EncounterComment.pending(
             encounterRecordName: "enc1",
             userID: "user1",
+            displayName: "user one",
             text: "nice cat"
         )
 
@@ -19,8 +20,8 @@ final class EncounterCommentTests: XCTestCase {
     }
 
     func test_pending_generatesUniqueIDs() {
-        let a = EncounterComment.pending(encounterRecordName: "enc1", userID: "u", text: "a")
-        let b = EncounterComment.pending(encounterRecordName: "enc1", userID: "u", text: "b")
+        let a = EncounterComment.pending(encounterRecordName: "enc1", userID: "u", displayName: nil, text: "a")
+        let b = EncounterComment.pending(encounterRecordName: "enc1", userID: "u", displayName: nil, text: "b")
 
         XCTAssertNotEqual(a.id, b.id)
     }
@@ -29,6 +30,7 @@ final class EncounterCommentTests: XCTestCase {
         let comment = EncounterComment.pending(
             encounterRecordName: "enc1",
             userID: "user1",
+            displayName: nil,
             text: "test"
         )
 
@@ -41,6 +43,7 @@ final class EncounterCommentTests: XCTestCase {
         let pending = EncounterComment.pending(
             encounterRecordName: "enc1",
             userID: "user1",
+            displayName: "user one",
             text: "hello"
         )
         XCTAssertTrue(pending.isPending)
@@ -55,6 +58,7 @@ final class EncounterCommentTests: XCTestCase {
         let pending = EncounterComment.pending(
             encounterRecordName: "enc1",
             userID: "user1",
+            displayName: "user one",
             text: "hello world"
         )
 
@@ -62,8 +66,48 @@ final class EncounterCommentTests: XCTestCase {
 
         XCTAssertEqual(confirmed.encounterRecordName, pending.encounterRecordName)
         XCTAssertEqual(confirmed.userID, pending.userID)
+        XCTAssertEqual(confirmed.displayName, pending.displayName)
         XCTAssertEqual(confirmed.text, pending.text)
         XCTAssertEqual(confirmed.createdAt, pending.createdAt)
+    }
+
+    // MARK: - Author Name
+
+    func test_authorName_returnsDisplayNameWhenSet() {
+        let comment = EncounterComment(
+            id: "c1",
+            encounterRecordName: "enc1",
+            userID: "long-apple-user-id-here",
+            displayName: "tuong",
+            text: "nice",
+            createdAt: Date()
+        )
+
+        XCTAssertEqual(comment.authorName, "tuong")
+    }
+
+    func test_authorName_fallsBackToTruncatedUserID() {
+        let comment = EncounterComment(
+            id: "c1",
+            encounterRecordName: "enc1",
+            userID: "long-apple-user-id-here",
+            text: "nice",
+            createdAt: Date()
+        )
+
+        XCTAssertEqual(comment.authorName, "long-app")
+    }
+
+    func test_pending_preservesDisplayName() {
+        let comment = EncounterComment.pending(
+            encounterRecordName: "enc1",
+            userID: "user1",
+            displayName: "cat person",
+            text: "wow"
+        )
+
+        XCTAssertEqual(comment.displayName, "cat person")
+        XCTAssertEqual(comment.authorName, "cat person")
     }
 
     // MARK: - Default isPending

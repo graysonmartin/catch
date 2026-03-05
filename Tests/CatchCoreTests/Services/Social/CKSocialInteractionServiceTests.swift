@@ -294,6 +294,57 @@ final class CKSocialInteractionServiceTests: XCTestCase {
         XCTAssertTrue(service.likedEncounters.contains("enc1"))
     }
 
+    func test_seedFakeInteractions_populatesCommentCache() async throws {
+        let service = CKSocialInteractionService(getCurrentUserID: { "debug-user" })
+
+        service.seedFakeInteractions(encounterRecordNames: ["enc1", "enc2", "enc3"])
+
+        // enc1 has index 0 -> commentCount = max(0, 0) = 0
+        // enc2 has index 1 -> commentCount = max(0, 1) = 1
+        // enc3 has index 2 -> commentCount = max(0, 2) = 2
+        let (comments1, _) = try await service.fetchComments(encounterRecordName: "enc1", cursor: nil)
+        let (comments2, _) = try await service.fetchComments(encounterRecordName: "enc2", cursor: nil)
+        let (comments3, _) = try await service.fetchComments(encounterRecordName: "enc3", cursor: nil)
+
+        XCTAssertEqual(comments1.count, 0)
+        XCTAssertEqual(comments2.count, 1)
+        XCTAssertEqual(comments3.count, 2)
+    }
+
+    func test_seedFakeInteractions_populatesLikeCache() async throws {
+        let service = CKSocialInteractionService(getCurrentUserID: { "debug-user" })
+
+        service.seedFakeInteractions(encounterRecordNames: ["enc1", "enc2", "enc3"])
+
+        // enc1 has index 0 -> likeCount = (0+1)*2 = 2
+        // enc2 has index 1 -> likeCount = (1+1)*2 = 4
+        let (likes1, _) = try await service.fetchLikes(encounterRecordName: "enc1", cursor: nil)
+        let (likes2, _) = try await service.fetchLikes(encounterRecordName: "enc2", cursor: nil)
+
+        XCTAssertEqual(likes1.count, 2)
+        XCTAssertEqual(likes2.count, 4)
+    }
+
+    func test_seedFakeInteractions_likeCacheMatchesCounts() async throws {
+        let service = CKSocialInteractionService(getCurrentUserID: { "debug-user" })
+
+        service.seedFakeInteractions(encounterRecordNames: ["enc1", "enc2", "enc3", "enc4", "enc5"])
+
+        for (index, recordName) in ["enc1", "enc2", "enc3", "enc4", "enc5"].enumerated() {
+            let expectedLikes = (index + 1) * 2
+            let expectedComments = max(0, index)
+
+            XCTAssertEqual(service.likeCount(for: recordName), expectedLikes)
+            XCTAssertEqual(service.commentCount(for: recordName), expectedComments)
+
+            let (likes, _) = try await service.fetchLikes(encounterRecordName: recordName, cursor: nil)
+            XCTAssertEqual(likes.count, expectedLikes, "Like detail count mismatch for \(recordName)")
+
+            let (comments, _) = try await service.fetchComments(encounterRecordName: recordName, cursor: nil)
+            XCTAssertEqual(comments.count, expectedComments, "Comment detail count mismatch for \(recordName)")
+        }
+    }
+
     func test_seedFakeInteractions_skipsIfAlreadySeeded() {
         let service = CKSocialInteractionService(getCurrentUserID: { "debug-user" })
         service.seedFakeInteractions(encounterRecordNames: ["enc1", "enc2"])
