@@ -3,9 +3,9 @@ import CatchCore
 
 final class BreedCatalogTests: XCTestCase {
 
-    func test_catalogHas28Breeds() {
-        XCTAssertEqual(BreedCatalog.count, 28)
-        XCTAssertEqual(BreedCatalog.allBreeds.count, 28)
+    func test_catalogHas12Breeds() {
+        XCTAssertEqual(BreedCatalog.count, 12)
+        XCTAssertEqual(BreedCatalog.allBreeds.count, 12)
     }
 
     func test_catalogHasOneEntryPerCatBreed() {
@@ -35,21 +35,22 @@ final class BreedCatalogTests: XCTestCase {
     }
 
     func test_entryForKnownBreedReturnsEntry() {
-        let entry = BreedCatalog.entry(for: "Tabby")
+        let entry = BreedCatalog.entry(for: "Domestic Shorthair")
         XCTAssertNotNil(entry)
-        XCTAssertEqual(entry?.displayName, "Tabby")
+        XCTAssertEqual(entry?.displayName, "Domestic Shorthair")
     }
 
     func test_entryForCatBreedReturnsEntry() {
-        let entry = BreedCatalog.entry(for: .tabby)
+        let entry = BreedCatalog.entry(for: .domesticShorthair)
         XCTAssertNotNil(entry)
-        XCTAssertEqual(entry?.displayName, "Tabby")
-        XCTAssertEqual(entry?.breed, .tabby)
+        XCTAssertEqual(entry?.displayName, "Domestic Shorthair")
+        XCTAssertEqual(entry?.breed, .domesticShorthair)
     }
 
     func test_entryForUnknownBreedReturnsNil() {
         XCTAssertNil(BreedCatalog.entry(for: "Space Cat"))
         XCTAssertNil(BreedCatalog.entry(for: ""))
+        XCTAssertNil(BreedCatalog.entry(for: "Tabby"))
     }
 
     func test_containsReturnsTrueForCatalogBreeds() {

@@ -13,25 +13,11 @@ public enum BreedCatalog {
             icon: "hare"
         ),
         BreedCatalogEntry(
-            breed: .angora,
-            description: "fluffy diva energy. all fur and attitude. will shed on your nicest clothes first.",
-            funFact: "turkish sultans used to keep them as royal pets. they haven't forgotten",
-            rarity: .uncommon,
-            icon: "wind"
-        ),
-        BreedCatalogEntry(
             breed: .bengal,
             description: "literally a tiny leopard that lives in your house. chaos incarnate.",
             funFact: "they love water. like, actually enjoy baths. broken cats.",
             rarity: .rare,
             icon: "bolt.fill"
-        ),
-        BreedCatalogEntry(
-            breed: .birman,
-            description: "white paws, blue eyes, permanent look of spiritual enlightenment.",
-            funFact: "legend says they got their coloring from a temple goddess. sure.",
-            rarity: .uncommon,
-            icon: "sparkles"
         ),
         BreedCatalogEntry(
             breed: .bombay,
@@ -48,13 +34,6 @@ public enum BreedCatalog {
             icon: "crown"
         ),
         BreedCatalogEntry(
-            breed: .burmese,
-            description: "velvet-coated attention seeker. will follow you into the bathroom. every time.",
-            funFact: "they're called 'velcro cats' because they literally will not leave you alone",
-            rarity: .uncommon,
-            icon: "figure.stand"
-        ),
-        BreedCatalogEntry(
             breed: .domesticShorthair,
             description: "the mutt of cats. no pedigree, all personality. literally every other cat you've ever met.",
             funFact: "make up about 95% of cats in the US. they're the main characters and they know it",
@@ -62,60 +41,11 @@ public enum BreedCatalog {
             icon: "house.fill"
         ),
         BreedCatalogEntry(
-            breed: .egyptianMau,
-            description: "the fastest domestic cat. spots are natural, not a filter. ancient egyptian royalty.",
-            funFact: "only naturally spotted domestic breed. they came pre-accessorized",
-            rarity: .legendary,
-            icon: "pyramid.fill"
-        ),
-        BreedCatalogEntry(
-            breed: .havanaBrown,
-            description: "chocolate brown everything. even the whiskers. looks like a living truffle.",
-            funFact: "fewer than 1,000 exist worldwide. basically a cryptid at this point",
-            rarity: .legendary,
-            icon: "cup.and.saucer.fill"
-        ),
-        BreedCatalogEntry(
-            breed: .japaneseBobtail,
-            description: "tiny tail, big personality. the lucky cat statue is based on these.",
-            funFact: "their stubby tail is caused by a natural genetic mutation. built different",
-            rarity: .rare,
-            icon: "hand.wave"
-        ),
-        BreedCatalogEntry(
-            breed: .korat,
-            description: "silver-tipped fur that shimmers. green eyes. considered extremely lucky in thailand.",
-            funFact: "traditionally given in pairs as wedding gifts. relationship goals, i guess",
-            rarity: .rare,
-            icon: "star.fill"
-        ),
-        BreedCatalogEntry(
             breed: .maineCoon,
             description: "absolute unit. the great dane of cats. somehow still thinks it's a kitten.",
             funFact: "can grow up to 40 inches long. that's not a cat, that's a roommate",
             rarity: .uncommon,
             icon: "mountain.2"
-        ),
-        BreedCatalogEntry(
-            breed: .manx,
-            description: "no tail. bunny hop walk. looks permanently surprised about their own existence.",
-            funFact: "they're amazing hunters despite the missing tail. don't need it, apparently",
-            rarity: .rare,
-            icon: "hare.fill"
-        ),
-        BreedCatalogEntry(
-            breed: .norwegianForestCat,
-            description: "viking cat. built for scandinavian winters. majestic floof that fears nothing.",
-            funFact: "norse mythology says they pulled freya's chariot. metal.",
-            rarity: .rare,
-            icon: "snowflake"
-        ),
-        BreedCatalogEntry(
-            breed: .ocicat,
-            description: "looks wild, acts domestic. spotted like an ocelot but purrs like a kitten.",
-            funFact: "created completely by accident. the best things are",
-            rarity: .rare,
-            icon: "circle.dotted"
         ),
         BreedCatalogEntry(
             breed: .persian,
@@ -153,53 +83,11 @@ public enum BreedCatalog {
             icon: "bubble.left"
         ),
         BreedCatalogEntry(
-            breed: .singapura,
-            description: "smallest domestic breed. huge eyes. permanent baby energy at 4 pounds.",
-            funFact: "national cat of singapore. tiny body, enormous personality",
-            rarity: .legendary,
-            icon: "ant"
-        ),
-        BreedCatalogEntry(
-            breed: .snowshoe,
-            description: "white paws like they stepped in paint. siamese vibes but make it artsy.",
-            funFact: "grumpy cat was a snowshoe mix. the attitude is genetic",
-            rarity: .rare,
-            icon: "shoeprint.fill"
-        ),
-        BreedCatalogEntry(
-            breed: .somali,
-            description: "long-haired abyssinian. foxy look. the main character of any room they enter.",
-            funFact: "nicknamed 'fox cats' for their bushy tails and red coats. they know they look good",
-            rarity: .rare,
-            icon: "flame"
-        ),
-        BreedCatalogEntry(
             breed: .sphynx,
             description: "hairless and proud. warm to the touch. looks like an alien, acts like a dog.",
             funFact: "they're not actually hypoallergenic. they just look like they should be",
-            rarity: .rare,
+            rarity: .legendary,
             icon: "globe.americas"
-        ),
-        BreedCatalogEntry(
-            breed: .tabby,
-            description: "the classic. the og. striped, spotted, or swirled. every cat aspires to this energy.",
-            funFact: "not technically a breed but a coat pattern. we don't care, they earned their spot",
-            rarity: .common,
-            icon: "cat"
-        ),
-        BreedCatalogEntry(
-            breed: .tigerTabby,
-            description: "tabby but make it fierce. bold stripes. walks like they're on a runway.",
-            funFact: "the 'M' marking on their forehead supposedly stands for 'majestic'. or 'menace'.",
-            rarity: .common,
-            icon: "cat.fill"
-        ),
-        BreedCatalogEntry(
-            breed: .turkishAngora,
-            description: "graceful, athletic, and definitely smarter than you. silky white coat optional.",
-            funFact: "turkish angoras often have odd eyes — one blue, one amber. built-in accessory",
-            rarity: .rare,
-            icon: "wand.and.stars"
         ),
     ]
 

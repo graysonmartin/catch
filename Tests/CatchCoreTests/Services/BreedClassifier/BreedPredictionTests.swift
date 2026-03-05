@@ -4,20 +4,20 @@ import XCTest
 final class BreedPredictionTests: XCTestCase {
 
     func test_equality_sameValuesAreEqual() {
-        let a = BreedPrediction(breed: "Tabby", rawIdentifier: "tabby", confidence: 0.85)
-        let b = BreedPrediction(breed: "Tabby", rawIdentifier: "tabby", confidence: 0.85)
+        let a = BreedPrediction(breed: "Persian", rawIdentifier: "Persian", confidence: 0.85)
+        let b = BreedPrediction(breed: "Persian", rawIdentifier: "Persian", confidence: 0.85)
         XCTAssertEqual(a, b)
     }
 
     func test_equality_differentBreedsAreNotEqual() {
-        let a = BreedPrediction(breed: "Tabby", rawIdentifier: "tabby", confidence: 0.85)
-        let b = BreedPrediction(breed: "Persian", rawIdentifier: "Persian_cat", confidence: 0.85)
+        let a = BreedPrediction(breed: "Persian", rawIdentifier: "Persian", confidence: 0.85)
+        let b = BreedPrediction(breed: "Siamese", rawIdentifier: "Siamese", confidence: 0.85)
         XCTAssertNotEqual(a, b)
     }
 
     func test_equality_differentConfidencesAreNotEqual() {
-        let a = BreedPrediction(breed: "Tabby", rawIdentifier: "tabby", confidence: 0.85)
-        let b = BreedPrediction(breed: "Tabby", rawIdentifier: "tabby", confidence: 0.50)
+        let a = BreedPrediction(breed: "Persian", rawIdentifier: "Persian", confidence: 0.85)
+        let b = BreedPrediction(breed: "Persian", rawIdentifier: "Persian", confidence: 0.50)
         XCTAssertNotEqual(a, b)
     }
 

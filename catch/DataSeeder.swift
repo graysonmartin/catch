@@ -22,7 +22,7 @@ enum DataSeeder {
         // -- Cat 1: garfield (the main character) --
         let garfield = Cat(
             name: "garfield",
-            breed: "Tabby",
+            breed: "Domestic Shorthair",
             estimatedAge: "3",
             location: Location(name: "Home", latitude: 37.7749, longitude: -122.4194),
             notes: "the original. the blueprint. simply unmatched.",

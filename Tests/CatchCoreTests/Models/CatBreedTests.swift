@@ -5,8 +5,8 @@ final class CatBreedTests: XCTestCase {
 
     // MARK: - All Cases
 
-    func test_allCases_has28Breeds() {
-        XCTAssertEqual(CatBreed.allCases.count, 28)
+    func test_allCases_has12Breeds() {
+        XCTAssertEqual(CatBreed.allCases.count, 12)
     }
 
     // MARK: - Display Names
@@ -15,9 +15,9 @@ final class CatBreedTests: XCTestCase {
         XCTAssertEqual(CatBreed.abyssinian.displayName, "Abyssinian")
         XCTAssertEqual(CatBreed.britishShorthair.displayName, "British Shorthair")
         XCTAssertEqual(CatBreed.maineCoon.displayName, "Maine Coon")
-        XCTAssertEqual(CatBreed.norwegianForestCat.displayName, "Norwegian Forest Cat")
-        XCTAssertEqual(CatBreed.tigerTabby.displayName, "Tiger Tabby")
-        XCTAssertEqual(CatBreed.turkishAngora.displayName, "Turkish Angora")
+        XCTAssertEqual(CatBreed.domesticShorthair.displayName, "Domestic Shorthair")
+        XCTAssertEqual(CatBreed.russianBlue.displayName, "Russian Blue")
+        XCTAssertEqual(CatBreed.scottishFold.displayName, "Scottish Fold")
     }
 
     func test_allDisplayNames_isSorted() {
@@ -41,8 +41,8 @@ final class CatBreedTests: XCTestCase {
         XCTAssertEqual(CatBreed.fromDisplayName("British Shorthair"), .britishShorthair)
         XCTAssertEqual(CatBreed.fromDisplayName("Maine Coon"), .maineCoon)
         XCTAssertEqual(CatBreed.fromDisplayName("Domestic Shorthair"), .domesticShorthair)
-        XCTAssertEqual(CatBreed.fromDisplayName("Tabby"), .tabby)
-        XCTAssertEqual(CatBreed.fromDisplayName("Tiger Tabby"), .tigerTabby)
+        XCTAssertEqual(CatBreed.fromDisplayName("Sphynx"), .sphynx)
+        XCTAssertEqual(CatBreed.fromDisplayName("Ragdoll"), .ragdoll)
     }
 
     func test_fromDisplayName_unknownNamesReturnNil() {
@@ -50,6 +50,8 @@ final class CatBreedTests: XCTestCase {
         XCTAssertNil(CatBreed.fromDisplayName("Space Cat"))
         XCTAssertNil(CatBreed.fromDisplayName(""))
         XCTAssertNil(CatBreed.fromDisplayName("abyssinian"))  // case-sensitive
+        XCTAssertNil(CatBreed.fromDisplayName("Tabby"))
+        XCTAssertNil(CatBreed.fromDisplayName("Turkish Angora"))
     }
 
     func test_fromDisplayName_roundTripsForAllBreeds() {
@@ -98,9 +100,14 @@ final class CatBreedTests: XCTestCase {
         XCTAssertFalse(CatBreed.isRecognizedMLLabel("tabby"))
     }
 
-    func test_mlMappedBreeds_has12Entries() {
-        let mlMappedCount = CatBreed.allCases.filter { CatBreed.fromMLLabel($0.displayName) != nil || hasMLLabel($0) }.count
-        XCTAssertEqual(mlMappedCount, 12, "exactly 12 breeds should have ML labels")
+    func test_allBreeds_haveMLLabels() {
+        for breed in CatBreed.allCases {
+            XCTAssertTrue(
+                CatBreed.isRecognizedMLLabel(breed.displayName)
+                    || CatBreed.fromMLLabel(breed.displayName.replacingOccurrences(of: " ", with: "_")) != nil,
+                "\(breed.displayName) should have an ML label"
+            )
+        }
     }
 
     // MARK: - Catalog Consistency
@@ -114,17 +121,5 @@ final class CatBreedTests: XCTestCase {
 
     func test_catalogCountMatchesBreedCount() {
         XCTAssertEqual(BreedCatalog.count, CatBreed.allCases.count)
-    }
-
-    // MARK: - Helpers
-
-    /// Checks if a breed has at least one ML label by testing known model identifiers.
-    private func hasMLLabel(_ breed: CatBreed) -> Bool {
-        let knownMLLabels = [
-            "Abyssinian", "Bengal", "Bombay", "British_Shorthair",
-            "Domestic_Shorthair", "Maine_Coon", "Persian", "Ragdoll",
-            "Russian_Blue", "Scottish_Fold", "Siamese", "Sphynx"
-        ]
-        return knownMLLabels.contains { CatBreed.fromMLLabel($0) == breed }
     }
 }

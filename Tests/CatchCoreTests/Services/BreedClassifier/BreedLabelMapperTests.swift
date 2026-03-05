@@ -61,7 +61,6 @@ final class BreedLabelMapperTests: XCTestCase {
         XCTAssertTrue(names.contains("Siamese"))
         XCTAssertTrue(names.contains("Maine Coon"))
         XCTAssertTrue(names.contains("Domestic Shorthair"))
-        XCTAssertTrue(names.contains("Tabby"))
     }
 
     func test_allDisplayNames_matchesCatBreedCanonicalList() {
@@ -71,8 +70,7 @@ final class BreedLabelMapperTests: XCTestCase {
                        "BreedLabelMapper.allDisplayNames must equal CatBreed.allDisplayNames")
     }
 
-    func test_allDisplayNames_isBroaderThanModelMapping() {
-        let names = BreedLabelMapper.allDisplayNames
-        XCTAssertGreaterThan(names.count, 12, "curated list should be larger than the 12 model labels")
+    func test_allDisplayNames_has12Breeds() {
+        XCTAssertEqual(BreedLabelMapper.allDisplayNames.count, 12)
     }
 }

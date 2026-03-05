@@ -27,7 +27,7 @@ final class DefaultBreedLogServiceTests: XCTestCase {
 
     func test_buildBreedLog_emptyCats_returnsAllUndiscovered() {
         let log = service.buildBreedLog(from: [Cat]())
-        XCTAssertEqual(log.count, 28)
+        XCTAssertEqual(log.count, 12)
         XCTAssertTrue(log.allSatisfy { !$0.isDiscovered })
         XCTAssertTrue(log.allSatisfy { $0.catCount == 0 })
         XCTAssertTrue(log.allSatisfy { $0.firstDiscoveredDate == nil })
@@ -44,17 +44,17 @@ final class DefaultBreedLogServiceTests: XCTestCase {
         XCTAssertNotNil(ragdoll!.firstDiscoveredDate)
 
         let undiscoveredCount = log.filter { !$0.isDiscovered }.count
-        XCTAssertEqual(undiscoveredCount, 27)
+        XCTAssertEqual(undiscoveredCount, 11)
     }
 
     func test_buildBreedLog_multipleCatsSameBreed() {
-        let cat1 = Fixtures.cat(name: "Luna", breed: "Tabby", in: context)
-        let cat2 = Fixtures.cat(name: "Milo", breed: "Tabby", in: context)
+        let cat1 = Fixtures.cat(name: "Luna", breed: "Domestic Shorthair", in: context)
+        let cat2 = Fixtures.cat(name: "Milo", breed: "Domestic Shorthair", in: context)
 
         let log = service.buildBreedLog(from: [cat1, cat2])
-        let tabby = log.first { $0.id == "Tabby" }
-        XCTAssertEqual(tabby?.catCount, 2)
-        XCTAssertTrue(tabby?.isDiscovered == true)
+        let dsh = log.first { $0.id == "Domestic Shorthair" }
+        XCTAssertEqual(dsh?.catCount, 2)
+        XCTAssertTrue(dsh?.isDiscovered == true)
     }
 
     func test_buildBreedLog_customBreedIgnored() {
@@ -96,7 +96,7 @@ final class DefaultBreedLogServiceTests: XCTestCase {
         XCTAssertEqual(siamese?.firstDiscoveredDate, earlier)
     }
 
-    func test_buildBreedLog_returnsAll28Entries() {
+    func test_buildBreedLog_returnsAll12Entries() {
         let log = service.buildBreedLog(from: [Cat]())
         XCTAssertEqual(log.count, BreedCatalog.count)
     }
@@ -122,15 +122,15 @@ final class DefaultBreedLogServiceTests: XCTestCase {
         let earlier = Date(timeIntervalSince1970: 1_000_000)
         let later = Date(timeIntervalSince1970: 2_000_000)
 
-        let cat1 = Cat(name: "New", breed: "Tabby")
+        let cat1 = Cat(name: "New", breed: "Domestic Shorthair")
         cat1.createdAt = later
         context.insert(cat1)
 
-        let cat2 = Cat(name: "Old", breed: "Tabby")
+        let cat2 = Cat(name: "Old", breed: "Domestic Shorthair")
         cat2.createdAt = earlier
         context.insert(cat2)
 
-        let result = service.catsForBreed("Tabby", from: [cat1, cat2])
+        let result = service.catsForBreed("Domestic Shorthair", from: [cat1, cat2])
         XCTAssertEqual(result.first?.name, "Old")
         XCTAssertEqual(result.last?.name, "New")
     }

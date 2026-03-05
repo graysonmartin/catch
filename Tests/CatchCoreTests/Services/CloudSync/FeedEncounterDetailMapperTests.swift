@@ -10,12 +10,12 @@ final class FeedEncounterDetailMapperTests: XCTestCase {
             recordName: "enc-1",
             catRecordName: "cat-1",
             locationName: "Central Park",
-            notes: "friendly tabby"
+            notes: "friendly cat"
         )
         let cat = makeCat(
             recordName: "cat-1",
             name: "Whiskers",
-            breed: "Tabby",
+            breed: "Domestic Shorthair",
             isOwned: true
         )
 
@@ -27,11 +27,11 @@ final class FeedEncounterDetailMapperTests: XCTestCase {
 
         XCTAssertEqual(detail.recordName, "enc-1")
         XCTAssertEqual(detail.catName, "Whiskers")
-        XCTAssertEqual(detail.breed, "Tabby")
+        XCTAssertEqual(detail.breed, "Domestic Shorthair")
         XCTAssertFalse(detail.isUnnamed)
         XCTAssertTrue(detail.isOwned)
         XCTAssertEqual(detail.locationName, "Central Park")
-        XCTAssertEqual(detail.notes, "friendly tabby")
+        XCTAssertEqual(detail.notes, "friendly cat")
         XCTAssertTrue(detail.isFirstEncounter)
     }
 
@@ -190,7 +190,7 @@ final class FeedEncounterDetailMapperTests: XCTestCase {
     }
 
     func testMapBatchReturnsCorrectCountForDuplicateCats() {
-        let cat = makeCat(recordName: "cat-dup", name: "Dup", breed: "Tabby")
+        let cat = makeCat(recordName: "cat-dup", name: "Dup", breed: "Domestic Shorthair")
         // Simulate duplicate cat records (same recordName) — should use the first
         let cats = [cat, makeCat(recordName: "cat-dup", name: "Other", breed: "Siamese")]
         let enc = makeEncounter(recordName: "enc-dup", catRecordName: "cat-dup")
@@ -203,7 +203,7 @@ final class FeedEncounterDetailMapperTests: XCTestCase {
 
         XCTAssertEqual(details.count, 1)
         XCTAssertEqual(details[0].catName, "Dup")
-        XCTAssertEqual(details[0].breed, "Tabby")
+        XCTAssertEqual(details[0].breed, "Domestic Shorthair")
     }
 
     // MARK: - Helpers
