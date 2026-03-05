@@ -104,7 +104,26 @@ struct LocationMapPreview: UIViewRepresentable {
             view.markerTintColor = CatchTheme.primaryUIColor
             view.animatesWhenAdded = true
             view.annotation = annotation
+
+            // Shorter long-press to start drag (default ~0.5s feels sluggish)
+            if view.gestureRecognizers?.contains(where: { $0 is UILongPressGestureRecognizer && $0.name == "quickDrag" }) != true {
+                let quickDrag = UILongPressGestureRecognizer(
+                    target: self,
+                    action: #selector(handleQuickDrag(_:))
+                )
+                quickDrag.name = "quickDrag"
+                quickDrag.minimumPressDuration = 0.15
+                view.addGestureRecognizer(quickDrag)
+            }
+
             return view
+        }
+
+        @objc func handleQuickDrag(_ gesture: UILongPressGestureRecognizer) {
+            guard let annotationView = gesture.view as? MKAnnotationView else { return }
+            if gesture.state == .began {
+                annotationView.setDragState(.starting, animated: true)
+            }
         }
 
         func mapView(

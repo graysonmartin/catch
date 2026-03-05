@@ -120,7 +120,7 @@ private struct LocationPickerSheet: View {
                     if fetcher.isFetchingLocation {
                         ProgressView()
                             .controlSize(.small)
-                            .tint(.white)
+                            .tint(CatchTheme.primary)
                     } else {
                         Image(systemName: "location.fill")
                     }
@@ -129,12 +129,12 @@ private struct LocationPickerSheet: View {
                          : CatchStrings.Components.currentLocation)
                 }
                 .font(.subheadline.weight(.medium))
-                .foregroundStyle(.white)
+                .foregroundStyle(CatchTheme.textPrimary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, CatchSpacing.space12)
-                .background(CatchTheme.primary)
+                .background(CatchTheme.cardBackground)
                 .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
-                .shadow(color: CatchTheme.primary.opacity(0.3), radius: 4, y: 2)
+                .shadow(color: .black.opacity(0.04), radius: 2, y: 1)
             }
             .disabled(fetcher.isFetchingLocation)
         }
@@ -218,12 +218,6 @@ private struct LocationPickerSheet: View {
                         .foregroundStyle(CatchTheme.textSecondary)
                     TextField(CatchStrings.Components.typeLocationName, text: $queryText)
                         .textInputAutocapitalization(.never)
-                        .onAppear {
-                            if draft.hasCoordinates, !draft.name.isEmpty {
-                                isSyncingFromBinding = true
-                                queryText = draft.name
-                            }
-                        }
                         .onChange(of: queryText) { _, newValue in
                             handleQueryChange(newValue)
                         }
