@@ -41,7 +41,7 @@ enum BreedLogSortOption: String, CaseIterable, Identifiable {
 
     var defaultDirection: BreedLogSortDirection {
         switch self {
-        case .rarity: .descending
+        case .rarity: .ascending
         case .alphabetical: .ascending
         case .discoveredFirst: .descending
         }
