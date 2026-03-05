@@ -19,6 +19,7 @@ struct LocationPickerView: View {
             errorDisplay
             searchField
             suggestionsList
+            mapPreview
         }
         .onAppear {
             if queryText.isEmpty, !location.name.isEmpty {
@@ -154,6 +155,26 @@ struct LocationPickerView: View {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(.green)
                 Text(CatchStrings.Components.locationPinned)
+                    .font(.caption)
+                    .foregroundStyle(CatchTheme.textSecondary)
+            }
+        }
+    }
+
+    // MARK: - Map Preview
+
+    @ViewBuilder
+    private var mapPreview: some View {
+        if location.hasCoordinates {
+            VStack(alignment: .leading, spacing: CatchSpacing.space4) {
+                LocationMapPreview(location: $location) { newLocation in
+                    isSyncingFromBinding = true
+                    queryText = newLocation.name
+                    hasUsedGPS = false
+                }
+                .frame(height: 180)
+
+                Text(CatchStrings.Components.dragToAdjust)
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }

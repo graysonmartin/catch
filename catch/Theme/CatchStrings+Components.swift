@@ -14,6 +14,7 @@ extension CatchStrings {
         static let locationTimeout = String(localized: "Location request timed out. Try again.")
         static let resolvingLocation = String(localized: "pinning location...")
         static let locationPinned = String(localized: "location pinned to map")
+        static let dragToAdjust = String(localized: "drag pin to adjust")
 
         // PhotoPickerView
         static let dragToReorder = String(localized: "drag to reorder -- first photo is your profile pic")
