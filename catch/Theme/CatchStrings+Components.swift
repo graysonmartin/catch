@@ -14,7 +14,7 @@ extension CatchStrings {
         static let locationTimeout = String(localized: "Location request timed out. Try again.")
         static let resolvingLocation = String(localized: "pinning location...")
         static let locationPinned = String(localized: "location pinned to map")
-        static let dragToAdjust = String(localized: "drag pin to adjust")
+        static let dragToAdjust = String(localized: "move map to adjust")
         static let viewOnMap = String(localized: "view on map")
         static let changeLocation = String(localized: "change")
         static let tapToSetLocation = String(localized: "tap to set location")
