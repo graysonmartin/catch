@@ -66,7 +66,11 @@ final class CKCatSyncService: CatSyncService {
             firstEncounter.cloudKitRecordName = encRecordName
         } catch {
             // Encounter save failed — rollback the cat record
-            try? await catRepository.delete(recordName: catRecordName)
+            do {
+                try await catRepository.delete(recordName: catRecordName)
+            } catch let rollbackError {
+                logger.error("rollback of cat record \(catRecordName) failed: \(rollbackError.localizedDescription)")
+            }
             cat.cloudKitRecordName = nil
             throw error
         }

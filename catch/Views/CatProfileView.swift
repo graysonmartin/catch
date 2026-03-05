@@ -230,6 +230,7 @@ struct CatProfileView: View {
             if let recordName = encounter.cloudKitRecordName {
                 do {
                     try await encounterSyncService?.deleteEncounter(recordName: recordName)
+                    encounter.cloudKitRecordName = nil
                 } catch {
                     toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
                     return
