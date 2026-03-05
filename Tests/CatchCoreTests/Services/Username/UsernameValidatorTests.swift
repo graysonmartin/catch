@@ -56,6 +56,40 @@ final class UsernameValidatorTests: XCTestCase {
         XCTAssertEqual(UsernameValidator.validate("___"), .valid)
     }
 
+    // MARK: - Reserved Usernames
+
+    func test_reservedUsername_isReserved() {
+        XCTAssertTrue(UsernameValidator.isReserved("grayson"))
+    }
+
+    func test_reservedUsername_isCaseInsensitive() {
+        XCTAssertTrue(UsernameValidator.isReserved("Grayson"))
+        XCTAssertTrue(UsernameValidator.isReserved("GRAYSON"))
+    }
+
+    func test_allReservedUsernames_areReserved() {
+        let reserved = [
+            "grayson", "sophi", "bea", "tuong", "mark", "shiv",
+            "tatum", "jorge", "raffaele", "bella", "2hollis",
+            "bladee", "stacey", "terry", "bubi", "thacatfish"
+        ]
+        for name in reserved {
+            XCTAssertTrue(UsernameValidator.isReserved(name), "\(name) should be reserved")
+        }
+    }
+
+    func test_nonReservedUsername_isNotReserved() {
+        XCTAssertFalse(UsernameValidator.isReserved("cat_lover"))
+        XCTAssertFalse(UsernameValidator.isReserved("steven"))
+        XCTAssertFalse(UsernameValidator.isReserved("grayson2"))
+    }
+
+    func test_reservedUsername_stillPassesValidation() {
+        // Reserved names are structurally valid — reservation is a separate check
+        XCTAssertEqual(UsernameValidator.validate("grayson"), .valid)
+        XCTAssertEqual(UsernameValidator.validate("2hollis"), .valid)
+    }
+
     // MARK: - Format Display
 
     func test_formatDisplay_prependsAtSymbol() {

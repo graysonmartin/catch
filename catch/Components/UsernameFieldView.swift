@@ -73,6 +73,10 @@ struct UsernameFieldView: View {
             availability = .available
             return
         }
+        if UsernameValidator.isReserved(current) {
+            availability = .taken
+            return
+        }
         availability = .checking
         checkTask = Task {
             try? await Task.sleep(for: .milliseconds(500))
