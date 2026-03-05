@@ -19,6 +19,9 @@ extension CatchStrings {
         static let changeLocation = String(localized: "change")
         static let tapToSetLocation = String(localized: "tap to set location")
         static let confirmLocation = String(localized: "Confirm")
+        static let searchLocation = String(localized: "Search")
+        static let currentLocation = String(localized: "Current Location")
+        static let searchOrGPS = String(localized: "search or use current location")
 
         // PhotoPickerView
         static let dragToReorder = String(localized: "drag to reorder -- first photo is your profile pic")

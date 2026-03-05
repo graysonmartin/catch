@@ -37,6 +37,8 @@ struct LocationPickerView: View {
         }
         .sheet(isPresented: $isShowingPicker) {
             LocationPickerSheet(location: $location)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
         }
     }
 }
@@ -52,6 +54,7 @@ private struct LocationPickerSheet: View {
     @State private var fetcher = LocationFetcher()
     @State private var queryText = ""
     @State private var isShowingSuggestions = false
+    @State private var isSearching = false
     @State private var debounceTask: Task<Void, Never>?
     @State private var isSyncingFromBinding = false
 
@@ -63,9 +66,13 @@ private struct LocationPickerSheet: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                searchSection
-                mapSection
-                bottomBar
+                if isSearching {
+                    searchOverlay
+                } else {
+                    actionButtons
+                    mapSection
+                    locationInfo
+                }
             }
             .background(CatchTheme.background)
             .navigationTitle(CatchStrings.Common.location)
@@ -86,21 +93,167 @@ private struct LocationPickerSheet: View {
         }
     }
 
-    // MARK: - Search Section
+    // MARK: - Action Buttons (above the map)
 
-    private var searchSection: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            TextField(CatchStrings.Components.typeLocationName, text: $queryText)
-                .textFieldStyle(.roundedBorder)
-                .padding(.horizontal)
-                .padding(.vertical, CatchSpacing.space8)
-                .onChange(of: queryText) { _, newValue in
-                    handleQueryChange(newValue)
+    private var actionButtons: some View {
+        HStack(spacing: CatchSpacing.space10) {
+            Button {
+                isSearching = true
+            } label: {
+                HStack(spacing: CatchSpacing.space6) {
+                    Image(systemName: "magnifyingglass")
+                    Text(CatchStrings.Components.searchLocation)
                 }
-
-            if isShowingSuggestions {
-                suggestionsList
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(CatchTheme.textPrimary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, CatchSpacing.space12)
+                .background(CatchTheme.cardBackground)
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
+                .shadow(color: .black.opacity(0.04), radius: 2, y: 1)
             }
+
+            Button {
+                fetchCurrentLocation()
+            } label: {
+                HStack(spacing: CatchSpacing.space6) {
+                    if fetcher.isFetchingLocation {
+                        ProgressView()
+                            .controlSize(.small)
+                            .tint(.white)
+                    } else {
+                        Image(systemName: "location.fill")
+                    }
+                    Text(fetcher.isFetchingLocation
+                         ? CatchStrings.Components.gettingLocation
+                         : CatchStrings.Components.currentLocation)
+                }
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, CatchSpacing.space12)
+                .background(CatchTheme.primary)
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
+                .shadow(color: CatchTheme.primary.opacity(0.3), radius: 4, y: 2)
+            }
+            .disabled(fetcher.isFetchingLocation)
+        }
+        .padding(.horizontal)
+        .padding(.top, CatchSpacing.space8)
+        .padding(.bottom, CatchSpacing.space4)
+    }
+
+    // MARK: - Map Section
+
+    private var mapSection: some View {
+        Group {
+            if draft.hasCoordinates {
+                LocationMapPreview(location: $draft) { newLocation in
+                    isSyncingFromBinding = true
+                    queryText = newLocation.name
+                }
+            } else {
+                Color(.secondarySystemBackground)
+                    .overlay {
+                        VStack(spacing: CatchSpacing.space8) {
+                            Image(systemName: "map")
+                                .font(.system(size: 40))
+                                .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
+                            Text(CatchStrings.Components.searchOrGPS)
+                                .font(.subheadline)
+                                .foregroundStyle(CatchTheme.textSecondary)
+                        }
+                    }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.horizontal)
+        .padding(.vertical, CatchSpacing.space4)
+        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+    }
+
+    // MARK: - Location Info (below map)
+
+    private var locationInfo: some View {
+        VStack(spacing: CatchSpacing.space4) {
+            if draft.hasCoordinates, !draft.name.isEmpty {
+                HStack(spacing: CatchSpacing.space6) {
+                    Image(systemName: "mappin.circle.fill")
+                        .foregroundStyle(CatchTheme.primary)
+                    Text(draft.name)
+                        .font(.subheadline)
+                        .foregroundStyle(CatchTheme.textPrimary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer()
+                }
+                .padding(.horizontal)
+            }
+
+            if draft.hasCoordinates {
+                HStack(spacing: CatchSpacing.space4) {
+                    Image(systemName: "hand.draw")
+                        .font(.caption2)
+                    Text(CatchStrings.Components.dragToAdjust)
+                        .font(.caption)
+                }
+                .foregroundStyle(CatchTheme.textSecondary)
+            }
+
+            if let error = fetcher.error {
+                errorDisplay(error)
+                    .padding(.horizontal)
+            }
+        }
+        .padding(.vertical, CatchSpacing.space8)
+    }
+
+    // MARK: - Search Overlay
+
+    private var searchOverlay: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                HStack(spacing: CatchSpacing.space8) {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(CatchTheme.textSecondary)
+                    TextField(CatchStrings.Components.typeLocationName, text: $queryText)
+                        .textInputAutocapitalization(.never)
+                        .onAppear {
+                            if draft.hasCoordinates, !draft.name.isEmpty {
+                                isSyncingFromBinding = true
+                                queryText = draft.name
+                            }
+                        }
+                        .onChange(of: queryText) { _, newValue in
+                            handleQueryChange(newValue)
+                        }
+                    if !queryText.isEmpty {
+                        Button {
+                            queryText = ""
+                            searchService?.clear()
+                            isShowingSuggestions = false
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundStyle(CatchTheme.textSecondary)
+                        }
+                    }
+                }
+                .padding(.horizontal, CatchSpacing.space12)
+                .padding(.vertical, CatchSpacing.space10)
+                .background(CatchTheme.cardBackground)
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
+                .shadow(color: .black.opacity(0.04), radius: 2, y: 1)
+
+                Button(CatchStrings.Common.cancel) {
+                    isSearching = false
+                    isShowingSuggestions = false
+                    queryText = ""
+                    searchService?.clear()
+                }
+                .font(.subheadline)
+            }
+            .padding(.horizontal)
+            .padding(.vertical, CatchSpacing.space8)
 
             if searchService?.isResolving == true {
                 HStack(spacing: CatchSpacing.space6) {
@@ -113,143 +266,50 @@ private struct LocationPickerSheet: View {
                 .padding(.horizontal)
                 .padding(.bottom, CatchSpacing.space8)
             }
+
+            suggestionsList
+
+            Spacer()
         }
     }
 
     @ViewBuilder
     private var suggestionsList: some View {
         let suggestions = searchService?.suggestions ?? []
-        if !suggestions.isEmpty {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    ForEach(suggestions, id: \.self) { result in
-                        Button {
-                            selectSuggestion(result)
-                        } label: {
-                            HStack(spacing: CatchSpacing.space8) {
-                                Image(systemName: "mappin.circle.fill")
-                                    .foregroundStyle(CatchTheme.primary)
-                                    .font(.body)
-                                VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                                    Text(result.title)
-                                        .font(.subheadline)
-                                        .foregroundStyle(CatchTheme.textPrimary)
-                                    if !result.subtitle.isEmpty {
-                                        Text(result.subtitle)
-                                            .font(.caption)
-                                            .foregroundStyle(CatchTheme.textSecondary)
-                                    }
+        if isShowingSuggestions, !suggestions.isEmpty {
+            VStack(alignment: .leading, spacing: 0) {
+                ForEach(suggestions, id: \.self) { result in
+                    Button {
+                        selectSuggestion(result)
+                    } label: {
+                        HStack(spacing: CatchSpacing.space10) {
+                            Image(systemName: "mappin.circle.fill")
+                                .foregroundStyle(CatchTheme.primary)
+                                .font(.title3)
+                            VStack(alignment: .leading, spacing: CatchSpacing.space2) {
+                                Text(result.title)
+                                    .font(.subheadline)
+                                    .foregroundStyle(CatchTheme.textPrimary)
+                                if !result.subtitle.isEmpty {
+                                    Text(result.subtitle)
+                                        .font(.caption)
+                                        .foregroundStyle(CatchTheme.textSecondary)
                                 }
-                                Spacer()
                             }
-                            .padding(.vertical, CatchSpacing.space8)
-                            .padding(.horizontal)
+                            Spacer()
                         }
-                        if result != suggestions.last {
-                            Divider().padding(.leading, 40)
-                        }
+                        .padding(.vertical, CatchSpacing.space10)
+                        .padding(.horizontal)
+                    }
+                    if result != suggestions.last {
+                        Divider().padding(.leading, 52)
                     }
                 }
             }
-            .frame(maxHeight: 200)
         }
     }
 
-    // MARK: - Map Section
-
-    private var mapSection: some View {
-        ZStack {
-            if draft.hasCoordinates {
-                LocationMapPreview(location: $draft) { newLocation in
-                    isSyncingFromBinding = true
-                    queryText = newLocation.name
-                }
-            } else {
-                RoundedRectangle(cornerRadius: CatchTheme.cornerRadius)
-                    .fill(Color(.systemFill))
-                    .overlay {
-                        VStack(spacing: CatchSpacing.space8) {
-                            Image(systemName: "map")
-                                .font(.largeTitle)
-                                .foregroundStyle(CatchTheme.textSecondary)
-                            Text(CatchStrings.Components.tapToSetLocation)
-                                .font(.subheadline)
-                                .foregroundStyle(CatchTheme.textSecondary)
-                        }
-                    }
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(.horizontal)
-        .padding(.vertical, CatchSpacing.space4)
-    }
-
-    // MARK: - Bottom Bar
-
-    private var bottomBar: some View {
-        VStack(spacing: CatchSpacing.space8) {
-            if draft.hasCoordinates, !draft.name.isEmpty {
-                HStack(spacing: CatchSpacing.space6) {
-                    Image(systemName: "mappin.circle.fill")
-                        .foregroundStyle(CatchTheme.primary)
-                    Text(draft.name)
-                        .font(.subheadline)
-                        .foregroundStyle(CatchTheme.textPrimary)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal)
-            }
-
-            if draft.hasCoordinates {
-                HStack(spacing: CatchSpacing.space6) {
-                    Image(systemName: "hand.draw")
-                        .foregroundStyle(CatchTheme.textSecondary)
-                    Text(CatchStrings.Components.dragToAdjust)
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                }
-            }
-
-            gpsButton
-                .padding(.horizontal)
-
-            if let error = fetcher.error {
-                errorDisplay(error)
-                    .padding(.horizontal)
-            }
-        }
-        .padding(.vertical, CatchSpacing.space8)
-    }
-
-    private var gpsButton: some View {
-        Button {
-            fetchCurrentLocation()
-        } label: {
-            HStack(spacing: CatchSpacing.space6) {
-                if fetcher.isFetchingLocation {
-                    ProgressView()
-                        .controlSize(.small)
-                        .tint(CatchTheme.primary)
-                } else {
-                    Image(systemName: "location.fill")
-                }
-                Text(fetcher.isFetchingLocation
-                     ? CatchStrings.Components.gettingLocation
-                     : CatchStrings.Components.useCurrentLocation)
-            }
-            .font(.subheadline.weight(.medium))
-            .foregroundStyle(CatchTheme.primary)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, CatchSpacing.space10)
-            .background(
-                RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall)
-                    .fill(CatchTheme.primary.opacity(0.12))
-            )
-        }
-        .disabled(fetcher.isFetchingLocation)
-    }
+    // MARK: - Helpers
 
     @ViewBuilder
     private func errorDisplay(_ error: String) -> some View {
@@ -298,6 +358,7 @@ private struct LocationPickerSheet: View {
     private func selectSuggestion(_ result: LocationSearchResult) {
         debounceTask?.cancel()
         isShowingSuggestions = false
+        isSearching = false
         isSyncingFromBinding = true
         queryText = result.displayName
 

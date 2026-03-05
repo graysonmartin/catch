@@ -107,16 +107,16 @@ struct AddCatView: View {
                 BreedPickerView(breed: $breed)
             }
 
+            Section(CatchStrings.Common.location) {
+                LocationPickerView(location: $location)
+            }
+
             Section(CatchStrings.Common.notes) {
                 LimitedTextFieldView(
                     CatchStrings.Common.notesPlaceholder,
                     text: $notes,
                     limit: TextInputLimits.catNotes
                 )
-            }
-
-            Section(CatchStrings.Common.location) {
-                LocationPickerView(location: $location)
             }
         }
     }
