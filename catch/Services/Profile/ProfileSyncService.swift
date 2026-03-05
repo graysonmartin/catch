@@ -22,6 +22,14 @@ final class ProfileSyncService {
         profile.cloudKitRecordName = recordName
     }
 
+    func fetchProfile(appleUserID: String) async throws -> CloudUserProfile? {
+        try await cloudKitService.fetchUserProfile(appleUserID: appleUserID)
+    }
+
+    func deleteProfile(recordName: String) async throws {
+        try await cloudKitService.deleteUserProfile(recordName: recordName)
+    }
+
     func checkUsernameAvailability(_ username: String) async throws -> Bool {
         try await cloudKitService.checkUsernameAvailability(username)
     }

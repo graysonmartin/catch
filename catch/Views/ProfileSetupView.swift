@@ -15,6 +15,7 @@ struct ProfileSetupView: View {
     @State private var avatarData: Data?
     @State private var usernameAvailability: UsernameAvailability = .idle
     @State private var signInError: String?
+    @State private var isRestoringProfile = false
 
     var onComplete: () -> Void
 
@@ -39,7 +40,9 @@ struct ProfileSetupView: View {
             ScrollView {
                 VStack(spacing: CatchSpacing.space32) {
                     headerSection
-                    if isSignedIn {
+                    if isRestoringProfile {
+                        PawLoadingView(label: CatchStrings.ProfileSetup.restoringProfile)
+                    } else if isSignedIn {
                         signedInBadge
                         AvatarPickerView(avatarData: $avatarData)
                         fieldsSection
@@ -94,6 +97,8 @@ struct ProfileSetupView: View {
             Button {
                 authService.debugSignIn()
                 prefillFromAppleUser()
+                isRestoringProfile = true
+                Task { await restoreExistingProfile() }
             } label: {
                 Text(CatchStrings.Profile.fakeSignIn)
                     .font(.caption.weight(.semibold)).foregroundStyle(.white)
@@ -108,7 +113,7 @@ struct ProfileSetupView: View {
     private var signedInBadge: some View {
         HStack(spacing: CatchSpacing.space8) {
             Image(systemName: "checkmark.seal.fill").foregroundStyle(CatchTheme.primary)
-            Text(CatchStrings.Profile.signedInWithApple)
+            Text(CatchStrings.ProfileSetup.appleAccountConnected)
                 .font(.subheadline).foregroundStyle(CatchTheme.textSecondary)
         }
         .padding(.vertical, CatchSpacing.space10)
@@ -190,9 +195,58 @@ extension ProfileSetupView {
             _ = try authService.processSignInResult(result)
             signInError = nil
             prefillFromAppleUser()
+            isRestoringProfile = true
+            Task { await restoreExistingProfile() }
         } catch {
             signInError = CatchStrings.ProfileSetup.signInFailed
         }
+    }
+
+    private func restoreExistingProfile() async {
+        guard let appleUserID = authService.authState.user?.userIdentifier else {
+            isRestoringProfile = false
+            return
+        }
+
+        let cloudProfile: CloudUserProfile?
+        do {
+            cloudProfile = try await profileSyncService.fetchProfile(appleUserID: appleUserID)
+        } catch {
+            isRestoringProfile = false
+            toastManager.showError(CatchStrings.ProfileSetup.signInFailed)
+            return
+        }
+
+        guard let cloudProfile else {
+            isRestoringProfile = false
+            return
+        }
+
+        let descriptor = FetchDescriptor<UserProfile>(
+            predicate: #Predicate { $0.appleUserID == appleUserID }
+        )
+        let existingProfile = try? modelContext.fetch(descriptor).first
+
+        if let existingProfile {
+            existingProfile.displayName = cloudProfile.displayName
+            existingProfile.bio = cloudProfile.bio
+            existingProfile.username = cloudProfile.username
+            existingProfile.cloudKitRecordName = cloudProfile.recordName
+            existingProfile.isPrivate = cloudProfile.isPrivate
+        } else {
+            let profile = UserProfile(
+                displayName: cloudProfile.displayName,
+                bio: cloudProfile.bio,
+                username: cloudProfile.username,
+                appleUserID: cloudProfile.appleUserID,
+                cloudKitRecordName: cloudProfile.recordName,
+                isPrivate: cloudProfile.isPrivate
+            )
+            modelContext.insert(profile)
+        }
+
+        try? modelContext.save()
+        onComplete()
     }
 
     private func prefillFromAppleUser() {
