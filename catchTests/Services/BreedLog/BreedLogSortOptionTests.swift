@@ -33,8 +33,8 @@ final class BreedLogSortOptionTests: XCTestCase {
 
     // MARK: - Default Direction
 
-    func test_defaultDirection_rarityIsDescending() {
-        XCTAssertEqual(BreedLogSortOption.rarity.defaultDirection, .descending)
+    func test_defaultDirection_rarityIsAscending() {
+        XCTAssertEqual(BreedLogSortOption.rarity.defaultDirection, .ascending)
     }
 
     func test_defaultDirection_alphabeticalIsAscending() {
