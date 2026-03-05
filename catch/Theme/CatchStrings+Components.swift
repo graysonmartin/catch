@@ -9,9 +9,11 @@ extension CatchStrings {
         static let useCurrentLocation = String(localized: "Use Current Location")
         static let coordinatesSaved = String(localized: "Coordinates saved")
         static let openSettings = String(localized: "Open Settings")
-        static let typeLocationName = String(localized: "Or type location name")
+        static let typeLocationName = String(localized: "Search for a location...")
         static let locationDenied = String(localized: "Location access denied. Enable it in Settings.")
         static let locationTimeout = String(localized: "Location request timed out. Try again.")
+        static let resolvingLocation = String(localized: "pinning location...")
+        static let locationPinned = String(localized: "location pinned to map")
 
         // PhotoPickerView
         static let dragToReorder = String(localized: "drag to reorder -- first photo is your profile pic")
