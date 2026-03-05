@@ -11,7 +11,15 @@ struct FeedView: View {
 
     private var feedItems: [FeedItem] {
         let local = localEncounters.map { FeedItem.local($0) }
-        let remote = socialFeedService?.remoteEncounters ?? []
+
+        // Remote feed now includes own CloudKit posts for cross-device visibility.
+        // Deduplicate against local encounters to avoid showing the same post twice.
+        let localRecordNames = Set(localEncounters.compactMap(\.cloudKitRecordName))
+        let remote = (socialFeedService?.remoteEncounters ?? []).filter { item in
+            guard let recordName = item.encounterRecordName else { return true }
+            return !localRecordNames.contains(recordName)
+        }
+
         return (local + remote).sorted { $0.date > $1.date }
     }
 

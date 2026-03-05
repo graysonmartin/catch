@@ -13,7 +13,8 @@ final class CKSocialFeedServiceTests: XCTestCase {
         mockBrowseService = MockUserBrowseService()
         sut = CKSocialFeedService(
             followService: mockFollowService,
-            userBrowseService: mockBrowseService
+            userBrowseService: mockBrowseService,
+            currentUserIDProvider: { nil }
         )
     }
 

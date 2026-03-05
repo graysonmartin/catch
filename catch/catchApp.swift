@@ -56,7 +56,8 @@ struct catchApp: App {
         ))
         _socialFeedService = State(initialValue: CKSocialFeedService(
             followService: follow,
-            userBrowseService: browseService
+            userBrowseService: browseService,
+            currentUserIDProvider: getUserID
         ))
         _profileSyncService = State(initialValue: ProfileSyncService(
             cloudKitService: CKCloudKitService()

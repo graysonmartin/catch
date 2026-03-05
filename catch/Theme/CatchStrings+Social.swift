@@ -26,6 +26,7 @@ extension CatchStrings {
         static let searchByUsername = String(localized: "search by username")
         static let anonymous = String(localized: "anonymous")
         static let you = String(localized: "you")
+        static let youBadge = you
         static let followingStatus = String(localized: "following")
         static let requestedStatus = String(localized: "requested")
         static let request = String(localized: "request")

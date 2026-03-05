@@ -12,6 +12,7 @@ final class CKSocialFeedService: SocialFeedService {
 
     private let followService: any FollowService
     private let userBrowseService: any UserBrowseService
+    private let currentUserIDProvider: @Sendable () -> String?
 
     /// All fetched items before pagination slicing — kept in memory for load-more.
     private var allFetchedItems: [FeedItem] = []
@@ -19,26 +20,34 @@ final class CKSocialFeedService: SocialFeedService {
 
     init(
         followService: any FollowService,
-        userBrowseService: any UserBrowseService
+        userBrowseService: any UserBrowseService,
+        currentUserIDProvider: @escaping @Sendable () -> String?
     ) {
         self.followService = followService
         self.userBrowseService = userBrowseService
+        self.currentUserIDProvider = currentUserIDProvider
     }
 
     func refresh() async {
-        let activeFollows = followService.following
-        guard !activeFollows.isEmpty else {
+        isLoading = true
+        defer { isLoading = false }
+
+        var userIDs = followService.following.map(\.followeeID)
+
+        // Include the current user's own CloudKit posts so they appear
+        // on every device, not just the one that created them locally.
+        if let currentUserID = currentUserIDProvider(),
+           !userIDs.contains(currentUserID) {
+            userIDs.append(currentUserID)
+        }
+
+        guard !userIDs.isEmpty else {
             remoteEncounters = []
             allFetchedItems = []
             displayedCount = 0
             hasMorePages = false
             return
         }
-
-        isLoading = true
-        defer { isLoading = false }
-
-        let userIDs = activeFollows.map(\.followeeID)
 
         var allItems: [FeedItem] = []
 

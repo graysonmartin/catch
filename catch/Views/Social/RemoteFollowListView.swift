@@ -8,6 +8,7 @@ struct RemoteFollowListView: View {
 
     @Environment(CKFollowService.self) private var followService
     @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
+    @Environment(AppleAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
 
     @State private var follows: [Follow] = []
@@ -23,17 +24,27 @@ struct RemoteFollowListView: View {
             } else {
                 List(follows, id: \.id) { follow in
                     let targetID = tab == .followers ? follow.followerID : follow.followeeID
-                    NavigationLink {
-                        RemoteProfileContent(
-                            userID: targetID,
-                            initialDisplayName: resolvedProfiles[targetID]?.displayName
-                        )
-                    } label: {
+                    let isCurrentUser = targetID == currentUserID
+                    if isCurrentUser {
                         RemoteFollowRow(
                             targetUserID: targetID,
                             profile: resolvedProfiles[targetID],
-                            since: follow.createdAt
+                            since: follow.createdAt,
+                            isCurrentUser: true
                         )
+                    } else {
+                        NavigationLink {
+                            RemoteProfileContent(
+                                userID: targetID,
+                                initialDisplayName: resolvedProfiles[targetID]?.displayName
+                            )
+                        } label: {
+                            RemoteFollowRow(
+                                targetUserID: targetID,
+                                profile: resolvedProfiles[targetID],
+                                since: follow.createdAt
+                            )
+                        }
                     }
                 }
                 .listStyle(.insetGrouped)
@@ -62,6 +73,10 @@ struct RemoteFollowListView: View {
     }
 
     // MARK: - Helpers
+
+    private var currentUserID: String {
+        authService.authState.user?.userIdentifier ?? ""
+    }
 
     private var title: String {
         tab == .followers
@@ -106,6 +121,7 @@ private struct RemoteFollowRow: View {
     let targetUserID: String
     let profile: CloudUserProfile?
     let since: Date
+    var isCurrentUser: Bool = false
 
     var body: some View {
         HStack(spacing: CatchSpacing.space12) {
@@ -114,10 +130,22 @@ private struct RemoteFollowRow: View {
                 .foregroundStyle(CatchTheme.secondary)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                Text(profile?.displayName ?? targetUserID)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(CatchTheme.textPrimary)
-                    .lineLimit(1)
+                HStack(spacing: CatchSpacing.space6) {
+                    Text(profile?.displayName ?? targetUserID)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(CatchTheme.textPrimary)
+                        .lineLimit(1)
+
+                    if isCurrentUser {
+                        Text(CatchStrings.Social.youBadge)
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(CatchTheme.primary)
+                            .padding(.horizontal, CatchSpacing.space6)
+                            .padding(.vertical, 2)
+                            .background(CatchTheme.primary.opacity(0.12))
+                            .clipShape(Capsule())
+                    }
+                }
 
                 if let username = profile?.username, !username.isEmpty {
                     Text(UsernameValidator.formatDisplay(username))
