@@ -47,7 +47,6 @@ struct LocationPickerView: View {
                 Text(location.name)
                     .font(.subheadline)
                     .foregroundStyle(CatchTheme.textPrimary)
-                    .lineLimit(2)
             }
 
             HStack(spacing: CatchSpacing.space16) {
