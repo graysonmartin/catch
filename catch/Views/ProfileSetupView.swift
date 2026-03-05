@@ -207,17 +207,20 @@ extension ProfileSetupView {
             isRestoringProfile = false
             return
         }
-        defer { isRestoringProfile = false }
 
         let cloudProfile: CloudUserProfile?
         do {
             cloudProfile = try await profileSyncService.fetchProfile(appleUserID: appleUserID)
         } catch {
+            isRestoringProfile = false
             toastManager.showError(CatchStrings.ProfileSetup.signInFailed)
             return
         }
 
-        guard let cloudProfile else { return }
+        guard let cloudProfile else {
+            isRestoringProfile = false
+            return
+        }
 
         let descriptor = FetchDescriptor<UserProfile>(
             predicate: #Predicate { $0.appleUserID == appleUserID }
