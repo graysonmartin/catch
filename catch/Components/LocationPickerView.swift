@@ -149,9 +149,26 @@ private struct LocationPickerSheet: View {
     // MARK: - Map Section
 
     private var mapSection: some View {
-        LocationMapPreview(location: $draft) { newLocation in
-            isSyncingFromBinding = true
-            queryText = newLocation.name
+        Group {
+            if draft.hasCoordinates {
+                LocationMapPreview(location: $draft) { newLocation in
+                    isSyncingFromBinding = true
+                    queryText = newLocation.name
+                }
+            } else {
+                RoundedRectangle(cornerRadius: CatchTheme.cornerRadius)
+                    .fill(Color(.secondarySystemBackground))
+                    .overlay {
+                        VStack(spacing: CatchSpacing.space8) {
+                            Image(systemName: "map")
+                                .font(.system(size: 40))
+                                .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
+                            Text(CatchStrings.Components.searchOrGPS)
+                                .font(.subheadline)
+                                .foregroundStyle(CatchTheme.textSecondary)
+                        }
+                    }
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal)

@@ -26,21 +26,14 @@ struct LocationMapPreview: UIViewRepresentable {
         map.layer.cornerRadius = CatchTheme.cornerRadius
         map.clipsToBounds = true
 
-        let region: MKCoordinateRegion
         if let coordinate = coordinate {
-            region = MKCoordinateRegion(
+            let region = MKCoordinateRegion(
                 center: coordinate,
                 latitudinalMeters: 1000,
                 longitudinalMeters: 1000
             )
-        } else {
-            // Neutral default: zoomed out to show a wide area
-            region = MKCoordinateRegion(
-                center: CLLocationCoordinate2D(latitude: 20, longitude: 0),
-                span: MKCoordinateSpan(latitudeDelta: 120, longitudeDelta: 120)
-            )
+            map.setRegion(region, animated: false)
         }
-        map.setRegion(region, animated: false)
 
         // Fixed pin overlay in the center of the map
         let pin = UIImageView(image: UIImage(systemName: "mappin.circle.fill")?
@@ -48,7 +41,6 @@ struct LocationMapPreview: UIViewRepresentable {
             .withTintColor(CatchTheme.primaryUIColor, renderingMode: .alwaysOriginal))
         pin.translatesAutoresizingMaskIntoConstraints = false
         pin.contentMode = .scaleAspectFit
-        pin.alpha = location.hasCoordinates ? 1 : 0
         map.addSubview(pin)
         NSLayoutConstraint.activate([
             pin.centerXAnchor.constraint(equalTo: map.centerXAnchor),
@@ -60,14 +52,6 @@ struct LocationMapPreview: UIViewRepresentable {
     }
 
     func updateUIView(_ map: MKMapView, context: Context) {
-        // Show/hide pin based on whether we have coordinates
-        let hasCoords = coordinate != nil
-        if context.coordinator.pinView?.alpha != (hasCoords ? 1 : 0) {
-            UIView.animate(withDuration: 0.2) {
-                context.coordinator.pinView?.alpha = hasCoords ? 1 : 0
-            }
-        }
-
         guard let coordinate = coordinate else { return }
         guard !context.coordinator.isPanning else { return }
 
