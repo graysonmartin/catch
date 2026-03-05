@@ -1,9 +1,9 @@
 import SwiftUI
-import PhotosUI
 import CatchCore
 
 struct EditProfileView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(ProfileSyncService.self) private var profileSyncService
     @Bindable var profile: UserProfile
 
     var onSave: ((UserProfile) -> Void)?
@@ -14,12 +14,7 @@ struct EditProfileView: View {
     @State private var avatarData: Data?
     @State private var isPrivate: Bool
     @State private var visibilitySettings: VisibilitySettings
-    @State private var pickerItem: PhotosPickerItem?
-    @State private var isShowingPhotoOptions = false
     @State private var usernameAvailability: UsernameAvailability = .idle
-    @State private var usernameCheckTask: Task<Void, Never>?
-
-    private var cloudKitService: CloudKitService = CKCloudKitService()
 
     init(profile: UserProfile, onSave: ((UserProfile) -> Void)? = nil) {
         self.profile = profile
@@ -35,7 +30,10 @@ struct EditProfileView: View {
     var body: some View {
         NavigationStack {
             Form {
-                avatarSection
+                Section {
+                    AvatarPickerView(avatarData: $avatarData, showCameraBadge: false)
+                }
+
                 infoSection
                 privacySection
                 if !isPrivate {
@@ -53,69 +51,22 @@ struct EditProfileView: View {
                         .fontWeight(.semibold)
                 }
             }
-            .onChange(of: pickerItem) { _, newItem in
-                loadPhoto(from: newItem)
-            }
         }
     }
 
     // MARK: - Sections
 
-    private var avatarSection: some View {
-        Section {
-            avatarPreview
-                .frame(maxWidth: .infinity)
-                .contentShape(Circle())
-                .onTapGesture { isShowingPhotoOptions = true }
-                .confirmationDialog(CatchStrings.Profile.profilePhoto, isPresented: $isShowingPhotoOptions) {
-                    PhotosPicker(selection: $pickerItem, matching: .images) {
-                        Text(CatchStrings.Profile.choosePhoto)
-                    }
-                    if avatarData != nil {
-                        Button(CatchStrings.Profile.removePhoto, role: .destructive) {
-                            avatarData = nil
-                            pickerItem = nil
-                        }
-                    }
-                }
-        }
-    }
-
-    private var avatarPreview: some View {
-        Group {
-            if let data = avatarData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
-            } else {
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .foregroundStyle(CatchTheme.secondary)
-            }
-        }
-    }
-
     private var infoSection: some View {
         Section {
             TextField(CatchStrings.Profile.displayName, text: $displayName)
-            VStack(alignment: .leading, spacing: CatchSpacing.space4) {
-                HStack {
-                    Text("@")
-                        .foregroundStyle(CatchTheme.textSecondary)
-                    TextField(CatchStrings.Profile.usernamePlaceholder, text: $username)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .onChange(of: username) { _, newValue in
-                            username = newValue.lowercased()
-                            checkUsernameAvailability()
-                        }
+            UsernameFieldView(
+                username: $username,
+                availability: $usernameAvailability,
+                currentUsername: profile.username,
+                checkAvailability: { username in
+                    try await profileSyncService.checkUsernameAvailability(username)
                 }
-                usernameStatusView
-            }
+            )
             LimitedTextFieldView(
                 CatchStrings.Profile.bio,
                 text: $bio,
@@ -126,65 +77,6 @@ struct EditProfileView: View {
         } footer: {
             if !username.isEmpty {
                 Text(CatchStrings.Profile.usernameFooter)
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var usernameStatusView: some View {
-        let validation = UsernameValidator.validate(username)
-        if username.isEmpty {
-            EmptyView()
-        } else if validation != .valid {
-            Text(CatchStrings.Profile.validationMessage(for: validation))
-                .font(.caption)
-                .foregroundStyle(.red)
-        } else {
-            switch usernameAvailability {
-            case .idle:
-                EmptyView()
-            case .checking:
-                Text(CatchStrings.Profile.usernameChecking)
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
-            case .available:
-                Text(CatchStrings.Profile.usernameAvailable)
-                    .font(.caption)
-                    .foregroundStyle(.green)
-            case .taken:
-                Text(CatchStrings.Profile.usernameTaken)
-                    .font(.caption)
-                    .foregroundStyle(.red)
-            case .error:
-                Text(CatchStrings.Profile.usernameCheckFailed)
-                    .font(.caption)
-                    .foregroundStyle(.orange)
-            }
-        }
-    }
-
-    private func checkUsernameAvailability() {
-        usernameCheckTask?.cancel()
-        let current = username
-        guard UsernameValidator.validate(current) == .valid else {
-            usernameAvailability = .idle
-            return
-        }
-        if current == profile.username {
-            usernameAvailability = .available
-            return
-        }
-        usernameAvailability = .checking
-        usernameCheckTask = Task {
-            try? await Task.sleep(for: .milliseconds(500))
-            guard !Task.isCancelled else { return }
-            do {
-                let isAvailable = try await cloudKitService.checkUsernameAvailability(current)
-                guard !Task.isCancelled else { return }
-                usernameAvailability = isAvailable ? .available : .taken
-            } catch {
-                guard !Task.isCancelled else { return }
-                usernameAvailability = .error
             }
         }
     }
@@ -220,17 +112,5 @@ struct EditProfileView: View {
         profile.visibilitySettings = visibilitySettings
         onSave?(profile)
         dismiss()
-    }
-
-    private func loadPhoto(from item: PhotosPickerItem?) {
-        guard let item else { return }
-        Task {
-            guard let data = try? await item.loadTransferable(type: Data.self),
-                  let uiImage = UIImage(data: data),
-                  let jpeg = uiImage.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) else {
-                return
-            }
-            avatarData = jpeg
-        }
     }
 }

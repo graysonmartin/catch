@@ -7,6 +7,7 @@ struct OwnProfileContent: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(AppleAuthService.self) var authService
     @Environment(CKFollowService.self) var followService
+    @Environment(ProfileSyncService.self) private var profileSyncService
     @Environment(ToastManager.self) private var toastManager
     @Query private var profiles: [UserProfile]
     @Query(sort: \Cat.name) var cats: [Cat]
@@ -16,8 +17,6 @@ struct OwnProfileContent: View {
     @State private var isShowingEditSheet = false
     @State private var isShowingCollection = false
     @State private var searchText = ""
-
-    var cloudKitService: CloudKitService = CKCloudKitService()
 
     private var profile: UserProfile? { profiles.first }
 
@@ -79,7 +78,7 @@ struct OwnProfileContent: View {
             set: { _ in isShowingEditSheet = false }
         )) { profile in
             EditProfileView(profile: profile) { updatedProfile in
-                syncProfileToCloudKit(updatedProfile)
+                syncProfile(updatedProfile)
             }
         }
     }
@@ -337,31 +336,19 @@ struct OwnProfileContent: View {
         do {
             let user = try authService.processSignInResult(result)
             profile.appleUserID = user.userIdentifier
-            syncToCloudKit(profile: profile, appleUserID: user.userIdentifier)
+            syncProfile(profile)
         } catch {
             // Sign-in cancelled or failed — profile still works locally
         }
     }
 
-    private func syncToCloudKit(profile: UserProfile, appleUserID: String) {
+    private func syncProfile(_ profile: UserProfile) {
         Task {
             do {
-                let recordName = try await cloudKitService.saveUserProfile(
-                    appleUserID: appleUserID,
-                    displayName: profile.displayName,
-                    bio: profile.bio,
-                    username: profile.username,
-                    isPrivate: profile.isPrivate
-                )
-                profile.cloudKitRecordName = recordName
+                try await profileSyncService.syncProfile(profile)
             } catch {
                 toastManager.showError(CatchStrings.Toast.profileSaveFailed)
             }
         }
-    }
-
-    private func syncProfileToCloudKit(_ profile: UserProfile) {
-        guard let appleUserID = profile.appleUserID else { return }
-        syncToCloudKit(profile: profile, appleUserID: appleUserID)
     }
 }

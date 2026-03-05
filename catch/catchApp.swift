@@ -4,8 +4,8 @@ import CatchCore
 
 @main
 struct catchApp: App {
-    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
-    @AppStorage("hasCompletedProfileSetup") private var hasCompletedProfileSetup = false
+    @AppStorage(AppStorageKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = false
+    @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
     @State private var authService: AppleAuthService
     @State private var followService: CKFollowService
     @State private var breedClassifier = VisionBreedClassifierService()
@@ -14,6 +14,7 @@ struct catchApp: App {
     @State private var userBrowseService: CKUserBrowseService
     @State private var socialInteractionService: CKSocialInteractionService
     @State private var socialFeedService: CKSocialFeedService
+    @State private var profileSyncService: ProfileSyncService
     @State private var toastManager = ToastManager()
     @State private var databaseState: DatabaseState
 
@@ -57,6 +58,9 @@ struct catchApp: App {
             followService: follow,
             userBrowseService: browseService
         ))
+        _profileSyncService = State(initialValue: ProfileSyncService(
+            cloudKitService: CKCloudKitService()
+        ))
     }
 
     var body: some Scene {
@@ -84,6 +88,7 @@ struct catchApp: App {
                 hasCompletedProfileSetup = true
             }
             .environment(authService)
+            .environment(profileSyncService)
             .environment(toastManager)
         } else {
             ContentView()
@@ -96,6 +101,7 @@ struct catchApp: App {
                 .environment(userBrowseService)
                 .environment(socialInteractionService)
                 .environment(socialFeedService)
+                .environment(profileSyncService)
                 .environment(toastManager)
                 .task {
                     await authService.checkCredentialState()

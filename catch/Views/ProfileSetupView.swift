@@ -1,25 +1,21 @@
 import SwiftUI
 import SwiftData
-import PhotosUI
 import AuthenticationServices
 import CatchCore
 
 struct ProfileSetupView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(AppleAuthService.self) private var authService
+    @Environment(ProfileSyncService.self) private var profileSyncService
     @Environment(ToastManager.self) private var toastManager
 
     @State private var displayName = ""
     @State private var username = ""
     @State private var bio = ""
     @State private var avatarData: Data?
-    @State private var pickerItem: PhotosPickerItem?
-    @State private var isShowingPhotoOptions = false
     @State private var usernameAvailability: UsernameAvailability = .idle
-    @State private var usernameCheckTask: Task<Void, Never>?
     @State private var signInError: String?
 
-    private var cloudKitService: CloudKitService = CKCloudKitService()
     var onComplete: () -> Void
 
     init(onComplete: @escaping () -> Void) {
@@ -45,7 +41,7 @@ struct ProfileSetupView: View {
                     headerSection
                     if isSignedIn {
                         signedInBadge
-                        avatarSection
+                        AvatarPickerView(avatarData: $avatarData)
                         fieldsSection
                         submitButton
                     } else {
@@ -57,7 +53,6 @@ struct ProfileSetupView: View {
             }
         }
         .onAppear { prefillFromAppleUser() }
-        .onDisappear { usernameCheckTask?.cancel() }
     }
 
     // MARK: - Header
@@ -120,44 +115,9 @@ struct ProfileSetupView: View {
         .padding(.horizontal, CatchSpacing.space16)
         .background(CatchTheme.cardBackground).clipShape(Capsule())
     }
-
-    // MARK: - Avatar
-
-    private var avatarSection: some View {
-        avatarPreview
-            .contentShape(Circle())
-            .onTapGesture { isShowingPhotoOptions = true }
-            .confirmationDialog(CatchStrings.Profile.profilePhoto, isPresented: $isShowingPhotoOptions) {
-                PhotosPicker(selection: $pickerItem, matching: .images) {
-                    Text(CatchStrings.Profile.choosePhoto)
-                }
-                if avatarData != nil {
-                    Button(CatchStrings.Profile.removePhoto, role: .destructive) {
-                        avatarData = nil
-                        pickerItem = nil
-                    }
-                }
-            }
-            .onChange(of: pickerItem) { _, newItem in loadPhoto(from: newItem) }
-    }
-
-    private var avatarPreview: some View {
-        ZStack(alignment: .bottomTrailing) {
-            if let data = avatarData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage).resizable().scaledToFill()
-                    .frame(width: 100, height: 100).clipShape(Circle())
-            } else {
-                Image(systemName: "person.crop.circle.fill").resizable().scaledToFit()
-                    .frame(width: 100, height: 100).foregroundStyle(CatchTheme.secondary)
-            }
-            Image(systemName: "camera.circle.fill")
-                .font(.title3).foregroundStyle(.white)
-                .background(Circle().fill(CatchTheme.primary).frame(width: 28, height: 28))
-        }
-    }
 }
 
-// MARK: - Fields & Username Status
+// MARK: - Fields
 
 extension ProfileSetupView {
 
@@ -174,22 +134,18 @@ extension ProfileSetupView {
             VStack(alignment: .leading, spacing: CatchSpacing.space6) {
                 Text(CatchStrings.ProfileSetup.usernameLabel)
                     .font(.caption.weight(.semibold)).foregroundStyle(CatchTheme.textSecondary)
-                HStack {
-                    Text("@").foregroundStyle(CatchTheme.textSecondary)
-                    TextField(CatchStrings.Profile.usernamePlaceholder, text: $username)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .onChange(of: username) { _, newValue in
-                            username = newValue.lowercased()
-                            checkUsernameAvailability()
-                        }
-                }
+                UsernameFieldView(
+                    username: $username,
+                    availability: $usernameAvailability,
+                    checkAvailability: { username in
+                        try await profileSyncService.checkUsernameAvailability(username)
+                    }
+                )
                 .padding(CatchSpacing.space12)
                 .background(CatchTheme.cardBackground)
                 .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
                 .overlay(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight)
                     .stroke(CatchTheme.secondary.opacity(0.3), lineWidth: 1))
-                usernameStatusView
             }
             fieldRow(label: CatchStrings.ProfileSetup.bioLabel) {
                 LimitedTextFieldView(
@@ -210,30 +166,6 @@ extension ProfileSetupView {
                 .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
                 .overlay(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight)
                     .stroke(CatchTheme.secondary.opacity(0.3), lineWidth: 1))
-        }
-    }
-
-    @ViewBuilder
-    private var usernameStatusView: some View {
-        let validation = UsernameValidator.validate(username)
-        if username.isEmpty {
-            Text(CatchStrings.Profile.usernameFooter)
-                .font(.caption).foregroundStyle(CatchTheme.textSecondary)
-        } else if validation != .valid {
-            Text(CatchStrings.Profile.validationMessage(for: validation))
-                .font(.caption).foregroundStyle(.red)
-        } else {
-            switch usernameAvailability {
-            case .idle: EmptyView()
-            case .checking:
-                Text(CatchStrings.Profile.usernameChecking).font(.caption).foregroundStyle(CatchTheme.textSecondary)
-            case .available:
-                Text(CatchStrings.Profile.usernameAvailable).font(.caption).foregroundStyle(.green)
-            case .taken:
-                Text(CatchStrings.Profile.usernameTaken).font(.caption).foregroundStyle(.red)
-            case .error:
-                Text(CatchStrings.Profile.usernameCheckFailed).font(.caption).foregroundStyle(.orange)
-            }
         }
     }
 
@@ -277,54 +209,13 @@ extension ProfileSetupView {
             appleUserID: authService.authState.user?.userIdentifier
         )
         modelContext.insert(profile)
-        syncToCloudKit(profile)
-        onComplete()
-    }
-
-    private func syncToCloudKit(_ profile: UserProfile) {
-        guard let appleUserID = profile.appleUserID else { return }
         Task {
             do {
-                let recordName = try await cloudKitService.saveUserProfile(
-                    appleUserID: appleUserID, displayName: profile.displayName,
-                    bio: profile.bio, username: profile.username, isPrivate: profile.isPrivate
-                )
-                profile.cloudKitRecordName = recordName
+                try await profileSyncService.syncProfile(profile)
             } catch {
                 toastManager.showError(CatchStrings.Toast.profileSaveFailed)
             }
         }
-    }
-
-    private func checkUsernameAvailability() {
-        usernameCheckTask?.cancel()
-        let current = username
-        guard UsernameValidator.validate(current) == .valid else {
-            usernameAvailability = .idle
-            return
-        }
-        usernameAvailability = .checking
-        usernameCheckTask = Task {
-            try? await Task.sleep(for: .milliseconds(500))
-            guard !Task.isCancelled else { return }
-            do {
-                let isAvailable = try await cloudKitService.checkUsernameAvailability(current)
-                guard !Task.isCancelled else { return }
-                usernameAvailability = isAvailable ? .available : .taken
-            } catch {
-                guard !Task.isCancelled else { return }
-                usernameAvailability = .error
-            }
-        }
-    }
-
-    private func loadPhoto(from item: PhotosPickerItem?) {
-        guard let item else { return }
-        Task {
-            guard let data = try? await item.loadTransferable(type: Data.self),
-                  let uiImage = UIImage(data: data),
-                  let jpeg = uiImage.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) else { return }
-            avatarData = jpeg
-        }
+        onComplete()
     }
 }
