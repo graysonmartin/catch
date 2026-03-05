@@ -11,6 +11,7 @@ struct LocationPickerView: View {
     @State private var isShowingSuggestions = false
     @State private var debounceTask: Task<Void, Never>?
     @State private var isSyncingFromBinding = false
+    @State private var isShowingMap = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space8) {
@@ -19,13 +20,22 @@ struct LocationPickerView: View {
             errorDisplay
             searchField
             suggestionsList
-            mapPreview
+            mapButton
         }
         .onAppear {
             if queryText.isEmpty, !location.name.isEmpty {
                 isSyncingFromBinding = true
                 queryText = location.name
             }
+        }
+        .sheet(isPresented: $isShowingMap) {
+            LocationMapSheet(location: $location) { newLocation in
+                isSyncingFromBinding = true
+                queryText = newLocation.name
+                hasUsedGPS = false
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
         }
     }
 
@@ -161,22 +171,20 @@ struct LocationPickerView: View {
         }
     }
 
-    // MARK: - Map Preview
+    // MARK: - Map Button
 
     @ViewBuilder
-    private var mapPreview: some View {
+    private var mapButton: some View {
         if location.hasCoordinates {
-            VStack(alignment: .leading, spacing: CatchSpacing.space4) {
-                LocationMapPreview(location: $location) { newLocation in
-                    isSyncingFromBinding = true
-                    queryText = newLocation.name
-                    hasUsedGPS = false
+            Button {
+                isShowingMap = true
+            } label: {
+                HStack(spacing: CatchSpacing.space6) {
+                    Image(systemName: "map")
+                    Text(CatchStrings.Components.viewOnMap)
                 }
-                .frame(height: 180)
-
-                Text(CatchStrings.Components.dragToAdjust)
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
+                .font(.subheadline)
+                .foregroundStyle(CatchTheme.primary)
             }
         }
     }
@@ -184,15 +192,12 @@ struct LocationPickerView: View {
     // MARK: - Actions
 
     private func handleQueryChange(_ newValue: String) {
-        // Skip search triggers when syncing initial value from binding
         if isSyncingFromBinding {
             isSyncingFromBinding = false
             return
         }
 
         hasUsedGPS = false
-
-        // User is manually typing — clear coordinates
         location.latitude = nil
         location.longitude = nil
         location.name = newValue
@@ -223,7 +228,6 @@ struct LocationPickerView: View {
             if let resolved = await searchService?.resolve(result) {
                 location = resolved
             } else {
-                // Fallback: use display name without coordinates
                 location = Location(name: result.displayName)
             }
             searchService?.clear()
@@ -242,6 +246,50 @@ struct LocationPickerView: View {
                 searchService?.clear()
             } catch {
                 // Error already set on fetcher by fetchCurrentLocation()
+            }
+        }
+    }
+}
+
+// MARK: - Map Sheet
+
+private struct LocationMapSheet: View {
+    @Binding var location: Location
+    @Environment(\.dismiss) private var dismiss
+    var onLocationChanged: ((Location) -> Void)?
+
+    var body: some View {
+        NavigationStack {
+            VStack(spacing: 0) {
+                LocationMapPreview(location: $location) { newLocation in
+                    onLocationChanged?(newLocation)
+                }
+
+                HStack(spacing: CatchSpacing.space6) {
+                    Image(systemName: "hand.draw")
+                        .foregroundStyle(CatchTheme.textSecondary)
+                    Text(CatchStrings.Components.dragToAdjust)
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                }
+                .padding(.top, CatchSpacing.space8)
+
+                if !location.name.isEmpty {
+                    Text(location.name)
+                        .font(.subheadline)
+                        .foregroundStyle(CatchTheme.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .padding(.top, CatchSpacing.space4)
+                }
+
+                Spacer()
+            }
+            .padding()
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(CatchStrings.Common.done) { dismiss() }
+                        .fontWeight(.semibold)
+                }
             }
         }
     }
