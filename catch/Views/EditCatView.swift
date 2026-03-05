@@ -11,7 +11,6 @@ struct EditCatView: View {
     @State private var isUnnamed: Bool
     @State private var name: String
     @State private var breed: String?
-    @State private var estimatedAge: String
     @State private var location: Location
     @State private var notes: String
     @State private var isOwned: Bool
@@ -23,7 +22,6 @@ struct EditCatView: View {
     // Original values for rollback
     private let originalName: String?
     private let originalBreed: String?
-    private let originalEstimatedAge: String
     private let originalLocation: Location
     private let originalNotes: String
     private let originalIsOwned: Bool
@@ -34,7 +32,6 @@ struct EditCatView: View {
         _isUnnamed = State(initialValue: cat.name == nil)
         _name = State(initialValue: cat.name ?? "")
         _breed = State(initialValue: cat.breed)
-        _estimatedAge = State(initialValue: cat.estimatedAge)
         _location = State(initialValue: cat.location)
         _notes = State(initialValue: cat.notes)
         _isOwned = State(initialValue: cat.isOwned)
@@ -42,7 +39,6 @@ struct EditCatView: View {
 
         originalName = cat.name
         originalBreed = cat.breed
-        originalEstimatedAge = cat.estimatedAge
         originalLocation = cat.location
         originalNotes = cat.notes
         originalIsOwned = cat.isOwned
@@ -55,6 +51,7 @@ struct EditCatView: View {
                 Section(CatchStrings.Common.photos) {
                     PhotoPickerView(
                         selectedPhotos: $photos,
+                        minimumPhotos: 1,
                         thumbnailSize: 120
                     )
                     if photos.isEmpty {
@@ -74,8 +71,12 @@ struct EditCatView: View {
                     }
                 }
 
-                Section(CatchStrings.Common.catInfo) {
+                Section {
                     Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
+                    Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
+                }
+
+                Section {
                     if !isUnnamed {
                         LimitedSingleLineFieldView(
                             CatchStrings.Common.name,
@@ -84,9 +85,10 @@ struct EditCatView: View {
                         )
                     }
                     BreedPickerView(breed: $breed)
-                    TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
+                }
+
+                Section(CatchStrings.Common.location) {
                     LocationPickerView(location: $location)
-                    Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
                 }
 
                 Section(CatchStrings.Common.notes) {
@@ -134,7 +136,6 @@ struct EditCatView: View {
     private func save() async {
         cat.name = isUnnamed ? nil : name.trimmingCharacters(in: .whitespaces)
         cat.breed = breed
-        cat.estimatedAge = estimatedAge
         cat.location = location
         cat.notes = notes
         cat.isOwned = isOwned
@@ -149,7 +150,6 @@ struct EditCatView: View {
             // Revert local changes
             cat.name = originalName
             cat.breed = originalBreed
-            cat.estimatedAge = originalEstimatedAge
             cat.location = originalLocation
             cat.notes = originalNotes
             cat.isOwned = originalIsOwned

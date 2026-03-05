@@ -26,6 +26,9 @@
 		E8000001AA000020 /* EditCatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00001F /* EditCatView.swift */; };
 		E8000001AA000021 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000025 /* MapView.swift */; };
 		E8000001AA000022 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000026 /* LocationPickerView.swift */; };
+		E8LM00000001 /* LocationMapPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8LM00000010 /* LocationMapPreview.swift */; };
+		E8LS00000001 /* LocationFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8LS00000010 /* LocationFetcher.swift */; };
+		E8LS00000002 /* MKLocationSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8LS00000020 /* MKLocationSearchService.swift */; };
 		E8000001AA000024 /* PhotoCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000028 /* PhotoCarouselView.swift */; };
 		E8000001AA000035 /* CatPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000029 /* CatPickerView.swift */; };
 		E8000001AA000036 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002A /* OnboardingView.swift */; };
@@ -244,6 +247,9 @@
 		E8000001AA00001F /* EditCatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCatView.swift; sourceTree = "<group>"; };
 		E8000001AA000025 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		E8000001AA000026 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
+		E8LM00000010 /* LocationMapPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMapPreview.swift; sourceTree = "<group>"; };
+		E8LS00000010 /* LocationFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFetcher.swift; sourceTree = "<group>"; };
+		E8LS00000020 /* MKLocationSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKLocationSearchService.swift; sourceTree = "<group>"; };
 		E8000001AA000028 /* PhotoCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCarouselView.swift; sourceTree = "<group>"; };
 		E8000001AA000029 /* CatPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatPickerView.swift; sourceTree = "<group>"; };
 		E8000001AA00002A /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -514,6 +520,8 @@
 				E8000001AA000016 /* EmptyStateView.swift */,
 				E8000001AA000065 /* CatCardView.swift */,
 				E8000001AA000026 /* LocationPickerView.swift */,
+				E8LM00000010 /* LocationMapPreview.swift */,
+				E8LS00000010 /* LocationFetcher.swift */,
 				E8000001AA000029 /* CatPickerView.swift */,
 				E8000001AA000050 /* ImageDownsampler.swift */,
 				E8PF00000005 /* ProfileHeaderView.swift */,
@@ -725,6 +733,7 @@
 				E8UV0000F001 /* Username */,
 				E8SI0000F001 /* Social */,
 				E8SF0000F001 /* SocialFeed */,
+				E8LS0000F001 /* LocationSearch */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -754,6 +763,14 @@
 			children = (
 			);
 			path = Auth;
+			sourceTree = "<group>";
+		};
+		E8LS0000F001 /* LocationSearch */ = {
+			isa = PBXGroup;
+			children = (
+				E8LS00000020 /* MKLocationSearchService.swift */,
+			);
+			path = LocationSearch;
 			sourceTree = "<group>";
 		};
 		E8CL0000F001 /* Collection */ = {
@@ -1123,6 +1140,9 @@
 				E8000001AA00003B /* MapAnnotations.swift in Sources */,
 				E8000001AA000071 /* RemoteCatMapSheet.swift in Sources */,
 				E8000001AA000022 /* LocationPickerView.swift in Sources */,
+				E8LM00000001 /* LocationMapPreview.swift in Sources */,
+				E8LS00000001 /* LocationFetcher.swift in Sources */,
+				E8LS00000002 /* MKLocationSearchService.swift in Sources */,
 				E8000001AA000024 /* PhotoCarouselView.swift in Sources */,
 				E8000001BB000002 /* DataSeeder.swift in Sources */,
 				E8000001AA000035 /* CatPickerView.swift in Sources */,

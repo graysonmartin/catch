@@ -14,7 +14,6 @@ struct AddCatView: View {
     @State private var isUnnamed = false
     @State private var name = ""
     @State private var breed: String?
-    @State private var estimatedAge = ""
     @State private var location = Location.empty
     @State private var notes = ""
     @State private var isOwned = false
@@ -30,6 +29,7 @@ struct AddCatView: View {
                 Section(CatchStrings.Common.photos) {
                     PhotoPickerView(
                         selectedPhotos: $photos,
+                        minimumPhotos: 1,
                         thumbnailSize: 120
                     )
                     if photos.isEmpty {
@@ -49,8 +49,12 @@ struct AddCatView: View {
                     }
                 }
 
-                Section(CatchStrings.Common.catInfo) {
+                Section {
                     Toggle(CatchStrings.Common.unnamedStray, isOn: $isUnnamed)
+                    Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
+                }
+
+                Section {
                     if !isUnnamed {
                         LimitedSingleLineFieldView(
                             CatchStrings.Common.name,
@@ -59,9 +63,10 @@ struct AddCatView: View {
                         )
                     }
                     BreedPickerView(breed: $breed)
-                    TextField(CatchStrings.Common.estimatedAge, text: $estimatedAge)
+                }
+
+                Section(CatchStrings.Common.location) {
                     LocationPickerView(location: $location)
-                    Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
                 }
 
                 Section(CatchStrings.Common.notes) {
@@ -71,7 +76,6 @@ struct AddCatView: View {
                         limit: TextInputLimits.catNotes
                     )
                 }
-
             }
             .navigationTitle(CatchStrings.Log.newCat)
             .navigationBarTitleDisplayMode(.inline)
@@ -119,7 +123,7 @@ struct AddCatView: View {
         let cat = Cat(
             name: trimmedName,
             breed: breed,
-            estimatedAge: estimatedAge,
+            estimatedAge: "",
             location: location,
             notes: notes,
             isOwned: isOwned,
