@@ -225,6 +225,12 @@
 		E8DB00000201 /* DatabaseStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DB00000002 /* DatabaseStateTests.swift */; };
 		E8PS00000101 /* ProfileSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PS00000001 /* ProfileSetupView.swift */; };
 		E8PS00000102 /* CatchStrings+ProfileSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PS00000002 /* CatchStrings+ProfileSetup.swift */; };
+		E8AK00000101 /* AppStorageKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AK00000001 /* AppStorageKeys.swift */; };
+		E8PY00000101 /* ProfileSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PY00000001 /* ProfileSyncService.swift */; };
+		E8PY00000201 /* ProfileSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PY00000001 /* ProfileSyncService.swift */; };
+		E8AP00000101 /* AvatarPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AP00000001 /* AvatarPickerView.swift */; };
+		E8UF00000101 /* UsernameFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UF00000001 /* UsernameFieldView.swift */; };
+		E8PY00000202 /* ProfileSyncServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PY00000002 /* ProfileSyncServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -398,6 +404,11 @@
 		E8FP00000002 /* ZoomablePhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomablePhotoView.swift; sourceTree = "<group>"; };
 		E8FP00000003 /* PhotoViewerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerState.swift; sourceTree = "<group>"; };
 		E8FP00000011 /* PhotoViewerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerStateTests.swift; sourceTree = "<group>"; };
+		E8AK00000001 /* AppStorageKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageKeys.swift; sourceTree = "<group>"; };
+		E8PY00000001 /* ProfileSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSyncService.swift; sourceTree = "<group>"; };
+		E8AP00000001 /* AvatarPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerView.swift; sourceTree = "<group>"; };
+		E8UF00000001 /* UsernameFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameFieldView.swift; sourceTree = "<group>"; };
+		E8PY00000002 /* ProfileSyncServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSyncServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -535,6 +546,8 @@
 				E8FP00000001 /* FullScreenPhotoViewer.swift */,
 				E8FP00000002 /* ZoomablePhotoView.swift */,
 				E8FP00000003 /* PhotoViewerState.swift */,
+				E8AP00000001 /* AvatarPickerView.swift */,
+				E8UF00000001 /* UsernameFieldView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -561,6 +574,7 @@
 				E8ST00000004 /* CatchStrings+Settings.swift */,
 				E8PS00000002 /* CatchStrings+ProfileSetup.swift */,
 				E8RV00000002 /* CatchStrings+Recovery.swift */,
+				E8AK00000001 /* AppStorageKeys.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -671,6 +685,14 @@
 			path = BreedLog;
 			sourceTree = "<group>";
 		};
+		E8PY0000F002 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				E8PY00000002 /* ProfileSyncServiceTests.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		E8C17FF134EEE52DB9FA0D4A /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -682,6 +704,7 @@
 				E8D100000020 /* CloudKit */,
 				E8F500000022 /* CloudSync */,
 				E8E500000022 /* Follow */,
+				E8PY0000F002 /* Profile */,
 				E8ST0000F002 /* Settings */,
 				E8E500000041 /* UserBrowse */,
 				E8UV0000F002 /* Username */,
@@ -709,6 +732,14 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
+		E8PY0000F001 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				E8PY00000001 /* ProfileSyncService.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		E8C7643E7D80FDFED273606F /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -719,6 +750,7 @@
 				E8C29A31E399698E3B36A45C /* CloudKit */,
 				E8F500000020 /* CloudSync */,
 				E8E500000020 /* Follow */,
+				E8PY0000F001 /* Profile */,
 				E8ST0000F001 /* Settings */,
 				E8E500000040 /* UserBrowse */,
 				E8UV0000F001 /* Username */,
@@ -1180,6 +1212,10 @@
 				E8RV00000102 /* CatchStrings+Recovery.swift in Sources */,
 				E8PS00000101 /* ProfileSetupView.swift in Sources */,
 				E8PS00000102 /* CatchStrings+ProfileSetup.swift in Sources */,
+				E8AK00000101 /* AppStorageKeys.swift in Sources */,
+				E8PY00000101 /* ProfileSyncService.swift in Sources */,
+				E8AP00000101 /* AvatarPickerView.swift in Sources */,
+				E8UF00000101 /* UsernameFieldView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1268,6 +1304,8 @@
 				E8ST00000205 /* CatchStrings+Settings.swift in Sources */,
 				E8DB00000102 /* DatabaseState.swift in Sources */,
 				E8DB00000201 /* DatabaseStateTests.swift in Sources */,
+				E8PY00000201 /* ProfileSyncService.swift in Sources */,
+				E8PY00000202 /* ProfileSyncServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

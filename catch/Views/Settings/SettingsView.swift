@@ -9,7 +9,7 @@ struct SettingsView: View {
 
     @Query private var profiles: [UserProfile]
 
-    @AppStorage("hasCompletedProfileSetup") private var hasCompletedProfileSetup = false
+    @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
 
     @State private var settingsService: SettingsService = UserDefaultsSettingsService()
     @State private var editedDisplayName: String = ""
