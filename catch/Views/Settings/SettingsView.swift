@@ -5,6 +5,7 @@ import CatchCore
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AppleAuthService.self) private var authService
+    @Environment(ProfileSyncService.self) private var profileSyncService
     @Environment(\.modelContext) private var modelContext
 
     @Query private var profiles: [UserProfile]
@@ -172,11 +173,17 @@ struct SettingsView: View {
     }
 
     private func deleteAccount() {
+        let recordName = profile?.cloudKitRecordName
         if let profile {
             modelContext.delete(profile)
         }
         authService.signOut()
         hasCompletedProfileSetup = false
         dismiss()
+        if let recordName {
+            Task {
+                try? await profileSyncService.deleteProfile(recordName: recordName)
+            }
+        }
     }
 }

@@ -14,5 +14,7 @@ extension CatchStrings {
         static let bioLabel = String(localized: "bio (optional)")
         static let bioPlaceholder = String(localized: "cat person, obviously")
         static let done = String(localized: "let me in")
+        static let restoringProfile = String(localized: "welcome back, checking your profile...")
+        static let appleAccountConnected = String(localized: "apple account connected")
     }
 }

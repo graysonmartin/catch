@@ -9,6 +9,7 @@ struct AvatarPickerView: View {
 
     @State private var pickerItem: PhotosPickerItem?
     @State private var isShowingPhotoOptions = false
+    @State private var isShowingPhotoPicker = false
 
     var body: some View {
         avatarPreview
@@ -16,8 +17,8 @@ struct AvatarPickerView: View {
             .contentShape(Circle())
             .onTapGesture { isShowingPhotoOptions = true }
             .confirmationDialog(CatchStrings.Profile.profilePhoto, isPresented: $isShowingPhotoOptions) {
-                PhotosPicker(selection: $pickerItem, matching: .images) {
-                    Text(CatchStrings.Profile.choosePhoto)
+                Button(CatchStrings.Profile.choosePhoto) {
+                    isShowingPhotoPicker = true
                 }
                 if avatarData != nil {
                     Button(CatchStrings.Profile.removePhoto, role: .destructive) {
@@ -26,6 +27,7 @@ struct AvatarPickerView: View {
                     }
                 }
             }
+            .photosPicker(isPresented: $isShowingPhotoPicker, selection: $pickerItem, matching: .images)
             .overlay(alignment: .bottomTrailing) {
                 if showCameraBadge {
                     cameraBadge
@@ -60,6 +62,7 @@ struct AvatarPickerView: View {
             .foregroundStyle(.white)
             .background(Circle().fill(CatchTheme.primary).frame(width: 28, height: 28))
             .offset(x: -size * 0.05, y: -size * 0.05)
+            .onTapGesture { isShowingPhotoOptions = true }
     }
 
     private func loadPhoto(from item: PhotosPickerItem?) {
