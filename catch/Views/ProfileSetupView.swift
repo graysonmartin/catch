@@ -55,7 +55,13 @@ struct ProfileSetupView: View {
                 .padding(.vertical, CatchSpacing.space48)
             }
         }
-        .onAppear { prefillFromAppleUser() }
+        .task {
+            prefillFromAppleUser()
+            if isSignedIn {
+                isRestoringProfile = true
+                await restoreExistingProfile()
+            }
+        }
     }
 
     // MARK: - Header
