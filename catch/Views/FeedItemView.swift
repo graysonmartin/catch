@@ -18,7 +18,12 @@ private enum FeedItemLayout {
 struct FeedItemView: View {
     let encounter: Encounter
 
+    @Environment(\.modelContext) private var modelContext
+    @Environment(CKEncounterSyncService.self) private var encounterSyncService: CKEncounterSyncService?
+
     @State private var showDetail = false
+    @State private var showEditEncounter = false
+    @State private var showDeleteConfirmation = false
 
     private var isFirstEncounter: Bool {
         guard let cat = encounter.cat else { return false }
@@ -49,6 +54,17 @@ struct FeedItemView: View {
         .onTapGesture { showDetail = true }
         .sheet(isPresented: $showDetail) {
             EncounterDetailSheet(data: detailData)
+        }
+        .sheet(isPresented: $showEditEncounter) {
+            EditEncounterView(encounter: encounter)
+        }
+        .alert(CatchStrings.Feed.deleteEncounterTitle, isPresented: $showDeleteConfirmation) {
+            Button(CatchStrings.Common.delete, role: .destructive) {
+                deleteEncounter()
+            }
+            Button(CatchStrings.Common.cancel, role: .cancel) {}
+        } message: {
+            Text(CatchStrings.Feed.deleteEncounterMessage)
         }
     }
 
@@ -83,6 +99,8 @@ struct FeedItemView: View {
                     .foregroundStyle(CatchTheme.primary)
                     .font(.caption)
             }
+
+            overflowMenu
         }
     }
 
@@ -149,6 +167,40 @@ struct FeedItemView: View {
                     .foregroundStyle(CatchTheme.primary))
                     .font(.caption.weight(.medium))
             }
+        }
+    }
+
+    // MARK: - Overflow Menu
+
+    private var overflowMenu: some View {
+        Menu {
+            Button {
+                showEditEncounter = true
+            } label: {
+                Label(CatchStrings.Feed.editEncounter, systemImage: "pencil")
+            }
+
+            Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label(CatchStrings.Feed.deleteEncounter, systemImage: "trash")
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.body)
+                .foregroundStyle(CatchTheme.textSecondary)
+                .frame(width: 32, height: 32)
+                .contentShape(Rectangle())
+        }
+    }
+
+    // MARK: - Actions
+
+    private func deleteEncounter() {
+        let recordName = encounter.cloudKitRecordName
+        modelContext.delete(encounter)
+        if let recordName {
+            Task { try? await encounterSyncService?.deleteEncounter(recordName: recordName) }
         }
     }
 

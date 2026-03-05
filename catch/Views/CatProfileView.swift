@@ -5,6 +5,7 @@ import CatchCore
 struct CatProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(CKEncounterSyncService.self) private var encounterSyncService: CKEncounterSyncService?
     @Bindable var cat: Cat
     @State private var showingEdit = false
     @State private var showingDeleteCat = false
@@ -178,7 +179,11 @@ struct CatProfileView: View {
         )) {
             Button(CatchStrings.Common.delete, role: .destructive) {
                 if let encounter = encounterToDelete {
+                    let recordName = encounter.cloudKitRecordName
                     modelContext.delete(encounter)
+                    if let recordName {
+                        Task { try? await encounterSyncService?.deleteEncounter(recordName: recordName) }
+                    }
                     encounterToDelete = nil
                 }
             }

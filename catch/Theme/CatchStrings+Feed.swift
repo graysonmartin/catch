@@ -27,5 +27,11 @@ extension CatchStrings {
         // Detail labels
         static let breedLabel = String(localized: "breed")
         static let tapForDetails = String(localized: "tap for details")
+
+        // Overflow menu
+        static let editEncounter = String(localized: "edit encounter")
+        static let deleteEncounter = String(localized: "delete encounter")
+        static let deleteEncounterTitle = String(localized: "delete this encounter?")
+        static let deleteEncounterMessage = String(localized: "poof. gone forever. no undo.")
     }
 }
