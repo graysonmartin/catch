@@ -173,6 +173,37 @@ public final class CKSocialInteractionService: SocialInteractionService {
         }
     }
 
+    /// Resolves display names for comment authors by fetching profile data.
+    private func resolveCommentAuthors(_ comments: [EncounterComment]) async -> [EncounterComment] {
+        let uniqueUserIDs = Set(comments.map(\.userID))
+        var profilesByID: [String: CloudUserProfile] = [:]
+
+        await withTaskGroup(of: (String, CloudUserProfile?).self) { group in
+            for userID in uniqueUserIDs {
+                group.addTask { [cloudKitService] in
+                    let profile = try? await cloudKitService?.fetchUserProfile(appleUserID: userID)
+                    return (userID, profile)
+                }
+            }
+            for await (userID, profile) in group {
+                profilesByID[userID] = profile
+            }
+        }
+
+        return comments.map { comment in
+            let profile = profilesByID[comment.userID]
+            return EncounterComment(
+                id: comment.id,
+                encounterRecordName: comment.encounterRecordName,
+                userID: comment.userID,
+                displayName: profile?.displayName ?? comment.displayName,
+                text: comment.text,
+                createdAt: comment.createdAt,
+                isPending: comment.isPending
+            )
+        }
+    }
+
     // MARK: - Comments
 
     public func addComment(encounterRecordName: String, text: String) async throws -> EncounterComment {
@@ -184,10 +215,13 @@ public final class CKSocialInteractionService: SocialInteractionService {
         guard !trimmed.isEmpty else { throw SocialInteractionError.commentEmpty }
         guard trimmed.count <= TextInputLimits.comment else { throw SocialInteractionError.commentTooLong }
 
+        let profile = try? await cloudKitService?.fetchUserProfile(appleUserID: userID)
+
         let comment = EncounterComment(
             id: "\(userID)_comment_\(UUID().uuidString)",
             encounterRecordName: encounterRecordName,
             userID: userID,
+            displayName: profile?.displayName,
             text: trimmed,
             createdAt: Date()
         )
@@ -249,10 +283,13 @@ public final class CKSocialInteractionService: SocialInteractionService {
             )
         }
 
-        let comments = results.compactMap { _, result -> EncounterComment? in
+        var comments = results.compactMap { _, result -> EncounterComment? in
             guard case .success(let record) = result else { return nil }
             return CommentRecordMapper.comment(from: record)
         }
+
+        // Resolve display names for comment authors
+        comments = await resolveCommentAuthors(comments)
 
         if let queryCursor {
             commentCursors[encounterRecordName] = queryCursor
@@ -354,11 +391,21 @@ public final class CKSocialInteractionService: SocialInteractionService {
 
         let (results, _) = try await database.records(matching: query, resultsLimit: 200)
 
-        var result = CommentLoadResult()
+        var allComments: [EncounterComment] = []
+        var countsByEncounter: [String: Int] = [:]
         for (_, recordResult) in results {
             guard case .success(let record) = recordResult,
                   let comment = CommentRecordMapper.comment(from: record) else { continue }
-            result.counts[comment.encounterRecordName, default: 0] += 1
+            countsByEncounter[comment.encounterRecordName, default: 0] += 1
+            allComments.append(comment)
+        }
+
+        // Resolve display names for all comment authors in one batch
+        let resolved = await resolveCommentAuthors(allComments)
+
+        var result = CommentLoadResult()
+        result.counts = countsByEncounter
+        for comment in resolved {
             result.commentsByEncounter[comment.encounterRecordName, default: []].append(comment)
         }
 
@@ -409,6 +456,7 @@ public final class CKSocialInteractionService: SocialInteractionService {
                 return EncounterComment(
                     id: "\(uid)_comment_\(recordName)_\(i)",
                     encounterRecordName: recordName, userID: uid,
+                    displayName: names[i % names.count],
                     text: commentTexts[i % commentTexts.count],
                     createdAt: Date().addingTimeInterval(Double(-i * 7200))
                 )

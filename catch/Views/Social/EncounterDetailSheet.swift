@@ -291,6 +291,7 @@ struct EncounterDetailSheet: View {
         let pendingComment = EncounterComment.pending(
             encounterRecordName: encounterRecordName,
             userID: currentUserID ?? "",
+            displayName: CatchStrings.Social.you,
             text: text
         )
 

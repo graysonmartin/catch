@@ -22,7 +22,7 @@ struct CommentRowView: View {
             avatar
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack {
-                    Text(comment.userID.prefix(8))
+                    Text(comment.authorName)
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(CatchTheme.textPrimary)
                     if comment.isPending {
@@ -67,7 +67,7 @@ struct CommentRowView: View {
             .fill(CatchTheme.secondary)
             .frame(width: Layout.avatarSize, height: Layout.avatarSize)
             .overlay {
-                Text(String(comment.userID.prefix(1)).uppercased())
+                Text(String(comment.authorName.prefix(1)).uppercased())
                     .font(.system(size: Layout.avatarFontSize, weight: .bold))
                     .foregroundStyle(CatchTheme.primary)
             }

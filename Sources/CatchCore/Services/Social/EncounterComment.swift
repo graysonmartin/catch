@@ -4,14 +4,21 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
     public let id: String
     public let encounterRecordName: String
     public let userID: String
+    public let displayName: String?
     public let text: String
     public let createdAt: Date
     public let isPending: Bool
+
+    /// The name shown in the UI, falling back to a truncated userID.
+    public var authorName: String {
+        displayName ?? String(userID.prefix(8))
+    }
 
     public init(
         id: String,
         encounterRecordName: String,
         userID: String,
+        displayName: String? = nil,
         text: String,
         createdAt: Date,
         isPending: Bool = false
@@ -19,6 +26,7 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
         self.id = id
         self.encounterRecordName = encounterRecordName
         self.userID = userID
+        self.displayName = displayName
         self.text = text
         self.createdAt = createdAt
         self.isPending = isPending
@@ -30,6 +38,7 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
             id: serverID,
             encounterRecordName: encounterRecordName,
             userID: userID,
+            displayName: displayName,
             text: text,
             createdAt: createdAt,
             isPending: false
@@ -40,12 +49,14 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
     public static func pending(
         encounterRecordName: String,
         userID: String,
+        displayName: String?,
         text: String
     ) -> EncounterComment {
         EncounterComment(
             id: "pending_\(UUID().uuidString)",
             encounterRecordName: encounterRecordName,
             userID: userID,
+            displayName: displayName,
             text: text,
             createdAt: Date(),
             isPending: true
