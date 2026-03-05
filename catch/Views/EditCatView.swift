@@ -55,7 +55,6 @@ struct EditCatView: View {
                 Section(CatchStrings.Common.photos) {
                     PhotoPickerView(
                         selectedPhotos: $photos,
-                        minimumPhotos: 1,
                         thumbnailSize: 120
                     )
                     if photos.isEmpty {
