@@ -56,6 +56,7 @@
 		E8A100000025 /* CatchSchemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000019 /* CatchSchemaTests.swift */; };
 		E8AK00000101 /* AppStorageKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AK00000001 /* AppStorageKeys.swift */; };
 		E8AP00000101 /* AvatarPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AP00000001 /* AvatarPickerView.swift */; };
+		E8CC00000101 /* CameraCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CC00000001 /* CameraCaptureView.swift */; };
 		E8B700000103 /* VisionBreedClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000003 /* VisionBreedClassifierService.swift */; };
 		E8B700000106 /* BreedPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B700000006 /* BreedPickerView.swift */; };
 		E8B70000010A /* catBreedDetection.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = E8B70000000A /* catBreedDetection.mlmodel */; };
@@ -273,6 +274,7 @@
 		E8A100000019 /* CatchSchemaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchemaTests.swift; sourceTree = "<group>"; };
 		E8AK00000001 /* AppStorageKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStorageKeys.swift; sourceTree = "<group>"; };
 		E8AP00000001 /* AvatarPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerView.swift; sourceTree = "<group>"; };
+		E8CC00000001 /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
 		E8B700000003 /* VisionBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionBreedClassifierService.swift; sourceTree = "<group>"; };
 		E8B700000006 /* BreedPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPickerView.swift; sourceTree = "<group>"; };
 		E8B700000009 /* MockBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedClassifierService.swift; sourceTree = "<group>"; };
@@ -540,6 +542,7 @@
 				E8FP00000002 /* ZoomablePhotoView.swift */,
 				E8FP00000003 /* PhotoViewerState.swift */,
 				E8AP00000001 /* AvatarPickerView.swift */,
+				E8CC00000001 /* CameraCaptureView.swift */,
 				E8UF00000001 /* UsernameFieldView.swift */,
 			);
 			path = Components;
@@ -1222,6 +1225,7 @@
 				E8AK00000101 /* AppStorageKeys.swift in Sources */,
 				E8PY00000101 /* ProfileSyncService.swift in Sources */,
 				E8AP00000101 /* AvatarPickerView.swift in Sources */,
+				E8CC00000101 /* CameraCaptureView.swift in Sources */,
 				E8UF00000101 /* UsernameFieldView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1450,6 +1454,7 @@
 				DEVELOPMENT_TEAM = SZC3MJ9V7Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Catch uses your camera to snap photos of cats you encounter.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Catch uses your location to record where you spotted a cat.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Catch needs access to your photo library to add photos of cats.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1482,6 +1487,7 @@
 				DEVELOPMENT_TEAM = SZC3MJ9V7Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Catch uses your camera to snap photos of cats you encounter.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Catch uses your location to record where you spotted a cat.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Catch needs access to your photo library to add photos of cats.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

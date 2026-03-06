@@ -9,6 +9,9 @@ struct PhotoPickerView: View {
     private let thumbnailSize: CGFloat
     @State private var pickerItems: [PhotosPickerItem] = []
     @State private var draggingIndex: Int?
+    @State private var isShowingCamera = false
+    @State private var isShowingPhotoSourceSheet = false
+    @State private var isShowingLibraryPicker = false
 
     init(selectedPhotos: Binding<[Data]>, minimumPhotos: Int = 0, thumbnailSize: CGFloat = 100) {
         _selectedPhotos = selectedPhotos
@@ -46,15 +49,33 @@ struct PhotoPickerView: View {
                     .padding(.horizontal)
             }
 
-            PhotosPicker(
-                selection: $pickerItems,
-                maxSelectionCount: CatchTheme.maxPhotoSelection,
-                matching: .images
-            ) {
+            Button {
+                isShowingPhotoSourceSheet = true
+            } label: {
                 Label(CatchStrings.Components.addPhotos, systemImage: "photo.on.rectangle.angled")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.primary)
             }
+            .confirmationDialog(
+                CatchStrings.Components.addPhotos,
+                isPresented: $isShowingPhotoSourceSheet,
+                titleVisibility: .hidden
+            ) {
+                if CameraCaptureView.isCameraAvailable {
+                    Button(CatchStrings.Components.takePhoto) {
+                        isShowingCamera = true
+                    }
+                }
+                Button(CatchStrings.Components.chooseFromLibrary) {
+                    isShowingLibraryPicker = true
+                }
+            }
+            .photosPicker(
+                isPresented: $isShowingLibraryPicker,
+                selection: $pickerItems,
+                maxSelectionCount: CatchTheme.maxPhotoSelection,
+                matching: .images
+            )
             .onChange(of: pickerItems) { _, newItems in
                 Task {
                     for item in newItems {
@@ -66,6 +87,18 @@ struct PhotoPickerView: View {
                     }
                     pickerItems.removeAll()
                 }
+            }
+            .fullScreenCover(isPresented: $isShowingCamera) {
+                CameraCaptureView(
+                    onCapture: { data in
+                        selectedPhotos.append(data)
+                        isShowingCamera = false
+                    },
+                    onCancel: {
+                        isShowingCamera = false
+                    }
+                )
+                .ignoresSafeArea()
             }
         }
     }

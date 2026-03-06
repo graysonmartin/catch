@@ -23,9 +23,11 @@ extension CatchStrings {
         static let currentLocation = String(localized: "Current Location")
         static let searchOrGPS = String(localized: "search or use current location")
 
-        // PhotoPickerView
+        // PhotoPickerView / CameraCaptureView
         static let dragToReorder = String(localized: "drag to reorder (first photo is your profile pic)")
         static let addPhotos = String(localized: "Add Photos")
+        static let takePhoto = String(localized: "Take Photo")
+        static let chooseFromLibrary = String(localized: "Choose from Library")
         static let profilePic = String(localized: "profile pic")
 
         // BreedPickerView
