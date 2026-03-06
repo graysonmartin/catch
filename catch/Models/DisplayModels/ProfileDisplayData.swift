@@ -30,7 +30,7 @@ struct ProfileDisplayData {
         self.displayName = data.profile.displayName
         self.username = data.profile.username
         self.bio = data.profile.bio
-        self.avatarData = nil
+        self.avatarData = data.profile.avatarData
         self.isPrivate = data.profile.isPrivate
         self.createdAt = Date()
         self.catCount = data.cats.count

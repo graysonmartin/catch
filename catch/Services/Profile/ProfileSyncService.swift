@@ -17,9 +17,19 @@ final class ProfileSyncService {
             displayName: profile.displayName,
             bio: profile.bio,
             username: profile.username,
-            isPrivate: profile.isPrivate
+            isPrivate: profile.isPrivate,
+            avatarData: profile.avatarData
         )
         profile.cloudKitRecordName = recordName
+    }
+
+    func restoreProfile(from cloudProfile: CloudUserProfile, to localProfile: UserProfile) {
+        localProfile.displayName = cloudProfile.displayName
+        localProfile.bio = cloudProfile.bio
+        localProfile.username = cloudProfile.username
+        localProfile.isPrivate = cloudProfile.isPrivate
+        localProfile.avatarData = cloudProfile.avatarData
+        localProfile.cloudKitRecordName = cloudProfile.recordName
     }
 
     func fetchProfile(appleUserID: String) async throws -> CloudUserProfile? {

@@ -7,7 +7,8 @@ public protocol CloudKitService: Sendable {
         displayName: String,
         bio: String,
         username: String?,
-        isPrivate: Bool
+        isPrivate: Bool,
+        avatarData: Data?
     ) async throws -> String
 
     func fetchUserProfile(
@@ -34,6 +35,7 @@ public struct CloudUserProfile: Sendable {
     public let bio: String
     public var username: String?
     public let isPrivate: Bool
+    public let avatarData: Data?
 
     public init(
         recordName: String,
@@ -41,7 +43,8 @@ public struct CloudUserProfile: Sendable {
         displayName: String,
         bio: String,
         username: String? = nil,
-        isPrivate: Bool
+        isPrivate: Bool,
+        avatarData: Data? = nil
     ) {
         self.recordName = recordName
         self.appleUserID = appleUserID
@@ -49,5 +52,6 @@ public struct CloudUserProfile: Sendable {
         self.bio = bio
         self.username = username
         self.isPrivate = isPrivate
+        self.avatarData = avatarData
     }
 }
