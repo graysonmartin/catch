@@ -10,6 +10,8 @@ struct PhotoPickerView: View {
     @State private var pickerItems: [PhotosPickerItem] = []
     @State private var draggingIndex: Int?
     @State private var isShowingCamera = false
+    @State private var isShowingPhotoSourceSheet = false
+    @State private var isShowingLibraryPicker = false
 
     init(selectedPhotos: Binding<[Data]>, minimumPhotos: Int = 0, thumbnailSize: CGFloat = 100) {
         _selectedPhotos = selectedPhotos
@@ -47,27 +49,33 @@ struct PhotoPickerView: View {
                     .padding(.horizontal)
             }
 
-            HStack(spacing: CatchSpacing.space16) {
-                PhotosPicker(
-                    selection: $pickerItems,
-                    maxSelectionCount: CatchTheme.maxPhotoSelection,
-                    matching: .images
-                ) {
-                    Label(CatchStrings.Components.addPhotos, systemImage: "photo.on.rectangle.angled")
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(CatchTheme.primary)
-                }
-
+            Button {
+                isShowingPhotoSourceSheet = true
+            } label: {
+                Label(CatchStrings.Components.addPhotos, systemImage: "photo.on.rectangle.angled")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(CatchTheme.primary)
+            }
+            .confirmationDialog(
+                CatchStrings.Components.addPhotos,
+                isPresented: $isShowingPhotoSourceSheet,
+                titleVisibility: .hidden
+            ) {
                 if CameraCaptureView.isCameraAvailable {
-                    Button {
+                    Button(CatchStrings.Components.takePhoto) {
                         isShowingCamera = true
-                    } label: {
-                        Label(CatchStrings.Components.takePhoto, systemImage: "camera.fill")
-                            .font(.subheadline.weight(.medium))
-                            .foregroundStyle(CatchTheme.primary)
                     }
                 }
+                Button(CatchStrings.Components.chooseFromLibrary) {
+                    isShowingLibraryPicker = true
+                }
             }
+            .photosPicker(
+                isPresented: $isShowingLibraryPicker,
+                selection: $pickerItems,
+                maxSelectionCount: CatchTheme.maxPhotoSelection,
+                matching: .images
+            )
             .onChange(of: pickerItems) { _, newItems in
                 Task {
                     for item in newItems {
