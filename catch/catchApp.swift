@@ -6,6 +6,7 @@ import CatchCore
 struct catchApp: App {
     @AppStorage(AppStorageKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = false
     @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
+    @AppStorage(AppStorageKeys.hasAttemptedRestore) private var hasAttemptedRestore = false
     @State private var authService: AppleAuthService
     @State private var followService: CKFollowService
     @State private var breedClassifier = VisionBreedClassifierService()
@@ -15,6 +16,7 @@ struct catchApp: App {
     @State private var socialInteractionService: CKSocialInteractionService
     @State private var socialFeedService: CKSocialFeedService
     @State private var profileSyncService: ProfileSyncService
+    @State private var restoreService: CKCloudKitRestoreService
     @State private var locationSearchService = MKLocationSearchService()
     @State private var toastManager = ToastManager()
     @State private var databaseState: DatabaseState
@@ -62,6 +64,11 @@ struct catchApp: App {
         _profileSyncService = State(initialValue: ProfileSyncService(
             cloudKitService: CKCloudKitService()
         ))
+        _restoreService = State(initialValue: CKCloudKitRestoreService(
+            catRepository: catRepo,
+            encounterRepository: encRepo,
+            cloudKitService: CKCloudKitService()
+        ))
     }
 
     var body: some Scene {
@@ -90,6 +97,14 @@ struct catchApp: App {
             }
             .environment(authService)
             .environment(profileSyncService)
+            .environment(toastManager)
+        } else if !hasAttemptedRestore {
+            DataRestoreView {
+                hasAttemptedRestore = true
+            }
+            .toastOverlay()
+            .environment(authService)
+            .environment(restoreService)
             .environment(toastManager)
         } else {
             ContentView()
