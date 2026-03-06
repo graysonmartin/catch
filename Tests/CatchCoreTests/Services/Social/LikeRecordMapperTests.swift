@@ -5,6 +5,8 @@ import CloudKit
 @MainActor
 final class LikeRecordMapperTests: XCTestCase {
 
+    // MARK: - Record Creation
+
     func test_recordFromLike_setsCorrectFields() {
         let like = EncounterLike(
             id: "user1_like_enc1",
@@ -21,6 +23,24 @@ final class LikeRecordMapperTests: XCTestCase {
         XCTAssertEqual(record["userID"] as? String, "user1")
     }
 
+    func test_recordFromLike_setsEncounterReference() {
+        let like = EncounterLike(
+            id: "user1_like_enc1",
+            encounterRecordName: "enc1",
+            userID: "user1",
+            createdAt: Date()
+        )
+
+        let record = LikeRecordMapper.record(from: like)
+
+        let ref = record[LikeRecordMapper.encounterReferenceKey] as? CKRecord.Reference
+        XCTAssertNotNil(ref)
+        XCTAssertEqual(ref?.recordID.recordName, "enc1")
+        XCTAssertEqual(ref?.action, .deleteSelf)
+    }
+
+    // MARK: - Parsing
+
     func test_likeFromRecord_parsesCorrectly() {
         let recordID = CKRecord.ID(recordName: "user1_like_enc1")
         let record = CKRecord(recordType: "EncounterLike", recordID: recordID)
@@ -33,6 +53,31 @@ final class LikeRecordMapperTests: XCTestCase {
         XCTAssertEqual(like?.id, "user1_like_enc1")
         XCTAssertEqual(like?.encounterRecordName, "enc1")
         XCTAssertEqual(like?.userID, "user1")
+    }
+
+    func test_likeFromRecord_prefersReferenceOverStringFK() {
+        let recordID = CKRecord.ID(recordName: "like-1")
+        let record = CKRecord(recordType: "EncounterLike", recordID: recordID)
+        record["encounterRecordName"] = "old-enc"
+        record["userID"] = "user1"
+
+        let refID = CKRecord.ID(recordName: "new-enc")
+        record[LikeRecordMapper.encounterReferenceKey] = CKRecord.Reference(recordID: refID, action: .deleteSelf)
+
+        let like = LikeRecordMapper.like(from: record)
+
+        XCTAssertEqual(like?.encounterRecordName, "new-enc")
+    }
+
+    func test_likeFromRecord_fallsBackToStringFK() {
+        let recordID = CKRecord.ID(recordName: "like-2")
+        let record = CKRecord(recordType: "EncounterLike", recordID: recordID)
+        record["encounterRecordName"] = "legacy-enc"
+        record["userID"] = "user1"
+
+        let like = LikeRecordMapper.like(from: record)
+
+        XCTAssertEqual(like?.encounterRecordName, "legacy-enc")
     }
 
     func test_likeFromRecord_returnsNilForMissingEncounterRecordName() {
@@ -69,4 +114,5 @@ final class LikeRecordMapperTests: XCTestCase {
         XCTAssertEqual(restored?.encounterRecordName, original.encounterRecordName)
         XCTAssertEqual(restored?.userID, original.userID)
     }
+
 }

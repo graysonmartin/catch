@@ -225,20 +225,8 @@ struct CatProfileView: View {
         isDeleting = true
         defer { isDeleting = false }
 
-        // Delete all encounter records from CloudKit first
-        for encounter in cat.encounters {
-            if let recordName = encounter.cloudKitRecordName {
-                do {
-                    try await encounterSyncService?.deleteEncounter(recordName: recordName)
-                    encounter.cloudKitRecordName = nil
-                } catch {
-                    toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
-                    return
-                }
-            }
-        }
-
-        // Delete cat record from CloudKit
+        // Delete cat record from CloudKit — encounter records are cascade-deleted
+        // via CKReference(.deleteSelf) on the encounter -> cat relationship.
         if let recordName = cat.cloudKitRecordName {
             do {
                 try await catSyncService?.deleteCat(recordName: recordName)
@@ -248,7 +236,7 @@ struct CatProfileView: View {
             }
         }
 
-        // Delete locally
+        // Delete locally (SwiftData cascade handles local encounters)
         modelContext.delete(cat)
         dismiss()
     }

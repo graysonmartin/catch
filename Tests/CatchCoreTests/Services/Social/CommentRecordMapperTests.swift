@@ -5,6 +5,8 @@ import CloudKit
 @MainActor
 final class CommentRecordMapperTests: XCTestCase {
 
+    // MARK: - Record Creation
+
     func test_recordFromComment_setsCorrectFields() {
         let comment = EncounterComment(
             id: "user1_comment_abc",
@@ -23,6 +25,25 @@ final class CommentRecordMapperTests: XCTestCase {
         XCTAssertEqual(record["text"] as? String, "nice cat")
     }
 
+    func test_recordFromComment_setsEncounterReference() {
+        let comment = EncounterComment(
+            id: "user1_comment_abc",
+            encounterRecordName: "enc1",
+            userID: "user1",
+            text: "nice cat",
+            createdAt: Date()
+        )
+
+        let record = CommentRecordMapper.record(from: comment)
+
+        let ref = record[CommentRecordMapper.encounterReferenceKey] as? CKRecord.Reference
+        XCTAssertNotNil(ref)
+        XCTAssertEqual(ref?.recordID.recordName, "enc1")
+        XCTAssertEqual(ref?.action, .deleteSelf)
+    }
+
+    // MARK: - Parsing
+
     func test_commentFromRecord_parsesCorrectly() {
         let recordID = CKRecord.ID(recordName: "user1_comment_abc")
         let record = CKRecord(recordType: "EncounterComment", recordID: recordID)
@@ -37,6 +58,33 @@ final class CommentRecordMapperTests: XCTestCase {
         XCTAssertEqual(comment?.encounterRecordName, "enc1")
         XCTAssertEqual(comment?.userID, "user1")
         XCTAssertEqual(comment?.text, "cool cat")
+    }
+
+    func test_commentFromRecord_prefersReferenceOverStringFK() {
+        let recordID = CKRecord.ID(recordName: "comment-1")
+        let record = CKRecord(recordType: "EncounterComment", recordID: recordID)
+        record["encounterRecordName"] = "old-enc"
+        record["userID"] = "user1"
+        record["text"] = "test"
+
+        let refID = CKRecord.ID(recordName: "new-enc")
+        record[CommentRecordMapper.encounterReferenceKey] = CKRecord.Reference(recordID: refID, action: .deleteSelf)
+
+        let comment = CommentRecordMapper.comment(from: record)
+
+        XCTAssertEqual(comment?.encounterRecordName, "new-enc")
+    }
+
+    func test_commentFromRecord_fallsBackToStringFK() {
+        let recordID = CKRecord.ID(recordName: "comment-2")
+        let record = CKRecord(recordType: "EncounterComment", recordID: recordID)
+        record["encounterRecordName"] = "legacy-enc"
+        record["userID"] = "user1"
+        record["text"] = "test"
+
+        let comment = CommentRecordMapper.comment(from: record)
+
+        XCTAssertEqual(comment?.encounterRecordName, "legacy-enc")
     }
 
     func test_commentFromRecord_returnsNilForMissingText() {
@@ -87,4 +135,5 @@ final class CommentRecordMapperTests: XCTestCase {
         XCTAssertEqual(restored?.userID, original.userID)
         XCTAssertEqual(restored?.text, original.text)
     }
+
 }
