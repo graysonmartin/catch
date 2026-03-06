@@ -5,8 +5,8 @@ extension CatchStrings {
 
     enum ProfileSetup {
         static let title = String(localized: "who are you")
-        static let subtitle = String(localized: "the cats need to know who's logging them.\npick a name and a handle, then you're in.")
-        static let signInPrompt = String(localized: "sign in first so the cats know\nthey can trust you.")
+        static let subtitle = String(localized: "pick a name and a handle.")
+        static let signInPrompt = String(localized: "sign in first to get started.")
         static let signInFailed = String(localized: "sign in didn't work. give it another shot.")
         static let displayNameLabel = String(localized: "display name")
         static let displayNamePlaceholder = String(localized: "what should cats call you")

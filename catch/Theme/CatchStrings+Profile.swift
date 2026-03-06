@@ -9,8 +9,8 @@ extension CatchStrings {
 
         // Profile view
         static let profileTitle = String(localized: "profile")
-        static let mysteriousStranger = String(localized: "mysterious stranger")
-        static let tooCoolForBio = String(localized: "too cool for a bio")
+        static let mysteriousStranger = String(localized: "kind stranger")
+        static let tooCoolForBio = String(localized: "default sample lorem ipsum type bio")
         static let cats = String(localized: "cats")
         static let encounters = String(localized: "encounters")
         static let followers = String(localized: "followers")
@@ -19,7 +19,7 @@ extension CatchStrings {
         static let signInPrompt = String(localized: "sign in to back up your profile")
         static let fakeSignIn = String(localized: "fake sign in (debug)")
         static let emptyTitle = String(localized: "who even are you")
-        static let emptySubtitle = String(localized: "set up your profile so the cats know who they're dealing with")
+        static let emptySubtitle = String(localized: "set up your profile so people know who you are")
         static let setUpProfile = String(localized: "set up profile")
         static let breedLog = String(localized: "breed log")
 
@@ -47,7 +47,7 @@ extension CatchStrings {
         static let usernameCheckFailed = String(localized: "couldn't check, try again")
         static let bio = String(localized: "bio")
         static let privateProfile = String(localized: "private profile")
-        static let privateFooter = String(localized: "when private, people have to send a request before they can see your cats. you're basically famous.")
+        static let privateFooter = String(localized: "when private, people have to send a follow request to see your cats.")
         static let showCats = String(localized: "show cats")
         static let showEncounters = String(localized: "show encounters")
         static let visibility = String(localized: "visibility")

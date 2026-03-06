@@ -10,7 +10,7 @@ extension CatchStrings {
         static let seenAgain = String(localized: "Seen Again")
 
         // AddCatView
-        static let photoRequired = String(localized: "at least 1 photo required -- no pics no proof")
+        static let photoRequired = String(localized: "at least 1 photo required")
 
         // LogEncounterView
         static let loggingFor = String(localized: "logging for")

@@ -32,6 +32,6 @@ extension CatchStrings {
         static let editEncounter = String(localized: "edit encounter")
         static let deleteEncounter = String(localized: "delete encounter")
         static let deleteEncounterTitle = String(localized: "delete this encounter?")
-        static let deleteEncounterMessage = String(localized: "poof. gone forever. no undo.")
+        static let deleteEncounterMessage = String(localized: "gone forever. no undo.")
     }
 }

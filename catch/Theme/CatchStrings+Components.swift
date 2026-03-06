@@ -24,7 +24,7 @@ extension CatchStrings {
         static let searchOrGPS = String(localized: "search or use current location")
 
         // PhotoPickerView
-        static let dragToReorder = String(localized: "drag to reorder -- first photo is your profile pic")
+        static let dragToReorder = String(localized: "drag to reorder (first photo is your profile pic)")
         static let addPhotos = String(localized: "Add Photos")
         static let profilePic = String(localized: "profile pic")
 
@@ -35,7 +35,7 @@ extension CatchStrings {
         static let unknown = String(localized: "unknown")
 
         // BreedPredictionCard
-        static let analyzingCreature = String(localized: "analyzing this creature...")
+        static let analyzingCreature = String(localized: "analyzing...")
         static let weThinkThisIs = String(localized: "we think this is...")
         static let noneOfThese = String(localized: "none of these, sorry")
 

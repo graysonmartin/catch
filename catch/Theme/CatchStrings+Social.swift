@@ -8,9 +8,9 @@ extension CatchStrings {
         static let requests = String(localized: "requests")
         static let findPeople = String(localized: "find people")
         static let noFollowersTitle = String(localized: "no followers yet")
-        static let noFollowersSubtitle = String(localized: "your adoring public hasn't arrived")
+        static let noFollowersSubtitle = String(localized: "share your profile to get some")
         static let notFollowingTitle = String(localized: "not following anyone")
-        static let notFollowingSubtitle = String(localized: "find some people to follow and start building your circle")
+        static let notFollowingSubtitle = String(localized: "search for people to see their cats in your feed")
         static let remoteNoFollowers = String(localized: "no followers to show")
         static let remoteNotFollowing = String(localized: "not following anyone yet")
 
