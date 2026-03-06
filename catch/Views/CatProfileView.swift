@@ -226,7 +226,7 @@ struct CatProfileView: View {
         defer { isDeleting = false }
 
         // Delete cat record from CloudKit — encounter records are cascade-deleted
-        // automatically via CKReference(.deleteSelf) on the encounter -> cat relationship.
+        // via CKReference(.deleteSelf) on the encounter -> cat relationship.
         if let recordName = cat.cloudKitRecordName {
             do {
                 try await catSyncService?.deleteCat(recordName: recordName)

@@ -39,31 +39,9 @@ public enum CommentRecordMapper {
         )
     }
 
-    /// Returns `true` if the record already has an `encounterRef` CKReference field populated.
-    public static func hasReference(_ record: CKRecord) -> Bool {
-        record[encounterReferenceKey] as? CKRecord.Reference != nil
-    }
-
-    /// Backfills the CKReference from the existing string FK field.
-    /// Returns the mutated record ready to be saved, or `nil` if already backfilled or missing the string FK.
-    public static func backfillReference(on record: CKRecord) -> CKRecord? {
-        guard !hasReference(record),
-              let encounterRecordName = record["encounterRecordName"] as? String,
-              !encounterRecordName.isEmpty else {
-            return nil
-        }
-
-        let encounterRecordID = CKRecord.ID(recordName: encounterRecordName)
-        record[encounterReferenceKey] = CKRecord.Reference(recordID: encounterRecordID, action: .deleteSelf)
-        return record
-    }
-
     // MARK: - Private
 
     private static func resolveEncounterRecordName(from record: CKRecord) -> String? {
-        if let ref = record[encounterReferenceKey] as? CKRecord.Reference {
-            return ref.recordID.recordName
-        }
-        return record["encounterRecordName"] as? String
+        CKReferenceFieldHelper.resolve(from: record, referenceKey: encounterReferenceKey, stringFKKey: "encounterRecordName")
     }
 }

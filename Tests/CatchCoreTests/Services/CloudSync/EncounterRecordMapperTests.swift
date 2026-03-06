@@ -134,59 +134,6 @@ final class EncounterRecordMapperTests: XCTestCase {
         XCTAssertEqual(encounter?.locationName, "Park")
     }
 
-    // MARK: - hasReference
-
-    func test_hasReference_returnsTrueWhenReferenceExists() {
-        let record = CKRecord(recordType: "Encounter")
-        let refID = CKRecord.ID(recordName: "cat-1")
-        record[EncounterRecordMapper.catReferenceKey] = CKRecord.Reference(recordID: refID, action: .deleteSelf)
-
-        XCTAssertTrue(EncounterRecordMapper.hasReference(record))
-    }
-
-    func test_hasReference_returnsFalseWhenNoReference() {
-        let record = CKRecord(recordType: "Encounter")
-        record["catRecordName"] = "cat-1"
-
-        XCTAssertFalse(EncounterRecordMapper.hasReference(record))
-    }
-
-    // MARK: - Backfill
-
-    func test_backfillReference_addsReferenceFromStringFK() {
-        let record = CKRecord(recordType: "Encounter")
-        record["catRecordName"] = "cat-backfill"
-
-        let updated = EncounterRecordMapper.backfillReference(on: record)
-
-        XCTAssertNotNil(updated)
-        let ref = updated?[EncounterRecordMapper.catReferenceKey] as? CKRecord.Reference
-        XCTAssertEqual(ref?.recordID.recordName, "cat-backfill")
-        XCTAssertEqual(ref?.action, .deleteSelf)
-    }
-
-    func test_backfillReference_returnsNilWhenAlreadyBackfilled() {
-        let record = CKRecord(recordType: "Encounter")
-        record["catRecordName"] = "cat-1"
-        let refID = CKRecord.ID(recordName: "cat-1")
-        record[EncounterRecordMapper.catReferenceKey] = CKRecord.Reference(recordID: refID, action: .deleteSelf)
-
-        XCTAssertNil(EncounterRecordMapper.backfillReference(on: record))
-    }
-
-    func test_backfillReference_returnsNilWhenNoStringFK() {
-        let record = CKRecord(recordType: "Encounter")
-
-        XCTAssertNil(EncounterRecordMapper.backfillReference(on: record))
-    }
-
-    func test_backfillReference_returnsNilForEmptyStringFK() {
-        let record = CKRecord(recordType: "Encounter")
-        record["catRecordName"] = ""
-
-        XCTAssertNil(EncounterRecordMapper.backfillReference(on: record))
-    }
-
     // MARK: - Helpers
 
     private func makePayload(catRecordName: String) -> EncounterSyncPayload {
