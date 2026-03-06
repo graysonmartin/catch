@@ -36,6 +36,7 @@ public struct CloudUserProfile: Sendable {
     public var username: String?
     public let isPrivate: Bool
     public let avatarData: Data?
+    public let avatarURL: String?
 
     public init(
         recordName: String,
@@ -44,7 +45,8 @@ public struct CloudUserProfile: Sendable {
         bio: String,
         username: String? = nil,
         isPrivate: Bool,
-        avatarData: Data? = nil
+        avatarData: Data? = nil,
+        avatarURL: String? = nil
     ) {
         self.recordName = recordName
         self.appleUserID = appleUserID
@@ -53,5 +55,6 @@ public struct CloudUserProfile: Sendable {
         self.username = username
         self.isPrivate = isPrivate
         self.avatarData = avatarData
+        self.avatarURL = avatarURL
     }
 }
