@@ -225,6 +225,11 @@
 		E8TM00000203 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
 		E8TM00000204 /* ToastManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000004 /* ToastManagerTests.swift */; };
 		E8UF00000101 /* UsernameFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UF00000001 /* UsernameFieldView.swift */; };
+		E8RS00000101 /* CKCloudKitRestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000001 /* CKCloudKitRestoreService.swift */; };
+		E8RS00000102 /* DataRestoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000002 /* DataRestoreView.swift */; };
+		E8RS00000103 /* CatchStrings+Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000003 /* CatchStrings+Restore.swift */; };
+		E8RS00000201 /* CKCloudKitRestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000001 /* CKCloudKitRestoreService.swift */; };
+		E8RS00000203 /* CatchStrings+Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000003 /* CatchStrings+Restore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -402,6 +407,9 @@
 		E8TM00000003 /* CatchStrings+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Toast.swift"; sourceTree = "<group>"; };
 		E8TM00000004 /* ToastManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManagerTests.swift; sourceTree = "<group>"; };
 		E8UF00000001 /* UsernameFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameFieldView.swift; sourceTree = "<group>"; };
+		E8RS00000001 /* CKCloudKitRestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKCloudKitRestoreService.swift; sourceTree = "<group>"; };
+		E8RS00000002 /* DataRestoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRestoreView.swift; sourceTree = "<group>"; };
+		E8RS00000003 /* CatchStrings+Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Restore.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -499,6 +507,7 @@
 				E8000001AA000072 /* RemoteCatMapSheet.swift */,
 				E8000001AA00002A /* OnboardingView.swift */,
 				E8PS00000001 /* ProfileSetupView.swift */,
+				E8RS00000002 /* DataRestoreView.swift */,
 				E8RV00000001 /* DatabaseRecoveryView.swift */,
 				E8000001AA000062 /* EditProfileView.swift */,
 				E8PF0000F001 /* Profile */,
@@ -569,6 +578,7 @@
 				E8TI00000003 /* CatchStrings+TextInput.swift */,
 				E8ST00000004 /* CatchStrings+Settings.swift */,
 				E8PS00000002 /* CatchStrings+ProfileSetup.swift */,
+				E8RS00000003 /* CatchStrings+Restore.swift */,
 				E8RV00000002 /* CatchStrings+Recovery.swift */,
 				E8AK00000001 /* AppStorageKeys.swift */,
 			);
@@ -867,6 +877,7 @@
 				E8F500000103 /* CloudKitAssetManager.swift */,
 				E8F500000302 /* CKCatSyncService.swift */,
 				E8F500000304 /* CKEncounterSyncService.swift */,
+				E8RS00000001 /* CKCloudKitRestoreService.swift */,
 			);
 			path = CloudSync;
 			sourceTree = "<group>";
@@ -1227,6 +1238,9 @@
 				E8AP00000101 /* AvatarPickerView.swift in Sources */,
 				E8CC00000101 /* CameraCaptureView.swift in Sources */,
 				E8UF00000101 /* UsernameFieldView.swift in Sources */,
+				E8RS00000101 /* CKCloudKitRestoreService.swift in Sources */,
+				E8RS00000102 /* DataRestoreView.swift in Sources */,
+				E8RS00000103 /* CatchStrings+Restore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1317,6 +1331,8 @@
 				E8DB00000201 /* DatabaseStateTests.swift in Sources */,
 				E8PY00000201 /* ProfileSyncService.swift in Sources */,
 				E8PY00000202 /* ProfileSyncServiceTests.swift in Sources */,
+				E8RS00000201 /* CKCloudKitRestoreService.swift in Sources */,
+				E8RS00000203 /* CatchStrings+Restore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

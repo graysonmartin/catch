@@ -239,11 +239,13 @@ extension ProfileSetupView {
             existingProfile.username = cloudProfile.username
             existingProfile.cloudKitRecordName = cloudProfile.recordName
             existingProfile.isPrivate = cloudProfile.isPrivate
+            existingProfile.avatarData = cloudProfile.avatarData
         } else {
             let profile = UserProfile(
                 displayName: cloudProfile.displayName,
                 bio: cloudProfile.bio,
                 username: cloudProfile.username,
+                avatarData: cloudProfile.avatarData,
                 appleUserID: cloudProfile.appleUserID,
                 cloudKitRecordName: cloudProfile.recordName,
                 isPrivate: cloudProfile.isPrivate
