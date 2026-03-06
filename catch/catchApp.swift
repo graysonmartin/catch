@@ -17,6 +17,7 @@ struct catchApp: App {
     @State private var socialFeedService: CKSocialFeedService
     @State private var profileSyncService: ProfileSyncService
     @State private var restoreService: CKCloudKitRestoreService
+    @State private var supabaseProvider = SupabaseClientProvider()
     @State private var locationSearchService = MKLocationSearchService()
     @State private var toastManager = ToastManager()
     @State private var databaseState: DatabaseState
@@ -118,6 +119,7 @@ struct catchApp: App {
                 .environment(socialInteractionService)
                 .environment(socialFeedService)
                 .environment(profileSyncService)
+                .environment(supabaseProvider)
                 .environment(locationSearchService)
                 .environment(toastManager)
                 .task {
