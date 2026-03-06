@@ -9,6 +9,7 @@ struct PhotoPickerView: View {
     private let thumbnailSize: CGFloat
     @State private var pickerItems: [PhotosPickerItem] = []
     @State private var draggingIndex: Int?
+    @State private var isShowingCamera = false
 
     init(selectedPhotos: Binding<[Data]>, minimumPhotos: Int = 0, thumbnailSize: CGFloat = 100) {
         _selectedPhotos = selectedPhotos
@@ -46,14 +47,26 @@ struct PhotoPickerView: View {
                     .padding(.horizontal)
             }
 
-            PhotosPicker(
-                selection: $pickerItems,
-                maxSelectionCount: CatchTheme.maxPhotoSelection,
-                matching: .images
-            ) {
-                Label(CatchStrings.Components.addPhotos, systemImage: "photo.on.rectangle.angled")
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(CatchTheme.primary)
+            HStack(spacing: CatchSpacing.space16) {
+                PhotosPicker(
+                    selection: $pickerItems,
+                    maxSelectionCount: CatchTheme.maxPhotoSelection,
+                    matching: .images
+                ) {
+                    Label(CatchStrings.Components.addPhotos, systemImage: "photo.on.rectangle.angled")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(CatchTheme.primary)
+                }
+
+                if CameraCaptureView.isCameraAvailable {
+                    Button {
+                        isShowingCamera = true
+                    } label: {
+                        Label(CatchStrings.Components.takePhoto, systemImage: "camera.fill")
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                }
             }
             .onChange(of: pickerItems) { _, newItems in
                 Task {
@@ -66,6 +79,18 @@ struct PhotoPickerView: View {
                     }
                     pickerItems.removeAll()
                 }
+            }
+            .fullScreenCover(isPresented: $isShowingCamera) {
+                CameraCaptureView(
+                    onCapture: { data in
+                        selectedPhotos.append(data)
+                        isShowingCamera = false
+                    },
+                    onCancel: {
+                        isShowingCamera = false
+                    }
+                )
+                .ignoresSafeArea()
             }
         }
     }
