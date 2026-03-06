@@ -10,12 +10,14 @@ final class MockUserBrowseService: UserBrowseService {
 
     private(set) var fetchUserDataCalls: [String] = []
     private(set) var fetchDisplayNameCalls: [String] = []
+    private(set) var batchFetchDisplayNamesCalls: [[String]] = []
     private(set) var clearCacheCalls = 0
 
     var fetchUserDataResult: Result<UserBrowseData, UserBrowseError> = .failure(.userNotFound)
     var fetchUserDataResults: [String: Result<UserBrowseData, UserBrowseError>] = [:]
     var cachedDataResult: UserBrowseData?
     var displayNameResult: String?
+    var displayNameResults: [String: String] = [:]
     var profileResult: CloudUserProfile?
     private(set) var fetchProfileCalls: [String] = []
 
@@ -33,7 +35,22 @@ final class MockUserBrowseService: UserBrowseService {
 
     func fetchDisplayName(userID: String) async -> String? {
         fetchDisplayNameCalls.append(userID)
-        return displayNameResult
+        return displayNameResults[userID] ?? displayNameResult
+    }
+
+    func cachedDisplayName(for userID: String) -> String? {
+        displayNameResults[userID]
+    }
+
+    func batchFetchDisplayNames(userIDs: [String]) async -> [String: String] {
+        batchFetchDisplayNamesCalls.append(userIDs)
+        var result: [String: String] = [:]
+        for userID in userIDs {
+            if let name = displayNameResults[userID] ?? displayNameResult {
+                result[userID] = name
+            }
+        }
+        return result
     }
 
     func fetchProfile(userID: String) async -> CloudUserProfile? {
@@ -50,11 +67,13 @@ final class MockUserBrowseService: UserBrowseService {
         error = nil
         fetchUserDataCalls = []
         fetchDisplayNameCalls = []
+        batchFetchDisplayNamesCalls = []
         clearCacheCalls = 0
         fetchUserDataResult = .failure(.userNotFound)
         fetchUserDataResults = [:]
         cachedDataResult = nil
         displayNameResult = nil
+        displayNameResults = [:]
         profileResult = nil
         fetchProfileCalls = []
     }

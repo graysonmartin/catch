@@ -17,10 +17,12 @@ enum SocialTab: String, CaseIterable, Identifiable {
 
 struct SocialView: View {
     @Environment(CKFollowService.self) private var followService
+    @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
     @Environment(AppleAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
     @State private var isLoadingMoreFollowers = false
     @State private var isLoadingMoreFollowing = false
+    @State private var isResolvingNames = false
     @State var selectedTab: SocialTab
 
     var body: some View {
@@ -212,9 +214,26 @@ struct SocialView: View {
         guard let userID = authService.authState.user?.userIdentifier else { return }
         do {
             try await followService.refresh(for: userID)
+            await batchResolveDisplayNames()
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }
+    }
+
+    private func batchResolveDisplayNames() async {
+        guard let browseService else { return }
+        isResolvingNames = true
+        defer { isResolvingNames = false }
+
+        var allUserIDs: [String] = []
+        allUserIDs.append(contentsOf: followService.followers.map(\.followerID))
+        allUserIDs.append(contentsOf: followService.following.map(\.followeeID))
+        allUserIDs.append(contentsOf: followService.pendingRequests.map(\.followerID))
+
+        let uniqueIDs = Array(Set(allUserIDs))
+        guard !uniqueIDs.isEmpty else { return }
+
+        _ = await browseService.batchFetchDisplayNames(userIDs: uniqueIDs)
     }
 
     private func loadMoreFollowers() async {

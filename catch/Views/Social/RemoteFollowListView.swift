@@ -32,7 +32,8 @@ struct RemoteFollowListView: View {
                         RemoteFollowRow(
                             targetUserID: targetID,
                             profile: resolvedProfiles[targetID],
-                            since: follow.createdAt
+                            since: follow.createdAt,
+                            isResolved: resolvedProfiles[targetID] != nil
                         )
                     }
                 }
@@ -78,18 +79,34 @@ struct RemoteFollowListView: View {
                 ? try await followService.fetchFollowers(for: userID)
                 : try await followService.fetchFollowing(for: userID)
 
-            await resolveProfiles()
+            await batchResolveProfiles()
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }
     }
 
-    private func resolveProfiles() async {
+    private func batchResolveProfiles() async {
         guard let browseService else { return }
-        for follow in follows {
-            let targetID = tab == .followers ? follow.followerID : follow.followeeID
-            if let profile = await browseService.fetchProfile(userID: targetID) {
-                resolvedProfiles[targetID] = profile
+
+        let targetIDs = follows.map { follow in
+            tab == .followers ? follow.followerID : follow.followeeID
+        }
+        guard !targetIDs.isEmpty else { return }
+
+        _ = await browseService.batchFetchDisplayNames(userIDs: targetIDs)
+
+        await withTaskGroup(of: (String, CloudUserProfile?).self) { group in
+            for targetID in targetIDs {
+                group.addTask {
+                    let profile = await browseService.fetchProfile(userID: targetID)
+                    return (targetID, profile)
+                }
+            }
+
+            for await (targetID, profile) in group {
+                if let profile {
+                    resolvedProfiles[targetID] = profile
+                }
             }
         }
     }
@@ -106,6 +123,7 @@ private struct RemoteFollowRow: View {
     let targetUserID: String
     let profile: CloudUserProfile?
     let since: Date
+    let isResolved: Bool
 
     var body: some View {
         HStack(spacing: CatchSpacing.space12) {
@@ -114,10 +132,11 @@ private struct RemoteFollowRow: View {
                 .foregroundStyle(CatchTheme.secondary)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                Text(profile?.displayName ?? targetUserID)
+                Text(profile?.displayName ?? CatchStrings.Social.loadingName)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.textPrimary)
                     .lineLimit(1)
+                    .redacted(reason: isResolved ? [] : .placeholder)
 
                 if let username = profile?.username, !username.isEmpty {
                     Text(UsernameValidator.formatDisplay(username))
