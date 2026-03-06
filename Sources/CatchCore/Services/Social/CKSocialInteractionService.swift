@@ -25,6 +25,9 @@ public final class CKSocialInteractionService: SocialInteractionService {
 
     private let cloudKitService: (any CloudKitService)?
 
+    /// Cached profile for the current user to avoid refetching on every comment submission.
+    private var currentUserProfile: CloudUserProfile?
+
     private var database: CKDatabase {
         CKContainer(identifier: Self.containerID).publicCloudDatabase
     }
@@ -148,29 +151,33 @@ public final class CKSocialInteractionService: SocialInteractionService {
     }
 
     /// Resolves EncounterLike records into LikedByUser models by fetching profile data.
-    private func resolveLikeUsers(_ likes: [EncounterLike]) async -> [LikedByUser] {
-        await withTaskGroup(of: LikedByUser?.self) { group in
-            for like in likes {
-                group.addTask { [cloudKitService] in
-                    let profile = try? await cloudKitService?.fetchUserProfile(appleUserID: like.userID)
-                    return LikedByUser(
-                        id: like.id,
-                        userID: like.userID,
-                        displayName: profile?.displayName ?? like.userID.prefix(8).description,
-                        username: profile?.username,
-                        likedAt: like.createdAt
-                    )
-                }
-            }
+    /// Deduplicates user IDs before fetching so each profile is fetched at most once.
+    func resolveLikeUsers(_ likes: [EncounterLike]) async -> [LikedByUser] {
+        let uniqueUserIDs = Set(likes.map(\.userID))
+        var profilesByID: [String: CloudUserProfile] = [:]
 
-            var users: [LikedByUser] = []
-            for await user in group {
-                if let user {
-                    users.append(user)
+        await withTaskGroup(of: (String, CloudUserProfile?).self) { group in
+            for userID in uniqueUserIDs {
+                group.addTask { [cloudKitService] in
+                    let profile = try? await cloudKitService?.fetchUserProfile(appleUserID: userID)
+                    return (userID, profile)
                 }
             }
-            return users.sorted { $0.likedAt > $1.likedAt }
+            for await (userID, profile) in group {
+                profilesByID[userID] = profile
+            }
         }
+
+        return likes.map { like in
+            let profile = profilesByID[like.userID]
+            return LikedByUser(
+                id: like.id,
+                userID: like.userID,
+                displayName: profile?.displayName ?? like.userID.prefix(8).description,
+                username: profile?.username,
+                likedAt: like.createdAt
+            )
+        }.sorted { $0.likedAt > $1.likedAt }
     }
 
     /// Resolves display names for comment authors by fetching profile data.
@@ -215,7 +222,7 @@ public final class CKSocialInteractionService: SocialInteractionService {
         guard !trimmed.isEmpty else { throw SocialInteractionError.commentEmpty }
         guard trimmed.count <= TextInputLimits.comment else { throw SocialInteractionError.commentTooLong }
 
-        let profile = try? await cloudKitService?.fetchUserProfile(appleUserID: userID)
+        let profile = await resolveCurrentUserProfile(userID: userID)
 
         let comment = EncounterComment(
             id: "\(userID)_comment_\(UUID().uuidString)",
@@ -415,6 +422,22 @@ public final class CKSocialInteractionService: SocialInteractionService {
         }
 
         return result
+    }
+
+    // MARK: - Current User Profile Cache
+
+    /// Returns the cached current user profile, or fetches and caches it on first call.
+    /// Avoids a network round-trip on every comment submission.
+    func resolveCurrentUserProfile(userID: String) async -> CloudUserProfile? {
+        if let cached = currentUserProfile, cached.appleUserID == userID {
+            return cached
+        }
+
+        let profile = try? await cloudKitService?.fetchUserProfile(appleUserID: userID)
+        if let profile {
+            currentUserProfile = profile
+        }
+        return profile
     }
 
     // MARK: - Debug Seeding
