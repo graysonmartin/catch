@@ -284,6 +284,177 @@ final class CKSocialInteractionServiceTests: XCTestCase {
         XCTAssertTrue(service.likeCounts.isEmpty)
     }
 
+    // MARK: - resolveLikeUsers Deduplication
+
+    func test_resolveLikeUsers_deduplicatesUserIDsBeforeFetching() async {
+        let mockCloudKit = MockCloudKitService()
+        let service = CKSocialInteractionService(
+            getCurrentUserID: { "user1" },
+            cloudKitService: mockCloudKit
+        )
+
+        mockCloudKit.fetchResultsByUserID = [
+            "user-a": CloudUserProfile(
+                recordName: "rec-a", appleUserID: "user-a",
+                displayName: "alice", bio: "", isPrivate: false
+            ),
+            "user-b": CloudUserProfile(
+                recordName: "rec-b", appleUserID: "user-b",
+                displayName: "bob", bio: "", isPrivate: false
+            )
+        ]
+
+        let now = Date()
+        let likes = [
+            EncounterLike(id: "like-1", encounterRecordName: "enc1", userID: "user-a", createdAt: now),
+            EncounterLike(id: "like-2", encounterRecordName: "enc1", userID: "user-a", createdAt: now.addingTimeInterval(-60)),
+            EncounterLike(id: "like-3", encounterRecordName: "enc1", userID: "user-b", createdAt: now.addingTimeInterval(-120)),
+            EncounterLike(id: "like-4", encounterRecordName: "enc1", userID: "user-a", createdAt: now.addingTimeInterval(-180)),
+        ]
+
+        let users = await service.resolveLikeUsers(likes)
+
+        // Should fetch only 2 unique profiles, not 4
+        XCTAssertEqual(mockCloudKit.fetchedAppleUserIDs.sorted(), ["user-a", "user-b"])
+
+        // Should return 4 LikedByUser entries (one per like)
+        XCTAssertEqual(users.count, 4)
+
+        // All user-a entries should have the resolved display name
+        let aliceUsers = users.filter { $0.userID == "user-a" }
+        XCTAssertEqual(aliceUsers.count, 3)
+        for user in aliceUsers {
+            XCTAssertEqual(user.displayName, "alice")
+        }
+
+        // user-b entry should have the resolved display name
+        let bobUsers = users.filter { $0.userID == "user-b" }
+        XCTAssertEqual(bobUsers.count, 1)
+        XCTAssertEqual(bobUsers.first?.displayName, "bob")
+    }
+
+    func test_resolveLikeUsers_fallsBackToTruncatedIDWhenProfileNotFound() async {
+        let mockCloudKit = MockCloudKitService()
+        let service = CKSocialInteractionService(
+            getCurrentUserID: { "user1" },
+            cloudKitService: mockCloudKit
+        )
+        // No profiles configured — fetchResult is nil by default
+
+        let likes = [
+            EncounterLike(id: "like-1", encounterRecordName: "enc1", userID: "long-user-id-12345", createdAt: Date()),
+        ]
+
+        let users = await service.resolveLikeUsers(likes)
+
+        XCTAssertEqual(users.count, 1)
+        XCTAssertEqual(users.first?.displayName, "long-use")
+        XCTAssertNil(users.first?.username)
+    }
+
+    func test_resolveLikeUsers_returnsEmptyForEmptyInput() async {
+        let mockCloudKit = MockCloudKitService()
+        let service = CKSocialInteractionService(
+            getCurrentUserID: { "user1" },
+            cloudKitService: mockCloudKit
+        )
+
+        let users = await service.resolveLikeUsers([])
+
+        XCTAssertTrue(users.isEmpty)
+        XCTAssertTrue(mockCloudKit.fetchedAppleUserIDs.isEmpty)
+    }
+
+    func test_resolveLikeUsers_preservesSortByDateDescending() async {
+        let mockCloudKit = MockCloudKitService()
+        let service = CKSocialInteractionService(
+            getCurrentUserID: { "user1" },
+            cloudKitService: mockCloudKit
+        )
+
+        mockCloudKit.fetchResultsByUserID = [
+            "user-a": CloudUserProfile(
+                recordName: "rec-a", appleUserID: "user-a",
+                displayName: "alice", bio: "", isPrivate: false
+            )
+        ]
+
+        let now = Date()
+        let likes = [
+            EncounterLike(id: "like-old", encounterRecordName: "enc1", userID: "user-a", createdAt: now.addingTimeInterval(-1000)),
+            EncounterLike(id: "like-new", encounterRecordName: "enc1", userID: "user-a", createdAt: now),
+            EncounterLike(id: "like-mid", encounterRecordName: "enc1", userID: "user-a", createdAt: now.addingTimeInterval(-500)),
+        ]
+
+        let users = await service.resolveLikeUsers(likes)
+
+        // Should be sorted newest first
+        XCTAssertEqual(users.map(\.id), ["like-new", "like-mid", "like-old"])
+    }
+
+    // MARK: - Current User Profile Caching
+
+    func test_resolveCurrentUserProfile_cachesAfterFirstFetch() async {
+        let mockCloudKit = MockCloudKitService()
+        let service = CKSocialInteractionService(
+            getCurrentUserID: { "user1" },
+            cloudKitService: mockCloudKit
+        )
+
+        mockCloudKit.fetchResult = CloudUserProfile(
+            recordName: "rec-1", appleUserID: "user1",
+            displayName: "me", bio: "", isPrivate: false
+        )
+
+        // First call — should fetch
+        let profile1 = await service.resolveCurrentUserProfile(userID: "user1")
+        XCTAssertEqual(profile1?.displayName, "me")
+        XCTAssertEqual(mockCloudKit.fetchedAppleUserIDs.count, 1)
+
+        // Second call — should use cache
+        let profile2 = await service.resolveCurrentUserProfile(userID: "user1")
+        XCTAssertEqual(profile2?.displayName, "me")
+        XCTAssertEqual(mockCloudKit.fetchedAppleUserIDs.count, 1, "should not fetch again")
+    }
+
+    func test_resolveCurrentUserProfile_refetchesForDifferentUser() async {
+        let mockCloudKit = MockCloudKitService()
+        let service = CKSocialInteractionService(
+            getCurrentUserID: { "user1" },
+            cloudKitService: mockCloudKit
+        )
+
+        mockCloudKit.fetchResultsByUserID = [
+            "user1": CloudUserProfile(
+                recordName: "rec-1", appleUserID: "user1",
+                displayName: "me", bio: "", isPrivate: false
+            ),
+            "user2": CloudUserProfile(
+                recordName: "rec-2", appleUserID: "user2",
+                displayName: "other", bio: "", isPrivate: false
+            )
+        ]
+
+        _ = await service.resolveCurrentUserProfile(userID: "user1")
+        let profile2 = await service.resolveCurrentUserProfile(userID: "user2")
+
+        XCTAssertEqual(profile2?.displayName, "other")
+        XCTAssertEqual(mockCloudKit.fetchedAppleUserIDs.count, 2, "should fetch for different user ID")
+    }
+
+    func test_resolveCurrentUserProfile_returnsNilWhenNoCloudKitProfile() async {
+        let mockCloudKit = MockCloudKitService()
+        let service = CKSocialInteractionService(
+            getCurrentUserID: { "user1" },
+            cloudKitService: mockCloudKit
+        )
+        // fetchResult is nil by default
+
+        let profile = await service.resolveCurrentUserProfile(userID: "user1")
+
+        XCTAssertNil(profile)
+    }
+
     #if DEBUG
     func test_seedFakeInteractions_populatesState() {
         let service = CKSocialInteractionService(getCurrentUserID: { "debug-user" })

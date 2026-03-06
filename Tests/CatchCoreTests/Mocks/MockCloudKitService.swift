@@ -9,6 +9,7 @@ final class MockCloudKitService: CloudKitService {
 
     var saveResult: Result<String, any Error> = .success("mock-record-name")
     var fetchResult: CloudUserProfile?
+    var fetchResultsByUserID: [String: CloudUserProfile] = [:]
     var deleteError: (any Error)?
     var searchUsersResult: [CloudUserProfile] = []
     private(set) var searchUsersCalls: [String] = []
@@ -29,7 +30,7 @@ final class MockCloudKitService: CloudKitService {
 
     func fetchUserProfile(appleUserID: String) async throws -> CloudUserProfile? {
         fetchedAppleUserIDs.append(appleUserID)
-        return fetchResult
+        return fetchResultsByUserID[appleUserID] ?? fetchResult
     }
 
     func deleteUserProfile(recordName: String) async throws {

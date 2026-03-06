@@ -17,8 +17,8 @@ struct FollowRowView: View {
         isFollowerRow ? follow.followerID : follow.followeeID
     }
 
-    private var displayName: String {
-        resolvedName ?? targetUserID
+    private var hasResolvedName: Bool {
+        resolvedName != nil
     }
 
     private var actionLabel: String {
@@ -38,10 +38,11 @@ struct FollowRowView: View {
                     .foregroundStyle(CatchTheme.secondary)
 
                 VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                    Text(displayName)
+                    Text(resolvedName ?? CatchStrings.Social.loadingName)
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(CatchTheme.textPrimary)
                         .lineLimit(1)
+                        .redacted(reason: hasResolvedName ? [] : .placeholder)
 
                     if let username = resolvedUsername, !username.isEmpty {
                         Text(UsernameValidator.formatDisplay(username))
@@ -83,6 +84,10 @@ struct FollowRowView: View {
             Text(CatchStrings.Social.areYouSure)
         }
         .task {
+            if let cached = browseService?.cachedDisplayName(for: targetUserID) {
+                resolvedName = cached
+            }
+
             let profile = await browseService?.fetchProfile(userID: targetUserID)
             resolvedName = profile?.displayName
             resolvedUsername = profile?.username

@@ -57,6 +57,9 @@ extension CatchStrings {
         // PendingRequestRowView
         static let wantsToFollowYou = String(localized: "wants to follow you")
 
+        // Display name loading placeholder
+        static let loadingName = String(localized: "loading...")
+
         // RemoteFeedItemView
         static let unknownCat = String(localized: "unknown cat")
     }
