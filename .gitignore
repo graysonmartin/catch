@@ -67,6 +67,9 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
+# Environment
+.env
+
 # Claude Code
 CLAUDE.md
 .claude/
