@@ -18,6 +18,7 @@ struct AddCatView: View {
     @State private var notes = ""
     @State private var isOwned = false
     @State private var photos: [Data] = []
+    @State private var encounterDate = Date()
     @State private var breedSuggestion: BreedPrediction?
     @State private var isDismissedSuggestion = false
     @State private var showStevenEasterEgg = false
@@ -65,7 +66,13 @@ struct AddCatView: View {
                     BreedPickerView(breed: $breed)
                 }
 
-                Section(CatchStrings.Common.location) {
+                Section(CatchStrings.Log.encounterDetails) {
+                    DatePicker(
+                        CatchStrings.Common.date,
+                        selection: $encounterDate,
+                        in: EncounterDateValidator.allowedRange,
+                        displayedComponents: [.date, .hourAndMinute]
+                    )
                     LocationPickerView(location: $location)
                 }
 
@@ -131,7 +138,7 @@ struct AddCatView: View {
         )
 
         let encounter = Encounter(
-            date: Date(),
+            date: encounterDate,
             location: location,
             notes: "",
             cat: cat,
