@@ -44,6 +44,12 @@ struct CommentThreadView: View {
                     Button(CatchStrings.Common.done) {}
                 }
             }
+            .navigationDestination(for: RemoteProfileRoute.self) { route in
+                RemoteProfileContent(
+                    userID: route.userID,
+                    initialDisplayName: route.displayName
+                )
+            }
             .task {
                 await loadComments()
             }

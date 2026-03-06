@@ -17,14 +17,16 @@ struct CommentRowView: View {
         currentUserID != nil && comment.userID == currentUserID
     }
 
+    private var isNavigable: Bool {
+        !isOwnComment && !comment.isPending
+    }
+
     var body: some View {
         HStack(alignment: .top, spacing: CatchSpacing.space8) {
-            avatar
+            authorLink
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack {
-                    Text(comment.authorName)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(CatchTheme.textPrimary)
+                    authorNameLink
                     if comment.isPending {
                         Text(CatchStrings.Interaction.sending)
                             .font(.caption2)
@@ -61,6 +63,45 @@ struct CommentRowView: View {
             Text(CatchStrings.Interaction.deleteCommentConfirm)
         }
     }
+
+    // MARK: - Author Navigation
+
+    @ViewBuilder
+    private var authorLink: some View {
+        if isNavigable {
+            NavigationLink(value: profileRoute) {
+                avatar
+            }
+            .buttonStyle(.plain)
+        } else {
+            avatar
+        }
+    }
+
+    @ViewBuilder
+    private var authorNameLink: some View {
+        if isNavigable {
+            NavigationLink(value: profileRoute) {
+                Text(comment.authorName)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(CatchTheme.textPrimary)
+            }
+            .buttonStyle(.plain)
+        } else {
+            Text(comment.authorName)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(CatchTheme.textPrimary)
+        }
+    }
+
+    private var profileRoute: RemoteProfileRoute {
+        RemoteProfileRoute(
+            userID: comment.userID,
+            displayName: comment.authorName
+        )
+    }
+
+    // MARK: - Avatar
 
     private var avatar: some View {
         Circle()

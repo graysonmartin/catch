@@ -37,6 +37,12 @@ struct EncounterDetailSheet: View {
                     Button(CatchStrings.Common.done) { dismiss() }
                 }
             }
+            .navigationDestination(for: RemoteProfileRoute.self) { route in
+                RemoteProfileContent(
+                    userID: route.userID,
+                    initialDisplayName: route.displayName
+                )
+            }
             .task { await loadComments() }
             .simultaneousGesture(
                 DragGesture(minimumDistance: 60)
