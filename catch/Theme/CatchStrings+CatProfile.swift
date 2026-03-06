@@ -9,8 +9,8 @@ extension CatchStrings {
         static let logSighting = String(localized: "log a sighting")
         static let deleteThisCat = String(localized: "delete this cat")
         static let deleteEncounterTitle = String(localized: "delete encounter?")
-        static let deleteEncounterMessage = String(localized: "gone forever. no take-backs.")
-        static let deleteCatMessage = String(localized: "this deletes all their encounters too. absolutely no undo.")
+        static let deleteEncounterMessage = String(localized: "gone forever. can't undo this.")
+        static let deleteCatMessage = String(localized: "this deletes all their encounters too. can't undo.")
 
         // Remote variant (lowercase)
         static let noEncountersLoggedRemote = String(localized: "no encounters logged")

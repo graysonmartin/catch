@@ -15,7 +15,7 @@ extension CatchStrings {
         // Notifications
         static let notificationsSection = String(localized: "notifications")
         static let notificationsToggle = String(localized: "push notifications")
-        static let notificationsFooter = String(localized: "we'll ping you when stuff happens")
+        static let notificationsFooter = String(localized: "get notified about new followers and activity")
 
         // About
         static let aboutSection = String(localized: "about")
@@ -27,7 +27,7 @@ extension CatchStrings {
         static let dangerZoneSection = String(localized: "danger zone")
         static let deleteAccount = String(localized: "delete account")
         static let deleteAccountConfirmTitle = String(localized: "you sure?")
-        static let deleteAccountConfirmMessage = String(localized: "this deletes all your cats, encounters, everything. no take-backs.")
+        static let deleteAccountConfirmMessage = String(localized: "this deletes all your cats, encounters, everything. can't undo this.")
         static let deleteAccountConfirm = String(localized: "delete it all")
         static let signOut = String(localized: "sign out")
         static let signOutConfirmTitle = String(localized: "sign out?")

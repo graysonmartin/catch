@@ -29,13 +29,13 @@ extension CatchStrings {
         static let rarityLegendary = String(localized: "legendary")
 
         // Progress flavor text
-        static let flavorZero = String(localized: "steven is judging you")
+        static let flavorZero = String(localized: "go find some fellas")
         static let flavorLow = String(localized: "barely scratching the surface")
-        static let flavorMedLow = String(localized: "you're getting out more. proud of you")
-        static let flavorMedium = String(localized: "okay cat whisperer, we see you")
-        static let flavorMedHigh = String(localized: "this is becoming a whole thing huh")
-        static let flavorHigh = String(localized: "so close. don't sleep now")
-        static let flavorMax = String(localized: "touch grass maybe?")
+        static let flavorMedLow = String(localized: "nice work, soldier")
+        static let flavorMedium = String(localized: "halfway there. not too shabby")
+        static let flavorMedHigh = String(localized: "holy crap u are doing well")
+        static let flavorHigh = String(localized: "so close. so freaking close.")
+        static let flavorMax = String(localized: "legendary")
         static let flavorDefault = String(localized: "how did you even get here")
     }
 }

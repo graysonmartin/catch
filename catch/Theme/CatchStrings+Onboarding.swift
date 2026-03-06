@@ -4,7 +4,7 @@ import CatchCore
 extension CatchStrings {
 
     enum Onboarding {
-        static let letsGo = String(localized: "let's go")
+        static let letsGo = String(localized: "ok let's go")
         static let next = String(localized: "next")
         static let skip = String(localized: "skip")
 
@@ -22,12 +22,12 @@ extension CatchStrings {
         static let tourMap = String(localized: "map")
         static let tourMapDetail = String(localized: "see where all your cats hang out")
         static let tourProfile = String(localized: "profile")
-        static let tourProfileDetail = String(localized: "your cats, your stats, your whole deal")
+        static let tourProfileDetail = String(localized: "your cats, your stats, your whole collection")
 
         // Location page
         static let locationTitle = String(localized: "one more thing")
         static let locationDescription = String(localized: "catch uses your location to pin\nwhere you spot cats on the map.")
-        static let locationReassurance = String(localized: "you can always skip this per-encounter.\nwe're not tracking you, promise.")
+        static let locationReassurance = String(localized: "you can always skip this per-encounter.")
         static let enableLocation = String(localized: "enable location")
         static let locationEnabled = String(localized: "location enabled")
         static let locationDenied = String(localized: "no worries, you can change this in settings")

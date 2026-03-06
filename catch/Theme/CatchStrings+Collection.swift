@@ -7,12 +7,12 @@ extension CatchStrings {
         // MARK: - Empty States
 
         static let emptyTitle = String(localized: "no cats yet")
-        static let emptySubtitle = String(localized: "your collection is tragically empty.")
+        static let emptySubtitle = String(localized: "nothing here yet. go find some cats.")
         static let emptyAction = String(localized: "log a cat")
         static let searchEmptyTitle = String(localized: "no matches")
         static let searchPrompt = String(localized: "find a cat")
         static let filterEmptyTitle = String(localized: "nothing here")
-        static let filterEmptySubtitle = String(localized: "no cats match your vibe check. try loosening up the filters.")
+        static let filterEmptySubtitle = String(localized: "no cats match those filters. try adjusting.")
 
         static func searchEmptySubtitle(_ query: String) -> String {
             String(localized: "nothing matching \"\(query)\" in your collection")

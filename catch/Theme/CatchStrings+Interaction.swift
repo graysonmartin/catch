@@ -16,7 +16,7 @@ extension CatchStrings {
         // Liked-by list
         static let likedBy = String(localized: "liked by")
         static let noLikesTitle = String(localized: "no likes yet")
-        static let noLikesSubtitle = String(localized: "first one to tap that heart wins bragging rights")
+        static let noLikesSubtitle = String(localized: "be the first")
 
         static func likeCount(_ count: Int) -> String {
             count == 1 ? String(localized: "1 like") : String(localized: "\(count) likes")
