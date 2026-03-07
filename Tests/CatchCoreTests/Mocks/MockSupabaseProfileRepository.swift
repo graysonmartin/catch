@@ -76,3 +76,33 @@ final class MockSupabaseProfileRepository: SupabaseProfileRepository {
         usernameAvailabilityResult = true
     }
 }
+
+// MARK: - Shared Test Factory
+
+extension SupabaseProfile {
+    static func fixture(
+        id: UUID = UUID(),
+        displayName: String = "test",
+        username: String = "test_user",
+        bio: String = "",
+        isPrivate: Bool = false,
+        avatarUrl: String? = nil,
+        followerCount: Int = 0,
+        followingCount: Int = 0
+    ) -> SupabaseProfile {
+        SupabaseProfile(
+            id: id,
+            displayName: displayName,
+            username: username,
+            bio: bio,
+            isPrivate: isPrivate,
+            showCats: true,
+            showEncounters: true,
+            avatarUrl: avatarUrl,
+            followerCount: followerCount,
+            followingCount: followingCount,
+            createdAt: Date(),
+            updatedAt: Date()
+        )
+    }
+}

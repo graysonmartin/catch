@@ -41,38 +41,7 @@ public final class DefaultSupabaseProfileRepository: SupabaseProfileRepository, 
     }
 
     public func createProfile(_ payload: SupabaseProfilePayload, id: String) async throws -> SupabaseProfile {
-        struct InsertPayload: Codable {
-            let id: String
-            let displayName: String
-            let username: String
-            let bio: String
-            let isPrivate: Bool
-            let showCats: Bool
-            let showEncounters: Bool
-            let avatarUrl: String?
-
-            private enum CodingKeys: String, CodingKey {
-                case id
-                case displayName = "display_name"
-                case username
-                case bio
-                case isPrivate = "is_private"
-                case showCats = "show_cats"
-                case showEncounters = "show_encounters"
-                case avatarUrl = "avatar_url"
-            }
-        }
-
-        let insertPayload = InsertPayload(
-            id: id,
-            displayName: payload.displayName,
-            username: payload.username,
-            bio: payload.bio,
-            isPrivate: payload.isPrivate,
-            showCats: payload.showCats,
-            showEncounters: payload.showEncounters,
-            avatarUrl: payload.avatarUrl
-        )
+        let insertPayload = SupabaseProfileInsertPayload(id: id, profile: payload)
 
         let profile: SupabaseProfile = try await clientProvider.client
             .from(Self.tableName)

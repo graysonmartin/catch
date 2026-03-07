@@ -5,7 +5,7 @@ final class SupabaseProfileMapperTests: XCTestCase {
 
     func testMapsIDToRecordNameAndAppleUserID() {
         let id = UUID()
-        let profile = makeProfile(id: id)
+        let profile = SupabaseProfile.fixture(id: id)
 
         let result = SupabaseProfileMapper.toCloudUserProfile(profile)
 
@@ -14,7 +14,7 @@ final class SupabaseProfileMapperTests: XCTestCase {
     }
 
     func testMapsDisplayNameAndBio() {
-        let profile = makeProfile(displayName: "cat lord", bio: "i pet cats")
+        let profile = SupabaseProfile.fixture(displayName: "cat lord", bio: "i pet cats")
 
         let result = SupabaseProfileMapper.toCloudUserProfile(profile)
 
@@ -23,7 +23,7 @@ final class SupabaseProfileMapperTests: XCTestCase {
     }
 
     func testMapsUsername() {
-        let profile = makeProfile(username: "catlord42")
+        let profile = SupabaseProfile.fixture(username: "catlord42")
 
         let result = SupabaseProfileMapper.toCloudUserProfile(profile)
 
@@ -31,15 +31,15 @@ final class SupabaseProfileMapperTests: XCTestCase {
     }
 
     func testMapsPrivateFlag() {
-        let publicProfile = makeProfile(isPrivate: false)
-        let privateProfile = makeProfile(isPrivate: true)
+        let publicProfile = SupabaseProfile.fixture(isPrivate: false)
+        let privateProfile = SupabaseProfile.fixture(isPrivate: true)
 
         XCTAssertFalse(SupabaseProfileMapper.toCloudUserProfile(publicProfile).isPrivate)
         XCTAssertTrue(SupabaseProfileMapper.toCloudUserProfile(privateProfile).isPrivate)
     }
 
     func testAvatarDataIsAlwaysNil() {
-        let profile = makeProfile(avatarUrl: "https://example.com/avatar.jpg")
+        let profile = SupabaseProfile.fixture(avatarUrl: "https://example.com/avatar.jpg")
 
         let result = SupabaseProfileMapper.toCloudUserProfile(profile)
 
@@ -47,7 +47,7 @@ final class SupabaseProfileMapperTests: XCTestCase {
     }
 
     func testMapsAvatarURL() {
-        let profile = makeProfile(avatarUrl: "https://example.com/avatar.jpg")
+        let profile = SupabaseProfile.fixture(avatarUrl: "https://example.com/avatar.jpg")
 
         let result = SupabaseProfileMapper.toCloudUserProfile(profile)
 
@@ -55,36 +55,11 @@ final class SupabaseProfileMapperTests: XCTestCase {
     }
 
     func testMapsNilAvatarURL() {
-        let profile = makeProfile(avatarUrl: nil)
+        let profile = SupabaseProfile.fixture(avatarUrl: nil)
 
         let result = SupabaseProfileMapper.toCloudUserProfile(profile)
 
         XCTAssertNil(result.avatarURL)
     }
 
-    // MARK: - Helpers
-
-    private func makeProfile(
-        id: UUID = UUID(),
-        displayName: String = "test",
-        username: String = "test_user",
-        bio: String = "",
-        isPrivate: Bool = false,
-        avatarUrl: String? = nil
-    ) -> SupabaseProfile {
-        SupabaseProfile(
-            id: id,
-            displayName: displayName,
-            username: username,
-            bio: bio,
-            isPrivate: isPrivate,
-            showCats: true,
-            showEncounters: true,
-            avatarUrl: avatarUrl,
-            followerCount: 0,
-            followingCount: 0,
-            createdAt: Date(),
-            updatedAt: Date()
-        )
-    }
 }

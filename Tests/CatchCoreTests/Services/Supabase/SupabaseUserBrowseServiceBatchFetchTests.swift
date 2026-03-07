@@ -42,7 +42,7 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
 
     func testCachedDisplayNameReturnsCachedValueAfterFetch() async {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID, displayName: "cool person")
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "cool person")
 
         _ = await sut.fetchDisplayName(userID: userID.uuidString)
 
@@ -56,9 +56,9 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
         let id2 = UUID()
         let id3 = UUID()
         mockProfileRepo.fetchProfilesResult = [
-            makeSupabaseProfile(id: id1, displayName: "alice"),
-            makeSupabaseProfile(id: id2, displayName: "bob"),
-            makeSupabaseProfile(id: id3, displayName: "charlie")
+            .fixture(id: id1, displayName: "alice"),
+            .fixture(id: id2, displayName: "bob"),
+            .fixture(id: id3, displayName: "charlie")
         ]
 
         let result = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString, id2.uuidString, id3.uuidString])
@@ -73,8 +73,8 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
         let id1 = UUID()
         let id2 = UUID()
         mockProfileRepo.fetchProfilesResult = [
-            makeSupabaseProfile(id: id1, displayName: "alice"),
-            makeSupabaseProfile(id: id2, displayName: "bob")
+            .fixture(id: id1, displayName: "alice"),
+            .fixture(id: id2, displayName: "bob")
         ]
 
         _ = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString, id2.uuidString])
@@ -86,12 +86,12 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
     func testBatchFetchDisplayNamesSkipsCachedUsers() async {
         let id1 = UUID()
         let id2 = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: id1, displayName: "alice")
+        mockProfileRepo.fetchProfileResult = .fixture(id: id1, displayName: "alice")
         _ = await sut.fetchDisplayName(userID: id1.uuidString)
         mockProfileRepo.fetchProfileCalls.removeAll()
 
         mockProfileRepo.fetchProfilesResult = [
-            makeSupabaseProfile(id: id2, displayName: "bob")
+            .fixture(id: id2, displayName: "bob")
         ]
 
         let result = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString, id2.uuidString])
@@ -106,7 +106,7 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
         let id1 = UUID()
         let id2 = UUID()
         mockProfileRepo.fetchProfilesResult = [
-            makeSupabaseProfile(id: id1, displayName: "alice")
+            .fixture(id: id1, displayName: "alice")
         ]
 
         let result = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString, id2.uuidString])
@@ -126,8 +126,8 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
     func testBatchFetchDisplayNamesAllCachedSkipsNetwork() async {
         let id1 = UUID()
         let id2 = UUID()
-        mockProfileRepo.fetchProfileResultsByID[id1.uuidString] = makeSupabaseProfile(id: id1, displayName: "alice")
-        mockProfileRepo.fetchProfileResultsByID[id2.uuidString] = makeSupabaseProfile(id: id2, displayName: "bob")
+        mockProfileRepo.fetchProfileResultsByID[id1.uuidString] = .fixture(id: id1, displayName: "alice")
+        mockProfileRepo.fetchProfileResultsByID[id2.uuidString] = .fixture(id: id2, displayName: "bob")
         _ = await sut.fetchDisplayName(userID: id1.uuidString)
         _ = await sut.fetchDisplayName(userID: id2.uuidString)
         mockProfileRepo.fetchProfileCalls.removeAll()
@@ -142,7 +142,7 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
     func testBatchFetchedNamesAvailableViaFetchDisplayName() async {
         let id1 = UUID()
         mockProfileRepo.fetchProfilesResult = [
-            makeSupabaseProfile(id: id1, displayName: "alice")
+            .fixture(id: id1, displayName: "alice")
         ]
 
         _ = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString])
@@ -158,7 +158,7 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
     func testBatchFetchUsesSingleQuery() async {
         let ids = (0..<5).map { _ in UUID() }
         mockProfileRepo.fetchProfilesResult = ids.enumerated().map { i, id in
-            makeSupabaseProfile(id: id, displayName: "user-\(i)")
+            .fixture(id: id, displayName: "user-\(i)")
         }
 
         _ = await sut.batchFetchDisplayNames(userIDs: ids.map(\.uuidString))
@@ -166,26 +166,4 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
         XCTAssertEqual(mockProfileRepo.fetchProfilesCalls.count, 1, "should use single batch query, not N individual fetches")
     }
 
-    // MARK: - Helpers
-
-    private func makeSupabaseProfile(
-        id: UUID = UUID(),
-        displayName: String = "test",
-        username: String = "test_user"
-    ) -> SupabaseProfile {
-        SupabaseProfile(
-            id: id,
-            displayName: displayName,
-            username: username,
-            bio: "",
-            isPrivate: false,
-            showCats: true,
-            showEncounters: true,
-            avatarUrl: nil,
-            followerCount: 0,
-            followingCount: 0,
-            createdAt: Date(),
-            updatedAt: Date()
-        )
-    }
 }

@@ -41,7 +41,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testFetchUserDataReturnsProfileAndData() async throws {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(
+        mockProfileRepo.fetchProfileResult = .fixture(
             id: userID, displayName: "cat lord", followerCount: 10, followingCount: 5
         )
         let cat = CloudCat(
@@ -87,7 +87,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testFetchUserDataThrowsNetworkErrorOnRepoFailure() async {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID)
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID)
         mockCatRepo.fetchAllError = NSError(domain: "test", code: 1, userInfo: [NSLocalizedDescriptionKey: "boom"])
 
         do {
@@ -108,7 +108,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testPrivateProfileReturnsEmptyDataWhenNotFollowing() async throws {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(
+        mockProfileRepo.fetchProfileResult = .fixture(
             id: userID, displayName: "shiv", isPrivate: true, followerCount: 7, followingCount: 3
         )
         mockCatRepo.fetchAllResult = [
@@ -135,7 +135,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
     func testPrivateProfileReturnsContentWhenFollowing() async throws {
         let userID = UUID()
         mockFollowService.simulateFollowing(followeeID: userID.uuidString)
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID, displayName: "shiv", isPrivate: true)
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "shiv", isPrivate: true)
         let cat = CloudCat(
             recordName: "cat-visible", ownerID: userID.uuidString, name: "Ghost",
             breed: "", estimatedAge: "?", locationName: "home",
@@ -154,7 +154,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
     func testOwnPrivateProfileAlwaysReturnsContent() async throws {
         let userID = UUID()
         currentUserID = userID.uuidString
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID, displayName: "me", isPrivate: true)
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "me", isPrivate: true)
         let cat = CloudCat(
             recordName: "cat-mine", ownerID: userID.uuidString, name: "Steven",
             breed: "", estimatedAge: "5", locationName: "couch",
@@ -172,7 +172,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testPublicProfileAlwaysReturnsContent() async throws {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID, displayName: "tuong")
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "tuong")
         let cat = CloudCat(
             recordName: "cat-pub", ownerID: userID.uuidString, name: "Chairman Meow",
             breed: "", estimatedAge: "6", locationName: "fire escape",
@@ -192,7 +192,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testCachedDataReturnsFetchedResult() async throws {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID, displayName: "cached user")
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "cached user")
         mockCatRepo.fetchAllResult = []
         mockEncounterRepo.fetchAllResult = []
 
@@ -209,7 +209,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testSecondFetchUsesCacheWhenNotExpired() async throws {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID, displayName: "test")
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "test")
         mockCatRepo.fetchAllResult = []
         mockEncounterRepo.fetchAllResult = []
 
@@ -221,7 +221,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testClearCacheRemovesAllData() async throws {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID, displayName: "test")
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "test")
         mockCatRepo.fetchAllResult = []
         mockEncounterRepo.fetchAllResult = []
 
@@ -235,7 +235,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testFetchDisplayNameReturnsFromProfile() async {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID, displayName: "cool person")
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "cool person")
 
         let name = await sut.fetchDisplayName(userID: userID.uuidString)
         XCTAssertEqual(name, "cool person")
@@ -243,7 +243,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testFetchDisplayNameCachesResult() async {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID, displayName: "cool person")
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "cool person")
 
         _ = await sut.fetchDisplayName(userID: userID.uuidString)
         _ = await sut.fetchDisplayName(userID: userID.uuidString)
@@ -262,7 +262,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testFetchProfileReturnsFromRepository() async {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID, displayName: "fetched")
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "fetched")
 
         let profile = await sut.fetchProfile(userID: userID.uuidString)
 
@@ -279,7 +279,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testFetchProfileReturnsCachedResult() async throws {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID, displayName: "cached")
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "cached")
         mockCatRepo.fetchAllResult = []
         mockEncounterRepo.fetchAllResult = []
 
@@ -300,7 +300,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testIsLoadingResetAfterFetch() async throws {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(id: userID)
+        mockProfileRepo.fetchProfileResult = .fixture(id: userID)
         mockCatRepo.fetchAllResult = []
         mockEncounterRepo.fetchAllResult = []
 
@@ -319,7 +319,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testFollowerCountsReadFromProfileNotFollowService() async throws {
         let userID = UUID()
-        mockProfileRepo.fetchProfileResult = makeSupabaseProfile(
+        mockProfileRepo.fetchProfileResult = .fixture(
             id: userID, followerCount: 99, followingCount: 42
         )
         mockCatRepo.fetchAllResult = []
@@ -332,30 +332,4 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         XCTAssertTrue(mockFollowService.fetchFollowCountsCalls.isEmpty, "should not call followService for counts")
     }
 
-    // MARK: - Helpers
-
-    private func makeSupabaseProfile(
-        id: UUID = UUID(),
-        displayName: String = "test",
-        username: String = "test_user",
-        bio: String = "",
-        isPrivate: Bool = false,
-        followerCount: Int = 0,
-        followingCount: Int = 0
-    ) -> SupabaseProfile {
-        SupabaseProfile(
-            id: id,
-            displayName: displayName,
-            username: username,
-            bio: bio,
-            isPrivate: isPrivate,
-            showCats: true,
-            showEncounters: true,
-            avatarUrl: nil,
-            followerCount: followerCount,
-            followingCount: followingCount,
-            createdAt: Date(),
-            updatedAt: Date()
-        )
-    }
 }
