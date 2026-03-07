@@ -33,7 +33,14 @@ RETURNS TABLE (
     owner_username  TEXT,
     owner_avatar_url TEXT
 ) AS $$
+DECLARE
+    v_uid UUID := auth.uid();
 BEGIN
+    -- Both cursor params must be provided together or both NULL
+    IF (p_cursor IS NULL) != (p_cursor_id IS NULL) THEN
+        RAISE EXCEPTION 'p_cursor and p_cursor_id must both be provided or both be NULL';
+    END IF;
+
     RETURN QUERY
     SELECT
         e.id                AS encounter_id,
@@ -49,7 +56,7 @@ BEGIN
         EXISTS (
             SELECT 1 FROM encounter_likes el
             WHERE el.encounter_id = e.id
-              AND el.user_id = auth.uid()
+              AND el.user_id = v_uid
         )                   AS is_liked,
         (e.id = (
             SELECT e2.id FROM encounters e2
@@ -70,12 +77,12 @@ BEGIN
     JOIN profiles p ON p.id = e.owner_id
     WHERE (
         -- own encounters always visible
-        e.owner_id = auth.uid()
+        e.owner_id = v_uid
         OR (
             -- encounters from actively followed users
             EXISTS (
                 SELECT 1 FROM follows f
-                WHERE f.follower_id = auth.uid()
+                WHERE f.follower_id = v_uid
                   AND f.followee_id = e.owner_id
                   AND f.status = 'active'
             )

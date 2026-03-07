@@ -1,8 +1,10 @@
 import XCTest
 
+/// Smoke tests verifying migration files contain expected SQL structures.
+/// These are substring-presence checks, not structural SQL validation.
 final class SupabaseSchemaTests: XCTestCase {
 
-    // MARK: - Migration file paths (relative to repo root)
+    // MARK: - Constants
 
     private static let migrationFiles = [
         "supabase/migrations/001_initial_schema.sql",
@@ -10,51 +12,54 @@ final class SupabaseSchemaTests: XCTestCase {
         "supabase/migrations/003_feed_function.sql"
     ]
 
-    private func repoRoot() throws -> URL {
-        // Tests run from the package directory; walk up to find supabase/
+    private static let allTables = [
+        "profiles", "cats", "encounters",
+        "follows", "encounter_likes", "encounter_comments"
+    ]
+
+    // MARK: - Helpers
+
+    private lazy var root: URL = {
         var dir = URL(fileURLWithPath: #file)
         for _ in 0..<10 {
             dir = dir.deletingLastPathComponent()
-            let candidate = dir.appendingPathComponent("supabase/migrations")
-            if FileManager.default.fileExists(atPath: candidate.path) {
+            if FileManager.default.fileExists(atPath: dir.appendingPathComponent("supabase/migrations").path) {
                 return dir
             }
         }
-        throw XCTSkip("Could not locate repo root from test file path")
+        return dir
+    }()
+
+    private func loadMigration(_ filename: String) throws -> String {
+        let url = root.appendingPathComponent(filename)
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            throw XCTSkip("Could not locate \(filename) from test file path")
+        }
+        return try String(contentsOf: url, encoding: .utf8)
     }
 
     // MARK: - Tests
 
     func testMigrationFilesExist() throws {
-        let root = try repoRoot()
         for file in Self.migrationFiles {
-            let path = root.appendingPathComponent(file).path
             XCTAssertTrue(
-                FileManager.default.fileExists(atPath: path),
+                FileManager.default.fileExists(atPath: root.appendingPathComponent(file).path),
                 "Migration file missing: \(file)"
             )
         }
     }
 
     func testMigrationFilesAreNonEmpty() throws {
-        let root = try repoRoot()
         for file in Self.migrationFiles {
-            let url = root.appendingPathComponent(file)
-            let contents = try String(contentsOf: url, encoding: .utf8)
+            let contents = try loadMigration(file)
             XCTAssertFalse(contents.isEmpty, "Migration file is empty: \(file)")
         }
     }
 
     func testSchemaContainsExpectedTables() throws {
-        let root = try repoRoot()
-        let url = root.appendingPathComponent("supabase/migrations/001_initial_schema.sql")
-        let sql = try String(contentsOf: url, encoding: .utf8)
+        let sql = try loadMigration("supabase/migrations/001_initial_schema.sql")
 
-        let expectedTables = [
-            "profiles", "cats", "encounters",
-            "follows", "encounter_likes", "encounter_comments"
-        ]
-        for table in expectedTables {
+        for table in Self.allTables {
             XCTAssertTrue(
                 sql.contains("CREATE TABLE \(table)"),
                 "Schema missing CREATE TABLE \(table)"
@@ -63,9 +68,7 @@ final class SupabaseSchemaTests: XCTestCase {
     }
 
     func testSchemaContainsExpectedIndexes() throws {
-        let root = try repoRoot()
-        let url = root.appendingPathComponent("supabase/migrations/001_initial_schema.sql")
-        let sql = try String(contentsOf: url, encoding: .utf8)
+        let sql = try loadMigration("supabase/migrations/001_initial_schema.sql")
 
         let expectedIndexes = [
             "idx_encounters_owner_date",
@@ -74,7 +77,9 @@ final class SupabaseSchemaTests: XCTestCase {
             "idx_follows_follower_status",
             "idx_follows_followee_status",
             "idx_encounter_likes_encounter",
-            "idx_encounter_comments_encounter_date"
+            "idx_encounter_comments_encounter_date",
+            "idx_encounters_date_id_desc",
+            "idx_encounters_cat_date_asc"
         ]
         for index in expectedIndexes {
             XCTAssertTrue(
@@ -85,9 +90,7 @@ final class SupabaseSchemaTests: XCTestCase {
     }
 
     func testSchemaContainsDenormalizedCountTriggers() throws {
-        let root = try repoRoot()
-        let url = root.appendingPathComponent("supabase/migrations/001_initial_schema.sql")
-        let sql = try String(contentsOf: url, encoding: .utf8)
+        let sql = try loadMigration("supabase/migrations/001_initial_schema.sql")
 
         XCTAssertTrue(sql.contains("adjust_like_count"), "Missing like count trigger function")
         XCTAssertTrue(sql.contains("adjust_comment_count"), "Missing comment count trigger function")
@@ -96,9 +99,7 @@ final class SupabaseSchemaTests: XCTestCase {
     }
 
     func testRLSPoliciesContainCanViewUser() throws {
-        let root = try repoRoot()
-        let url = root.appendingPathComponent("supabase/migrations/002_rls_policies.sql")
-        let sql = try String(contentsOf: url, encoding: .utf8)
+        let sql = try loadMigration("supabase/migrations/002_rls_policies.sql")
 
         XCTAssertTrue(sql.contains("can_view_user"), "Missing can_view_user helper function")
         XCTAssertTrue(sql.contains("SECURITY DEFINER"), "can_view_user should be SECURITY DEFINER")
@@ -106,15 +107,9 @@ final class SupabaseSchemaTests: XCTestCase {
     }
 
     func testRLSPoliciesEnableRLSOnAllTables() throws {
-        let root = try repoRoot()
-        let url = root.appendingPathComponent("supabase/migrations/002_rls_policies.sql")
-        let sql = try String(contentsOf: url, encoding: .utf8)
+        let sql = try loadMigration("supabase/migrations/002_rls_policies.sql")
 
-        let tables = [
-            "profiles", "cats", "encounters",
-            "follows", "encounter_likes", "encounter_comments"
-        ]
-        for table in tables {
+        for table in Self.allTables {
             XCTAssertTrue(
                 sql.contains("ALTER TABLE \(table) ENABLE ROW LEVEL SECURITY"),
                 "RLS not enabled on \(table)"
@@ -123,9 +118,7 @@ final class SupabaseSchemaTests: XCTestCase {
     }
 
     func testFeedFunctionExists() throws {
-        let root = try repoRoot()
-        let url = root.appendingPathComponent("supabase/migrations/003_feed_function.sql")
-        let sql = try String(contentsOf: url, encoding: .utf8)
+        let sql = try loadMigration("supabase/migrations/003_feed_function.sql")
 
         XCTAssertTrue(sql.contains("get_feed"), "Missing get_feed function")
         XCTAssertTrue(sql.contains("p_cursor"), "Missing cursor parameter")

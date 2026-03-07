@@ -112,6 +112,12 @@ CREATE INDEX idx_encounter_likes_encounter ON encounter_likes (encounter_id);
 -- paginated comments per encounter
 CREATE INDEX idx_encounter_comments_encounter_date ON encounter_comments (encounter_id, created_at);
 
+-- feed pagination sort across all owners
+CREATE INDEX idx_encounters_date_id_desc ON encounters (date DESC, id DESC);
+
+-- is_first_encounter subquery: first encounter per cat by date
+CREATE INDEX idx_encounters_cat_date_asc ON encounters (cat_id, date ASC, id);
+
 -- =============================================================================
 -- TRIGGERS: updated_at auto-update
 -- =============================================================================
