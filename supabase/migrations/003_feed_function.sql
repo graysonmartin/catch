@@ -8,6 +8,7 @@
 
 CREATE OR REPLACE FUNCTION get_feed(
     p_cursor TIMESTAMPTZ DEFAULT NULL,
+    p_cursor_id UUID DEFAULT NULL,
     p_limit  INT DEFAULT 20
 )
 RETURNS TABLE (
@@ -50,10 +51,12 @@ BEGIN
             WHERE el.encounter_id = e.id
               AND el.user_id = auth.uid()
         )                   AS is_liked,
-        (ROW_NUMBER() OVER (
-            PARTITION BY e.cat_id
-            ORDER BY e.date ASC
-        ) = 1)              AS is_first_encounter,
+        (e.id = (
+            SELECT e2.id FROM encounters e2
+            WHERE e2.cat_id = e.cat_id
+            ORDER BY e2.date ASC
+            LIMIT 1
+        ))                  AS is_first_encounter,
         c.id                AS cat_id,
         c.name              AS cat_name,
         c.breed             AS cat_breed,
@@ -80,9 +83,10 @@ BEGIN
             AND p.show_encounters = TRUE
         )
     )
-    -- cursor-based pagination
-    AND (p_cursor IS NULL OR e.date < p_cursor)
-    ORDER BY e.date DESC
+    -- cursor-based pagination (date + id tiebreaker)
+    AND (p_cursor IS NULL OR (e.date, e.id) < (p_cursor, p_cursor_id))
+    ORDER BY e.date DESC, e.id DESC
     LIMIT p_limit;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
+$$ LANGUAGE plpgsql SECURITY DEFINER STABLE
+SET search_path = public;

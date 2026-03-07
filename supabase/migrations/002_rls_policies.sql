@@ -37,7 +37,8 @@ BEGIN
 
     RETURN FALSE;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
+$$ LANGUAGE plpgsql SECURITY DEFINER STABLE
+SET search_path = public;
 
 -- =============================================================================
 -- ENABLE RLS ON ALL TABLES

@@ -102,6 +102,7 @@ final class SupabaseSchemaTests: XCTestCase {
 
         XCTAssertTrue(sql.contains("can_view_user"), "Missing can_view_user helper function")
         XCTAssertTrue(sql.contains("SECURITY DEFINER"), "can_view_user should be SECURITY DEFINER")
+        XCTAssertTrue(sql.contains("SET search_path = public"), "Missing search_path pinning on SECURITY DEFINER function")
     }
 
     func testRLSPoliciesEnableRLSOnAllTables() throws {
@@ -128,8 +129,10 @@ final class SupabaseSchemaTests: XCTestCase {
 
         XCTAssertTrue(sql.contains("get_feed"), "Missing get_feed function")
         XCTAssertTrue(sql.contains("p_cursor"), "Missing cursor parameter")
+        XCTAssertTrue(sql.contains("p_cursor_id"), "Missing cursor_id tiebreaker parameter")
         XCTAssertTrue(sql.contains("p_limit"), "Missing limit parameter")
         XCTAssertTrue(sql.contains("is_first_encounter"), "Missing is_first_encounter field")
         XCTAssertTrue(sql.contains("is_liked"), "Missing is_liked field")
+        XCTAssertTrue(sql.contains("SET search_path = public"), "Missing search_path pinning on SECURITY DEFINER function")
     }
 }

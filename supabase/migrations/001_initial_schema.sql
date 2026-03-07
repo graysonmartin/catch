@@ -156,7 +156,7 @@ BEGIN
         WHERE id = NEW.encounter_id;
         RETURN NEW;
     ELSIF TG_OP = 'DELETE' THEN
-        UPDATE encounters SET like_count = like_count - 1
+        UPDATE encounters SET like_count = GREATEST(0, like_count - 1)
         WHERE id = OLD.encounter_id;
         RETURN OLD;
     END IF;
@@ -180,7 +180,7 @@ BEGIN
         WHERE id = NEW.encounter_id;
         RETURN NEW;
     ELSIF TG_OP = 'DELETE' THEN
-        UPDATE encounters SET comment_count = comment_count - 1
+        UPDATE encounters SET comment_count = GREATEST(0, comment_count - 1)
         WHERE id = OLD.encounter_id;
         RETURN OLD;
     END IF;
@@ -210,9 +210,9 @@ BEGIN
 
     ELSIF TG_OP = 'DELETE' THEN
         IF OLD.status = 'active' THEN
-            UPDATE profiles SET following_count = following_count - 1
+            UPDATE profiles SET following_count = GREATEST(0, following_count - 1)
             WHERE id = OLD.follower_id;
-            UPDATE profiles SET follower_count = follower_count - 1
+            UPDATE profiles SET follower_count = GREATEST(0, follower_count - 1)
             WHERE id = OLD.followee_id;
         END IF;
         RETURN OLD;
@@ -226,9 +226,9 @@ BEGIN
             WHERE id = NEW.followee_id;
         -- active → pending: decrement both counts (unlikely but defensive)
         ELSIF OLD.status = 'active' AND NEW.status = 'pending' THEN
-            UPDATE profiles SET following_count = following_count - 1
+            UPDATE profiles SET following_count = GREATEST(0, following_count - 1)
             WHERE id = NEW.follower_id;
-            UPDATE profiles SET follower_count = follower_count - 1
+            UPDATE profiles SET follower_count = GREATEST(0, follower_count - 1)
             WHERE id = NEW.followee_id;
         END IF;
         RETURN NEW;
