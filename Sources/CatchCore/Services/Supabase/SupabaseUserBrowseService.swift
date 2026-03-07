@@ -3,11 +3,11 @@ import Observation
 
 @Observable
 @MainActor
-public final class CKUserBrowseService: UserBrowseService {
+public final class SupabaseUserBrowseService: UserBrowseService {
     public private(set) var isLoading = false
     public private(set) var error: UserBrowseError?
 
-    private let cloudKitService: any CloudKitService
+    private let profileRepository: any SupabaseProfileRepository
     private let catRepository: any CatRepository
     private let encounterRepository: any EncounterRepository
     private let followService: any FollowService
@@ -17,13 +17,13 @@ public final class CKUserBrowseService: UserBrowseService {
     private var displayNameCache: [String: String] = [:]
 
     public init(
-        cloudKitService: any CloudKitService,
+        profileRepository: any SupabaseProfileRepository,
         catRepository: any CatRepository,
         encounterRepository: any EncounterRepository,
         followService: any FollowService,
         currentUserIDProvider: @escaping () -> String?
     ) {
-        self.cloudKitService = cloudKitService
+        self.profileRepository = profileRepository
         self.catRepository = catRepository
         self.encounterRepository = encounterRepository
         self.followService = followService
@@ -39,12 +39,13 @@ public final class CKUserBrowseService: UserBrowseService {
         error = nil
         defer { isLoading = false }
 
-        guard let profile = try await cloudKitService.fetchUserProfile(appleUserID: userID) else {
+        guard let supabaseProfile = try await profileRepository.fetchProfile(id: userID) else {
             let browseError = UserBrowseError.userNotFound
             error = browseError
             throw browseError
         }
 
+        let profile = SupabaseProfileMapper.toCloudUserProfile(supabaseProfile)
         displayNameCache[userID] = profile.displayName
 
         let currentUserID = currentUserIDProvider()
@@ -52,13 +53,12 @@ public final class CKUserBrowseService: UserBrowseService {
         let isPrivateAndNotFollowing = profile.isPrivate && !isOwnProfile && !followService.isFollowing(userID)
 
         if isPrivateAndNotFollowing {
-            let counts = try? await followService.fetchFollowCounts(for: userID)
             let data = UserBrowseData(
                 profile: profile,
                 cats: [],
                 encounters: [],
-                followerCount: counts?.followers ?? 0,
-                followingCount: counts?.following ?? 0,
+                followerCount: supabaseProfile.followerCount,
+                followingCount: supabaseProfile.followingCount,
                 fetchedAt: Date()
             )
             cache[userID] = data
@@ -68,15 +68,13 @@ public final class CKUserBrowseService: UserBrowseService {
         do {
             async let cats = catRepository.fetchAll(ownerID: userID)
             async let encounters = encounterRepository.fetchAll(ownerID: userID)
-            async let counts = followService.fetchFollowCounts(for: userID)
 
-            let fetchedCounts = try? await counts
             let data = UserBrowseData(
                 profile: profile,
                 cats: try await cats,
                 encounters: try await encounters,
-                followerCount: fetchedCounts?.followers ?? 0,
-                followingCount: fetchedCounts?.following ?? 0,
+                followerCount: supabaseProfile.followerCount,
+                followingCount: supabaseProfile.followingCount,
                 fetchedAt: Date()
             )
 
@@ -99,12 +97,12 @@ public final class CKUserBrowseService: UserBrowseService {
             return cached
         }
 
-        guard let profile = try? await cloudKitService.fetchUserProfile(appleUserID: userID) else {
+        guard let supabaseProfile = try? await profileRepository.fetchProfile(id: userID) else {
             return nil
         }
 
-        displayNameCache[userID] = profile.displayName
-        return profile.displayName
+        displayNameCache[userID] = supabaseProfile.displayName
+        return supabaseProfile.displayName
     }
 
     public func cachedDisplayName(for userID: String) -> String? {
@@ -115,19 +113,9 @@ public final class CKUserBrowseService: UserBrowseService {
         let uncachedIDs = userIDs.filter { displayNameCache[$0] == nil }
 
         if !uncachedIDs.isEmpty {
-            await withTaskGroup(of: (String, String?).self) { group in
-                for userID in uncachedIDs {
-                    group.addTask { [cloudKitService] in
-                        let profile = try? await cloudKitService.fetchUserProfile(appleUserID: userID)
-                        return (userID, profile?.displayName)
-                    }
-                }
-
-                for await (userID, name) in group {
-                    if let name {
-                        displayNameCache[userID] = name
-                    }
-                }
+            let profiles = (try? await profileRepository.fetchProfiles(ids: uncachedIDs)) ?? []
+            for profile in profiles {
+                displayNameCache[profile.id.uuidString] = profile.displayName
             }
         }
 
@@ -145,10 +133,11 @@ public final class CKUserBrowseService: UserBrowseService {
             return cached.profile
         }
 
-        guard let profile = try? await cloudKitService.fetchUserProfile(appleUserID: userID) else {
+        guard let supabaseProfile = try? await profileRepository.fetchProfile(id: userID) else {
             return nil
         }
 
+        let profile = SupabaseProfileMapper.toCloudUserProfile(supabaseProfile)
         displayNameCache[userID] = profile.displayName
         return profile
     }
