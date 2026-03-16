@@ -50,8 +50,12 @@ install:
 test-fast:
 	swift test --package-path .
 
+# Migration tool tests
+test-migration:
+	swift test --package-path Tools/Migration
+
 # Package + Xcode tests
-test-all: test-fast test
+test-all: test-fast test-migration test
 
 test: boot-sim
 	xcodebuild test \
