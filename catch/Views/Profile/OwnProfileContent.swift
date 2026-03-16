@@ -5,7 +5,7 @@ import CatchCore
 struct OwnProfileContent: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(SupabaseAuthService.self) var authService
-    @Environment(CKFollowService.self) var followService
+    @Environment(SupabaseFollowService.self) var followService
     @Environment(ProfileSyncService.self) private var profileSyncService
     @Environment(ToastManager.self) private var toastManager
     @Query private var profiles: [UserProfile]

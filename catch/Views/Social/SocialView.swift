@@ -16,8 +16,8 @@ enum SocialTab: String, CaseIterable, Identifiable {
 }
 
 struct SocialView: View {
-    @Environment(CKFollowService.self) private var followService
-    @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
+    @Environment(SupabaseFollowService.self) private var followService
+    @Environment(SupabaseUserBrowseService.self) private var browseService: SupabaseUserBrowseService?
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
     @State private var isLoadingMoreFollowers = false

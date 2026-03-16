@@ -6,47 +6,44 @@ import CatchCore
 
 @Observable
 @MainActor
-final class CKCloudKitRestoreService: CloudKitRestoreService {
+final class DefaultRestoreService: RestoreService {
     private(set) var isRestoring = false
 
     private let catRepository: any CatRepository
     private let encounterRepository: any EncounterRepository
-    private let cloudKitService: CloudKitService
-    private let logger = Logger(subsystem: "com.graysonmartin.catch", category: "CloudKitRestore")
+    private let logger = Logger(subsystem: "com.graysonmartin.catch", category: "Restore")
 
     init(
         catRepository: any CatRepository,
-        encounterRepository: any EncounterRepository,
-        cloudKitService: CloudKitService
+        encounterRepository: any EncounterRepository
     ) {
         self.catRepository = catRepository
         self.encounterRepository = encounterRepository
-        self.cloudKitService = cloudKitService
     }
 
-    func restoreIfNeeded(ownerID: String) async throws -> CloudKitRestoreResult {
+    func restoreIfNeeded(ownerID: String) async throws -> RestoreResult {
         isRestoring = true
         defer { isRestoring = false }
 
         let (restoredCats, restoredEncounters) = try await fetchAndMap(ownerID: ownerID)
-        return CloudKitRestoreResult(
+        return RestoreResult(
             catsRestored: restoredCats.count,
             encountersRestored: restoredEncounters.count
         )
     }
 
-    /// Fetches the user's data from CloudKit and inserts it into the local SwiftData store.
+    /// Fetches the user's data and inserts it into the local SwiftData store.
     func insertRestoredData(
         ownerID: String,
         into context: ModelContext
-    ) async throws -> CloudKitRestoreResult {
+    ) async throws -> RestoreResult {
         isRestoring = true
         defer { isRestoring = false }
 
         let (restoredCats, restoredEncounters) = try await fetchAndMap(ownerID: ownerID)
 
         guard !restoredCats.isEmpty else {
-            return CloudKitRestoreResult(catsRestored: 0, encountersRestored: 0)
+            return RestoreResult(catsRestored: 0, encountersRestored: 0)
         }
 
         var catLookup: [String: Cat] = [:]
@@ -89,7 +86,7 @@ final class CKCloudKitRestoreService: CloudKitRestoreService {
         try context.save()
         logger.info("restored \(restoredCats.count) cats and \(encounterCount) encounters to local store")
 
-        return CloudKitRestoreResult(
+        return RestoreResult(
             catsRestored: restoredCats.count,
             encountersRestored: encounterCount
         )
@@ -100,8 +97,8 @@ final class CKCloudKitRestoreService: CloudKitRestoreService {
     private func fetchAndMap(
         ownerID: String
     ) async throws -> (
-        cats: [CloudKitRestoreMapper.RestoredCat],
-        encounters: [CloudKitRestoreMapper.RestoredEncounter]
+        cats: [RestoreMapper.RestoredCat],
+        encounters: [RestoreMapper.RestoredEncounter]
     ) {
         async let cloudCats = catRepository.fetchAll(ownerID: ownerID)
         async let cloudEncounters = encounterRepository.fetchAll(ownerID: ownerID)
@@ -115,7 +112,7 @@ final class CKCloudKitRestoreService: CloudKitRestoreService {
 
         logger.info("found \(fetchedCats.count) cats and \(fetchedEncounters.count) encounters to restore")
 
-        return CloudKitRestoreMapper.mapAll(
+        return RestoreMapper.mapAll(
             cats: fetchedCats,
             encounters: fetchedEncounters
         )

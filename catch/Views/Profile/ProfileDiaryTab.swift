@@ -6,7 +6,7 @@ struct ProfileDiaryTab: View {
     let encounters: [Encounter]
     let searchText: String
 
-    @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+    @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(ToastManager.self) private var toastManager
 
     @State private var selectedEncounterDetail: EncounterDetailData?

@@ -5,7 +5,7 @@ import CatchCore
 struct AddCatView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
+    @Environment(DefaultCatSyncService.self) private var catSyncService: DefaultCatSyncService?
     @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
     @Environment(ToastManager.self) private var toastManager
 

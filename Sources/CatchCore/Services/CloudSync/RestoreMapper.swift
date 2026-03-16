@@ -1,9 +1,9 @@
 import Foundation
 
-/// Pure-logic mapper that converts CloudKit domain models into restore-ready structs.
+/// Pure-logic mapper that converts cloud domain models into restore-ready structs.
 /// These structs contain all the data needed to create local SwiftData models,
 /// without depending on SwiftData itself.
-public enum CloudKitRestoreMapper {
+public enum RestoreMapper {
 
     /// A flat representation of a cat ready for local insertion.
     public struct RestoredCat: Sendable, Equatable {

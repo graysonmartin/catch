@@ -4,8 +4,8 @@ import CatchCore
 
 struct FeedView: View {
     @Query(sort: \Encounter.date, order: .reverse) private var localEncounters: [Encounter]
-    @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
-    @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
+    @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
+    @Environment(DefaultSocialFeedService.self) private var socialFeedService: DefaultSocialFeedService?
     @Environment(ToastManager.self) private var toastManager
     @Binding var scrollToTop: Bool
 

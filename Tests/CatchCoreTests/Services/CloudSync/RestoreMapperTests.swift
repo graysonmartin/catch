@@ -1,7 +1,7 @@
 import XCTest
 @testable import CatchCore
 
-final class CloudKitRestoreMapperTests: XCTestCase {
+final class RestoreMapperTests: XCTestCase {
 
     // MARK: - mapCat
 
@@ -21,7 +21,7 @@ final class CloudKitRestoreMapperTests: XCTestCase {
             photos: [Data([0x01, 0x02])]
         )
 
-        let restored = CloudKitRestoreMapper.mapCat(cloudCat)
+        let restored = RestoreMapper.mapCat(cloudCat)
 
         XCTAssertEqual(restored.cloudKitRecordName, "cat-record-1")
         XCTAssertEqual(restored.name, "Steven")
@@ -52,7 +52,7 @@ final class CloudKitRestoreMapperTests: XCTestCase {
             photos: []
         )
 
-        let restored = CloudKitRestoreMapper.mapCat(cloudCat)
+        let restored = RestoreMapper.mapCat(cloudCat)
 
         XCTAssertNil(restored.name)
         XCTAssertNil(restored.location.latitude)
@@ -76,7 +76,7 @@ final class CloudKitRestoreMapperTests: XCTestCase {
             photos: [Data([0xAA, 0xBB])]
         )
 
-        let restored = CloudKitRestoreMapper.mapEncounter(cloudEncounter)
+        let restored = RestoreMapper.mapEncounter(cloudEncounter)
 
         XCTAssertEqual(restored.cloudKitRecordName, "enc-record-1")
         XCTAssertEqual(restored.catRecordName, "cat-record-1")
@@ -101,7 +101,7 @@ final class CloudKitRestoreMapperTests: XCTestCase {
             photos: []
         )
 
-        let restored = CloudKitRestoreMapper.mapEncounter(cloudEncounter)
+        let restored = RestoreMapper.mapEncounter(cloudEncounter)
 
         XCTAssertNil(restored.location.latitude)
         XCTAssertNil(restored.location.longitude)
@@ -135,7 +135,7 @@ final class CloudKitRestoreMapperTests: XCTestCase {
             notes: "", photos: []
         )
 
-        let (cats, encounters) = CloudKitRestoreMapper.mapAll(cats: [cat1, cat2], encounters: [enc1, enc2])
+        let (cats, encounters) = RestoreMapper.mapAll(cats: [cat1, cat2], encounters: [enc1, enc2])
 
         XCTAssertEqual(cats.count, 2)
         XCTAssertEqual(encounters.count, 2)
@@ -146,7 +146,7 @@ final class CloudKitRestoreMapperTests: XCTestCase {
     }
 
     func testMapAllHandlesEmptyInputs() {
-        let (cats, encounters) = CloudKitRestoreMapper.mapAll(cats: [], encounters: [])
+        let (cats, encounters) = RestoreMapper.mapAll(cats: [], encounters: [])
 
         XCTAssertTrue(cats.isEmpty)
         XCTAssertTrue(encounters.isEmpty)

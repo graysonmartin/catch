@@ -3,16 +3,15 @@ import CatchCore
 
 struct FindPeopleView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(CKFollowService.self) private var followService
+    @Environment(SupabaseFollowService.self) private var followService
     @Environment(SupabaseAuthService.self) private var authService
+    @Environment(ProfileSyncService.self) private var profileSyncService
     @Environment(ToastManager.self) private var toastManager
 
     @State private var searchText = ""
     @State private var results: [CloudUserProfile] = []
     @State private var isSearching = false
     @State private var sentFollowIDs: Set<String> = []
-
-    private var cloudKitService: CloudKitService = CKCloudKitService()
 
     private var currentUserID: String {
         authService.authState.user?.id ?? ""
@@ -145,7 +144,7 @@ struct FindPeopleView: View {
         defer { isSearching = false }
 
         do {
-            results = try await cloudKitService.searchUsers(query: query)
+            results = try await profileSyncService.searchUsers(query: query)
         } catch {
             results = []
             toastManager.showError(CatchStrings.Toast.searchFailed)

@@ -6,8 +6,8 @@ struct RemoteFollowListView: View {
     let displayName: String?
     let tab: RemoteFollowTab
 
-    @Environment(CKFollowService.self) private var followService
-    @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
+    @Environment(SupabaseFollowService.self) private var followService
+    @Environment(SupabaseUserBrowseService.self) private var browseService: SupabaseUserBrowseService?
     @Environment(ToastManager.self) private var toastManager
 
     @State private var follows: [Follow] = []

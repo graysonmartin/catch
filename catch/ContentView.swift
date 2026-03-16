@@ -2,7 +2,7 @@ import SwiftUI
 import CatchCore
 
 struct ContentView: View {
-    @Environment(CKFollowService.self) private var followService
+    @Environment(SupabaseFollowService.self) private var followService
     @Environment(SupabaseAuthService.self) private var authService
     @State private var selectedTab = 0
     @State private var feedScrollToTop = false

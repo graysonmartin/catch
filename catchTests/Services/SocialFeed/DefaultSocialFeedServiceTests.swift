@@ -2,8 +2,8 @@ import XCTest
 import CatchCore
 
 @MainActor
-final class SupabaseSocialFeedServiceTests: XCTestCase {
-    private var sut: SupabaseSocialFeedService!
+final class DefaultSocialFeedServiceTests: XCTestCase {
+    private var sut: DefaultSocialFeedService!
     private var mockRepo: MockSupabaseFeedRepository!
     private var mockFollowService: MockFollowService!
 
@@ -11,7 +11,7 @@ final class SupabaseSocialFeedServiceTests: XCTestCase {
         super.setUp()
         mockRepo = MockSupabaseFeedRepository()
         mockFollowService = MockFollowService()
-        sut = SupabaseSocialFeedService(
+        sut = DefaultSocialFeedService(
             repository: mockRepo,
             followService: mockFollowService,
             pageSize: 3

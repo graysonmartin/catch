@@ -1,7 +1,7 @@
 import Foundation
 
-/// Describes the result of a CloudKit data restore operation.
-public struct CloudKitRestoreResult: Sendable, Equatable {
+/// Describes the result of a data restore operation.
+public struct RestoreResult: Sendable, Equatable {
     public let catsRestored: Int
     public let encountersRestored: Int
 
@@ -15,13 +15,13 @@ public struct CloudKitRestoreResult: Sendable, Equatable {
     }
 }
 
-/// Orchestrates restoring the user's own cats and encounters from CloudKit
+/// Orchestrates restoring the user's own cats and encounters
 /// back into the local store after a reinstall or new login.
 @MainActor
-public protocol CloudKitRestoreService: Observable, Sendable {
+public protocol RestoreService: Observable, Sendable {
     var isRestoring: Bool { get }
 
-    /// Restore the user's data from CloudKit if the local store is empty.
+    /// Restore the user's data if the local store is empty.
     /// Returns the count of restored items.
-    func restoreIfNeeded(ownerID: String) async throws -> CloudKitRestoreResult
+    func restoreIfNeeded(ownerID: String) async throws -> RestoreResult
 }

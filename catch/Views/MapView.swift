@@ -6,7 +6,7 @@ import CatchCore
 
 struct CatMapView: View {
     @Query(sort: \Cat.name) private var cats: [Cat]
-    @Environment(CKSocialFeedService.self) private var socialFeedService: CKSocialFeedService?
+    @Environment(DefaultSocialFeedService.self) private var socialFeedService: DefaultSocialFeedService?
     @Binding var selectedTab: Int
     @State private var selectedCat: Cat?
     @State private var selectedRemote: RemotePinSelection?

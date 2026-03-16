@@ -7,7 +7,7 @@ struct InteractionBar: View {
     var ownerRoute: RemoteProfileRoute?
     var isOwnEncounter: Bool = false
 
-    @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+    @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(ToastManager.self) private var toastManager
 
     @State private var showLikedBySheet = false

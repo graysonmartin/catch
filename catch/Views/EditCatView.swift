@@ -3,7 +3,7 @@ import CatchCore
 
 struct EditCatView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
+    @Environment(DefaultCatSyncService.self) private var catSyncService: DefaultCatSyncService?
     @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
     @Environment(ToastManager.self) private var toastManager
     @Bindable var cat: Cat

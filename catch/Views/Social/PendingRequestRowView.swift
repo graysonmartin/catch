@@ -6,7 +6,7 @@ struct PendingRequestRowView: View {
     let onApprove: () async throws -> Void
     let onDecline: () async throws -> Void
 
-    @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
+    @Environment(SupabaseUserBrowseService.self) private var browseService: SupabaseUserBrowseService?
     @Environment(ToastManager.self) private var toastManager
     @State private var resolvedName: String?
 

@@ -5,7 +5,7 @@ import CatchCore
 
 @Observable
 @MainActor
-final class CKCatSyncService: CatSyncService {
+final class DefaultCatSyncService: CatSyncService {
     private(set) var isSyncing = false
 
     private let catRepository: any CatRepository

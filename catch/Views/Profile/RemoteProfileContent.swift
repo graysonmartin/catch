@@ -5,10 +5,10 @@ struct RemoteProfileContent: View {
     let userID: String
     let initialDisplayName: String?
 
-    @Environment(CKFollowService.self) private var followService
-    @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
+    @Environment(SupabaseFollowService.self) private var followService
+    @Environment(SupabaseUserBrowseService.self) private var browseService: SupabaseUserBrowseService?
     @Environment(SupabaseAuthService.self) private var authService
-    @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+    @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(ToastManager.self) private var toastManager
 
     @State private var data: UserBrowseData?
