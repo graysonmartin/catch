@@ -12,20 +12,8 @@ struct CatPhotoView: View {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()
-            } else if let photoUrl, let url = URL(string: photoUrl) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    case .failure:
-                        placeholder
-                    default:
-                        ProgressView()
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    }
-                }
+            } else if let photoUrl {
+                RemoteImageView(urlString: photoUrl) { placeholder }
             } else {
                 placeholder
             }

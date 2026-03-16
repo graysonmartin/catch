@@ -63,7 +63,7 @@ struct PhotoCarouselView: View {
             .contentShape(Rectangle())
             .onTapGesture { handleTap() }
             .fullScreenCover(isPresented: $isShowingFullScreen) {
-                FullScreenPhotoViewer(photos: photos, initialIndex: 0) {
+                FullScreenPhotoViewer(photos: photos, photoUrls: photoUrls, initialIndex: 0) {
                     isShowingFullScreen = false
                 }
             }
@@ -88,7 +88,7 @@ struct PhotoCarouselView: View {
             }
         }
         .fullScreenCover(isPresented: $isShowingFullScreen) {
-            FullScreenPhotoViewer(photos: photos, initialIndex: currentPage) {
+            FullScreenPhotoViewer(photos: photos, photoUrls: photoUrls, initialIndex: currentPage) {
                 isShowingFullScreen = false
             }
         }
@@ -139,25 +139,7 @@ struct PhotoCarouselView: View {
     }
 
     private func remotePhotoImage(_ urlString: String) -> some View {
-        Group {
-            if let url = URL(string: urlString) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    case .failure:
-                        photoPlaceholder
-                    default:
-                        ProgressView()
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    }
-                }
-            } else {
-                photoPlaceholder
-            }
-        }
+        RemoteImageView(urlString: urlString) { photoPlaceholder }
     }
 
     private var photoPlaceholder: some View {

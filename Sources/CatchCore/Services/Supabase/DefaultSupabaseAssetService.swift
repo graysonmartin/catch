@@ -1,10 +1,8 @@
 import Foundation
-import Observation
 import Supabase
 import os
 
 /// Uploads and manages photos in Supabase Storage buckets.
-@Observable
 @MainActor
 public final class DefaultSupabaseAssetService: SupabaseAssetService, @unchecked Sendable {
     private let clientProvider: any SupabaseClientProviding
@@ -13,7 +11,6 @@ public final class DefaultSupabaseAssetService: SupabaseAssetService, @unchecked
         category: "SupabaseAssetService"
     )
 
-    private static let jpegCompressionQuality: Double = 0.7
     private static let contentType = "image/jpeg"
 
     public init(clientProvider: any SupabaseClientProviding) {
@@ -38,7 +35,7 @@ public final class DefaultSupabaseAssetService: SupabaseAssetService, @unchecked
                 options: FileOptions(contentType: Self.contentType, upsert: true)
             )
 
-        return publicURL(bucket: bucket, path: path)
+        return Self.buildPublicURL(bucket: bucket, path: path)
     }
 
     public func uploadPhotos(
@@ -46,17 +43,22 @@ public final class DefaultSupabaseAssetService: SupabaseAssetService, @unchecked
         bucket: SupabaseStorageBucket,
         ownerID: String
     ) async throws -> [String] {
-        try await withThrowingTaskGroup(of: (Int, String).self, returning: [String].self) { group in
+        let client = clientProvider.client
+        let contentType = Self.contentType
+
+        return try await withThrowingTaskGroup(of: (Int, String).self, returning: [String].self) { group in
             for (index, photoData) in photos.enumerated() {
                 group.addTask {
                     let fileName = "\(UUID().uuidString)_\(index).jpg"
-                    let url = try await self.uploadPhoto(
-                        photoData,
-                        bucket: bucket,
-                        ownerID: ownerID,
-                        fileName: fileName
-                    )
-                    return (index, url)
+                    let path = "\(ownerID)/\(fileName)"
+                    try await client.storage
+                        .from(bucket.rawValue)
+                        .upload(
+                            path: path,
+                            file: photoData,
+                            options: FileOptions(contentType: contentType, upsert: true)
+                        )
+                    return (index, Self.buildPublicURL(bucket: bucket, path: path))
                 }
             }
 
@@ -81,7 +83,14 @@ public final class DefaultSupabaseAssetService: SupabaseAssetService, @unchecked
         bucket: SupabaseStorageBucket,
         path: String
     ) -> String {
+        Self.buildPublicURL(bucket: bucket, path: path)
+    }
+
+    // MARK: - Private
+
+    private nonisolated static func buildPublicURL(bucket: SupabaseStorageBucket, path: String) -> String {
         let baseURL = SupabaseConfig.url.absoluteString
-        return "\(baseURL)/storage/v1/object/public/\(bucket.rawValue)/\(path)"
+        let encodedPath = path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? path
+        return "\(baseURL)/storage/v1/object/public/\(bucket.rawValue)/\(encodedPath)"
     }
 }
