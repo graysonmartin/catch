@@ -136,6 +136,59 @@ final class FeedEncounterDetailMapperTests: XCTestCase {
         XCTAssertNil(detail.thumbnailPhoto)
     }
 
+    // MARK: - Photo URLs
+
+    func testDisplayPhotoUrlsUsesEncounterUrlsWhenAvailable() {
+        let encounter = makeEncounter(recordName: "enc-9", catRecordName: "cat-9", photoUrls: ["enc-url"])
+        let cat = makeCat(recordName: "cat-9", name: "Test", breed: "", photoUrls: ["cat-url"])
+
+        let detail = FeedEncounterDetailMapper.map(
+            encounter: encounter,
+            cat: cat,
+            isFirstEncounter: false
+        )
+
+        XCTAssertEqual(detail.displayPhotoUrls, ["enc-url"])
+    }
+
+    func testDisplayPhotoUrlsFallsToCatUrlsWhenEncounterHasNone() {
+        let encounter = makeEncounter(recordName: "enc-10", catRecordName: "cat-10")
+        let cat = makeCat(recordName: "cat-10", name: "Test", breed: "", photoUrls: ["cat-url"])
+
+        let detail = FeedEncounterDetailMapper.map(
+            encounter: encounter,
+            cat: cat,
+            isFirstEncounter: false
+        )
+
+        XCTAssertEqual(detail.displayPhotoUrls, ["cat-url"])
+    }
+
+    func testThumbnailPhotoUrlReturnsFirstCatPhotoUrl() {
+        let encounter = makeEncounter(recordName: "enc-11", catRecordName: "cat-11")
+        let cat = makeCat(recordName: "cat-11", name: "Test", breed: "", photoUrls: ["url-a", "url-b"])
+
+        let detail = FeedEncounterDetailMapper.map(
+            encounter: encounter,
+            cat: cat,
+            isFirstEncounter: false
+        )
+
+        XCTAssertEqual(detail.thumbnailPhotoUrl, "url-a")
+    }
+
+    func testThumbnailPhotoUrlIsNilWhenNoCat() {
+        let encounter = makeEncounter(recordName: "enc-12", catRecordName: "cat-12")
+
+        let detail = FeedEncounterDetailMapper.map(
+            encounter: encounter,
+            cat: nil,
+            isFirstEncounter: false
+        )
+
+        XCTAssertNil(detail.thumbnailPhotoUrl)
+    }
+
     // MARK: - Batch Mapping
 
     func testMapBatchMatchesCatsToEncounters() {
@@ -214,6 +267,7 @@ final class FeedEncounterDetailMapperTests: XCTestCase {
         locationName: String = "",
         notes: String = "",
         photos: [Data] = [],
+        photoUrls: [String] = [],
         daysAgo: Int = 0
     ) -> CloudEncounter {
         CloudEncounter(
@@ -225,7 +279,8 @@ final class FeedEncounterDetailMapperTests: XCTestCase {
             locationLatitude: nil,
             locationLongitude: nil,
             notes: notes,
-            photos: photos
+            photos: photos,
+            photoUrls: photoUrls
         )
     }
 
@@ -234,7 +289,8 @@ final class FeedEncounterDetailMapperTests: XCTestCase {
         name: String?,
         breed: String,
         isOwned: Bool = false,
-        photos: [Data] = []
+        photos: [Data] = [],
+        photoUrls: [String] = []
     ) -> CloudCat {
         CloudCat(
             recordName: recordName,
@@ -248,7 +304,8 @@ final class FeedEncounterDetailMapperTests: XCTestCase {
             notes: "",
             isOwned: isOwned,
             createdAt: Date(),
-            photos: photos
+            photos: photos,
+            photoUrls: photoUrls
         )
     }
 }

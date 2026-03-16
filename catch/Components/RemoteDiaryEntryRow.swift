@@ -20,7 +20,7 @@ struct RemoteDiaryEntryRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: CatchSpacing.space12) {
-            CatPhotoView(photoData: cat?.photos.first, size: Layout.thumbnailSize)
+            CatPhotoView(photoData: cat?.photos.first, photoUrl: cat?.photoUrls.first, size: Layout.thumbnailSize)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack(spacing: CatchSpacing.space4) {

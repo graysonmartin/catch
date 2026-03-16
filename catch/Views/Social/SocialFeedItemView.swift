@@ -95,7 +95,7 @@ struct SocialFeedItemView: View {
                     ownerName: owner.displayName
                 )
             } label: {
-                CatPhotoView(photoData: cat.photos.first, size: Layout.thumbnailSize)
+                CatPhotoView(photoData: cat.photos.first, photoUrl: cat.photoUrls.first, size: Layout.thumbnailSize)
             }
             .buttonStyle(.plain)
         } else {
@@ -124,9 +124,11 @@ struct SocialFeedItemView: View {
     @ViewBuilder
     private var photos: some View {
         let allPhotos = !encounter.photos.isEmpty ? encounter.photos : (cat?.photos ?? [])
-        if !allPhotos.isEmpty {
+        let allPhotoUrls = !encounter.photoUrls.isEmpty ? encounter.photoUrls : (cat?.photoUrls ?? [])
+        if !allPhotos.isEmpty || !allPhotoUrls.isEmpty {
             PhotoCarouselView(
                 photos: allPhotos,
+                photoUrls: allPhotoUrls,
                 height: Layout.carouselHeight,
                 cornerRadius: CatchTheme.cornerRadiusSmall,
                 onTap: { showDetail = true }

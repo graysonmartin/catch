@@ -18,7 +18,8 @@ public enum SupabaseCatMapper {
             notes: cat.notes ?? "",
             isOwned: cat.isOwned,
             createdAt: cat.createdAt,
-            photos: []
+            photos: [],
+            photoUrls: cat.photoUrls
         )
     }
 

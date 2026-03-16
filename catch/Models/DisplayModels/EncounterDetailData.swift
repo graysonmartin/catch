@@ -5,6 +5,7 @@ struct EncounterDetailData: Identifiable {
     let id: String
     let catName: String
     let catPhotoData: Data?
+    let catPhotoUrl: String?
     let breed: String
     let isFirstEncounter: Bool
     let isUnnamed: Bool
@@ -13,6 +14,7 @@ struct EncounterDetailData: Identifiable {
     let locationName: String
     let notes: String
     let photos: [Data]
+    let photoUrls: [String]
 
     // MARK: - Local SwiftData init
 
@@ -20,6 +22,7 @@ struct EncounterDetailData: Identifiable {
         self.id = encounter.cloudKitRecordName ?? UUID().uuidString
         self.catName = encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat
         self.catPhotoData = encounter.cat?.photos.first
+        self.catPhotoUrl = nil
         self.breed = encounter.cat?.breed ?? ""
         self.isFirstEncounter = isFirstEncounter
         self.isUnnamed = encounter.cat?.isUnnamed ?? false
@@ -28,6 +31,7 @@ struct EncounterDetailData: Identifiable {
         self.locationName = encounter.location.name
         self.notes = encounter.notes
         self.photos = encounter.photos.isEmpty ? (encounter.cat?.photos ?? []) : encounter.photos
+        self.photoUrls = []
     }
 
     // MARK: - Remote CloudKit init
@@ -36,6 +40,7 @@ struct EncounterDetailData: Identifiable {
         self.id = encounter.recordName
         self.catName = cat?.displayName ?? CatchStrings.Social.unknownCat
         self.catPhotoData = cat?.photos.first
+        self.catPhotoUrl = cat?.photoUrls.first
         self.breed = cat?.breed ?? ""
         self.isFirstEncounter = isFirstEncounter
         self.isUnnamed = cat?.isUnnamed ?? false
@@ -44,5 +49,6 @@ struct EncounterDetailData: Identifiable {
         self.locationName = encounter.locationName
         self.notes = encounter.notes
         self.photos = encounter.photos.isEmpty ? (cat?.photos ?? []) : encounter.photos
+        self.photoUrls = encounter.photoUrls.isEmpty ? (cat?.photoUrls ?? []) : encounter.photoUrls
     }
 }

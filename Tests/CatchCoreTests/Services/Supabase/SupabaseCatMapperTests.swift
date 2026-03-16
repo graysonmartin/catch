@@ -78,12 +78,28 @@ final class SupabaseCatMapperTests: XCTestCase {
         XCTAssertFalse(SupabaseCatMapper.toCloudCat(stray).isOwned)
     }
 
-    func testPhotosAlwaysEmpty() {
+    func testPhotosDataAlwaysEmpty() {
         let cat = SupabaseCat.fixture(photoUrls: ["url1", "url2"])
 
         let result = SupabaseCatMapper.toCloudCat(cat)
 
         XCTAssertTrue(result.photos.isEmpty)
+    }
+
+    func testPhotoUrlsPassedThrough() {
+        let cat = SupabaseCat.fixture(photoUrls: ["url1", "url2"])
+
+        let result = SupabaseCatMapper.toCloudCat(cat)
+
+        XCTAssertEqual(result.photoUrls, ["url1", "url2"])
+    }
+
+    func testEmptyPhotoUrlsPassedThrough() {
+        let cat = SupabaseCat.fixture(photoUrls: [])
+
+        let result = SupabaseCatMapper.toCloudCat(cat)
+
+        XCTAssertTrue(result.photoUrls.isEmpty)
     }
 
     // MARK: - insertPayload

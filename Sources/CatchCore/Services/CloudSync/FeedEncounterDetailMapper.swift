@@ -27,6 +27,8 @@ public enum FeedEncounterDetailMapper {
             notes: encounter.notes,
             encounterPhotos: encounter.photos,
             catPhotos: cat?.photos ?? [],
+            encounterPhotoUrls: encounter.photoUrls,
+            catPhotoUrls: cat?.photoUrls ?? [],
             isFirstEncounter: isFirstEncounter
         )
     }

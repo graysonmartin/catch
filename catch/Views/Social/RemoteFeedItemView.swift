@@ -35,7 +35,7 @@ struct RemoteFeedItemView: View {
 
     private var header: some View {
         HStack(spacing: CatchSpacing.space12) {
-            CatPhotoView(photoData: cat?.photos.first, size: Layout.thumbnailSize)
+            CatPhotoView(photoData: cat?.photos.first, photoUrl: cat?.photoUrls.first, size: Layout.thumbnailSize)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(cat?.displayName ?? CatchStrings.Social.unknownCat)
@@ -59,9 +59,11 @@ struct RemoteFeedItemView: View {
     @ViewBuilder
     private var photos: some View {
         let allPhotos = !encounter.photos.isEmpty ? encounter.photos : (cat?.photos ?? [])
-        if !allPhotos.isEmpty {
+        let allPhotoUrls = !encounter.photoUrls.isEmpty ? encounter.photoUrls : (cat?.photoUrls ?? [])
+        if !allPhotos.isEmpty || !allPhotoUrls.isEmpty {
             PhotoCarouselView(
                 photos: allPhotos,
+                photoUrls: allPhotoUrls,
                 height: Layout.carouselHeight,
                 cornerRadius: CatchTheme.cornerRadiusSmall,
                 onTap: { showDetail = true }
