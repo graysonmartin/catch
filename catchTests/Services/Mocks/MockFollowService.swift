@@ -88,6 +88,10 @@ final class MockFollowService: FollowService {
         outgoingPending.first { $0.followeeID == targetID }
     }
 
+    func startListening(for userID: String) async {}
+
+    func stopListening() async {}
+
     // MARK: - Test Helpers
 
     func simulateFollower(id: String = UUID().uuidString, followerID: String) {
