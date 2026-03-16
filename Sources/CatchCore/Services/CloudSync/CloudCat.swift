@@ -13,6 +13,7 @@ public struct CloudCat: Sendable {
     public let isOwned: Bool
     public let createdAt: Date
     public let photos: [Data]
+    public let photoUrls: [String]
 
     public var isUnnamed: Bool {
         name?.isEmpty ?? true
@@ -37,7 +38,8 @@ public struct CloudCat: Sendable {
         notes: String,
         isOwned: Bool,
         createdAt: Date,
-        photos: [Data]
+        photos: [Data],
+        photoUrls: [String] = []
     ) {
         self.recordName = recordName
         self.ownerID = ownerID
@@ -51,5 +53,6 @@ public struct CloudCat: Sendable {
         self.isOwned = isOwned
         self.createdAt = createdAt
         self.photos = photos
+        self.photoUrls = photoUrls
     }
 }

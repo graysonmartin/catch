@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PhotoCarouselView: View {
     let photos: [Data]
+    var photoUrls: [String] = []
     var height: CGFloat = 200
     var cornerRadius: CGFloat = 12
     var showsIndicator: Bool = true
@@ -24,10 +25,19 @@ struct PhotoCarouselView: View {
         static let emptyIconScale: CGFloat = 0.25
     }
 
+    /// Total number of displayable items (local data or remote URLs).
+    private var totalCount: Int {
+        photos.isEmpty ? photoUrls.count : photos.count
+    }
+
+    private var hasContent: Bool {
+        !photos.isEmpty || !photoUrls.isEmpty
+    }
+
     var body: some View {
-        if photos.isEmpty {
+        if !hasContent {
             emptyState
-        } else if photos.count == 1 {
+        } else if totalCount == 1 {
             singlePhoto
         } else {
             carousel
@@ -45,7 +55,7 @@ struct PhotoCarouselView: View {
     }
 
     private var singlePhoto: some View {
-        photoImage(photos[0])
+        photoView(at: 0)
             .frame(maxWidth: .infinity)
             .frame(height: height)
             .clipped()
@@ -53,7 +63,7 @@ struct PhotoCarouselView: View {
             .contentShape(Rectangle())
             .onTapGesture { handleTap() }
             .fullScreenCover(isPresented: $isShowingFullScreen) {
-                FullScreenPhotoViewer(photos: photos, initialIndex: 0) {
+                FullScreenPhotoViewer(photos: photos, photoUrls: photoUrls, initialIndex: 0) {
                     isShowingFullScreen = false
                 }
             }
@@ -62,8 +72,8 @@ struct PhotoCarouselView: View {
     private var carousel: some View {
         ZStack(alignment: .bottom) {
             TabView(selection: $currentPage) {
-                ForEach(photos.indices, id: \.self) { index in
-                    photoImage(photos[index])
+                ForEach(0..<totalCount, id: \.self) { index in
+                    photoView(at: index)
                         .tag(index)
                 }
             }
@@ -78,7 +88,7 @@ struct PhotoCarouselView: View {
             }
         }
         .fullScreenCover(isPresented: $isShowingFullScreen) {
-            FullScreenPhotoViewer(photos: photos, initialIndex: currentPage) {
+            FullScreenPhotoViewer(photos: photos, photoUrls: photoUrls, initialIndex: currentPage) {
                 isShowingFullScreen = false
             }
         }
@@ -86,7 +96,7 @@ struct PhotoCarouselView: View {
 
     private var pageIndicator: some View {
         HStack(spacing: Layout.dotSpacing) {
-            ForEach(photos.indices, id: \.self) { index in
+            ForEach(0..<totalCount, id: \.self) { index in
                 Circle()
                     .fill(index == currentPage ? Color.white : Color.white.opacity(Layout.inactiveDotOpacity))
                     .frame(width: Layout.dotSize, height: Layout.dotSize)
@@ -105,6 +115,17 @@ struct PhotoCarouselView: View {
         }
     }
 
+    @ViewBuilder
+    private func photoView(at index: Int) -> some View {
+        if !photos.isEmpty, index < photos.count {
+            photoImage(photos[index])
+        } else if !photoUrls.isEmpty, index < photoUrls.count {
+            remotePhotoImage(photoUrls[index])
+        } else {
+            photoPlaceholder
+        }
+    }
+
     private func photoImage(_ data: Data) -> some View {
         Group {
             if let uiImage = ImageDownsampler.shared.downsample(data: data, to: CGSize(width: height * 2, height: height)) {
@@ -112,12 +133,20 @@ struct PhotoCarouselView: View {
                     .resizable()
                     .scaledToFill()
             } else {
-                Image(systemName: "photo")
-                    .font(.system(size: height * Layout.emptyIconScale))
-                    .foregroundStyle(accentColor.opacity(0.5))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(emptyBackgroundColor)
+                photoPlaceholder
             }
         }
+    }
+
+    private func remotePhotoImage(_ urlString: String) -> some View {
+        RemoteImageView(urlString: urlString) { photoPlaceholder }
+    }
+
+    private var photoPlaceholder: some View {
+        Image(systemName: "photo")
+            .font(.system(size: height * Layout.emptyIconScale))
+            .foregroundStyle(accentColor.opacity(0.5))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(emptyBackgroundColor)
     }
 }

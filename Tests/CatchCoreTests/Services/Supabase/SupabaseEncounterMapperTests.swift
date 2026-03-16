@@ -61,12 +61,28 @@ final class SupabaseEncounterMapperTests: XCTestCase {
         XCTAssertEqual(result.notes, "")
     }
 
-    func testPhotosAlwaysEmpty() {
+    func testPhotosDataAlwaysEmpty() {
         let encounter = SupabaseEncounter.fixture(photoUrls: ["url1", "url2"])
 
         let result = SupabaseEncounterMapper.toCloudEncounter(encounter)
 
         XCTAssertTrue(result.photos.isEmpty)
+    }
+
+    func testPhotoUrlsPassedThrough() {
+        let encounter = SupabaseEncounter.fixture(photoUrls: ["url1", "url2"])
+
+        let result = SupabaseEncounterMapper.toCloudEncounter(encounter)
+
+        XCTAssertEqual(result.photoUrls, ["url1", "url2"])
+    }
+
+    func testEmptyPhotoUrlsPassedThrough() {
+        let encounter = SupabaseEncounter.fixture(photoUrls: [])
+
+        let result = SupabaseEncounterMapper.toCloudEncounter(encounter)
+
+        XCTAssertTrue(result.photoUrls.isEmpty)
     }
 
     // MARK: - insertPayload

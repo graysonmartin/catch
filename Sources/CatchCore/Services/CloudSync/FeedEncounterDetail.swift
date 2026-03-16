@@ -14,6 +14,8 @@ public struct FeedEncounterDetail: Sendable {
     public let notes: String
     public let encounterPhotos: [Data]
     public let catPhotos: [Data]
+    public let encounterPhotoUrls: [String]
+    public let catPhotoUrls: [String]
     public let isFirstEncounter: Bool
 
     public init(
@@ -27,6 +29,8 @@ public struct FeedEncounterDetail: Sendable {
         notes: String,
         encounterPhotos: [Data],
         catPhotos: [Data],
+        encounterPhotoUrls: [String] = [],
+        catPhotoUrls: [String] = [],
         isFirstEncounter: Bool
     ) {
         self.recordName = recordName
@@ -39,6 +43,8 @@ public struct FeedEncounterDetail: Sendable {
         self.notes = notes
         self.encounterPhotos = encounterPhotos
         self.catPhotos = catPhotos
+        self.encounterPhotoUrls = encounterPhotoUrls
+        self.catPhotoUrls = catPhotoUrls
         self.isFirstEncounter = isFirstEncounter
     }
 
@@ -47,8 +53,18 @@ public struct FeedEncounterDetail: Sendable {
         encounterPhotos.isEmpty ? catPhotos : encounterPhotos
     }
 
+    /// Photo URLs to display: encounter URLs if available, otherwise cat URLs.
+    public var displayPhotoUrls: [String] {
+        encounterPhotoUrls.isEmpty ? catPhotoUrls : encounterPhotoUrls
+    }
+
     /// First cat photo for thumbnail display, or nil.
     public var thumbnailPhoto: Data? {
         catPhotos.first
+    }
+
+    /// First cat photo URL for thumbnail display, or nil.
+    public var thumbnailPhotoUrl: String? {
+        catPhotoUrls.first
     }
 }

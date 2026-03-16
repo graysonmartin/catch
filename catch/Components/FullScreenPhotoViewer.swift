@@ -7,6 +7,7 @@ import SwiftUI
 struct FullScreenPhotoViewer: View {
 
     let photos: [Data]
+    var photoUrls: [String] = []
     let initialIndex: Int
     let onDismiss: () -> Void
 
@@ -22,8 +23,13 @@ struct FullScreenPhotoViewer: View {
         static let counterCornerRadius: CGFloat = 12
     }
 
-    init(photos: [Data], initialIndex: Int = 0, onDismiss: @escaping () -> Void) {
+    private var totalCount: Int {
+        photos.isEmpty ? photoUrls.count : photos.count
+    }
+
+    init(photos: [Data], photoUrls: [String] = [], initialIndex: Int = 0, onDismiss: @escaping () -> Void) {
         self.photos = photos
+        self.photoUrls = photoUrls
         self.initialIndex = initialIndex
         self.onDismiss = onDismiss
         self._currentPage = State(initialValue: initialIndex)
@@ -46,16 +52,39 @@ struct FullScreenPhotoViewer: View {
 
     private var photoPages: some View {
         TabView(selection: $currentPage) {
-            ForEach(photos.indices, id: \.self) { index in
-                ZoomablePhotoView(
-                    imageData: photos[index],
-                    onDismiss: onDismiss
-                )
-                .tag(index)
+            ForEach(0..<totalCount, id: \.self) { index in
+                photoPage(at: index)
+                    .tag(index)
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         .ignoresSafeArea()
+    }
+
+    @ViewBuilder
+    private func photoPage(at index: Int) -> some View {
+        if !photos.isEmpty, index < photos.count {
+            ZoomablePhotoView(
+                imageData: photos[index],
+                onDismiss: onDismiss
+            )
+        } else if !photoUrls.isEmpty, index < photoUrls.count {
+            RemoteImageView(urlString: photoUrls[index]) {
+                Image(systemName: "photo")
+                    .font(.system(size: 40))
+                    .foregroundStyle(.white.opacity(0.5))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 100)
+                    .onEnded { value in
+                        if abs(value.translation.height) > 100 {
+                            onDismiss()
+                        }
+                    }
+            )
+        }
     }
 
     // MARK: - Overlay Controls
@@ -71,7 +100,7 @@ struct FullScreenPhotoViewer: View {
 
             Spacer()
 
-            if photos.count > 1 {
+            if totalCount > 1 {
                 pageCounter
                     .padding(.bottom, Layout.closeButtonPadding)
             }
@@ -89,7 +118,7 @@ struct FullScreenPhotoViewer: View {
     }
 
     private var pageCounter: some View {
-        Text(CatchStrings.Components.photoPageIndicator(currentPage + 1, photos.count))
+        Text(CatchStrings.Components.photoPageIndicator(currentPage + 1, totalCount))
             .font(.system(size: Layout.counterFontSize, weight: .medium))
             .foregroundStyle(.white)
             .padding(.horizontal, Layout.counterPaddingH)

@@ -61,8 +61,8 @@ struct EncounterDetailSheet: View {
     private var scrollContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                if !data.photos.isEmpty {
-                    PhotoCarouselView(photos: data.photos, height: 260, isTappable: true)
+                if !data.photos.isEmpty || !data.photoUrls.isEmpty {
+                    PhotoCarouselView(photos: data.photos, photoUrls: data.photoUrls, height: 260, isTappable: true)
                         .padding(.bottom, CatchSpacing.space12)
                 }
 
@@ -109,7 +109,7 @@ struct EncounterDetailSheet: View {
 
     private var catHeader: some View {
         HStack(spacing: CatchSpacing.space10) {
-            CatPhotoView(photoData: data.catPhotoData, size: 40)
+            CatPhotoView(photoData: data.catPhotoData, photoUrl: data.catPhotoUrl, size: 40)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack(spacing: CatchSpacing.space4) {

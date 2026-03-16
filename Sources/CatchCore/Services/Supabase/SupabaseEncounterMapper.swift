@@ -15,7 +15,8 @@ public enum SupabaseEncounterMapper {
             locationLatitude: encounter.locationLat,
             locationLongitude: encounter.locationLng,
             notes: encounter.notes ?? "",
-            photos: []
+            photos: [],
+            photoUrls: encounter.photoUrls
         )
     }
 

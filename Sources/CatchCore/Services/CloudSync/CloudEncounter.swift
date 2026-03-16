@@ -10,6 +10,7 @@ public struct CloudEncounter: Sendable {
     public let locationLongitude: Double?
     public let notes: String
     public let photos: [Data]
+    public let photoUrls: [String]
 
     public init(
         recordName: String,
@@ -20,7 +21,8 @@ public struct CloudEncounter: Sendable {
         locationLatitude: Double?,
         locationLongitude: Double?,
         notes: String,
-        photos: [Data]
+        photos: [Data],
+        photoUrls: [String] = []
     ) {
         self.recordName = recordName
         self.ownerID = ownerID
@@ -31,5 +33,6 @@ public struct CloudEncounter: Sendable {
         self.locationLongitude = locationLongitude
         self.notes = notes
         self.photos = photos
+        self.photoUrls = photoUrls
     }
 }

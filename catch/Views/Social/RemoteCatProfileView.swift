@@ -30,9 +30,10 @@ struct RemoteCatProfileView: View {
 
     private var photoSection: some View {
         Section {
-            if !cat.photos.isEmpty {
+            if !cat.photos.isEmpty || !cat.photoUrls.isEmpty {
                 PhotoCarouselView(
                     photos: cat.photos,
+                    photoUrls: cat.photoUrls,
                     height: 250,
                     cornerRadius: 16
                 )
