@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import Supabase
 
 @Observable
 @MainActor
@@ -13,13 +14,18 @@ public final class SupabaseFollowService: FollowService {
     public private(set) var hasMoreFollowing = false
 
     private let repository: any SupabaseFollowRepository
+    private let clientProvider: (any SupabaseClientProviding)?
     private let pageSize: Int
+    private var realtimeChannel: RealtimeChannelV2?
+    private var realtimeTask: Task<Void, Never>?
 
     public init(
         repository: any SupabaseFollowRepository,
+        clientProvider: (any SupabaseClientProviding)? = nil,
         pageSize: Int = PaginationConstants.defaultPageSize
     ) {
         self.repository = repository
+        self.clientProvider = clientProvider
         self.pageSize = pageSize
     }
 
@@ -104,7 +110,7 @@ public final class SupabaseFollowService: FollowService {
         hasMoreFollowers = fRows.count >= pageSize
         following = gRows.map { $0.toDomain() }
         hasMoreFollowing = gRows.count >= pageSize
-        pendingRequests = piRows.map { $0.toDomain() }
+        pendingRequests = piRows.map { $0.toDomain() }  // Includes joined display names
         outgoingPending = poRows.map { $0.toDomain() }
     }
 
@@ -164,6 +170,60 @@ public final class SupabaseFollowService: FollowService {
 
     public func pendingRequestTo(_ targetID: String) -> Follow? {
         outgoingPending.first { $0.followeeID == targetID }
+    }
+
+    // MARK: - Realtime
+
+    public func startListening(for userID: String) async {
+        guard let clientProvider else { return }
+        await stopListening()
+
+        let channel = clientProvider.client.channel("follows:\(userID)")
+        let insertions: AsyncStream<InsertAction> = channel.postgresChange(
+            InsertAction.self,
+            schema: "public",
+            table: "follows",
+            filter: .eq("followee_id", value: userID)
+        )
+
+        realtimeChannel = channel
+        try? await channel.subscribeWithError()
+
+        realtimeTask = Task { [weak self] in
+            for await action in insertions {
+                guard let self, !Task.isCancelled else { return }
+                await self.handleRealtimeInsert(action, userID: userID)
+            }
+        }
+    }
+
+    public func stopListening() async {
+        realtimeTask?.cancel()
+        realtimeTask = nil
+
+        if let channel = realtimeChannel {
+            await clientProvider?.client.removeChannel(channel)
+            realtimeChannel = nil
+        }
+    }
+
+    private func handleRealtimeInsert(_ action: InsertAction, userID: String) async {
+        do {
+            let data = try JSONEncoder().encode(action.record)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let follow = try decoder.decode(SupabaseFollow.self, from: data)
+            let domain = follow.toDomain()
+
+            guard domain.isPending, !pendingRequests.contains(where: { $0.id == domain.id }) else { return }
+            pendingRequests.insert(domain, at: 0)
+        } catch {
+            // Re-fetch pending list on decode failure to include display names
+            let rows = try? await repository.fetchPendingIncoming(userID: userID)
+            if let rows {
+                pendingRequests = rows.map { $0.toDomain() }
+            }
+        }
     }
 
     // MARK: - Debug Seeding

@@ -166,6 +166,12 @@ public final class CKFollowService: FollowService {
         outgoingPending.first { $0.followeeID == targetID }
     }
 
+    public func startListening(for userID: String) async {
+        registerForFollowNotifications(userID: userID)
+    }
+
+    public func stopListening() async {}
+
     // MARK: - Private
 
     private func countRecords(field: String, value: String) async throws -> Int {

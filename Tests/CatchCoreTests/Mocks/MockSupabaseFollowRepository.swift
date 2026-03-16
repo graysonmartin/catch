@@ -17,7 +17,7 @@ final class MockSupabaseFollowRepository: SupabaseFollowRepository {
     var fetchFollowResult: SupabaseFollow?
     var fetchFollowersResult: [SupabaseFollow] = []
     var fetchFollowingResult: [SupabaseFollow] = []
-    var fetchPendingIncomingResult: [SupabaseFollow] = []
+    var fetchPendingIncomingResult: [SupabaseFollowWithProfile] = []
     var fetchPendingOutgoingResult: [SupabaseFollow] = []
     var insertFollowResult: SupabaseFollow?
     var updateFollowStatusResult: SupabaseFollow?
@@ -44,7 +44,7 @@ final class MockSupabaseFollowRepository: SupabaseFollowRepository {
         return fetchFollowingResult
     }
 
-    func fetchPendingIncoming(userID: String) async throws -> [SupabaseFollow] {
+    func fetchPendingIncoming(userID: String) async throws -> [SupabaseFollowWithProfile] {
         fetchPendingIncomingCalls.append(userID)
         if let error { throw error }
         return fetchPendingIncomingResult
@@ -109,6 +109,26 @@ extension SupabaseFollow {
             followeeID: followeeID,
             status: status,
             createdAt: createdAt
+        )
+    }
+}
+
+extension SupabaseFollowWithProfile {
+    static func fixture(
+        id: UUID = UUID(),
+        followerID: UUID = UUID(),
+        followeeID: UUID = UUID(),
+        status: String = "pending",
+        createdAt: Date = Date(),
+        displayName: String? = nil
+    ) -> SupabaseFollowWithProfile {
+        SupabaseFollowWithProfile(
+            id: id,
+            followerID: followerID,
+            followeeID: followeeID,
+            status: status,
+            createdAt: createdAt,
+            profiles: displayName.map { JoinedProfile(displayName: $0) }
         )
     }
 }

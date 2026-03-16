@@ -127,4 +127,65 @@ final class SupabaseFollowTests: XCTestCase {
         XCTAssertEqual(decoded.followeeID, original.followeeID)
         XCTAssertEqual(decoded.status, original.status)
     }
+
+    // MARK: - SupabaseFollowWithProfile
+
+    func testDecodesFollowWithJoinedProfile() throws {
+        let json = """
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440000",
+            "follower_id": "660e8400-e29b-41d4-a716-446655440001",
+            "followee_id": "770e8400-e29b-41d4-a716-446655440002",
+            "status": "pending",
+            "created_at": "2025-06-15T10:30:00+00:00",
+            "profiles": {
+                "display_name": "CoolCatPerson"
+            }
+        }
+        """.data(using: .utf8)!
+
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+
+        let follow = try decoder.decode(SupabaseFollowWithProfile.self, from: json)
+
+        XCTAssertEqual(follow.profiles?.displayName, "CoolCatPerson")
+        XCTAssertEqual(follow.status, "pending")
+    }
+
+    func testDecodesFollowWithNullProfile() throws {
+        let json = """
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440000",
+            "follower_id": "660e8400-e29b-41d4-a716-446655440001",
+            "followee_id": "770e8400-e29b-41d4-a716-446655440002",
+            "status": "pending",
+            "created_at": "2025-06-15T10:30:00+00:00",
+            "profiles": null
+        }
+        """.data(using: .utf8)!
+
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+
+        let follow = try decoder.decode(SupabaseFollowWithProfile.self, from: json)
+
+        XCTAssertNil(follow.profiles)
+    }
+
+    func testFollowWithProfileToDomainMapsDisplayName() {
+        let follow = SupabaseFollowWithProfile.fixture(
+            status: "pending",
+            displayName: "CatLover42"
+        ).toDomain()
+
+        XCTAssertEqual(follow.followerDisplayName, "CatLover42")
+        XCTAssertTrue(follow.isPending)
+    }
+
+    func testFollowWithProfileToDomainNilDisplayName() {
+        let follow = SupabaseFollowWithProfile.fixture(status: "pending").toDomain()
+
+        XCTAssertNil(follow.followerDisplayName)
+    }
 }

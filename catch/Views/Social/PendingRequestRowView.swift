@@ -10,8 +10,12 @@ struct PendingRequestRowView: View {
     @Environment(ToastManager.self) private var toastManager
     @State private var resolvedName: String?
 
+    private var displayName: String? {
+        resolvedName ?? follow.followerDisplayName
+    }
+
     private var hasResolvedName: Bool {
-        resolvedName != nil
+        displayName != nil
     }
 
     var body: some View {
@@ -21,7 +25,7 @@ struct PendingRequestRowView: View {
                 .foregroundStyle(CatchTheme.primary)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                Text(resolvedName ?? CatchStrings.Social.loadingName)
+                Text(displayName ?? CatchStrings.Social.loadingName)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.textPrimary)
                     .lineLimit(1)
@@ -65,6 +69,8 @@ struct PendingRequestRowView: View {
             .buttonStyle(.plain)
         }
         .task {
+            guard follow.followerDisplayName == nil else { return }
+
             if let cached = browseService?.cachedDisplayName(for: follow.followerID) {
                 resolvedName = cached
                 return

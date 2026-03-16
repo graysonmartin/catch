@@ -23,4 +23,6 @@ public protocol FollowService: Observable, Sendable {
     func fetchFollowing(for userID: String) async throws -> [Follow]
     func isFollowing(_ targetID: String) -> Bool
     func pendingRequestTo(_ targetID: String) -> Follow?
+    func startListening(for userID: String) async
+    func stopListening() async
 }

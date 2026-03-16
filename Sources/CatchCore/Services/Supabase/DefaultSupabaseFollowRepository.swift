@@ -48,10 +48,10 @@ public final class DefaultSupabaseFollowRepository: SupabaseFollowRepository, @u
             .value
     }
 
-    public func fetchPendingIncoming(userID: String) async throws -> [SupabaseFollow] {
+    public func fetchPendingIncoming(userID: String) async throws -> [SupabaseFollowWithProfile] {
         try await clientProvider.client
             .from(Self.tableName)
-            .select()
+            .select("*, profiles!follower_id(display_name)")
             .eq("followee_id", value: userID)
             .eq("status", value: FollowStatus.pending.rawValue)
             .order("created_at", ascending: false)
@@ -100,24 +100,22 @@ public final class DefaultSupabaseFollowRepository: SupabaseFollowRepository, @u
     }
 
     public func countFollowers(userID: String) async throws -> Int {
-        let response: [SupabaseFollow] = try await clientProvider.client
+        let response = try await clientProvider.client
             .from(Self.tableName)
             .select("id")
             .eq("followee_id", value: userID)
             .eq("status", value: FollowStatus.active.rawValue)
-            .execute()
-            .value
-        return response.count
+            .execute(options: FetchOptions(head: true, count: .exact))
+        return response.count ?? 0
     }
 
     public func countFollowing(userID: String) async throws -> Int {
-        let response: [SupabaseFollow] = try await clientProvider.client
+        let response = try await clientProvider.client
             .from(Self.tableName)
             .select("id")
             .eq("follower_id", value: userID)
             .eq("status", value: FollowStatus.active.rawValue)
-            .execute()
-            .value
-        return response.count
+            .execute(options: FetchOptions(head: true, count: .exact))
+        return response.count ?? 0
     }
 }

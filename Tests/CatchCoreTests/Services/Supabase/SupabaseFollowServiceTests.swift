@@ -161,7 +161,7 @@ final class SupabaseFollowServiceTests: XCTestCase {
         mockRepo.fetchFollowersResult = []
         mockRepo.fetchFollowingResult = []
         mockRepo.fetchPendingIncomingResult = [
-            .fixture(id: followID, followerID: followerID, followeeID: UUID(uuidString: currentUserID) ?? UUID(), status: "pending")
+            SupabaseFollowWithProfile.fixture(id: followID, followerID: followerID, followeeID: UUID(uuidString: currentUserID) ?? UUID(), status: "pending")
         ]
         mockRepo.fetchPendingOutgoingResult = []
         try await sut.refresh(for: currentUserID)
@@ -387,5 +387,50 @@ final class SupabaseFollowServiceTests: XCTestCase {
 
         XCTAssertNotNil(sut.pendingRequestTo(targetID.uuidString))
         XCTAssertNil(sut.pendingRequestTo("unknown"))
+    }
+
+    // MARK: - Display Names
+
+    func testPendingRequestsIncludeDisplayNames() async throws {
+        let followerID = UUID()
+        let myID = UUID(uuidString: currentUserID) ?? UUID()
+
+        mockRepo.fetchFollowersResult = []
+        mockRepo.fetchFollowingResult = []
+        mockRepo.fetchPendingIncomingResult = [
+            SupabaseFollowWithProfile.fixture(
+                followerID: followerID,
+                followeeID: myID,
+                status: "pending",
+                displayName: "CoolCatPerson"
+            )
+        ]
+        mockRepo.fetchPendingOutgoingResult = []
+
+        try await sut.refresh(for: currentUserID)
+
+        XCTAssertEqual(sut.pendingRequests.count, 1)
+        XCTAssertEqual(sut.pendingRequests.first?.followerDisplayName, "CoolCatPerson")
+    }
+
+    func testPendingRequestsWithoutDisplayNameAreNil() async throws {
+        let followerID = UUID()
+        let myID = UUID(uuidString: currentUserID) ?? UUID()
+
+        mockRepo.fetchFollowersResult = []
+        mockRepo.fetchFollowingResult = []
+        mockRepo.fetchPendingIncomingResult = [
+            SupabaseFollowWithProfile.fixture(
+                followerID: followerID,
+                followeeID: myID,
+                status: "pending"
+            )
+        ]
+        mockRepo.fetchPendingOutgoingResult = []
+
+        try await sut.refresh(for: currentUserID)
+
+        XCTAssertEqual(sut.pendingRequests.count, 1)
+        XCTAssertNil(sut.pendingRequests.first?.followerDisplayName)
     }
 }
