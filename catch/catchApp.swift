@@ -7,7 +7,7 @@ struct catchApp: App {
     @AppStorage(AppStorageKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = false
     @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
     @AppStorage(AppStorageKeys.hasAttemptedRestore) private var hasAttemptedRestore = false
-    @State private var authService: AppleAuthService
+    @State private var authService: SupabaseAuthService
     @State private var followService: CKFollowService
     @State private var breedClassifier = VisionBreedClassifierService()
     @State private var catSyncService: CKCatSyncService
@@ -17,7 +17,7 @@ struct catchApp: App {
     @State private var socialFeedService: CKSocialFeedService
     @State private var profileSyncService: ProfileSyncService
     @State private var restoreService: CKCloudKitRestoreService
-    @State private var supabaseProvider = SupabaseClientProvider()
+    @State private var supabaseProvider: SupabaseClientProvider
     @State private var locationSearchService = MKLocationSearchService()
     @State private var toastManager = ToastManager()
     @State private var databaseState: DatabaseState
@@ -25,13 +25,14 @@ struct catchApp: App {
     init() {
         _databaseState = State(initialValue: DatabaseState())
 
-        let auth = AppleAuthService()
+        let provider = SupabaseClientProvider()
+        let auth = SupabaseAuthService(clientProvider: provider)
         let follow = CKFollowService()
         let catRepo = CKCatRepository()
         let encRepo = CKEncounterRepository()
 
         let getUserID: @Sendable () -> String? = { [auth] in
-            auth.authState.user?.userIdentifier
+            auth.authState.user?.id
         }
 
         let browseService = CKUserBrowseService(
@@ -42,6 +43,9 @@ struct catchApp: App {
             currentUserIDProvider: getUserID
         )
 
+        let profileRepo = DefaultSupabaseProfileRepository(clientProvider: provider)
+
+        _supabaseProvider = State(initialValue: provider)
         _authService = State(initialValue: auth)
         _followService = State(initialValue: follow)
         _catSyncService = State(initialValue: CKCatSyncService(
@@ -63,7 +67,7 @@ struct catchApp: App {
             userBrowseService: browseService
         ))
         _profileSyncService = State(initialValue: ProfileSyncService(
-            cloudKitService: CKCloudKitService()
+            profileRepository: profileRepo
         ))
         _restoreService = State(initialValue: CKCloudKitRestoreService(
             catRepository: catRepo,
@@ -123,7 +127,7 @@ struct catchApp: App {
                 .environment(locationSearchService)
                 .environment(toastManager)
                 .task {
-                    await authService.checkCredentialState()
+                    await authService.refreshSessionIfNeeded()
                     #if DEBUG
                     seedDebugData(context: container.mainContext)
                     #endif
@@ -134,7 +138,7 @@ struct catchApp: App {
     #if DEBUG
     private func seedDebugData(context: ModelContext) {
         DataSeeder.seedIfEmpty(context: context)
-        let fakeUserID = authService.authState.user?.userIdentifier ?? "debug-user"
+        let fakeUserID = authService.authState.user?.id ?? "debug-user"
         followService.seedFakeFollows(currentUserID: fakeUserID)
         userBrowseService.seedFakeUsers()
         socialInteractionService.seedFakeInteractions(encounterRecordNames: [

@@ -9,6 +9,7 @@ final class UserProfile {
     var username: String?
     var createdAt: Date
     var appleUserID: String?
+    var supabaseUserID: String?
     var cloudKitRecordName: String?
     var isPrivate: Bool = false
     var visibilitySettings: VisibilitySettings = VisibilitySettings.default
@@ -31,6 +32,7 @@ final class UserProfile {
         username: String? = nil,
         avatarData: Data? = nil,
         appleUserID: String? = nil,
+        supabaseUserID: String? = nil,
         cloudKitRecordName: String? = nil,
         isPrivate: Bool = false,
         visibilitySettings: VisibilitySettings = .default
@@ -41,6 +43,7 @@ final class UserProfile {
         self.createdAt = Date()
         self.avatarData = avatarData
         self.appleUserID = appleUserID
+        self.supabaseUserID = supabaseUserID
         self.cloudKitRecordName = cloudKitRecordName
         self.isPrivate = isPrivate
         self.visibilitySettings = visibilitySettings

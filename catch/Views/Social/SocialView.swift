@@ -18,7 +18,7 @@ enum SocialTab: String, CaseIterable, Identifiable {
 struct SocialView: View {
     @Environment(CKFollowService.self) private var followService
     @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
-    @Environment(AppleAuthService.self) private var authService
+    @Environment(SupabaseAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
     @State private var isLoadingMoreFollowers = false
     @State private var isLoadingMoreFollowing = false
@@ -207,11 +207,11 @@ struct SocialView: View {
     // MARK: - Helpers
 
     private var currentUserID: String {
-        authService.authState.user?.userIdentifier ?? ""
+        authService.authState.user?.id ?? ""
     }
 
     private func refresh() async {
-        guard let userID = authService.authState.user?.userIdentifier else { return }
+        guard let userID = authService.authState.user?.id else { return }
         do {
             try await followService.refresh(for: userID)
             await batchResolveDisplayNames()

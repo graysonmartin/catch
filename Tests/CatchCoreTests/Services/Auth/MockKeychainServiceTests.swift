@@ -115,7 +115,7 @@ final class MockKeychainServiceTests: XCTestCase {
     // MARK: - Codable Round-Trip (AppleUser via Keychain)
 
     func test_appleUser_roundTrip_viaKeychain() throws {
-        let user = AppleUser(userIdentifier: "user-123", fullName: "Cat Fan", email: "cat@catch.app")
+        let user = AuthUser(id: "user-123", email: "cat@catch.app", fullName: "Cat Fan", provider: .apple)
         let data = try JSONEncoder().encode(user)
         try sut.save(data, forKey: "catch.appleUser")
 
@@ -125,7 +125,7 @@ final class MockKeychainServiceTests: XCTestCase {
     }
 
     func test_appleUser_roundTrip_nilOptionals() throws {
-        let user = AppleUser(userIdentifier: "user-456", fullName: nil, email: nil)
+        let user = AuthUser(id: "user-456", email: nil, fullName: nil, provider: .apple)
         let data = try JSONEncoder().encode(user)
         try sut.save(data, forKey: "catch.appleUser")
 

@@ -2,6 +2,8 @@ import AuthenticationServices
 import Observation
 import CatchCore
 
+/// Legacy Apple-only auth service. Retained for backward compatibility with tests.
+/// New code should use `SupabaseAuthService` instead.
 @Observable
 @MainActor
 final class AppleAuthService: AuthService {
@@ -34,7 +36,7 @@ final class AppleAuthService: AuthService {
 
     // MARK: - AuthService
 
-    func processSignInResult(_ result: Result<ASAuthorization, any Error>) throws -> AppleUser {
+    func processSignInResult(_ result: Result<ASAuthorization, any Error>) throws -> AuthUser {
         let authorization = try result.get()
 
         guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else {
@@ -50,10 +52,11 @@ final class AppleAuthService: AuthService {
             return formatted.isEmpty ? nil : formatted
         }()
 
-        let user = AppleUser(
-            userIdentifier: credential.user,
+        let user = AuthUser(
+            id: credential.user,
+            email: credential.email ?? authState.user?.email,
             fullName: fullName ?? authState.user?.fullName,
-            email: credential.email ?? authState.user?.email
+            provider: .apple
         )
 
         Self.persistUser(user, to: keychain)
@@ -61,17 +64,18 @@ final class AppleAuthService: AuthService {
         return user
     }
 
-    func signOut() {
+    func signOut() async {
         Self.clearPersistedUser(from: keychain)
         authState = .signedOut
     }
 
     #if DEBUG
     func debugSignIn() {
-        let user = AppleUser(
-            userIdentifier: "debug-user-\(UUID().uuidString.prefix(8))",
+        let user = AuthUser(
+            id: "debug-user-\(UUID().uuidString.prefix(8))",
+            email: "debug@catch.test",
             fullName: "Debug User",
-            email: "debug@catch.test"
+            provider: .apple
         )
         Self.persistUser(user, to: keychain)
         authState = .signedIn(user)
@@ -86,12 +90,12 @@ final class AppleAuthService: AuthService {
 
         do {
             let state = try await ASAuthorizationAppleIDProvider()
-                .credentialState(forUserID: user.userIdentifier)
+                .credentialState(forUserID: user.id)
             switch state {
             case .authorized:
                 break
             case .revoked, .notFound, .transferred:
-                signOut()
+                await signOut()
             @unknown default:
                 break
             }
@@ -102,14 +106,14 @@ final class AppleAuthService: AuthService {
 
     // MARK: - Persistence
 
-    private static func persistUser(_ user: AppleUser, to keychain: any KeychainService) {
+    private static func persistUser(_ user: AuthUser, to keychain: any KeychainService) {
         guard let data = try? JSONEncoder().encode(user) else { return }
         try? keychain.save(data, forKey: keychainKey)
     }
 
-    private static func loadPersistedUser(from keychain: any KeychainService) -> AppleUser? {
+    private static func loadPersistedUser(from keychain: any KeychainService) -> AuthUser? {
         guard let data = try? keychain.load(forKey: keychainKey) else { return nil }
-        return try? JSONDecoder().decode(AppleUser.self, from: data)
+        return try? JSONDecoder().decode(AuthUser.self, from: data)
     }
 
     private static func clearPersistedUser(from keychain: any KeychainService) {
@@ -125,7 +129,7 @@ final class AppleAuthService: AuthService {
             queue: .main
         ) { [weak self] _ in
             Task { @MainActor in
-                self?.signOut()
+                await self?.signOut()
             }
         }
     }

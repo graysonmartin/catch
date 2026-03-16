@@ -7,7 +7,7 @@ struct RemoteProfileContent: View {
 
     @Environment(CKFollowService.self) private var followService
     @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
-    @Environment(AppleAuthService.self) private var authService
+    @Environment(SupabaseAuthService.self) private var authService
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
     @Environment(ToastManager.self) private var toastManager
 
@@ -234,7 +234,7 @@ struct RemoteProfileContent: View {
 
     @ViewBuilder
     private var toolbarFollowButton: some View {
-        let currentUserID = authService.authState.user?.userIdentifier ?? ""
+        let currentUserID = authService.authState.user?.id ?? ""
         if userID != currentUserID {
             if followService.isFollowing(userID) {
                 Button {
@@ -296,7 +296,7 @@ struct RemoteProfileContent: View {
 
     @ViewBuilder
     private var inlineFollowButton: some View {
-        let currentUserID = authService.authState.user?.userIdentifier ?? ""
+        let currentUserID = authService.authState.user?.id ?? ""
         if userID != currentUserID {
             if followService.pendingRequestTo(userID) != nil {
                 Text(CatchStrings.Social.requestedStatus)

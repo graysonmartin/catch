@@ -4,43 +4,44 @@ import CatchCore
 @MainActor
 @Observable
 final class ProfileSyncService {
-    private let cloudKitService: CloudKitService
+    private let profileRepository: any SupabaseProfileRepository
 
-    init(cloudKitService: CloudKitService) {
-        self.cloudKitService = cloudKitService
+    init(profileRepository: any SupabaseProfileRepository) {
+        self.profileRepository = profileRepository
     }
 
     func syncProfile(_ profile: UserProfile) async throws {
-        guard let appleUserID = profile.appleUserID else { return }
-        let recordName = try await cloudKitService.saveUserProfile(
-            appleUserID: appleUserID,
+        guard let userID = profile.supabaseUserID else { return }
+
+        let payload = SupabaseProfilePayload(
             displayName: profile.displayName,
+            username: profile.username ?? "",
             bio: profile.bio,
-            username: profile.username,
-            isPrivate: profile.isPrivate,
-            avatarData: profile.avatarData
+            isPrivate: profile.isPrivate
         )
-        profile.cloudKitRecordName = recordName
+
+        // Try update first; if profile doesn't exist, create it
+        let existing = try await profileRepository.fetchProfile(id: userID)
+        if existing != nil {
+            _ = try await profileRepository.updateProfile(id: userID, payload)
+        } else {
+            _ = try await profileRepository.createProfile(payload, id: userID)
+        }
     }
 
-    func restoreProfile(from cloudProfile: CloudUserProfile, to localProfile: UserProfile) {
-        localProfile.displayName = cloudProfile.displayName
-        localProfile.bio = cloudProfile.bio
-        localProfile.username = cloudProfile.username
-        localProfile.isPrivate = cloudProfile.isPrivate
-        localProfile.avatarData = cloudProfile.avatarData
-        localProfile.cloudKitRecordName = cloudProfile.recordName
+    func fetchProfile(userID: String) async throws -> CloudUserProfile? {
+        guard let profile = try await profileRepository.fetchProfile(id: userID) else {
+            return nil
+        }
+        return SupabaseProfileMapper.toCloudUserProfile(profile)
     }
 
-    func fetchProfile(appleUserID: String) async throws -> CloudUserProfile? {
-        try await cloudKitService.fetchUserProfile(appleUserID: appleUserID)
-    }
-
-    func deleteProfile(recordName: String) async throws {
-        try await cloudKitService.deleteUserProfile(recordName: recordName)
+    func deleteProfile(userID: String) async throws {
+        // Profile deletion is handled by Supabase cascade or RLS — no explicit delete needed
+        // for now. If we add a delete endpoint, wire it here.
     }
 
     func checkUsernameAvailability(_ username: String) async throws -> Bool {
-        try await cloudKitService.checkUsernameAvailability(username)
+        try await profileRepository.checkUsernameAvailability(username)
     }
 }

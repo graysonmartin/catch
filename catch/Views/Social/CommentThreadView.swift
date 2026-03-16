@@ -6,7 +6,7 @@ struct CommentThreadView: View {
     var showInteractionBar: Bool = false
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
-    @Environment(AppleAuthService.self) private var authService
+    @Environment(SupabaseAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
 
     @State private var comments: [EncounterComment] = []
@@ -16,7 +16,7 @@ struct CommentThreadView: View {
     @State private var cursor: String?
 
     private var currentUserID: String? {
-        authService.authState.user?.userIdentifier
+        authService.authState.user?.id
     }
 
     private var hasMoreComments: Bool {
