@@ -200,6 +200,10 @@
 		E8SF00000203 /* CKSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000003 /* CKSocialFeedService.swift */; };
 		E8SF00000204 /* MockSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000005 /* MockSocialFeedService.swift */; };
 		E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000006 /* CKSocialFeedServiceTests.swift */; };
+		E8SF00000105 /* SupabaseSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000007 /* SupabaseSocialFeedService.swift */; };
+		E8SF00000206 /* SupabaseSocialFeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000007 /* SupabaseSocialFeedService.swift */; };
+		E8SF00000207 /* MockSupabaseFeedRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000008 /* MockSupabaseFeedRepository.swift */; };
+		E8SF00000208 /* SupabaseSocialFeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000009 /* SupabaseSocialFeedServiceTests.swift */; };
 		E8SI00000108 /* CatchStrings+Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000008 /* CatchStrings+Interaction.swift */; };
 		E8SI00000109 /* InteractionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000009 /* InteractionBar.swift */; };
 		E8SI0000010A /* CommentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000A /* CommentRowView.swift */; };
@@ -387,6 +391,9 @@
 		E8SF00000004 /* SocialFeedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialFeedItemView.swift; sourceTree = "<group>"; };
 		E8SF00000005 /* MockSocialFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialFeedService.swift; sourceTree = "<group>"; };
 		E8SF00000006 /* CKSocialFeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CKSocialFeedServiceTests.swift; sourceTree = "<group>"; };
+		E8SF00000007 /* SupabaseSocialFeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseSocialFeedService.swift; sourceTree = "<group>"; };
+		E8SF00000008 /* MockSupabaseFeedRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSupabaseFeedRepository.swift; sourceTree = "<group>"; };
+		E8SF00000009 /* SupabaseSocialFeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseSocialFeedServiceTests.swift; sourceTree = "<group>"; };
 		E8SI00000008 /* CatchStrings+Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Interaction.swift"; sourceTree = "<group>"; };
 		E8SI00000009 /* InteractionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionBar.swift; sourceTree = "<group>"; };
 		E8SI0000000A /* CommentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRowView.swift; sourceTree = "<group>"; };
@@ -766,6 +773,7 @@
 				E8BL00000022 /* MockBreedLogService.swift */,
 				E8SI0000000C /* MockSocialInteractionService.swift */,
 				E8SF00000005 /* MockSocialFeedService.swift */,
+				E8SF00000008 /* MockSupabaseFeedRepository.swift */,
 				E8ST00000005 /* MockSettingsService.swift */,
 			);
 			path = Mocks;
@@ -941,6 +949,7 @@
 			children = (
 				E8SF00000002 /* SocialFeedService.swift */,
 				E8SF00000003 /* CKSocialFeedService.swift */,
+				E8SF00000007 /* SupabaseSocialFeedService.swift */,
 			);
 			path = SocialFeed;
 			sourceTree = "<group>";
@@ -950,6 +959,7 @@
 			children = (
 				E8SF00000006 /* CKSocialFeedServiceTests.swift */,
 				E8PG00000007 /* CKSocialFeedServicePaginationTests.swift */,
+				E8SF00000009 /* SupabaseSocialFeedServiceTests.swift */,
 			);
 			path = SocialFeed;
 			sourceTree = "<group>";
@@ -1218,6 +1228,7 @@
 				E8SF00000101 /* FeedItem.swift in Sources */,
 				E8SF00000102 /* SocialFeedService.swift in Sources */,
 				E8SF00000103 /* CKSocialFeedService.swift in Sources */,
+				E8SF00000105 /* SupabaseSocialFeedService.swift in Sources */,
 				E8SF00000104 /* SocialFeedItemView.swift in Sources */,
 				E8TM00000101 /* ToastManager.swift in Sources */,
 				E8TM00000102 /* ToastView.swift in Sources */,
@@ -1315,6 +1326,9 @@
 				E8SF00000204 /* MockSocialFeedService.swift in Sources */,
 				E8SF00000205 /* CKSocialFeedServiceTests.swift in Sources */,
 				E8PG00000207 /* CKSocialFeedServicePaginationTests.swift in Sources */,
+				E8SF00000206 /* SupabaseSocialFeedService.swift in Sources */,
+				E8SF00000207 /* MockSupabaseFeedRepository.swift in Sources */,
+				E8SF00000208 /* SupabaseSocialFeedServiceTests.swift in Sources */,
 				E8CL00000201 /* CollectionSortOption.swift in Sources */,
 				E8CL00000202 /* CollectionFilter.swift in Sources */,
 				E8CL00000203 /* CollectionSortFilterService.swift in Sources */,
