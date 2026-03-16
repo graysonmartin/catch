@@ -6,7 +6,7 @@ import CatchCore
 /// Automatically restores cats and encounters, then transitions to the main app.
 struct DataRestoreView: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(AppleAuthService.self) private var authService
+    @Environment(SupabaseAuthService.self) private var authService
     @Environment(CKCloudKitRestoreService.self) private var restoreService
     @Environment(ToastManager.self) private var toastManager
 
@@ -32,7 +32,7 @@ struct DataRestoreView: View {
     private func performRestore() async {
         guard !hasFinished else { return }
 
-        guard let ownerID = authService.authState.user?.userIdentifier else {
+        guard let ownerID = authService.authState.user?.id else {
             onComplete()
             return
         }

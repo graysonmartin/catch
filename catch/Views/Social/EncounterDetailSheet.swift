@@ -5,7 +5,7 @@ struct EncounterDetailSheet: View {
     let data: EncounterDetailData
 
     @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
-    @Environment(AppleAuthService.self) private var authService
+    @Environment(SupabaseAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
     @Environment(\.dismiss) private var dismiss
 
@@ -15,7 +15,7 @@ struct EncounterDetailSheet: View {
     @State private var showLikedBySheet = false
 
     private var currentUserID: String? {
-        authService.authState.user?.userIdentifier
+        authService.authState.user?.id
     }
 
     private var encounterRecordName: String { data.id }

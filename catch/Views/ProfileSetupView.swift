@@ -5,7 +5,7 @@ import CatchCore
 
 struct ProfileSetupView: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(AppleAuthService.self) private var authService
+    @Environment(SupabaseAuthService.self) private var authService
     @Environment(ProfileSyncService.self) private var profileSyncService
     @Environment(ToastManager.self) private var toastManager
 
@@ -16,6 +16,12 @@ struct ProfileSetupView: View {
     @State private var usernameAvailability: UsernameAvailability = .idle
     @State private var signInError: String?
     @State private var isRestoringProfile = false
+    @State private var currentNonce: String?
+    @State private var showEmailSignIn = false
+    @State private var emailAddress = ""
+    @State private var emailPassword = ""
+    @State private var isEmailSignUp = false
+    @State private var isEmailLoading = false
 
     var onComplete: () -> Void
 
@@ -56,7 +62,7 @@ struct ProfileSetupView: View {
             }
         }
         .task {
-            prefillFromAppleUser()
+            prefillFromUser()
             if isSignedIn {
                 isRestoringProfile = true
                 await restoreExistingProfile()
@@ -86,25 +92,23 @@ struct ProfileSetupView: View {
 
     private var signInSection: some View {
         VStack(spacing: CatchSpacing.space16) {
-            SignInWithAppleButton(.signIn) { request in
-                request.requestedScopes = [.fullName, .email]
-            } onCompletion: { result in
-                handleSignIn(result)
+            appleSignInButton
+            googleSignInButton
+            emailSignInToggle
+
+            if showEmailSignIn {
+                emailSignInFields
             }
-            .signInWithAppleButtonStyle(.black)
-            .frame(height: 52)
 
             if let signInError {
                 Text(signInError)
                     .font(.caption).foregroundStyle(.red)
                     .multilineTextAlignment(.center)
             }
+
             #if DEBUG
             Button {
-                authService.debugSignIn()
-                prefillFromAppleUser()
-                isRestoringProfile = true
-                Task { await restoreExistingProfile() }
+                debugSignIn()
             } label: {
                 Text(CatchStrings.Profile.fakeSignIn)
                     .font(.caption.weight(.semibold)).foregroundStyle(.white)
@@ -116,10 +120,127 @@ struct ProfileSetupView: View {
         }
     }
 
+    private var appleSignInButton: some View {
+        SignInWithAppleButton(.signIn) { request in
+            let nonce = NonceGenerator.randomNonce()
+            currentNonce = nonce
+            request.requestedScopes = [.fullName, .email]
+            request.nonce = NonceGenerator.sha256(nonce)
+        } onCompletion: { result in
+            handleAppleSignIn(result)
+        }
+        .signInWithAppleButtonStyle(.black)
+        .frame(height: 52)
+    }
+
+    private var googleSignInButton: some View {
+        Button {
+            Task { await handleGoogleSignIn() }
+        } label: {
+            HStack(spacing: CatchSpacing.space10) {
+                Image(systemName: "globe")
+                    .font(.body.weight(.medium))
+                Text(CatchStrings.ProfileSetup.signInWithGoogle)
+                    .font(.body.weight(.medium))
+            }
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 52)
+            .background(Color(red: 0.26, green: 0.52, blue: 0.96))
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+        }
+    }
+
+    private var emailSignInToggle: some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                showEmailSignIn.toggle()
+            }
+        } label: {
+            HStack(spacing: CatchSpacing.space10) {
+                Image(systemName: "envelope.fill")
+                    .font(.body.weight(.medium))
+                Text(CatchStrings.ProfileSetup.signInWithEmail)
+                    .font(.body.weight(.medium))
+            }
+            .foregroundStyle(CatchTheme.textPrimary)
+            .frame(maxWidth: .infinity)
+            .frame(height: 52)
+            .background(CatchTheme.cardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(CatchTheme.secondary.opacity(0.3), lineWidth: 1)
+            )
+        }
+    }
+
+    private var emailSignInFields: some View {
+        VStack(spacing: CatchSpacing.space12) {
+            TextField(CatchStrings.ProfileSetup.emailPlaceholder, text: $emailAddress)
+                .textContentType(.emailAddress)
+                .keyboardType(.emailAddress)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .padding(CatchSpacing.space12)
+                .background(CatchTheme.cardBackground)
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
+                .overlay(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight)
+                    .stroke(CatchTheme.secondary.opacity(0.3), lineWidth: 1))
+
+            SecureField(CatchStrings.ProfileSetup.passwordPlaceholder, text: $emailPassword)
+                .textContentType(isEmailSignUp ? .newPassword : .password)
+                .padding(CatchSpacing.space12)
+                .background(CatchTheme.cardBackground)
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
+                .overlay(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight)
+                    .stroke(CatchTheme.secondary.opacity(0.3), lineWidth: 1))
+
+            HStack(spacing: CatchSpacing.space16) {
+                Button {
+                    isEmailSignUp.toggle()
+                } label: {
+                    Text(isEmailSignUp
+                         ? CatchStrings.ProfileSetup.switchToSignIn
+                         : CatchStrings.ProfileSetup.switchToSignUp)
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.primary)
+                }
+
+                Spacer()
+
+                Button {
+                    Task { await handleEmailSignIn() }
+                } label: {
+                    if isEmailLoading {
+                        ProgressView()
+                            .frame(width: 80, height: 40)
+                    } else {
+                        Text(isEmailSignUp
+                             ? CatchStrings.ProfileSetup.signUp
+                             : CatchStrings.ProfileSetup.signIn)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.white)
+                            .frame(width: 80, height: 40)
+                            .background(canSubmitEmail ? CatchTheme.primary : CatchTheme.primary.opacity(0.4))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                }
+                .disabled(!canSubmitEmail || isEmailLoading)
+            }
+        }
+        .transition(.opacity.combined(with: .move(edge: .top)))
+    }
+
+    private var canSubmitEmail: Bool {
+        !emailAddress.trimmingCharacters(in: .whitespaces).isEmpty &&
+        emailPassword.count >= 6
+    }
+
     private var signedInBadge: some View {
         HStack(spacing: CatchSpacing.space8) {
             Image(systemName: "checkmark.seal.fill").foregroundStyle(CatchTheme.primary)
-            Text(CatchStrings.ProfileSetup.appleAccountConnected)
+            Text(CatchStrings.ProfileSetup.accountConnected)
                 .font(.subheadline).foregroundStyle(CatchTheme.textSecondary)
         }
         .padding(.vertical, CatchSpacing.space10)
@@ -196,27 +317,137 @@ extension ProfileSetupView {
 
 extension ProfileSetupView {
 
-    private func handleSignIn(_ result: Result<ASAuthorization, any Error>) {
+    private func handleAppleSignIn(_ result: Result<ASAuthorization, any Error>) {
+        guard let nonce = currentNonce else {
+            signInError = CatchStrings.ProfileSetup.signInFailed
+            return
+        }
+
         do {
-            _ = try authService.processSignInResult(result)
+            let authorization = try result.get()
+            guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
+                  let identityToken = credential.identityToken else {
+                throw SupabaseAuthError.missingIdentityToken
+            }
+
+            // Extract full name from Apple (only provided on first sign-in)
+            let fullName: String? = {
+                guard let components = credential.fullName else { return nil }
+                let formatted = PersonNameComponentsFormatter.localizedString(
+                    from: components, style: .default
+                )
+                return formatted.isEmpty ? nil : formatted
+            }()
+
             signInError = nil
-            prefillFromAppleUser()
-            isRestoringProfile = true
-            Task { await restoreExistingProfile() }
+
+            Task {
+                do {
+                    let user = try await authService.signInWithApple(idToken: identityToken, nonce: nonce)
+                    if let fullName, displayName.isEmpty {
+                        displayName = fullName
+                    }
+                    if let email = user.email, displayName.isEmpty {
+                        displayName = email.components(separatedBy: "@").first ?? ""
+                    }
+                    isRestoringProfile = true
+                    await restoreExistingProfile()
+                } catch {
+                    signInError = CatchStrings.ProfileSetup.signInFailed
+                }
+            }
         } catch {
             signInError = CatchStrings.ProfileSetup.signInFailed
         }
     }
 
+    private func handleGoogleSignIn() async {
+        do {
+            let redirectURL = URL(string: "catch://auth-callback")!
+            let oauthURL = try await authService.googleOAuthURL(redirectTo: redirectURL)
+
+            // Open in ASWebAuthenticationSession
+            let callbackURL: URL = try await withCheckedThrowingContinuation { continuation in
+                Task { @MainActor in
+                    let session = ASWebAuthenticationSession(
+                        url: oauthURL,
+                        callbackURLScheme: "catch"
+                    ) { callbackURL, error in
+                        if let error {
+                            continuation.resume(throwing: error)
+                        } else if let callbackURL {
+                            continuation.resume(returning: callbackURL)
+                        } else {
+                            continuation.resume(throwing: SupabaseAuthError.providerError("No callback received."))
+                        }
+                    }
+                    session.prefersEphemeralWebBrowserSession = false
+                    session.presentationContextProvider = GoogleAuthPresentationContext.shared
+                    session.start()
+                }
+            }
+
+            let user = try await authService.handleOAuthCallback(callbackURL)
+            if let name = user.fullName, displayName.isEmpty {
+                displayName = name
+            }
+            signInError = nil
+            isRestoringProfile = true
+            await restoreExistingProfile()
+        } catch is CancellationError {
+            // User cancelled — no error shown
+        } catch {
+            signInError = CatchStrings.ProfileSetup.signInFailed
+        }
+    }
+
+    private func handleEmailSignIn() async {
+        isEmailLoading = true
+        defer { isEmailLoading = false }
+
+        let trimmedEmail = emailAddress.trimmingCharacters(in: .whitespaces)
+
+        do {
+            if isEmailSignUp {
+                _ = try await authService.signUpWithEmail(trimmedEmail, password: emailPassword)
+            } else {
+                _ = try await authService.signInWithEmail(trimmedEmail, password: emailPassword)
+            }
+            signInError = nil
+            prefillFromUser()
+            isRestoringProfile = true
+            await restoreExistingProfile()
+        } catch SupabaseAuthError.signUpRequiresVerification {
+            signInError = CatchStrings.ProfileSetup.checkEmailForVerification
+        } catch {
+            signInError = CatchStrings.ProfileSetup.signInFailed
+        }
+    }
+
+    #if DEBUG
+    private func debugSignIn() {
+        Task {
+            do {
+                _ = try await authService.signInWithEmail("debug@catch.test", password: "debug123456")
+                prefillFromUser()
+                isRestoringProfile = true
+                await restoreExistingProfile()
+            } catch {
+                signInError = "debug sign-in failed: \(error.localizedDescription)"
+            }
+        }
+    }
+    #endif
+
     private func restoreExistingProfile() async {
-        guard let appleUserID = authService.authState.user?.userIdentifier else {
+        guard let userID = authService.authState.user?.id else {
             isRestoringProfile = false
             return
         }
 
         let cloudProfile: CloudUserProfile?
         do {
-            cloudProfile = try await profileSyncService.fetchProfile(appleUserID: appleUserID)
+            cloudProfile = try await profileSyncService.fetchProfile(userID: userID)
         } catch {
             isRestoringProfile = false
             toastManager.showError(CatchStrings.ProfileSetup.signInFailed)
@@ -229,7 +460,7 @@ extension ProfileSetupView {
         }
 
         let descriptor = FetchDescriptor<UserProfile>(
-            predicate: #Predicate { $0.appleUserID == appleUserID }
+            predicate: #Predicate { $0.supabaseUserID == userID }
         )
         let existingProfile = try? modelContext.fetch(descriptor).first
 
@@ -246,7 +477,7 @@ extension ProfileSetupView {
                 bio: cloudProfile.bio,
                 username: cloudProfile.username,
                 avatarData: cloudProfile.avatarData,
-                appleUserID: cloudProfile.appleUserID,
+                supabaseUserID: userID,
                 cloudKitRecordName: cloudProfile.recordName,
                 isPrivate: cloudProfile.isPrivate
             )
@@ -257,7 +488,7 @@ extension ProfileSetupView {
         onComplete()
     }
 
-    private func prefillFromAppleUser() {
+    private func prefillFromUser() {
         guard let user = authService.authState.user else { return }
         if displayName.isEmpty, let fullName = user.fullName { displayName = fullName }
     }
@@ -268,7 +499,7 @@ extension ProfileSetupView {
             bio: bio.trimmingCharacters(in: .whitespaces),
             username: username.trimmingCharacters(in: .whitespaces),
             avatarData: avatarData,
-            appleUserID: authService.authState.user?.userIdentifier
+            supabaseUserID: authService.authState.user?.id
         )
         modelContext.insert(profile)
         Task {
@@ -279,5 +510,19 @@ extension ProfileSetupView {
             }
         }
         onComplete()
+    }
+}
+
+// MARK: - Google Auth Presentation Context
+
+private final class GoogleAuthPresentationContext: NSObject, ASWebAuthenticationPresentationContextProviding {
+    static let shared = GoogleAuthPresentationContext()
+
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = scene.windows.first else {
+            return ASPresentationAnchor()
+        }
+        return window
     }
 }

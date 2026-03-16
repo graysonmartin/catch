@@ -1,11 +1,10 @@
 import SwiftUI
 import SwiftData
-import AuthenticationServices
 import CatchCore
 
 struct OwnProfileContent: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(AppleAuthService.self) var authService
+    @Environment(SupabaseAuthService.self) var authService
     @Environment(CKFollowService.self) var followService
     @Environment(ProfileSyncService.self) private var profileSyncService
     @Environment(ToastManager.self) private var toastManager
@@ -297,35 +296,9 @@ struct OwnProfileContent: View {
 
     private func signInPrompt(_ profile: UserProfile) -> some View {
         VStack(spacing: CatchSpacing.space10) {
-            SignInWithAppleButton(.signIn) { request in
-                request.requestedScopes = [.fullName, .email]
-            } onCompletion: { result in
-                handleSignIn(result, profile: profile)
-            }
-            .signInWithAppleButtonStyle(.black)
-            .frame(height: 44)
-
             Text(CatchStrings.Profile.signInPrompt)
                 .font(.caption)
                 .foregroundStyle(CatchTheme.textSecondary)
-
-            #if DEBUG
-            Button {
-                authService.debugSignIn()
-                if let userID = authService.authState.user?.userIdentifier {
-                    profile.appleUserID = userID
-                }
-            } label: {
-                Text(CatchStrings.Profile.fakeSignIn)
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, CatchSpacing.space16)
-                    .padding(.vertical, CatchSpacing.space8)
-                    .background(.red.opacity(0.8))
-                    .clipShape(Capsule())
-            }
-            #endif
         }
     }
 
@@ -343,16 +316,6 @@ struct OwnProfileContent: View {
         let profile = UserProfile()
         modelContext.insert(profile)
         isShowingEditSheet = true
-    }
-
-    private func handleSignIn(_ result: Result<ASAuthorization, any Error>, profile: UserProfile) {
-        do {
-            let user = try authService.processSignInResult(result)
-            profile.appleUserID = user.userIdentifier
-            syncProfile(profile)
-        } catch {
-            // Sign-in cancelled or failed — profile still works locally
-        }
     }
 
     private func syncProfile(_ profile: UserProfile) {

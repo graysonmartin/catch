@@ -4,7 +4,7 @@ import CatchCore
 struct FindPeopleView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(CKFollowService.self) private var followService
-    @Environment(AppleAuthService.self) private var authService
+    @Environment(SupabaseAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
 
     @State private var searchText = ""
@@ -15,7 +15,7 @@ struct FindPeopleView: View {
     private var cloudKitService: CloudKitService = CKCloudKitService()
 
     private var currentUserID: String {
-        authService.authState.user?.userIdentifier ?? ""
+        authService.authState.user?.id ?? ""
     }
 
     var body: some View {

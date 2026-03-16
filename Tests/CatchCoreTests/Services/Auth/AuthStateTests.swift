@@ -19,54 +19,71 @@ final class AuthStateTests: XCTestCase {
     }
 
     func test_signedIn_isSignedIn() {
-        let user = AppleUser(userIdentifier: "abc123", fullName: "Test", email: "t@t.com")
+        let user = AuthUser(id: "abc123", email: "t@t.com", fullName: "Test", provider: .apple)
         let state = AuthState.signedIn(user)
         XCTAssertTrue(state.isSignedIn)
         XCTAssertEqual(state.user, user)
     }
 
     func test_signedIn_userExtraction() {
-        let user = AppleUser(userIdentifier: "id", fullName: nil, email: nil)
+        let user = AuthUser(id: "id", email: nil, fullName: nil, provider: .apple)
         let state = AuthState.signedIn(user)
-        XCTAssertEqual(state.user?.userIdentifier, "id")
+        XCTAssertEqual(state.user?.id, "id")
         XCTAssertNil(state.user?.fullName)
         XCTAssertNil(state.user?.email)
     }
 
-    // MARK: - AppleUser Codable
+    // MARK: - AuthUser Codable
 
-    func test_appleUser_codableRoundTrip_allFields() throws {
-        let user = AppleUser(userIdentifier: "user-1", fullName: "Cat Person", email: "cat@catch.app")
+    func test_authUser_codableRoundTrip_allFields() throws {
+        let user = AuthUser(id: "user-1", email: "cat@catch.app", fullName: "Cat Person", provider: .apple)
         let data = try JSONEncoder().encode(user)
-        let decoded = try JSONDecoder().decode(AppleUser.self, from: data)
+        let decoded = try JSONDecoder().decode(AuthUser.self, from: data)
         XCTAssertEqual(decoded, user)
     }
 
-    func test_appleUser_codableRoundTrip_nilOptionals() throws {
-        let user = AppleUser(userIdentifier: "user-2", fullName: nil, email: nil)
+    func test_authUser_codableRoundTrip_nilOptionals() throws {
+        let user = AuthUser(id: "user-2", email: nil, fullName: nil, provider: .email)
         let data = try JSONEncoder().encode(user)
-        let decoded = try JSONDecoder().decode(AppleUser.self, from: data)
+        let decoded = try JSONDecoder().decode(AuthUser.self, from: data)
         XCTAssertEqual(decoded, user)
         XCTAssertNil(decoded.fullName)
         XCTAssertNil(decoded.email)
     }
 
-    func test_appleUser_equatable() {
-        let a = AppleUser(userIdentifier: "same", fullName: "Name", email: "e@e.com")
-        let b = AppleUser(userIdentifier: "same", fullName: "Name", email: "e@e.com")
-        let c = AppleUser(userIdentifier: "different", fullName: "Name", email: "e@e.com")
+    func test_authUser_equatable() {
+        let a = AuthUser(id: "same", email: "e@e.com", fullName: "Name", provider: .apple)
+        let b = AuthUser(id: "same", email: "e@e.com", fullName: "Name", provider: .apple)
+        let c = AuthUser(id: "different", email: "e@e.com", fullName: "Name", provider: .apple)
         XCTAssertEqual(a, b)
         XCTAssertNotEqual(a, c)
+    }
+
+    // MARK: - AuthProvider
+
+    func test_authProvider_codableRoundTrip() throws {
+        for provider in [AuthProvider.apple, .google, .email] {
+            let data = try JSONEncoder().encode(provider)
+            let decoded = try JSONDecoder().decode(AuthProvider.self, from: data)
+            XCTAssertEqual(decoded, provider)
+        }
     }
 
     // MARK: - AuthState Equatable
 
     func test_authState_equatable() {
-        let user = AppleUser(userIdentifier: "id", fullName: nil, email: nil)
+        let user = AuthUser(id: "id", email: nil, fullName: nil, provider: .apple)
         XCTAssertEqual(AuthState.unknown, AuthState.unknown)
         XCTAssertEqual(AuthState.signedOut, AuthState.signedOut)
         XCTAssertEqual(AuthState.signedIn(user), AuthState.signedIn(user))
         XCTAssertNotEqual(AuthState.unknown, AuthState.signedOut)
         XCTAssertNotEqual(AuthState.signedOut, AuthState.signedIn(user))
+    }
+
+    // MARK: - Legacy Typealias
+
+    func test_appleUser_typealiasWorks() {
+        let user: AppleUser = AuthUser(id: "legacy", email: nil, fullName: nil, provider: .apple)
+        XCTAssertEqual(user.id, "legacy")
     }
 }

@@ -1,4 +1,3 @@
-import AuthenticationServices
 import Observation
 import CatchCore
 
@@ -7,28 +6,14 @@ import CatchCore
 final class MockAuthService: AuthService {
     private(set) var authState: AuthState = .signedOut
 
-    var processSignInResultStub: Result<AppleUser, any Error> = .success(
-        AppleUser(userIdentifier: "mock-user", fullName: "Mock User", email: "mock@catch.app")
-    )
-    var checkCredentialStateCalled = false
     var signOutCalled = false
 
-    func processSignInResult(_ result: Result<ASAuthorization, any Error>) throws -> AppleUser {
-        let user = try processSignInResultStub.get()
-        authState = .signedIn(user)
-        return user
-    }
-
-    func signOut() {
+    func signOut() async {
         signOutCalled = true
         authState = .signedOut
     }
 
-    func checkCredentialState() async {
-        checkCredentialStateCalled = true
-    }
-
-    func simulateSignIn(user: AppleUser = AppleUser(userIdentifier: "mock", fullName: nil, email: nil)) {
+    func simulateSignIn(user: AuthUser = AuthUser(id: "mock", email: nil, fullName: nil, provider: .apple)) {
         authState = .signedIn(user)
     }
 }

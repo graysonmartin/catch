@@ -3,7 +3,7 @@ import CatchCore
 
 struct ContentView: View {
     @Environment(CKFollowService.self) private var followService
-    @Environment(AppleAuthService.self) private var authService
+    @Environment(SupabaseAuthService.self) private var authService
     @State private var selectedTab = 0
     @State private var feedScrollToTop = false
 
@@ -36,7 +36,7 @@ struct ContentView: View {
         }
         .tint(CatchTheme.primary)
         .task {
-            guard let userID = authService.authState.user?.userIdentifier else { return }
+            guard let userID = authService.authState.user?.id else { return }
             do {
                 try await followService.refresh(for: userID)
             } catch {
