@@ -7,7 +7,7 @@ struct FollowRowView: View {
     let isFollowerRow: Bool
     let onAction: () async throws -> Void
 
-    @Environment(CKUserBrowseService.self) private var browseService: CKUserBrowseService?
+    @Environment(SupabaseUserBrowseService.self) private var browseService: SupabaseUserBrowseService?
     @Environment(ToastManager.self) private var toastManager
     @State private var isShowingConfirmation = false
     @State private var resolvedName: String?

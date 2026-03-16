@@ -44,4 +44,9 @@ final class ProfileSyncService {
     func checkUsernameAvailability(_ username: String) async throws -> Bool {
         try await profileRepository.checkUsernameAvailability(username)
     }
+
+    func searchUsers(query: String) async throws -> [CloudUserProfile] {
+        let profiles = try await profileRepository.searchUsers(query: query)
+        return profiles.map { SupabaseProfileMapper.toCloudUserProfile($0) }
+    }
 }

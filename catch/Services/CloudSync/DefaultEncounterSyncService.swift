@@ -5,7 +5,7 @@ import CatchCore
 
 @Observable
 @MainActor
-final class CKEncounterSyncService: EncounterSyncService {
+final class DefaultEncounterSyncService: EncounterSyncService {
     private(set) var isSyncing = false
 
     private let encounterRepository: any EncounterRepository

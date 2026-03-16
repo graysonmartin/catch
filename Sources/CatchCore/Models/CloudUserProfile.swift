@@ -1,33 +1,5 @@
 import Foundation
 
-@MainActor
-public protocol CloudKitService: Sendable {
-    func saveUserProfile(
-        appleUserID: String,
-        displayName: String,
-        bio: String,
-        username: String?,
-        isPrivate: Bool,
-        avatarData: Data?
-    ) async throws -> String
-
-    func fetchUserProfile(
-        appleUserID: String
-    ) async throws -> CloudUserProfile?
-
-    func deleteUserProfile(
-        recordName: String
-    ) async throws
-
-    func searchUsers(
-        query: String
-    ) async throws -> [CloudUserProfile]
-
-    func checkUsernameAvailability(
-        _ username: String
-    ) async throws -> Bool
-}
-
 public struct CloudUserProfile: Sendable {
     public let recordName: String
     public let appleUserID: String

@@ -9,7 +9,7 @@ private enum Layout {
 struct LikedByListView: View {
     let encounterRecordName: String
 
-    @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+    @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(\.dismiss) private var dismiss
 
     @State private var users: [LikedByUser] = []

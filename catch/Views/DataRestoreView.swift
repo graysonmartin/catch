@@ -2,12 +2,12 @@ import SwiftUI
 import SwiftData
 import CatchCore
 
-/// Shown after login when the local database is empty but CloudKit may have data.
+/// Shown after login when the local database is empty but the server may have data.
 /// Automatically restores cats and encounters, then transitions to the main app.
 struct DataRestoreView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(SupabaseAuthService.self) private var authService
-    @Environment(CKCloudKitRestoreService.self) private var restoreService
+    @Environment(DefaultRestoreService.self) private var restoreService
     @Environment(ToastManager.self) private var toastManager
 
     var onComplete: () -> Void

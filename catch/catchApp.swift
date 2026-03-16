@@ -8,15 +8,15 @@ struct catchApp: App {
     @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
     @AppStorage(AppStorageKeys.hasAttemptedRestore) private var hasAttemptedRestore = false
     @State private var authService: SupabaseAuthService
-    @State private var followService: CKFollowService
+    @State private var followService: SupabaseFollowService
     @State private var breedClassifier = VisionBreedClassifierService()
-    @State private var catSyncService: CKCatSyncService
-    @State private var encounterSyncService: CKEncounterSyncService
-    @State private var userBrowseService: CKUserBrowseService
-    @State private var socialInteractionService: CKSocialInteractionService
-    @State private var socialFeedService: CKSocialFeedService
+    @State private var catSyncService: DefaultCatSyncService
+    @State private var encounterSyncService: DefaultEncounterSyncService
+    @State private var userBrowseService: SupabaseUserBrowseService
+    @State private var socialInteractionService: SupabaseSocialInteractionService
+    @State private var socialFeedService: DefaultSocialFeedService
     @State private var profileSyncService: ProfileSyncService
-    @State private var restoreService: CKCloudKitRestoreService
+    @State private var restoreService: DefaultRestoreService
     @State private var supabaseProvider: SupabaseClientProvider
     @State private var locationSearchService = MKLocationSearchService()
     @State private var toastManager = ToastManager()
@@ -27,52 +27,66 @@ struct catchApp: App {
 
         let provider = SupabaseClientProvider()
         let auth = SupabaseAuthService(clientProvider: provider)
-        let follow = CKFollowService()
-        let catRepo = CKCatRepository()
-        let encRepo = CKEncounterRepository()
 
         let getUserID: @Sendable () -> String? = { [auth] in
             auth.authState.user?.id
         }
 
-        let browseService = CKUserBrowseService(
-            cloudKitService: CKCloudKitService(),
-            catRepository: catRepo,
-            encounterRepository: encRepo,
+        let profileRepo = DefaultSupabaseProfileRepository(clientProvider: provider)
+        let catRepo = DefaultSupabaseCatRepository(clientProvider: provider)
+        let encRepo = DefaultSupabaseEncounterRepository(clientProvider: provider)
+        let followRepo = DefaultSupabaseFollowRepository(clientProvider: provider)
+        let socialRepo = DefaultSupabaseSocialRepository(clientProvider: provider)
+        let feedRepo = DefaultSupabaseFeedRepository(clientProvider: provider)
+
+        let catRepoAdapter = SupabaseCatRepositoryAdapter(repository: catRepo)
+        let encRepoAdapter = SupabaseEncounterRepositoryAdapter(repository: encRepo)
+
+        let follow = SupabaseFollowService(
+            repository: followRepo,
+            clientProvider: provider
+        )
+
+        let browseService = SupabaseUserBrowseService(
+            profileRepository: profileRepo,
+            catRepository: catRepoAdapter,
+            encounterRepository: encRepoAdapter,
             followService: follow,
             currentUserIDProvider: getUserID
         )
 
-        let profileRepo = DefaultSupabaseProfileRepository(clientProvider: provider)
+        let socialInteraction = SupabaseSocialInteractionService(
+            repository: socialRepo,
+            clientProvider: provider,
+            getCurrentUserID: getUserID
+        )
+
+        let socialFeed = DefaultSocialFeedService(
+            repository: feedRepo,
+            followService: follow
+        )
 
         _supabaseProvider = State(initialValue: provider)
         _authService = State(initialValue: auth)
         _followService = State(initialValue: follow)
-        _catSyncService = State(initialValue: CKCatSyncService(
-            catRepository: catRepo,
-            encounterRepository: encRepo,
+        _catSyncService = State(initialValue: DefaultCatSyncService(
+            catRepository: catRepoAdapter,
+            encounterRepository: encRepoAdapter,
             getUserID: getUserID
         ))
-        _encounterSyncService = State(initialValue: CKEncounterSyncService(
-            encounterRepository: encRepo,
+        _encounterSyncService = State(initialValue: DefaultEncounterSyncService(
+            encounterRepository: encRepoAdapter,
             getUserID: getUserID
         ))
         _userBrowseService = State(initialValue: browseService)
-        _socialInteractionService = State(initialValue: CKSocialInteractionService(
-            getCurrentUserID: getUserID,
-            cloudKitService: CKCloudKitService()
-        ))
-        _socialFeedService = State(initialValue: CKSocialFeedService(
-            followService: follow,
-            userBrowseService: browseService
-        ))
+        _socialInteractionService = State(initialValue: socialInteraction)
+        _socialFeedService = State(initialValue: socialFeed)
         _profileSyncService = State(initialValue: ProfileSyncService(
             profileRepository: profileRepo
         ))
-        _restoreService = State(initialValue: CKCloudKitRestoreService(
-            catRepository: catRepo,
-            encounterRepository: encRepo,
-            cloudKitService: CKCloudKitService()
+        _restoreService = State(initialValue: DefaultRestoreService(
+            catRepository: catRepoAdapter,
+            encounterRepository: encRepoAdapter
         ))
     }
 
@@ -141,10 +155,6 @@ struct catchApp: App {
         let fakeUserID = authService.authState.user?.id ?? "debug-user"
         followService.seedFakeFollows(currentUserID: fakeUserID)
         userBrowseService.seedFakeUsers()
-        socialInteractionService.seedFakeInteractions(encounterRecordNames: [
-            "tuong-enc-1", "tuong-enc-2", "tuong-enc-3", "tuong-enc-4",
-            "sophi-enc-1", "sophi-enc-2"
-        ])
     }
     #endif
 }

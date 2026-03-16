@@ -4,7 +4,7 @@ import CatchCore
 
 @Observable
 @MainActor
-final class SupabaseSocialFeedService: SocialFeedService {
+final class DefaultSocialFeedService: SocialFeedService {
     private(set) var remoteEncounters: [FeedItem] = []
     private(set) var isLoading = false
     private(set) var isLoadingMore = false

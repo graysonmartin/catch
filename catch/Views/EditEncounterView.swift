@@ -3,7 +3,7 @@ import CatchCore
 
 struct EditEncounterView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(CKEncounterSyncService.self) private var encounterSyncService: CKEncounterSyncService?
+    @Environment(DefaultEncounterSyncService.self) private var encounterSyncService: DefaultEncounterSyncService?
     @Environment(ToastManager.self) private var toastManager
     @Bindable var encounter: Encounter
 

@@ -5,8 +5,8 @@ import CatchCore
 struct CatProfileView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(CKCatSyncService.self) private var catSyncService: CKCatSyncService?
-    @Environment(CKEncounterSyncService.self) private var encounterSyncService: CKEncounterSyncService?
+    @Environment(DefaultCatSyncService.self) private var catSyncService: DefaultCatSyncService?
+    @Environment(DefaultEncounterSyncService.self) private var encounterSyncService: DefaultEncounterSyncService?
     @Environment(ToastManager.self) private var toastManager
     @Bindable var cat: Cat
     @State private var showingEdit = false

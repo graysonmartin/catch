@@ -19,7 +19,7 @@ struct FeedItemView: View {
     let encounter: Encounter
 
     @Environment(\.modelContext) private var modelContext
-    @Environment(CKEncounterSyncService.self) private var encounterSyncService: CKEncounterSyncService?
+    @Environment(DefaultEncounterSyncService.self) private var encounterSyncService: DefaultEncounterSyncService?
 
     @State private var showDetail = false
     @State private var showEditEncounter = false

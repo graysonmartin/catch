@@ -4,7 +4,7 @@ import CatchCore
 struct EncounterDetailSheet: View {
     let data: EncounterDetailData
 
-    @Environment(CKSocialInteractionService.self) private var socialService: CKSocialInteractionService?
+    @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
     @Environment(\.dismiss) private var dismiss
