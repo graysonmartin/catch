@@ -6,11 +6,7 @@ public enum SupabaseConfig {
         case production
     }
 
-    #if DEBUG
     public static var current: Environment = .development
-    #else
-    public static var current: Environment = .production
-    #endif
 
     public static var url: URL {
         switch current {

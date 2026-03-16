@@ -83,7 +83,7 @@ public final class DefaultSupabaseProfileRepository: SupabaseProfileRepository, 
     public func checkUsernameAvailability(_ username: String) async throws -> Bool {
         let results: [SupabaseProfile] = try await clientProvider.client
             .from(Self.tableName)
-            .select("id")
+            .select()
             .eq("username", value: username.lowercased())
             .limit(1)
             .execute()
