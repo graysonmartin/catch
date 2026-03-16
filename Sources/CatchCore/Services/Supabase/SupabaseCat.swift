@@ -78,6 +78,34 @@ public struct SupabaseCatInsertPayload: Codable, Sendable {
     public let photoUrls: [String]
     public let createdAt: Date
 
+    public init(
+        id: String,
+        ownerID: String,
+        name: String,
+        breed: String?,
+        estimatedAge: String?,
+        locationName: String?,
+        locationLat: Double?,
+        locationLng: Double?,
+        notes: String?,
+        isOwned: Bool,
+        photoUrls: [String],
+        createdAt: Date
+    ) {
+        self.id = id
+        self.ownerID = ownerID
+        self.name = name
+        self.breed = breed
+        self.estimatedAge = estimatedAge
+        self.locationName = locationName
+        self.locationLat = locationLat
+        self.locationLng = locationLng
+        self.notes = notes
+        self.isOwned = isOwned
+        self.photoUrls = photoUrls
+        self.createdAt = createdAt
+    }
+
     private enum CodingKeys: String, CodingKey {
         case id
         case ownerID = "owner_id"
@@ -105,6 +133,28 @@ public struct SupabaseCatUpdatePayload: Codable, Sendable {
     public let notes: String?
     public let isOwned: Bool
     public let photoUrls: [String]
+
+    public init(
+        name: String,
+        breed: String?,
+        estimatedAge: String?,
+        locationName: String?,
+        locationLat: Double?,
+        locationLng: Double?,
+        notes: String?,
+        isOwned: Bool,
+        photoUrls: [String]
+    ) {
+        self.name = name
+        self.breed = breed
+        self.estimatedAge = estimatedAge
+        self.locationName = locationName
+        self.locationLat = locationLat
+        self.locationLng = locationLng
+        self.notes = notes
+        self.isOwned = isOwned
+        self.photoUrls = photoUrls
+    }
 
     private enum CodingKeys: String, CodingKey {
         case name

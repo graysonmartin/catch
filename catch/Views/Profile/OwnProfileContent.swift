@@ -1,24 +1,31 @@
 import SwiftUI
-import SwiftData
 import CatchCore
 
 struct OwnProfileContent: View {
-    @Environment(\.modelContext) private var modelContext
     @Environment(SupabaseAuthService.self) var authService
     @Environment(SupabaseFollowService.self) var followService
     @Environment(ProfileSyncService.self) private var profileSyncService
+    @Environment(CatDataService.self) private var catDataService
     @Environment(ToastManager.self) private var toastManager
-    @Query private var profiles: [UserProfile]
-    @Query(sort: \Cat.name) var cats: [Cat]
-    @Query var encounters: [Encounter]
 
     @Binding var selectedTab: Int
+    @State private var profile: UserProfile?
     @State private var isShowingEditSheet = false
     @State private var isShowingFindPeople = false
     @State private var isShowingCollection = false
     @State private var searchText = ""
 
-    private var profile: UserProfile? { profiles.first }
+    private var cats: [Cat] { catDataService.cats }
+
+    private var encounters: [Encounter] {
+        cats.flatMap { cat in
+            cat.encounters.map { enc in
+                var e = enc
+                e.cat = cat
+                return e
+            }
+        }.sorted { $0.date > $1.date }
+    }
 
     var body: some View {
         ScrollView {
@@ -88,10 +95,34 @@ struct OwnProfileContent: View {
         .sheet(item: Binding(
             get: { isShowingEditSheet ? profile : nil },
             set: { _ in isShowingEditSheet = false }
-        )) { profile in
-            EditProfileView(profile: profile) { updatedProfile in
+        )) { editProfile in
+            EditProfileView(profile: editProfile) { updatedProfile in
+                profile = updatedProfile
                 syncProfile(updatedProfile)
             }
+        }
+        .task {
+            await loadProfile()
+        }
+    }
+
+    // MARK: - Data Loading
+
+    private func loadProfile() async {
+        guard let userID = authService.authState.user?.id else { return }
+        do {
+            if let cloudProfile = try await profileSyncService.fetchProfile(userID: userID) {
+                profile = UserProfile(
+                    displayName: cloudProfile.displayName,
+                    bio: cloudProfile.bio,
+                    username: cloudProfile.username,
+                    supabaseUserID: userID,
+                    isPrivate: cloudProfile.isPrivate,
+                    avatarUrl: cloudProfile.avatarURL
+                )
+            }
+        } catch {
+            // Profile load failure is non-critical
         }
     }
 
@@ -164,12 +195,16 @@ struct OwnProfileContent: View {
 
     private func avatarImage(_ profile: UserProfile) -> some View {
         Group {
-            if let data = profile.avatarData, let uiImage = UIImage(data: data) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 120, height: 120)
-                    .clipShape(Circle())
+            if let avatarUrl = profile.avatarUrl {
+                RemoteImageView(urlString: avatarUrl) {
+                    Image(systemName: "person.crop.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 120, height: 120)
+                        .foregroundStyle(CatchTheme.secondary)
+                }
+                .frame(width: 120, height: 120)
+                .clipShape(Circle())
             } else {
                 Image(systemName: "person.crop.circle.fill")
                     .resizable()
@@ -243,18 +278,6 @@ struct OwnProfileContent: View {
             }
 
             Spacer()
-
-            Button {
-                createProfile()
-            } label: {
-                Text(CatchStrings.Profile.setUpProfile)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, CatchSpacing.space12)
-                    .padding(.vertical, CatchSpacing.space8)
-                    .background(CatchTheme.primary)
-                    .clipShape(Capsule())
-            }
         }
         .padding(CatchSpacing.space16)
         .background(CatchTheme.cardBackground)
@@ -311,12 +334,6 @@ struct OwnProfileContent: View {
     }
 
     // MARK: - Helpers
-
-    private func createProfile() {
-        let profile = UserProfile()
-        modelContext.insert(profile)
-        isShowingEditSheet = true
-    }
 
     private func syncProfile(_ profile: UserProfile) {
         Task {

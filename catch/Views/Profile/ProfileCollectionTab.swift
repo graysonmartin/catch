@@ -1,10 +1,8 @@
 import SwiftUI
-import SwiftData
 import CatchCore
 
 struct ProfileCollectionTab: View {
-    @Query(sort: \Cat.name) private var cats: [Cat]
-    @Query private var encounters: [Encounter]
+    @Environment(CatDataService.self) private var catDataService
 
     @Binding var selectedTab: Int
     @State private var searchText = ""
@@ -19,26 +17,14 @@ struct ProfileCollectionTab: View {
         GridItem(.flexible(), spacing: CatchSpacing.space16)
     ]
 
-    private var encounterStatsByCat: [PersistentIdentifier: (count: Int, lastDate: Date)] {
-        var stats: [PersistentIdentifier: (count: Int, lastDate: Date)] = [:]
-        for encounter in encounters {
-            if let catID = encounter.cat?.persistentModelID {
-                let existing = stats[catID]
-                stats[catID] = (
-                    count: (existing?.count ?? 0) + 1,
-                    lastDate: max(encounter.date, existing?.lastDate ?? .distantPast)
-                )
-            }
-        }
-        return stats
-    }
+    private var cats: [Cat] { catDataService.cats }
 
     private func encounterCount(for cat: Cat) -> Int {
-        encounterStatsByCat[cat.persistentModelID]?.count ?? 0
+        cat.encounters.count
     }
 
     private func lastEncounterDate(for cat: Cat) -> Date? {
-        encounterStatsByCat[cat.persistentModelID]?.lastDate
+        cat.encounters.map(\.date).max()
     }
 
     private var processedCats: [Cat] {
@@ -54,7 +40,7 @@ struct ProfileCollectionTab: View {
 
         let items = searched.map { cat in
             CollectionCatItem(
-                id: cat.persistentModelID.hashValue.description,
+                id: cat.id.uuidString,
                 name: cat.displayName,
                 isOwned: cat.isOwned,
                 createdAt: cat.createdAt,
@@ -73,13 +59,9 @@ struct ProfileCollectionTab: View {
 
         let orderedIDs = sortedItems.map(\.id)
         let catsByID = Dictionary(
-            uniqueKeysWithValues: searched.map { ($0.persistentModelID.hashValue.description, $0) }
+            uniqueKeysWithValues: searched.map { ($0.id.uuidString, $0) }
         )
         return orderedIDs.compactMap { catsByID[$0] }
-    }
-
-    private var hasActiveFilters: Bool {
-        !activeFilters.isEmpty
     }
 
     var body: some View {

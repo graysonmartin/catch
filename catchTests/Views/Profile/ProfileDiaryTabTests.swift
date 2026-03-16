@@ -1,66 +1,52 @@
 import XCTest
-import SwiftData
 import CatchCore
 
 @MainActor
 final class ProfileDiaryTabTests: XCTestCase {
 
-    private var container: ModelContainer!
-    private var context: ModelContext!
-
-    override func setUp() async throws {
-        container = try ModelContainer.forTesting()
-        context = container.mainContext
-    }
-
-    override func tearDown() {
-        container = nil
-        context = nil
-    }
-
     // MARK: - Date grouping
 
-    func testEncountersOnSameDayGroupTogether() throws {
-        let cat = Fixtures.cat(name: "Mochi", in: context)
+    func testEncountersOnSameDayGroupTogether() {
+        let cat = Fixtures.cat(name: "Mochi")
         let today = Calendar.current.startOfDay(for: Date())
         let morning = today.addingTimeInterval(3600 * 9)
         let afternoon = today.addingTimeInterval(3600 * 14)
 
-        _ = Fixtures.encounter(for: cat, date: morning, in: context)
-        _ = Fixtures.encounter(for: cat, date: afternoon, in: context)
-
-        let encounters = try context.fetch(FetchDescriptor<Encounter>())
+        let encounters = [
+            Fixtures.encounter(for: cat, date: morning),
+            Fixtures.encounter(for: cat, date: afternoon)
+        ]
         let grouped = groupEncountersByDay(encounters)
 
         XCTAssertEqual(grouped.count, 1, "Both encounters should be in the same day group")
         XCTAssertEqual(grouped[0].encounters.count, 2)
     }
 
-    func testEncountersOnDifferentDaysGroupSeparately() throws {
-        let cat = Fixtures.cat(name: "Luna", in: context)
+    func testEncountersOnDifferentDaysGroupSeparately() {
+        let cat = Fixtures.cat(name: "Luna")
         let today = Date()
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
 
-        _ = Fixtures.encounter(for: cat, date: today, in: context)
-        _ = Fixtures.encounter(for: cat, date: yesterday, in: context)
-
-        let encounters = try context.fetch(FetchDescriptor<Encounter>())
+        let encounters = [
+            Fixtures.encounter(for: cat, date: today),
+            Fixtures.encounter(for: cat, date: yesterday)
+        ]
         let grouped = groupEncountersByDay(encounters)
 
         XCTAssertEqual(grouped.count, 2, "Encounters on different days should be in separate groups")
     }
 
-    func testGroupsAreSortedNewestFirst() throws {
-        let cat = Fixtures.cat(name: "Biscuit", in: context)
+    func testGroupsAreSortedNewestFirst() {
+        let cat = Fixtures.cat(name: "Biscuit")
         let today = Date()
         let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: today)!
         let lastWeek = Calendar.current.date(byAdding: .day, value: -7, to: today)!
 
-        _ = Fixtures.encounter(for: cat, date: lastWeek, in: context)
-        _ = Fixtures.encounter(for: cat, date: today, in: context)
-        _ = Fixtures.encounter(for: cat, date: threeDaysAgo, in: context)
-
-        let encounters = try context.fetch(FetchDescriptor<Encounter>())
+        let encounters = [
+            Fixtures.encounter(for: cat, date: lastWeek),
+            Fixtures.encounter(for: cat, date: today),
+            Fixtures.encounter(for: cat, date: threeDaysAgo)
+        ]
         let grouped = groupEncountersByDay(encounters)
 
         XCTAssertEqual(grouped.count, 3)
@@ -91,50 +77,50 @@ final class ProfileDiaryTabTests: XCTestCase {
 
     // MARK: - Search filtering
 
-    func testSearchFiltersByCatName() throws {
-        let mochi = Fixtures.cat(name: "Mochi", in: context)
-        let luna = Fixtures.cat(name: "Luna", in: context)
+    func testSearchFiltersByCatName() {
+        let mochi = Fixtures.cat(name: "Mochi")
+        let luna = Fixtures.cat(name: "Luna")
 
-        _ = Fixtures.encounter(for: mochi, in: context)
-        _ = Fixtures.encounter(for: luna, in: context)
-
-        let encounters = try context.fetch(FetchDescriptor<Encounter>())
+        let encounters = [
+            Fixtures.encounter(for: mochi),
+            Fixtures.encounter(for: luna)
+        ]
         let filtered = filterEncounters(encounters, searchText: "mochi")
 
         XCTAssertEqual(filtered.count, 1)
         XCTAssertEqual(filtered[0].cat?.name, "Mochi")
     }
 
-    func testSearchFiltersByNotes() throws {
-        let cat = Fixtures.cat(name: "Biscuit", in: context)
-        _ = Fixtures.encounter(for: cat, notes: "spotted near the park", in: context)
-        _ = Fixtures.encounter(for: cat, notes: "chilling on a car", in: context)
-
-        let encounters = try context.fetch(FetchDescriptor<Encounter>())
+    func testSearchFiltersByNotes() {
+        let cat = Fixtures.cat(name: "Biscuit")
+        let encounters = [
+            Fixtures.encounter(for: cat, notes: "spotted near the park"),
+            Fixtures.encounter(for: cat, notes: "chilling on a car")
+        ]
         let filtered = filterEncounters(encounters, searchText: "park")
 
         XCTAssertEqual(filtered.count, 1)
         XCTAssertTrue(filtered[0].notes.contains("park"))
     }
 
-    func testSearchFiltersByLocation() throws {
-        let cat = Fixtures.cat(name: "Shadow", in: context)
-        _ = Fixtures.encounter(for: cat, location: Location(name: "Central Park"), in: context)
-        _ = Fixtures.encounter(for: cat, location: Location(name: "Back Alley"), in: context)
-
-        let encounters = try context.fetch(FetchDescriptor<Encounter>())
+    func testSearchFiltersByLocation() {
+        let cat = Fixtures.cat(name: "Shadow")
+        let encounters = [
+            Fixtures.encounter(for: cat, location: Location(name: "Central Park")),
+            Fixtures.encounter(for: cat, location: Location(name: "Back Alley"))
+        ]
         let filtered = filterEncounters(encounters, searchText: "central")
 
         XCTAssertEqual(filtered.count, 1)
         XCTAssertEqual(filtered[0].location.name, "Central Park")
     }
 
-    func testEmptySearchReturnsAll() throws {
-        let cat = Fixtures.cat(name: "Bean", in: context)
-        _ = Fixtures.encounter(for: cat, in: context)
-        _ = Fixtures.encounter(for: cat, in: context)
-
-        let encounters = try context.fetch(FetchDescriptor<Encounter>())
+    func testEmptySearchReturnsAll() {
+        let cat = Fixtures.cat(name: "Bean")
+        let encounters = [
+            Fixtures.encounter(for: cat),
+            Fixtures.encounter(for: cat)
+        ]
         let filtered = filterEncounters(encounters, searchText: "")
 
         XCTAssertEqual(filtered.count, 2)
@@ -142,32 +128,20 @@ final class ProfileDiaryTabTests: XCTestCase {
 
     // MARK: - First encounter detection
 
-    func testEarliestEncounterIDsForMultipleCats() throws {
-        let mochi = Fixtures.cat(name: "Mochi", in: context)
-        let luna = Fixtures.cat(name: "Luna", in: context)
+    func testEarliestEncounterIDsForMultipleCats() {
+        let mochi = Fixtures.cat(name: "Mochi")
+        let luna = Fixtures.cat(name: "Luna")
 
-        let mochiFirst = Fixtures.encounter(
-            for: mochi,
-            date: Date().addingTimeInterval(-3600),
-            in: context
-        )
-        let mochiSecond = Fixtures.encounter(
-            for: mochi,
-            date: Date(),
-            in: context
-        )
-        let lunaFirst = Fixtures.encounter(
-            for: luna,
-            date: Date().addingTimeInterval(-7200),
-            in: context
-        )
+        let mochiFirst = Fixtures.encounter(for: mochi, date: Date().addingTimeInterval(-3600))
+        let mochiSecond = Fixtures.encounter(for: mochi, date: Date())
+        let lunaFirst = Fixtures.encounter(for: luna, date: Date().addingTimeInterval(-7200))
 
-        let encounters = try context.fetch(FetchDescriptor<Encounter>())
+        let encounters = [mochiFirst, mochiSecond, lunaFirst]
         let firstIDs = earliestEncounterIDs(encounters)
 
-        XCTAssertTrue(firstIDs.contains(mochiFirst.persistentModelID))
-        XCTAssertFalse(firstIDs.contains(mochiSecond.persistentModelID))
-        XCTAssertTrue(firstIDs.contains(lunaFirst.persistentModelID))
+        XCTAssertTrue(firstIDs.contains(mochiFirst.id))
+        XCTAssertFalse(firstIDs.contains(mochiSecond.id))
+        XCTAssertTrue(firstIDs.contains(lunaFirst.id))
     }
 
     // MARK: - Engagement count lookup
@@ -244,14 +218,14 @@ final class ProfileDiaryTabTests: XCTestCase {
         }
     }
 
-    private func earliestEncounterIDs(_ encounters: [Encounter]) -> Set<PersistentIdentifier> {
-        var ids = Set<PersistentIdentifier>()
-        var seenCats = Set<PersistentIdentifier>()
+    private func earliestEncounterIDs(_ encounters: [Encounter]) -> Set<UUID> {
+        var ids = Set<UUID>()
+        var seenCats = Set<UUID>()
         let allSorted = encounters.sorted { $0.date < $1.date }
         for encounter in allSorted {
-            if let catID = encounter.cat?.persistentModelID, !seenCats.contains(catID) {
+            if let catID = encounter.catID, !seenCats.contains(catID) {
                 seenCats.insert(catID)
-                ids.insert(encounter.persistentModelID)
+                ids.insert(encounter.id)
             }
         }
         return ids

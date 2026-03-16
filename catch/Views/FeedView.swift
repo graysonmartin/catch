@@ -1,13 +1,22 @@
 import SwiftUI
-import SwiftData
 import CatchCore
 
 struct FeedView: View {
-    @Query(sort: \Encounter.date, order: .reverse) private var localEncounters: [Encounter]
+    @Environment(CatDataService.self) private var catDataService
     @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(DefaultSocialFeedService.self) private var socialFeedService: DefaultSocialFeedService?
     @Environment(ToastManager.self) private var toastManager
     @Binding var scrollToTop: Bool
+
+    private var localEncounters: [Encounter] {
+        catDataService.cats
+            .flatMap { cat in cat.encounters.map { enc in
+                var e = enc
+                e.cat = cat
+                return e
+            }}
+            .sorted { $0.date > $1.date }
+    }
 
     private var feedItems: [FeedItem] {
         let local = localEncounters.map { FeedItem.local($0) }
@@ -20,7 +29,7 @@ struct FeedView: View {
     }
 
     private var isInitialLoad: Bool {
-        socialFeedService?.isLoading == true && isEmpty
+        (socialFeedService?.isLoading == true || catDataService.isLoading) && isEmpty
     }
 
     var body: some View {
@@ -49,8 +58,10 @@ struct FeedView: View {
             }
             .refreshable {
                 await socialFeedService?.refresh()
+                try? await catDataService.loadCats()
             }
-            .task(id: socialFeedService != nil) {
+            .task {
+                try? await catDataService.loadCats()
                 await socialFeedService?.refresh()
                 await loadInteractionData()
             }

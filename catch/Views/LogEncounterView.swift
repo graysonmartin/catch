@@ -1,13 +1,11 @@
 import SwiftUI
-import SwiftData
 import CatchCore
 
 struct LogEncounterView: View {
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(DefaultEncounterSyncService.self) private var encounterSyncService: DefaultEncounterSyncService?
+    @Environment(CatDataService.self) private var catDataService
+    @Environment(EncounterDataService.self) private var encounterDataService
     @Environment(ToastManager.self) private var toastManager
-    @Query(sort: \Cat.name) private var cats: [Cat]
 
     @State private var selectedCat: Cat?
     @State private var date = Date()
@@ -20,6 +18,10 @@ struct LogEncounterView: View {
     var onSave: (() -> Void)?
     var preselectedCat: Cat? = nil
 
+    private var cats: [Cat] {
+        catDataService.cats.sorted { ($0.name ?? "") < ($1.name ?? "") }
+    }
+
     var body: some View {
         NavigationStack {
             Form {
@@ -27,7 +29,7 @@ struct LogEncounterView: View {
                     Section {
                         if let cat = selectedCat {
                             HStack(spacing: CatchSpacing.space12) {
-                                CatPhotoView(photoData: cat.photos.first, size: 40)
+                                CatPhotoView(photoData: nil, photoUrl: cat.photoUrls.first, size: 40)
 
                                 VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                                     Text(CatchStrings.Log.loggingFor)
@@ -61,7 +63,7 @@ struct LogEncounterView: View {
                             } label: {
                                 if let cat = selectedCat {
                                     HStack(spacing: CatchSpacing.space12) {
-                                        CatPhotoView(photoData: cat.photos.first, size: 40)
+                                        CatPhotoView(photoData: nil, photoUrl: cat.photoUrls.first, size: 40)
 
                                         VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                                             Text(cat.displayName)
@@ -139,26 +141,23 @@ struct LogEncounterView: View {
 
     private func save() async {
         guard let cat = selectedCat else { return }
-        let encounter = Encounter(
-            date: date,
-            location: location,
-            notes: notes,
-            cat: cat,
-            photos: photos
-        )
 
         isSaving = true
         defer { isSaving = false }
 
         do {
-            try await encounterSyncService?.syncNewEncounter(encounter, for: cat)
+            _ = try await encounterDataService.createEncounter(
+                catID: cat.id,
+                date: date,
+                location: location,
+                notes: notes,
+                photos: photos
+            )
+            try await catDataService.loadCats()
+            onSave?()
+            dismiss()
         } catch {
             toastManager.showError(CatchStrings.Toast.encounterSyncFailed)
-            return
         }
-
-        modelContext.insert(encounter)
-        onSave?()
-        dismiss()
     }
 }

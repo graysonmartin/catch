@@ -1,14 +1,10 @@
 import SwiftUI
-import SwiftData
 import CatchCore
 
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(ProfileSyncService.self) private var profileSyncService
-    @Environment(\.modelContext) private var modelContext
-
-    @Query private var profiles: [UserProfile]
 
     @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
 
@@ -17,8 +13,6 @@ struct SettingsView: View {
     @State private var isShowingDeleteConfirmation = false
     @State private var isShowingSignOutConfirmation = false
     @State private var hasLoadedDisplayName = false
-
-    private var profile: UserProfile? { profiles.first }
 
     var body: some View {
         Form {
@@ -30,12 +24,6 @@ struct SettingsView: View {
         .navigationTitle(CatchStrings.Settings.title)
         .navigationBarTitleDisplayMode(.inline)
         .background(CatchTheme.background)
-        .onAppear {
-            if !hasLoadedDisplayName {
-                editedDisplayName = profile?.displayName ?? ""
-                hasLoadedDisplayName = true
-            }
-        }
         .alert(
             CatchStrings.Settings.deleteAccountConfirmTitle,
             isPresented: $isShowingDeleteConfirmation
@@ -69,9 +57,6 @@ struct SettingsView: View {
                 text: $editedDisplayName
             )
             .textInputAutocapitalization(.words)
-            .onChange(of: editedDisplayName) { _, newValue in
-                saveDisplayName(newValue)
-            }
         } header: {
             Text(CatchStrings.Settings.displayNameSection)
         } footer: {
@@ -161,11 +146,6 @@ struct SettingsView: View {
 
     // MARK: - Actions
 
-    private func saveDisplayName(_ name: String) {
-        let trimmed = name.trimmingCharacters(in: .whitespaces)
-        profile?.displayName = trimmed
-    }
-
     private func performSignOut() {
         Task {
             await authService.signOut()
@@ -175,10 +155,7 @@ struct SettingsView: View {
     }
 
     private func deleteAccount() {
-        let userID = profile?.supabaseUserID
-        if let profile {
-            modelContext.delete(profile)
-        }
+        let userID = authService.authState.user?.id
         Task {
             await authService.signOut()
             hasCompletedProfileSetup = false

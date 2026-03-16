@@ -1,28 +1,14 @@
 import XCTest
-import SwiftData
 import CatchCore
 
 @MainActor
 final class FeedItemTests: XCTestCase {
 
-    private var container: ModelContainer!
-    private var context: ModelContext!
-
-    override func setUp() async throws {
-        container = try ModelContainer.forTesting()
-        context = container.mainContext
-    }
-
-    override func tearDown() async throws {
-        container = nil
-        context = nil
-    }
-
     // MARK: - Identifiers
 
     func testLocalItemIDPrefixedWithLocal() {
-        let cat = Fixtures.cat(name: "Noodle", in: context)
-        let encounter = Fixtures.encounter(for: cat, in: context)
+        let cat = Fixtures.cat(name: "Noodle")
+        let encounter = Fixtures.encounter(for: cat)
         let item = FeedItem.local(encounter)
 
         XCTAssertTrue(item.id.hasPrefix("local-"))
@@ -38,8 +24,8 @@ final class FeedItemTests: XCTestCase {
 
     func testLocalItemDateMatchesEncounterDate() {
         let date = Date(timeIntervalSince1970: 1_700_000_000)
-        let cat = Fixtures.cat(name: "Mochi", in: context)
-        let encounter = Fixtures.encounter(for: cat, date: date, in: context)
+        let cat = Fixtures.cat(name: "Mochi")
+        let encounter = Fixtures.encounter(for: cat, date: date)
         let item = FeedItem.local(encounter)
 
         XCTAssertEqual(item.date, date)
@@ -55,8 +41,8 @@ final class FeedItemTests: XCTestCase {
     // MARK: - isLocal
 
     func testLocalItemIsLocalReturnsTrue() {
-        let cat = Fixtures.cat(name: "Bean", in: context)
-        let encounter = Fixtures.encounter(for: cat, in: context)
+        let cat = Fixtures.cat(name: "Bean")
+        let encounter = Fixtures.encounter(for: cat)
         let item = FeedItem.local(encounter)
 
         XCTAssertTrue(item.isLocal)
@@ -70,20 +56,12 @@ final class FeedItemTests: XCTestCase {
 
     // MARK: - Encounter Record Name
 
-    func testLocalItemEncounterRecordNameReturnsCloudKitName() {
-        let cat = Fixtures.cat(name: "Pixel", in: context)
-        let encounter = Fixtures.encounter(for: cat, cloudKitRecordName: "ck-enc-1", in: context)
+    func testLocalItemEncounterRecordNameReturnsUUID() {
+        let cat = Fixtures.cat(name: "Pixel")
+        let encounter = Fixtures.encounter(for: cat)
         let item = FeedItem.local(encounter)
 
-        XCTAssertEqual(item.encounterRecordName, "ck-enc-1")
-    }
-
-    func testLocalItemEncounterRecordNameNilWhenNotSynced() {
-        let cat = Fixtures.cat(name: "Ghost", in: context)
-        let encounter = Fixtures.encounter(for: cat, in: context)
-        let item = FeedItem.local(encounter)
-
-        XCTAssertNil(item.encounterRecordName)
+        XCTAssertEqual(item.encounterRecordName, encounter.id.uuidString)
     }
 
     func testRemoteItemEncounterRecordNameMatchesRecordName() {
@@ -99,9 +77,9 @@ final class FeedItemTests: XCTestCase {
         let midDate = Date(timeIntervalSince1970: 1_650_000_000)
         let newDate = Date(timeIntervalSince1970: 1_700_000_000)
 
-        let cat = Fixtures.cat(name: "Sorter", in: context)
-        let localOld = FeedItem.local(Fixtures.encounter(for: cat, date: oldDate, in: context))
-        let localNew = FeedItem.local(Fixtures.encounter(for: cat, date: newDate, in: context))
+        let cat = Fixtures.cat(name: "Sorter")
+        let localOld = FeedItem.local(Fixtures.encounter(for: cat, date: oldDate))
+        let localNew = FeedItem.local(Fixtures.encounter(for: cat, date: newDate))
         let remoteMid = makeRemoteItem(recordName: "enc-mid", date: midDate)
 
         let sorted = [localOld, remoteMid, localNew].sorted { $0.date > $1.date }

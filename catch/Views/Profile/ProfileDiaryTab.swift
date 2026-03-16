@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 import CatchCore
 
 struct ProfileDiaryTab: View {
@@ -29,14 +28,14 @@ struct ProfileDiaryTab: View {
             .map { (date: $0.key, encounters: $0.value.sorted { $0.date > $1.date }) }
     }
 
-    private var earliestEncounterIDs: Set<PersistentIdentifier> {
-        var ids = Set<PersistentIdentifier>()
-        var seenCats = Set<PersistentIdentifier>()
+    private var earliestEncounterIDs: Set<UUID> {
+        var ids = Set<UUID>()
+        var seenCats = Set<UUID>()
         let allSorted = encounters.sorted { $0.date < $1.date }
         for encounter in allSorted {
-            if let catID = encounter.cat?.persistentModelID, !seenCats.contains(catID) {
+            if let catID = encounter.catID, !seenCats.contains(catID) {
                 seenCats.insert(catID)
-                ids.insert(encounter.persistentModelID)
+                ids.insert(encounter.id)
             }
         }
         return ids
@@ -94,10 +93,10 @@ struct ProfileDiaryTab: View {
 
     @ViewBuilder
     private func diaryRow(for encounter: Encounter) -> some View {
-        let recordName = encounter.cloudKitRecordName
+        let recordName = encounter.id.uuidString
         let likes = likeCount(for: recordName)
         let comments = commentCount(for: recordName)
-        let isFirst = earliestEncounterIDs.contains(encounter.persistentModelID)
+        let isFirst = earliestEncounterIDs.contains(encounter.id)
 
         if encounter.cat != nil {
             Button {
@@ -147,7 +146,7 @@ struct ProfileDiaryTab: View {
 
     private func loadInteractionData() async {
         guard let socialService else { return }
-        let recordNames = encounters.compactMap(\.cloudKitRecordName)
+        let recordNames = encounters.map { $0.id.uuidString }
         guard !recordNames.isEmpty else { return }
         do {
             try await socialService.loadInteractionData(for: recordNames)

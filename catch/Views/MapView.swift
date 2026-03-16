@@ -1,17 +1,18 @@
 import SwiftUI
-import SwiftData
 import CatchCore
 
 // MARK: - SwiftUI wrapper
 
 struct CatMapView: View {
-    @Query(sort: \Cat.name) private var cats: [Cat]
+    @Environment(CatDataService.self) private var catDataService
     @Environment(DefaultSocialFeedService.self) private var socialFeedService: DefaultSocialFeedService?
     @Binding var selectedTab: Int
     @State private var selectedCat: Cat?
     @State private var selectedRemote: RemotePinSelection?
     @State private var clusterSelection: ClusterSelection?
     @State private var showMissingLocationSheet = false
+
+    private var cats: [Cat] { catDataService.cats }
 
     private var catsWithLocation: [Cat] {
         cats.filter { $0.location.hasCoordinates }
@@ -157,21 +158,7 @@ struct MissingLocationSheet: View {
                     onSelect(cat)
                 } label: {
                     HStack(spacing: CatchSpacing.space12) {
-                        if let photoData = cat.photos.first,
-                           let uiImage = ImageDownsampler.shared.downsample(data: photoData, to: CGSize(width: 44, height: 44)) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 44, height: 44)
-                                .clipShape(Circle())
-                        } else {
-                            Image(systemName: "cat.fill")
-                                .font(.system(size: 20))
-                                .foregroundStyle(.white)
-                                .frame(width: 44, height: 44)
-                                .background(CatchTheme.primary)
-                                .clipShape(Circle())
-                        }
+                        CatPhotoView(photoData: nil, photoUrl: cat.photoUrls.first, size: 44)
 
                         VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                             Text(cat.displayName)
@@ -254,25 +241,12 @@ struct ClusterListSheet: View {
 
     @ViewBuilder
     private func pinPhoto(_ pin: MapPin) -> some View {
-        if let photoData = pin.photoData,
-           let uiImage = ImageDownsampler.shared.downsample(data: photoData, to: CGSize(width: 44, height: 44)) {
-            Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 44, height: 44)
-                .clipShape(Circle())
-                .overlay(Circle().stroke(
-                    pin.isRemote ? CatchTheme.remotePinColor : CatchTheme.primary,
-                    lineWidth: 1.5
-                ))
-        } else {
-            Image(systemName: "cat.fill")
-                .font(.system(size: 20))
-                .foregroundStyle(.white)
-                .frame(width: 44, height: 44)
-                .background(pin.isRemote ? CatchTheme.remotePinColor : CatchTheme.primary)
-                .clipShape(Circle())
-        }
+        CatPhotoView(photoData: nil, photoUrl: pin.photoUrl, size: 44)
+            .clipShape(Circle())
+            .overlay(Circle().stroke(
+                pin.isRemote ? CatchTheme.remotePinColor : CatchTheme.primary,
+                lineWidth: 1.5
+            ))
     }
 
     @ViewBuilder

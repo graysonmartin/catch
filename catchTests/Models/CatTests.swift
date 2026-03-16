@@ -1,22 +1,8 @@
 import XCTest
-import SwiftData
 import CatchCore
 
 @MainActor
 final class CatTests: XCTestCase {
-
-    var container: ModelContainer!
-    var context: ModelContext!
-
-    override func setUp() async throws {
-        container = try ModelContainer.forTesting()
-        context = container.mainContext
-    }
-
-    override func tearDown() async throws {
-        container = nil
-        context = nil
-    }
 
     func test_catInitDefaults() {
         let cat = Cat(name: "Steven")
@@ -25,7 +11,7 @@ final class CatTests: XCTestCase {
         XCTAssertEqual(cat.estimatedAge, "")
         XCTAssertEqual(cat.notes, "")
         XCTAssertFalse(cat.isOwned)
-        XCTAssertTrue(cat.photos.isEmpty)
+        XCTAssertTrue(cat.photoUrls.isEmpty)
         XCTAssertTrue(cat.encounters.isEmpty)
     }
 
@@ -37,49 +23,6 @@ final class CatTests: XCTestCase {
         XCTAssertLessThanOrEqual(cat.createdAt, after)
     }
 
-    func test_catPersistence_insertAndFetch() throws {
-        context.insert(Cat(name: "Mango"))
-        try context.save()
-
-        let fetched = try context.fetch(FetchDescriptor<Cat>())
-        XCTAssertEqual(fetched.count, 1)
-        XCTAssertEqual(fetched.first?.name, "Mango")
-    }
-
-    func test_catPersistence_multipleInserts() throws {
-        context.insert(Cat(name: "Mango"))
-        context.insert(Cat(name: "Biscuit"))
-        context.insert(Cat(name: "Noodle"))
-        try context.save()
-
-        let fetched = try context.fetch(FetchDescriptor<Cat>())
-        XCTAssertEqual(fetched.count, 3)
-    }
-
-    func test_catIsOwnedPersistedCorrectly() throws {
-        context.insert(Cat(name: "Steven", isOwned: true))
-        try context.save()
-
-        let fetched = try context.fetch(FetchDescriptor<Cat>()).first
-        XCTAssertEqual(fetched?.isOwned, true)
-    }
-
-    func test_catCascadeDeletesEncounters() throws {
-        let cat = Fixtures.cat(name: "Doomed", in: context)
-        _ = Fixtures.encounter(for: cat, in: context)
-        _ = Fixtures.encounter(for: cat, in: context)
-        try context.save()
-
-        XCTAssertEqual(try context.fetch(FetchDescriptor<Cat>()).count, 1)
-        XCTAssertEqual(try context.fetch(FetchDescriptor<Encounter>()).count, 2)
-
-        context.delete(try context.fetch(FetchDescriptor<Cat>())[0])
-        try context.save()
-
-        XCTAssertEqual(try context.fetch(FetchDescriptor<Cat>()).count, 0)
-        XCTAssertEqual(try context.fetch(FetchDescriptor<Encounter>()).count, 0)
-    }
-
     // MARK: - breed
 
     func test_catBreed_defaultsToNil() {
@@ -87,13 +30,9 @@ final class CatTests: XCTestCase {
         XCTAssertNil(cat.breed)
     }
 
-    func test_catBreed_canBeSetAndPersisted() throws {
+    func test_catBreed_canBeSet() {
         let cat = Cat(name: "Fancy", breed: "Persian")
-        context.insert(cat)
-        try context.save()
-
-        let fetched = try context.fetch(FetchDescriptor<Cat>())
-        XCTAssertEqual(fetched.first?.breed, "Persian")
+        XCTAssertEqual(cat.breed, "Persian")
     }
 
     // MARK: - lastEncounterDate
@@ -103,29 +42,27 @@ final class CatTests: XCTestCase {
         XCTAssertNil(cat.lastEncounterDate)
     }
 
-    func test_lastEncounterDate_returnsSingleEncounterDate() throws {
-        let cat = Fixtures.cat(name: "Solo", in: context)
-        let encounter = Fixtures.encounter(for: cat, in: context)
-        try context.save()
-
-        XCTAssertEqual(cat.lastEncounterDate, encounter.date)
+    func test_lastEncounterDate_returnsSingleEncounterDate() {
+        let cat = Fixtures.cat(name: "Solo")
+        let encounter = Fixtures.encounter(for: cat)
+        var catWithEnc = cat
+        catWithEnc.encounters = [encounter]
+        XCTAssertEqual(catWithEnc.lastEncounterDate, encounter.date)
     }
 
-    func test_lastEncounterDate_returnsMostRecentDate() throws {
-        let cat = Fixtures.cat(name: "Popular", in: context)
+    func test_lastEncounterDate_returnsMostRecentDate() {
+        let cat = Fixtures.cat(name: "Popular")
 
         let oldDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         let recentDate = Calendar.current.date(byAdding: .hour, value: -1, to: Date())!
 
-        let oldEncounter = Encounter(date: oldDate, cat: cat)
-        context.insert(oldEncounter)
+        let oldEncounter = Encounter(date: oldDate, catID: cat.id, ownerID: cat.ownerID)
+        let recentEncounter = Encounter(date: recentDate, catID: cat.id, ownerID: cat.ownerID)
 
-        let recentEncounter = Encounter(date: recentDate, cat: cat)
-        context.insert(recentEncounter)
+        var catWithEnc = cat
+        catWithEnc.encounters = [oldEncounter, recentEncounter]
 
-        try context.save()
-
-        XCTAssertEqual(cat.lastEncounterDate, recentDate)
+        XCTAssertEqual(catWithEnc.lastEncounterDate, recentDate)
     }
 
     // MARK: - displayName
@@ -162,46 +99,54 @@ final class CatTests: XCTestCase {
         XCTAssertFalse(cat.isUnnamed)
     }
 
-    // MARK: - isSteven with nil name
+    // MARK: - isSteven
 
     func test_isSteven_falseWhenNameIsNil() {
         let cat = Cat(breed: "Domestic Shorthair")
         XCTAssertFalse(cat.isSteven)
     }
 
-    // MARK: - nil name persistence
+    // MARK: - nil name behavior
 
-    func test_nilNamePersistsAndRoundTrips() throws {
+    func test_nilNameCreatesUnnamedCat() {
         let cat = Cat()
-        context.insert(cat)
-        try context.save()
-
-        let fetched = try context.fetch(FetchDescriptor<Cat>())
-        XCTAssertEqual(fetched.count, 1)
-        XCTAssertNil(fetched.first?.name)
+        XCTAssertNil(cat.name)
+        XCTAssertTrue(cat.isUnnamed)
     }
 
-    func test_namedToUnnamed_roundTrip() throws {
-        let cat = Cat(name: "Temp")
-        context.insert(cat)
-        try context.save()
-
+    func test_namedCatCanBeRenamed() {
+        var cat = Cat(name: "Temp")
         cat.name = nil
-        try context.save()
-
-        let fetched = try context.fetch(FetchDescriptor<Cat>())
-        XCTAssertNil(fetched.first?.name)
+        XCTAssertNil(cat.name)
+        XCTAssertTrue(cat.isUnnamed)
     }
 
-    func test_unnamedToNamed_roundTrip() throws {
-        let cat = Cat()
-        context.insert(cat)
-        try context.save()
-
+    func test_unnamedCatCanBeNamed() {
+        var cat = Cat()
         cat.name = "Now Named"
-        try context.save()
+        XCTAssertEqual(cat.name, "Now Named")
+        XCTAssertFalse(cat.isUnnamed)
+    }
 
-        let fetched = try context.fetch(FetchDescriptor<Cat>())
-        XCTAssertEqual(fetched.first?.name, "Now Named")
+    // MARK: - Payload generation
+
+    func test_toInsertPayload_generatesCorrectPayload() {
+        let cat = Cat(
+            id: UUID(),
+            name: "Test",
+            breed: "Persian",
+            location: Location(name: "Home", latitude: 37.0, longitude: -122.0),
+            notes: "test notes",
+            isOwned: true,
+            photoUrls: ["url1", "url2"]
+        )
+
+        let payload = cat.toInsertPayload(ownerID: "owner-123")
+        XCTAssertEqual(payload.id, cat.id.uuidString)
+        XCTAssertEqual(payload.ownerID, "owner-123")
+        XCTAssertEqual(payload.name, "Test")
+        XCTAssertEqual(payload.breed, "Persian")
+        XCTAssertEqual(payload.isOwned, true)
+        XCTAssertEqual(payload.photoUrls, ["url1", "url2"])
     }
 }

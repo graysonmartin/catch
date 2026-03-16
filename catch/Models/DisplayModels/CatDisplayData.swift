@@ -13,13 +13,12 @@ struct CatDisplayData: Identifiable, Hashable {
     let isSteven: Bool
     let createdAt: Date
     let encounterCount: Int
-    let firstPhotoData: Data?
-    let allPhotos: [Data]
+    let firstPhotoUrl: String?
 
-    // MARK: - Local SwiftData init
+    // MARK: - Local init
 
     init(local cat: Cat, encounterCount: Int? = nil) {
-        self.id = cat.persistentModelID.hashValue.description
+        self.id = cat.id.uuidString
         self.name = cat.displayName
         self.breed = cat.breed ?? ""
         self.estimatedAge = cat.estimatedAge
@@ -30,8 +29,7 @@ struct CatDisplayData: Identifiable, Hashable {
         self.isSteven = cat.isSteven
         self.createdAt = cat.createdAt
         self.encounterCount = encounterCount ?? cat.encounters.count
-        self.firstPhotoData = cat.photos.first
-        self.allPhotos = cat.photos
+        self.firstPhotoUrl = cat.photoUrls.first
     }
 
     // MARK: - Remote CloudKit init
@@ -48,8 +46,7 @@ struct CatDisplayData: Identifiable, Hashable {
         self.isSteven = false
         self.createdAt = cat.createdAt
         self.encounterCount = encounterCount
-        self.firstPhotoData = cat.photos.first
-        self.allPhotos = cat.photos
+        self.firstPhotoUrl = cat.photoUrls.first
     }
 
     // MARK: - Hashable

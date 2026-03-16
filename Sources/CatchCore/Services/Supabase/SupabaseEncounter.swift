@@ -75,6 +75,28 @@ public struct SupabaseEncounterInsertPayload: Codable, Sendable {
     public let notes: String?
     public let photoUrls: [String]
 
+    public init(
+        id: String,
+        ownerID: String,
+        catID: String,
+        date: Date,
+        locationName: String?,
+        locationLat: Double?,
+        locationLng: Double?,
+        notes: String?,
+        photoUrls: [String]
+    ) {
+        self.id = id
+        self.ownerID = ownerID
+        self.catID = catID
+        self.date = date
+        self.locationName = locationName
+        self.locationLat = locationLat
+        self.locationLng = locationLng
+        self.notes = notes
+        self.photoUrls = photoUrls
+    }
+
     private enum CodingKeys: String, CodingKey {
         case id
         case ownerID = "owner_id"
@@ -96,6 +118,22 @@ public struct SupabaseEncounterUpdatePayload: Codable, Sendable {
     public let locationLng: Double?
     public let notes: String?
     public let photoUrls: [String]
+
+    public init(
+        date: Date,
+        locationName: String?,
+        locationLat: Double?,
+        locationLng: Double?,
+        notes: String?,
+        photoUrls: [String]
+    ) {
+        self.date = date
+        self.locationName = locationName
+        self.locationLat = locationLat
+        self.locationLng = locationLng
+        self.notes = notes
+        self.photoUrls = photoUrls
+    }
 
     private enum CodingKeys: String, CodingKey {
         case date

@@ -119,7 +119,7 @@ struct BreedDetailView: View {
 
             ForEach(cats) { cat in
                 HStack(spacing: CatchSpacing.space12) {
-                    CatPhotoView(photoData: cat.photos.first, size: 44)
+                    CatPhotoView(photoData: nil, photoUrl: cat.photoUrls.first, size: 44)
 
                     VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                         Text(cat.displayName)

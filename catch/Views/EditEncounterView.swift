@@ -3,9 +3,11 @@ import CatchCore
 
 struct EditEncounterView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(DefaultEncounterSyncService.self) private var encounterSyncService: DefaultEncounterSyncService?
+    @Environment(EncounterDataService.self) private var encounterDataService
+    @Environment(CatDataService.self) private var catDataService
     @Environment(ToastManager.self) private var toastManager
-    @Bindable var encounter: Encounter
+
+    private let encounter: Encounter
 
     @State private var date: Date
     @State private var location: Location
@@ -13,23 +15,12 @@ struct EditEncounterView: View {
     @State private var photos: [Data]
     @State private var isSaving = false
 
-    // Original values for rollback
-    private let originalDate: Date
-    private let originalLocation: Location
-    private let originalNotes: String
-    private let originalPhotos: [Data]
-
     init(encounter: Encounter) {
         self.encounter = encounter
         _date = State(initialValue: encounter.date)
         _location = State(initialValue: encounter.location)
         _notes = State(initialValue: encounter.notes)
-        _photos = State(initialValue: encounter.photos)
-
-        originalDate = encounter.date
-        originalLocation = encounter.location
-        originalNotes = encounter.notes
-        originalPhotos = encounter.photos
+        _photos = State(initialValue: [])
     }
 
     var body: some View {
@@ -38,7 +29,7 @@ struct EditEncounterView: View {
                 if let cat = encounter.cat {
                     Section(CatchStrings.Log.catSection) {
                         HStack(spacing: CatchSpacing.space12) {
-                            CatPhotoView(photoData: cat.photos.first, size: 40)
+                            CatPhotoView(photoData: nil, photoUrl: cat.photoUrls.first, size: 40)
                             Text(cat.displayName)
                                 .font(.body.weight(.semibold))
                                 .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
@@ -90,26 +81,20 @@ struct EditEncounterView: View {
     }
 
     private func save() async {
-        encounter.date = date
-        encounter.location = location
-        encounter.notes = notes
-        encounter.photos = photos
+        var updated = encounter
+        updated.date = date
+        updated.location = location
+        updated.notes = notes
 
         isSaving = true
         defer { isSaving = false }
 
         do {
-            try await encounterSyncService?.syncEncounterUpdate(encounter)
+            _ = try await encounterDataService.updateEncounter(updated, photos: photos)
+            try await catDataService.loadCats()
+            dismiss()
         } catch {
-            // Revert local changes
-            encounter.date = originalDate
-            encounter.location = originalLocation
-            encounter.notes = originalNotes
-            encounter.photos = originalPhotos
             toastManager.showError(CatchStrings.Toast.encounterUpdateFailed)
-            return
         }
-
-        dismiss()
     }
 }

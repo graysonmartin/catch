@@ -1,29 +1,13 @@
 import XCTest
-import SwiftData
 import CatchCore
 
 @MainActor
 final class CatDisplayDataTests: XCTestCase {
 
-    private var container: ModelContainer!
-    private var context: ModelContext!
-
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        container = try ModelContainer.forTesting()
-        context = container.mainContext
-    }
-
-    override func tearDown() {
-        context = nil
-        container = nil
-        super.tearDown()
-    }
-
     // MARK: - Local init
 
     func testLocalInitMapsBasicFields() {
-        let cat = Fixtures.cat(name: "Whiskers", breed: "Domestic Shorthair", in: context)
+        var cat = Fixtures.cat(name: "Whiskers", breed: "Domestic Shorthair")
         cat.estimatedAge = "3"
         cat.notes = "friendly"
         cat.isOwned = true
@@ -38,29 +22,29 @@ final class CatDisplayDataTests: XCTestCase {
     }
 
     func testLocalInitMapsEncounterCount() {
-        let cat = Fixtures.cat(name: "Luna", in: context)
-        _ = Fixtures.encounter(for: cat, in: context)
-        _ = Fixtures.encounter(for: cat, in: context)
+        let cat = Fixtures.cat(name: "Luna")
+        var catWithEnc = cat
+        catWithEnc.encounters = [
+            Fixtures.encounter(for: cat),
+            Fixtures.encounter(for: cat)
+        ]
 
-        let data = CatDisplayData(local: cat)
+        let data = CatDisplayData(local: catWithEnc)
 
         XCTAssertEqual(data.encounterCount, 2)
     }
 
-    func testLocalInitMapsPhotos() {
-        let photo1 = Data([0x01, 0x02])
-        let photo2 = Data([0x03, 0x04])
-        let cat = Fixtures.cat(name: "Photo Cat", in: context)
-        cat.photos = [photo1, photo2]
+    func testLocalInitMapsPhotoUrl() {
+        var cat = Fixtures.cat(name: "Photo Cat")
+        cat.photoUrls = ["https://example.com/photo1.jpg", "https://example.com/photo2.jpg"]
 
         let data = CatDisplayData(local: cat)
 
-        XCTAssertEqual(data.firstPhotoData, photo1)
-        XCTAssertEqual(data.allPhotos.count, 2)
+        XCTAssertEqual(data.firstPhotoUrl, "https://example.com/photo1.jpg")
     }
 
     func testLocalInitMapsLocationName() {
-        let cat = Fixtures.cat(name: "Spot", in: context)
+        var cat = Fixtures.cat(name: "Spot")
         cat.location = Location(name: "Back Alley")
 
         let data = CatDisplayData(local: cat)
@@ -69,7 +53,7 @@ final class CatDisplayDataTests: XCTestCase {
     }
 
     func testLocalInitNilBreedBecomesEmptyString() {
-        let cat = Fixtures.cat(name: "No Breed", breed: nil, in: context)
+        let cat = Fixtures.cat(name: "No Breed", breed: nil)
 
         let data = CatDisplayData(local: cat)
 
@@ -77,24 +61,23 @@ final class CatDisplayDataTests: XCTestCase {
     }
 
     func testLocalInitStevenDetection() {
-        let steven = Fixtures.cat(name: "Steven", breed: "Domestic Shorthair", in: context)
-        let notSteven = Fixtures.cat(name: "Mittens", breed: "Domestic Shorthair", in: context)
+        let steven = Fixtures.cat(name: "Steven", breed: "Domestic Shorthair")
+        let notSteven = Fixtures.cat(name: "Mittens", breed: "Domestic Shorthair")
 
         XCTAssertTrue(CatDisplayData(local: steven).isSteven)
         XCTAssertFalse(CatDisplayData(local: notSteven).isSteven)
     }
 
     func testLocalInitNoPhotosGivesNilFirstPhoto() {
-        let cat = Fixtures.cat(name: "Shy", in: context)
+        let cat = Fixtures.cat(name: "Shy")
 
         let data = CatDisplayData(local: cat)
 
-        XCTAssertNil(data.firstPhotoData)
-        XCTAssertTrue(data.allPhotos.isEmpty)
+        XCTAssertNil(data.firstPhotoUrl)
     }
 
     func testLocalInitNilNameUsesDisplayName() {
-        let cat = Fixtures.cat(name: nil, in: context)
+        let cat = Fixtures.cat(name: nil)
 
         let data = CatDisplayData(local: cat)
 
@@ -103,7 +86,7 @@ final class CatDisplayDataTests: XCTestCase {
     }
 
     func testLocalInitEmptyNameUsesDisplayName() {
-        let cat = Fixtures.cat(name: "", in: context)
+        let cat = Fixtures.cat(name: "")
 
         let data = CatDisplayData(local: cat)
 
@@ -112,7 +95,7 @@ final class CatDisplayDataTests: XCTestCase {
     }
 
     func testLocalInitNamedCatIsNotUnnamed() {
-        let cat = Fixtures.cat(name: "Whiskers", in: context)
+        let cat = Fixtures.cat(name: "Whiskers")
 
         let data = CatDisplayData(local: cat)
 
@@ -149,16 +132,6 @@ final class CatDisplayDataTests: XCTestCase {
         XCTAssertFalse(data.isSteven)
     }
 
-    func testRemoteInitMapsPhotos() {
-        let photo = Data([0xFF, 0xD8])
-        let cloudCat = makeCloudCat(photos: [photo])
-
-        let data = CatDisplayData(remote: cloudCat, encounterCount: 0)
-
-        XCTAssertEqual(data.firstPhotoData, photo)
-        XCTAssertEqual(data.allPhotos.count, 1)
-    }
-
     func testRemoteInitMapsLocationName() {
         let cloudCat = makeCloudCat(locationName: "Coffee shop window")
 
@@ -182,16 +155,6 @@ final class CatDisplayDataTests: XCTestCase {
         let different = makeCloudCat(recordName: "same-id", name: "B")
         let data4 = CatDisplayData(remote: different, encounterCount: 0)
         XCTAssertNotEqual(data1, data4, "Different names should not be equal")
-    }
-
-    func testInequalityForDifferentIDs() {
-        let cat1 = makeCloudCat(recordName: "id-1")
-        let cat2 = makeCloudCat(recordName: "id-2")
-
-        let data1 = CatDisplayData(remote: cat1, encounterCount: 0)
-        let data2 = CatDisplayData(remote: cat2, encounterCount: 0)
-
-        XCTAssertNotEqual(data1, data2)
     }
 
     func testRemoteInitNilNameUsesDisplayName() {

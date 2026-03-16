@@ -3,10 +3,11 @@ import CatchCore
 
 struct EditCatView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(DefaultCatSyncService.self) private var catSyncService: DefaultCatSyncService?
+    @Environment(CatDataService.self) private var catDataService
     @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
     @Environment(ToastManager.self) private var toastManager
-    @Bindable var cat: Cat
+
+    private let cat: Cat
 
     @State private var isUnnamed: Bool
     @State private var name: String
@@ -19,14 +20,6 @@ struct EditCatView: View {
     @State private var isDismissedSuggestion = false
     @State private var isSaving = false
 
-    // Original values for rollback
-    private let originalName: String?
-    private let originalBreed: String?
-    private let originalLocation: Location
-    private let originalNotes: String
-    private let originalIsOwned: Bool
-    private let originalPhotos: [Data]
-
     init(cat: Cat) {
         self.cat = cat
         _isUnnamed = State(initialValue: cat.name == nil)
@@ -35,14 +28,7 @@ struct EditCatView: View {
         _location = State(initialValue: cat.location)
         _notes = State(initialValue: cat.notes)
         _isOwned = State(initialValue: cat.isOwned)
-        _photos = State(initialValue: cat.photos)
-
-        originalName = cat.name
-        originalBreed = cat.breed
-        originalLocation = cat.location
-        originalNotes = cat.notes
-        originalIsOwned = cat.isOwned
-        originalPhotos = cat.photos
+        _photos = State(initialValue: [])
     }
 
     var body: some View {
@@ -54,7 +40,7 @@ struct EditCatView: View {
                         minimumPhotos: 1,
                         thumbnailSize: 120
                     )
-                    if photos.isEmpty {
+                    if photos.isEmpty && cat.photoUrls.isEmpty {
                         Text(CatchStrings.Log.photoRequired)
                             .font(.caption)
                             .foregroundStyle(CatchTheme.primary)
@@ -130,34 +116,26 @@ struct EditCatView: View {
     }
 
     private var canSave: Bool {
-        (isUnnamed || !name.trimmingCharacters(in: .whitespaces).isEmpty) && !photos.isEmpty
+        (isUnnamed || !name.trimmingCharacters(in: .whitespaces).isEmpty)
+            && (!photos.isEmpty || !cat.photoUrls.isEmpty)
     }
 
     private func save() async {
-        cat.name = isUnnamed ? nil : name.trimmingCharacters(in: .whitespaces)
-        cat.breed = breed
-        cat.location = location
-        cat.notes = notes
-        cat.isOwned = isOwned
-        cat.photos = photos
+        var updatedCat = cat
+        updatedCat.name = isUnnamed ? nil : name.trimmingCharacters(in: .whitespaces)
+        updatedCat.breed = breed
+        updatedCat.location = location
+        updatedCat.notes = notes
+        updatedCat.isOwned = isOwned
 
         isSaving = true
         defer { isSaving = false }
 
         do {
-            try await catSyncService?.syncCatUpdate(cat)
+            _ = try await catDataService.updateCat(updatedCat, photos: photos)
+            dismiss()
         } catch {
-            // Revert local changes
-            cat.name = originalName
-            cat.breed = originalBreed
-            cat.location = originalLocation
-            cat.notes = originalNotes
-            cat.isOwned = originalIsOwned
-            cat.photos = originalPhotos
             toastManager.showError(CatchStrings.Toast.catUpdateFailed)
-            return
         }
-
-        dismiss()
     }
 }

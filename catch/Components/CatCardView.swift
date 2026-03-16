@@ -6,7 +6,7 @@ struct CatCardView: View {
 
     var body: some View {
         VStack(spacing: CatchSpacing.space8) {
-            CatPhotoView(photoData: data.firstPhotoData, size: 120)
+            CatPhotoView(photoData: nil, photoUrl: data.firstPhotoUrl, size: 120)
                 .frame(maxWidth: .infinity)
                 .frame(height: 120)
                 .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))

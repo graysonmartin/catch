@@ -37,8 +37,7 @@ final class ProfileSyncService {
     }
 
     func deleteProfile(userID: String) async throws {
-        // Profile deletion is handled by Supabase cascade or RLS — no explicit delete needed
-        // for now. If we add a delete endpoint, wire it here.
+        // Profile deletion is handled by Supabase cascade or RLS
     }
 
     func checkUsernameAvailability(_ username: String) async throws -> Bool {

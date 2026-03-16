@@ -1,20 +1,23 @@
 import SwiftUI
-import SwiftData
 import CatchCore
 
 struct CatProfileView: View {
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(DefaultCatSyncService.self) private var catSyncService: DefaultCatSyncService?
-    @Environment(DefaultEncounterSyncService.self) private var encounterSyncService: DefaultEncounterSyncService?
+    @Environment(CatDataService.self) private var catDataService
+    @Environment(EncounterDataService.self) private var encounterDataService
     @Environment(ToastManager.self) private var toastManager
-    @Bindable var cat: Cat
+
+    @State private var cat: Cat
     @State private var showingEdit = false
     @State private var showingDeleteCat = false
     @State private var encounterToEdit: Encounter?
     @State private var showingLogEncounter = false
     @State private var encounterToDelete: Encounter?
     @State private var isDeleting = false
+
+    init(cat: Cat) {
+        _cat = State(initialValue: cat)
+    }
 
     private var sortedEncounters: [Encounter] {
         cat.encounters.sorted { $0.date > $1.date }
@@ -24,9 +27,10 @@ struct CatProfileView: View {
         List {
             // Photo header
             Section {
-                if !cat.photos.isEmpty {
+                if !cat.photoUrls.isEmpty {
                     PhotoCarouselView(
-                        photos: cat.photos,
+                        photos: [],
+                        photoUrls: cat.photoUrls,
                         height: 250,
                         cornerRadius: 16
                     )
@@ -205,40 +209,40 @@ struct CatProfileView: View {
         } message: {
             Text(CatchStrings.CatProfile.deleteCatMessage)
         }
+        .task {
+            await refreshCat()
+        }
+    }
+
+    // MARK: - Data Refresh
+
+    private func refreshCat() async {
+        guard let refreshed = try? await catDataService.fetchCat(id: cat.id) else { return }
+        cat = refreshed
     }
 
     // MARK: - Delete Actions
 
     private func deleteEncounter(_ encounter: Encounter) async {
-        if let recordName = encounter.cloudKitRecordName {
-            do {
-                try await encounterSyncService?.deleteEncounter(recordName: recordName)
-            } catch {
-                toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
-                return
-            }
+        do {
+            try await encounterDataService.deleteEncounter(id: encounter.id)
+            try await catDataService.loadCats()
+            await refreshCat()
+        } catch {
+            toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
         }
-        modelContext.delete(encounter)
     }
 
     private func deleteCat() async {
         isDeleting = true
         defer { isDeleting = false }
 
-        // Delete cat record from CloudKit — encounter records are cascade-deleted
-        // via CKReference(.deleteSelf) on the encounter -> cat relationship.
-        if let recordName = cat.cloudKitRecordName {
-            do {
-                try await catSyncService?.deleteCat(recordName: recordName)
-            } catch {
-                toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
-                return
-            }
+        do {
+            try await catDataService.deleteCat(cat)
+            dismiss()
+        } catch {
+            toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
         }
-
-        // Delete locally (SwiftData cascade handles local encounters)
-        modelContext.delete(cat)
-        dismiss()
     }
 
     // MARK: - Subviews

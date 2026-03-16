@@ -1,10 +1,8 @@
 import SwiftUI
-import SwiftData
 import AuthenticationServices
 import CatchCore
 
 struct ProfileSetupView: View {
-    @Environment(\.modelContext) private var modelContext
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(ProfileSyncService.self) private var profileSyncService
     @Environment(ToastManager.self) private var toastManager
@@ -330,7 +328,6 @@ extension ProfileSetupView {
                 throw SupabaseAuthError.missingIdentityToken
             }
 
-            // Extract full name from Apple (only provided on first sign-in)
             let fullName: String? = {
                 guard let components = credential.fullName else { return nil }
                 let formatted = PersonNameComponentsFormatter.localizedString(
@@ -366,7 +363,6 @@ extension ProfileSetupView {
             let redirectURL = URL(string: "catch://auth-callback")!
             let oauthURL = try await authService.googleOAuthURL(redirectTo: redirectURL)
 
-            // Open in ASWebAuthenticationSession
             let callbackURL: URL = try await withCheckedThrowingContinuation { continuation in
                 Task { @MainActor in
                     let session = ASWebAuthenticationSession(
@@ -395,7 +391,7 @@ extension ProfileSetupView {
             isRestoringProfile = true
             await restoreExistingProfile()
         } catch is CancellationError {
-            // User cancelled — no error shown
+            // User cancelled
         } catch {
             signInError = CatchStrings.ProfileSetup.signInFailed
         }
@@ -445,47 +441,24 @@ extension ProfileSetupView {
             return
         }
 
-        let cloudProfile: CloudUserProfile?
         do {
-            cloudProfile = try await profileSyncService.fetchProfile(userID: userID)
+            let cloudProfile = try await profileSyncService.fetchProfile(userID: userID)
+            guard let cloudProfile else {
+                isRestoringProfile = false
+                return
+            }
+
+            // Pre-fill fields from existing profile
+            displayName = cloudProfile.displayName
+            bio = cloudProfile.bio
+            username = cloudProfile.username ?? ""
+
+            isRestoringProfile = false
+            onComplete()
         } catch {
             isRestoringProfile = false
             toastManager.showError(CatchStrings.ProfileSetup.signInFailed)
-            return
         }
-
-        guard let cloudProfile else {
-            isRestoringProfile = false
-            return
-        }
-
-        let descriptor = FetchDescriptor<UserProfile>(
-            predicate: #Predicate { $0.supabaseUserID == userID }
-        )
-        let existingProfile = try? modelContext.fetch(descriptor).first
-
-        if let existingProfile {
-            existingProfile.displayName = cloudProfile.displayName
-            existingProfile.bio = cloudProfile.bio
-            existingProfile.username = cloudProfile.username
-            existingProfile.cloudKitRecordName = cloudProfile.recordName
-            existingProfile.isPrivate = cloudProfile.isPrivate
-            existingProfile.avatarData = cloudProfile.avatarData
-        } else {
-            let profile = UserProfile(
-                displayName: cloudProfile.displayName,
-                bio: cloudProfile.bio,
-                username: cloudProfile.username,
-                avatarData: cloudProfile.avatarData,
-                supabaseUserID: userID,
-                cloudKitRecordName: cloudProfile.recordName,
-                isPrivate: cloudProfile.isPrivate
-            )
-            modelContext.insert(profile)
-        }
-
-        try? modelContext.save()
-        onComplete()
     }
 
     private func prefillFromUser() {
@@ -498,10 +471,8 @@ extension ProfileSetupView {
             displayName: displayName.trimmingCharacters(in: .whitespaces),
             bio: bio.trimmingCharacters(in: .whitespaces),
             username: username.trimmingCharacters(in: .whitespaces),
-            avatarData: avatarData,
             supabaseUserID: authService.authState.user?.id
         )
-        modelContext.insert(profile)
         Task {
             do {
                 try await profileSyncService.syncProfile(profile)

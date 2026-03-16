@@ -1,5 +1,2 @@
-import SwiftData
-
-enum CatchSchema {
-    static let current = Schema([Cat.self, Encounter.self, UserProfile.self])
-}
+// CatchSchema is no longer used — SwiftData has been removed.
+// This file is intentionally empty.
