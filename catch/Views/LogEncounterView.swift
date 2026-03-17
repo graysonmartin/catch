@@ -147,15 +147,16 @@ struct LogEncounterView: View {
         defer { isSaving = false }
 
         do {
-            _ = try await encounterDataService.createEncounter(
+            var encounter = try await encounterDataService.createEncounter(
                 catID: cat.id,
                 date: date,
                 location: location,
                 notes: notes,
                 photos: photos
             )
+            encounter.cat = cat
+            feedDataService.prependEncounter(encounter)
             try await catDataService.loadCats()
-            await feedDataService.refresh()
             onSave?()
             dismiss()
         } catch {

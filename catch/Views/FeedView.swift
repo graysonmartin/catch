@@ -8,18 +8,14 @@ struct FeedView: View {
     @Environment(ToastManager.self) private var toastManager
     @Binding var scrollToTop: Bool
 
-    private var localEncounters: [Encounter] {
-        feedDataService.encounters
-    }
-
     private var feedItems: [FeedItem] {
-        let local = localEncounters.map { FeedItem.local($0) }
+        let local = feedDataService.encounters.map { FeedItem.local($0) }
         let remote = socialFeedService?.remoteEncounters ?? []
         return (local + remote).sorted { $0.date > $1.date }
     }
 
     private var isEmpty: Bool {
-        localEncounters.isEmpty && (socialFeedService?.remoteEncounters.isEmpty ?? true)
+        feedDataService.encounters.isEmpty && (socialFeedService?.remoteEncounters.isEmpty ?? true)
     }
 
     private var isInitialLoad: Bool {
@@ -51,12 +47,14 @@ struct FeedView: View {
                 )
             }
             .refreshable {
-                await feedDataService.refresh()
-                await socialFeedService?.refresh()
+                async let local: Void = feedDataService.refresh()
+                async let remote: Void = socialFeedService?.refresh() ?? ()
+                _ = await (local, remote)
             }
             .task {
-                await feedDataService.refresh()
-                await socialFeedService?.refresh()
+                async let local: Void = feedDataService.refresh()
+                async let remote: Void = socialFeedService?.refresh() ?? ()
+                _ = await (local, remote)
                 await loadInteractionData()
             }
         }

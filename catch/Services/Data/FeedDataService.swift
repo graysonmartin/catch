@@ -96,6 +96,12 @@ final class FeedDataService {
         encounters.removeAll { $0.id == id }
     }
 
+    /// Replaces an existing encounter in the feed (e.g. after editing).
+    func replaceEncounter(_ encounter: Encounter) {
+        guard let idx = encounters.firstIndex(where: { $0.id == encounter.id }) else { return }
+        encounters[idx] = encounter
+    }
+
     // MARK: - Private
 
     private func mapRows(_ rows: [SupabaseEncounterFeedRow]) -> [Encounter] {
@@ -136,8 +142,10 @@ final class FeedDataService {
         }
     }
 
+    private static let iso8601Formatter = ISO8601DateFormatter()
+
     private func cursorFromRows(_ rows: [SupabaseEncounterFeedRow]) -> String? {
         guard let last = rows.last else { return nil }
-        return ISO8601DateFormatter().string(from: last.date)
+        return Self.iso8601Formatter.string(from: last.date)
     }
 }

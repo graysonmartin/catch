@@ -240,8 +240,11 @@ struct CatProfileView: View {
         defer { isDeleting = false }
 
         do {
+            let encounterIDs = cat.encounters.map(\.id)
             try await catDataService.deleteCat(cat)
-            await feedDataService.refresh()
+            for id in encounterIDs {
+                feedDataService.removeEncounter(id: id)
+            }
             dismiss()
         } catch {
             toastManager.showError(CatchStrings.Toast.deleteSyncFailed)

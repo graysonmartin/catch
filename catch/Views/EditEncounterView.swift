@@ -91,9 +91,10 @@ struct EditEncounterView: View {
         defer { isSaving = false }
 
         do {
-            _ = try await encounterDataService.updateEncounter(updated, photos: photos)
+            var result = try await encounterDataService.updateEncounter(updated, photos: photos)
+            result.cat = encounter.cat
+            feedDataService.replaceEncounter(result)
             try await catDataService.loadCats()
-            await feedDataService.refresh()
             dismiss()
         } catch {
             toastManager.showError(CatchStrings.Toast.encounterUpdateFailed)

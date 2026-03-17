@@ -1,8 +1,6 @@
 import Foundation
-import Observation
 import CatchCore
 
-@Observable
 @MainActor
 final class MockSupabaseEncounterRepository: SupabaseEncounterRepository {
     private(set) var fetchEncounterCalls: [String] = []

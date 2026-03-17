@@ -140,7 +140,10 @@ struct AddCatView: View {
                 photos: photos,
                 encounterDate: encounterDate
             )
-            await feedDataService.refresh()
+            if var encounter = cat.encounters.first {
+                encounter.cat = cat
+                feedDataService.prependEncounter(encounter)
+            }
             onSave?()
 
             if cat.isSteven {

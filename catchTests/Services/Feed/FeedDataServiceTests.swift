@@ -236,6 +236,30 @@ final class FeedDataServiceTests: XCTestCase {
         XCTAssertEqual(sut.encounters[0].id, id2)
     }
 
+    func testReplaceEncounter() async {
+        let id = UUID()
+        mockRepo.fetchEncounterFeedResult = [.fixture(id: id, notes: "original")]
+        await sut.refresh()
+        XCTAssertEqual(sut.encounters[0].notes, "original")
+
+        var updated = sut.encounters[0]
+        updated.notes = "edited"
+        sut.replaceEncounter(updated)
+
+        XCTAssertEqual(sut.encounters.count, 1)
+        XCTAssertEqual(sut.encounters[0].notes, "edited")
+    }
+
+    func testReplaceNonexistentEncounterDoesNothing() async {
+        mockRepo.fetchEncounterFeedResult = [.fixture()]
+        await sut.refresh()
+
+        let unknown = Encounter(id: UUID(), date: Date(), notes: "ghost")
+        sut.replaceEncounter(unknown)
+
+        XCTAssertEqual(sut.encounters.count, 1)
+    }
+
     func testRemoveNonexistentEncounterDoesNothing() async {
         mockRepo.fetchEncounterFeedResult = [.fixture()]
         await sut.refresh()
