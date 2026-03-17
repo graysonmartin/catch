@@ -5,6 +5,7 @@ struct EditEncounterView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(EncounterDataService.self) private var encounterDataService
     @Environment(CatDataService.self) private var catDataService
+    @Environment(FeedDataService.self) private var feedDataService
     @Environment(ToastManager.self) private var toastManager
 
     private let encounter: Encounter
@@ -92,6 +93,7 @@ struct EditEncounterView: View {
         do {
             _ = try await encounterDataService.updateEncounter(updated, photos: photos)
             try await catDataService.loadCats()
+            await feedDataService.refresh()
             dismiss()
         } catch {
             toastManager.showError(CatchStrings.Toast.encounterUpdateFailed)

@@ -5,6 +5,7 @@ struct LogEncounterView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(CatDataService.self) private var catDataService
     @Environment(EncounterDataService.self) private var encounterDataService
+    @Environment(FeedDataService.self) private var feedDataService
     @Environment(ToastManager.self) private var toastManager
 
     @State private var selectedCat: Cat?
@@ -154,6 +155,7 @@ struct LogEncounterView: View {
                 photos: photos
             )
             try await catDataService.loadCats()
+            await feedDataService.refresh()
             onSave?()
             dismiss()
         } catch {

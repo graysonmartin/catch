@@ -74,4 +74,36 @@ public final class DefaultSupabaseEncounterRepository: SupabaseEncounterReposito
             .eq("id", value: id)
             .execute()
     }
+
+    // MARK: - Paginated Feed
+
+    /// Columns selected from the joined query. Selects encounter fields plus nested cat.
+    private static let feedSelect = """
+        id, owner_id, cat_id, date, location_name, location_lat, location_lng, \
+        notes, photo_urls, like_count, comment_count, created_at, \
+        cats!inner(id, name, breed, estimated_age, location_name, location_lat, location_lng, notes, is_owned, photo_urls, created_at)
+        """
+
+    public func fetchEncounterFeed(
+        ownerID: String,
+        limit: Int,
+        cursor: String?
+    ) async throws -> [SupabaseEncounterFeedRow] {
+        var filterBuilder = clientProvider.client
+            .from(Self.tableName)
+            .select(Self.feedSelect)
+            .eq("owner_id", value: ownerID)
+
+        if let cursor {
+            filterBuilder = filterBuilder.lt("date", value: cursor)
+        }
+
+        let rows: [SupabaseEncounterFeedRow] = try await filterBuilder
+            .order("date", ascending: false)
+            .limit(limit)
+            .execute()
+            .value
+
+        return rows
+    }
 }

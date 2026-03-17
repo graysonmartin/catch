@@ -5,6 +5,7 @@ struct CatProfileView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(CatDataService.self) private var catDataService
     @Environment(EncounterDataService.self) private var encounterDataService
+    @Environment(FeedDataService.self) private var feedDataService
     @Environment(ToastManager.self) private var toastManager
 
     @State private var cat: Cat
@@ -227,6 +228,7 @@ struct CatProfileView: View {
         do {
             try await encounterDataService.deleteEncounter(id: encounter.id)
             try await catDataService.loadCats()
+            feedDataService.removeEncounter(id: encounter.id)
             await refreshCat()
         } catch {
             toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
@@ -239,6 +241,7 @@ struct CatProfileView: View {
 
         do {
             try await catDataService.deleteCat(cat)
+            await feedDataService.refresh()
             dismiss()
         } catch {
             toastManager.showError(CatchStrings.Toast.deleteSyncFailed)

@@ -4,6 +4,7 @@ import CatchCore
 struct AddCatView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(CatDataService.self) private var catDataService
+    @Environment(FeedDataService.self) private var feedDataService
     @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
     @Environment(ToastManager.self) private var toastManager
 
@@ -139,6 +140,7 @@ struct AddCatView: View {
                 photos: photos,
                 encounterDate: encounterDate
             )
+            await feedDataService.refresh()
             onSave?()
 
             if cat.isSteven {
