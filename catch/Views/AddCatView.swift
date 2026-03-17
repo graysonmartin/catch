@@ -147,7 +147,6 @@ struct AddCatView: View {
                 dismiss()
             }
         } catch {
-            print("❌ Save cat failed: \(error)")
             toastManager.showError(CatchStrings.Toast.catSyncFailed)
         }
     }

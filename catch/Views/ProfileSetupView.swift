@@ -476,11 +476,11 @@ extension ProfileSetupView {
         Task {
             do {
                 try await profileSyncService.syncProfile(profile, avatarData: avatarData)
+                onComplete()
             } catch {
                 toastManager.showError(CatchStrings.Toast.profileSaveFailed)
             }
         }
-        onComplete()
     }
 }
 

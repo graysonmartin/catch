@@ -102,7 +102,6 @@ struct OwnProfileContent: View {
         )) { editProfile in
             EditProfileView(profile: editProfile) { updatedProfile in
                 profile = updatedProfile
-                syncProfile(updatedProfile)
             }
         }
         .task {
@@ -342,14 +341,4 @@ struct OwnProfileContent: View {
     }
 
     // MARK: - Helpers
-
-    private func syncProfile(_ profile: UserProfile) {
-        Task {
-            do {
-                try await profileSyncService.syncProfile(profile)
-            } catch {
-                toastManager.showError(CatchStrings.Toast.profileSaveFailed)
-            }
-        }
-    }
 }

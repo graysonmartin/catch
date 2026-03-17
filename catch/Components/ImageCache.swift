@@ -7,6 +7,7 @@ final class RemoteImageCache: @unchecked Sendable {
 
     private init() {
         cache.countLimit = 200
+        cache.totalCostLimit = 75 * 1024 * 1024 // 75 MB
     }
 
     func image(for key: String) -> UIImage? {
@@ -14,6 +15,7 @@ final class RemoteImageCache: @unchecked Sendable {
     }
 
     func setImage(_ image: UIImage, for key: String) {
-        cache.setObject(image, forKey: key as NSString)
+        let cost = Int(image.size.width * image.size.height * image.scale * image.scale * 4)
+        cache.setObject(image, forKey: key as NSString, cost: cost)
     }
 }

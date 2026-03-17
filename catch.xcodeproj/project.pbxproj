@@ -35,6 +35,7 @@
 		E8000001AA000038 /* EditEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002C /* EditEncounterView.swift */; };
 		E8000001AA00003A /* ClusterMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002E /* ClusterMapView.swift */; };
 		E8000001AA00003B /* MapAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002F /* MapAnnotations.swift */; };
+		E8EC00000101 /* Error+Cancellation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EC00000001 /* Error+Cancellation.swift */; };
 		E8IC00000101 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IC00000001 /* ImageCache.swift */; };
 		E8000001AA000051 /* ImageDownsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000050 /* ImageDownsampler.swift */; };
 		E8000001AA000052 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
@@ -259,6 +260,7 @@
 		E8000001AA00002C /* EditEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEncounterView.swift; sourceTree = "<group>"; };
 		E8000001AA00002E /* ClusterMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterMapView.swift; sourceTree = "<group>"; };
 		E8000001AA00002F /* MapAnnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotations.swift; sourceTree = "<group>"; };
+		E8EC00000001 /* Error+Cancellation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Cancellation.swift"; sourceTree = "<group>"; };
 		E8IC00000001 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		E8000001AA000050 /* ImageDownsampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownsampler.swift; sourceTree = "<group>"; };
 		E8000001AA000060 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -896,6 +898,7 @@
 		E8F500000300 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				E8EC00000001 /* Error+Cancellation.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1162,6 +1165,7 @@
 				E8000001BB000002 /* DataSeeder.swift in Sources */,
 				E8000001AA000035 /* CatPickerView.swift in Sources */,
 				E8000001AA000036 /* OnboardingView.swift in Sources */,
+				E8EC00000101 /* Error+Cancellation.swift in Sources */,
 				E8IC00000101 /* ImageCache.swift in Sources */,
 				E8000001AA000051 /* ImageDownsampler.swift in Sources */,
 				E8000001AA000052 /* UserProfile.swift in Sources */,

@@ -150,8 +150,7 @@ struct ProfileDiaryTab: View {
         guard !recordNames.isEmpty else { return }
         do {
             try await socialService.loadInteractionData(for: recordNames)
-        } catch is CancellationError {
-        } catch let error as NSError where error.code == NSURLErrorCancelled {
+        } catch where error.isCancellation {
         } catch {
             toastManager.showError(CatchStrings.Toast.feedLoadFailed)
         }

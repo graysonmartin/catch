@@ -141,10 +141,7 @@ struct FeedView: View {
         guard !recordNames.isEmpty else { return }
         do {
             try await socialService.loadInteractionData(for: recordNames)
-        } catch is CancellationError {
-            // View redrawn — request cancelled, not a real error
-        } catch let error as NSError where error.code == NSURLErrorCancelled {
-            // Network request cancelled due to view lifecycle
+        } catch where error.isCancellation {
         } catch {
             toastManager.showError(CatchStrings.Toast.feedLoadFailed)
         }
