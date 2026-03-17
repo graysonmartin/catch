@@ -17,6 +17,7 @@ struct RemoteProfileContent: View {
     @State private var isShowingBreedLog = false
     @State private var isShowingUnfollowConfirmation = false
     @State private var selectedEncounterDetail: EncounterDetailData?
+    @State private var followerCountAdjustment = 0
 
     var body: some View {
         Group {
@@ -132,7 +133,7 @@ struct RemoteProfileContent: View {
                 )
             } label: {
                 compactSocialStat(
-                    count: data.followerCount,
+                    count: max(0, data.followerCount + followerCountAdjustment),
                     label: CatchStrings.Profile.followers
                 )
             }
@@ -263,10 +264,11 @@ struct RemoteProfileContent: View {
                 ) {
                     Button(CatchStrings.Social.unfollow, role: .destructive) {
                         Task {
+                            followerCountAdjustment -= 1
                             do {
                                 try await followService.unfollow(targetID: userID, by: currentUserID)
-                                await loadData()
                             } catch {
+                                followerCountAdjustment += 1
                                 toastManager.showError(CatchStrings.Toast.unfollowFailed)
                             }
                         }
@@ -281,15 +283,20 @@ struct RemoteProfileContent: View {
             } else {
                 Button {
                     Task {
+                        let isPrivate = data?.profile.isPrivate ?? false
+                        if !isPrivate {
+                            followerCountAdjustment += 1
+                        }
                         do {
-                            let isPrivate = data?.profile.isPrivate ?? false
                             try await followService.follow(
                                 targetID: userID,
                                 by: currentUserID,
                                 isTargetPrivate: isPrivate
                             )
-                            await loadData()
                         } catch {
+                            if !isPrivate {
+                                followerCountAdjustment -= 1
+                            }
                             toastManager.showError(CatchStrings.Toast.followFailed)
                         }
                     }
@@ -324,13 +331,11 @@ struct RemoteProfileContent: View {
                 Button(CatchStrings.Social.follow) {
                     Task {
                         do {
-                            let isPrivate = data?.profile.isPrivate ?? false
                             try await followService.follow(
                                 targetID: userID,
                                 by: currentUserID,
-                                isTargetPrivate: isPrivate
+                                isTargetPrivate: true
                             )
-                            await loadData()
                         } catch {
                             toastManager.showError(CatchStrings.Toast.followFailed)
                         }

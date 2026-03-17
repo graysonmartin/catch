@@ -37,33 +37,74 @@ public final class SupabaseFollowService: FollowService {
         guard pendingRequestTo(targetID) == nil else { throw FollowServiceError.requestAlreadyPending }
 
         let status: FollowStatus = isTargetPrivate ? .pending : .active
+        let optimisticID = "optimistic-\(UUID().uuidString)"
+        let optimisticFollow = Follow(
+            id: optimisticID,
+            followerID: userID,
+            followeeID: targetID,
+            status: status,
+            createdAt: Date()
+        )
+
+        if status == .active {
+            following.append(optimisticFollow)
+        } else {
+            outgoingPending.append(optimisticFollow)
+        }
+
         let payload = SupabaseFollowInsertPayload(
             followerID: userID,
             followeeID: targetID,
             status: status.rawValue
         )
 
-        let row = try await repository.insertFollow(payload)
-        let follow = row.toDomain()
+        do {
+            let row = try await repository.insertFollow(payload)
+            let realFollow = row.toDomain()
 
-        if follow.isActive {
-            following.append(follow)
-        } else {
-            outgoingPending.append(follow)
+            if status == .active {
+                if let index = following.firstIndex(where: { $0.id == optimisticID }) {
+                    following[index] = realFollow
+                }
+            } else {
+                if let index = outgoingPending.firstIndex(where: { $0.id == optimisticID }) {
+                    outgoingPending[index] = realFollow
+                }
+            }
+        } catch {
+            if status == .active {
+                following.removeAll { $0.id == optimisticID }
+            } else {
+                outgoingPending.removeAll { $0.id == optimisticID }
+            }
+            throw FollowServiceError.networkError(error.localizedDescription)
         }
     }
 
     public func unfollow(targetID: String, by userID: String) async throws {
         guard let match = following.first(where: { $0.followeeID == targetID }) else {
             if let pending = outgoingPending.first(where: { $0.followeeID == targetID }) {
-                try await repository.deleteFollow(id: pending.id)
                 outgoingPending.removeAll { $0.id == pending.id }
+
+                do {
+                    try await repository.deleteFollow(id: pending.id)
+                } catch {
+                    outgoingPending.append(pending)
+                    throw FollowServiceError.networkError(error.localizedDescription)
+                }
                 return
             }
             throw FollowServiceError.followNotFound
         }
-        try await repository.deleteFollow(id: match.id)
+
         following.removeAll { $0.id == match.id }
+
+        do {
+            try await repository.deleteFollow(id: match.id)
+        } catch {
+            following.append(match)
+            throw FollowServiceError.networkError(error.localizedDescription)
+        }
     }
 
     // MARK: - Request Management
