@@ -9,14 +9,11 @@ struct SettingsView: View {
     @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
 
     @State private var settingsService: SettingsService = UserDefaultsSettingsService()
-    @State private var editedDisplayName: String = ""
     @State private var isShowingDeleteConfirmation = false
     @State private var isShowingSignOutConfirmation = false
-    @State private var hasLoadedDisplayName = false
 
     var body: some View {
         Form {
-            displayNameSection
             notificationsSection
             aboutSection
             dangerZoneSection
@@ -45,22 +42,6 @@ struct SettingsView: View {
             Button(CatchStrings.Common.cancel, role: .cancel) { }
         } message: {
             Text(CatchStrings.Settings.signOutConfirmMessage)
-        }
-    }
-
-    // MARK: - Display Name
-
-    private var displayNameSection: some View {
-        Section {
-            TextField(
-                CatchStrings.Settings.displayNamePlaceholder,
-                text: $editedDisplayName
-            )
-            .textInputAutocapitalization(.words)
-        } header: {
-            Text(CatchStrings.Settings.displayNameSection)
-        } footer: {
-            Text(CatchStrings.Settings.displayNameFooter)
         }
     }
 
