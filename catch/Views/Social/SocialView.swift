@@ -214,13 +214,13 @@ struct SocialView: View {
         guard let userID = authService.authState.user?.id else { return }
         do {
             try await followService.refresh(for: userID)
-            await batchResolveDisplayNames()
+            await batchResolveProfiles()
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }
     }
 
-    private func batchResolveDisplayNames() async {
+    private func batchResolveProfiles() async {
         guard let browseService else { return }
         isResolvingNames = true
         defer { isResolvingNames = false }
@@ -233,7 +233,7 @@ struct SocialView: View {
         let uniqueIDs = Array(Set(allUserIDs))
         guard !uniqueIDs.isEmpty else { return }
 
-        _ = await browseService.batchFetchDisplayNames(userIDs: uniqueIDs)
+        _ = await browseService.batchFetchProfiles(userIDs: uniqueIDs)
     }
 
     private func loadMoreFollowers() async {

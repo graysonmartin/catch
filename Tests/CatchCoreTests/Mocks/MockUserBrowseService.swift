@@ -53,9 +53,23 @@ final class MockUserBrowseService: UserBrowseService {
         return result
     }
 
+    func batchFetchProfiles(userIDs: [String]) async -> [String: CloudUserProfile] {
+        var result: [String: CloudUserProfile] = [:]
+        for userID in userIDs {
+            if let profile = profileResult {
+                result[userID] = profile
+            }
+        }
+        return result
+    }
+
     func fetchProfile(userID: String) async -> CloudUserProfile? {
         fetchProfileCalls.append(userID)
         return profileResult
+    }
+
+    func cachedProfile(for userID: String) -> CloudUserProfile? {
+        nil
     }
 
     func clearCache() {

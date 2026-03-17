@@ -68,17 +68,13 @@ struct PendingRequestRowView: View {
             .buttonStyle(.plain)
         }
         .task {
-            if let cached = browseService?.cachedData(for: follow.followerID) {
+            if let profile = browseService?.cachedProfile(for: follow.followerID) {
+                resolvedName = profile.displayName
+                resolvedAvatarURL = profile.avatarURL
+            } else if let cached = browseService?.cachedData(for: follow.followerID) {
                 resolvedName = cached.profile.displayName
                 resolvedAvatarURL = cached.profile.avatarURL
-                return
             }
-
-            guard follow.followerDisplayName == nil else { return }
-
-            let profile = await browseService?.fetchProfile(userID: follow.followerID)
-            resolvedName = profile?.displayName
-            resolvedAvatarURL = profile?.avatarURL
         }
     }
 }

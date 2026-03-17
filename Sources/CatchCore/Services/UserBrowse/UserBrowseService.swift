@@ -10,6 +10,8 @@ public protocol UserBrowseService: Observable, Sendable {
     func fetchDisplayName(userID: String) async -> String?
     func cachedDisplayName(for userID: String) -> String?
     func batchFetchDisplayNames(userIDs: [String]) async -> [String: String]
+    func batchFetchProfiles(userIDs: [String]) async -> [String: CloudUserProfile]
     func fetchProfile(userID: String) async -> CloudUserProfile?
+    func cachedProfile(for userID: String) -> CloudUserProfile?
     func clearCache()
 }

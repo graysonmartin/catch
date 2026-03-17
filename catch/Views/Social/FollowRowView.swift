@@ -80,14 +80,13 @@ struct FollowRowView: View {
             Text(CatchStrings.Social.areYouSure)
         }
         .task {
-            if let cached = browseService?.cachedDisplayName(for: targetUserID) {
+            if let profile = browseService?.cachedProfile(for: targetUserID) {
+                resolvedName = profile.displayName
+                resolvedUsername = profile.username
+                resolvedAvatarURL = profile.avatarURL
+            } else if let cached = browseService?.cachedDisplayName(for: targetUserID) {
                 resolvedName = cached
             }
-
-            let profile = await browseService?.fetchProfile(userID: targetUserID)
-            resolvedName = profile?.displayName
-            resolvedUsername = profile?.username
-            resolvedAvatarURL = profile?.avatarURL
         }
     }
 }

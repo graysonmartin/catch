@@ -92,22 +92,7 @@ struct RemoteFollowListView: View {
         }
         guard !targetIDs.isEmpty else { return }
 
-        _ = await browseService.batchFetchDisplayNames(userIDs: targetIDs)
-
-        await withTaskGroup(of: (String, CloudUserProfile?).self) { group in
-            for targetID in targetIDs {
-                group.addTask {
-                    let profile = await browseService.fetchProfile(userID: targetID)
-                    return (targetID, profile)
-                }
-            }
-
-            for await (targetID, profile) in group {
-                if let profile {
-                    resolvedProfiles[targetID] = profile
-                }
-            }
-        }
+        resolvedProfiles = await browseService.batchFetchProfiles(userIDs: targetIDs)
     }
 }
 
