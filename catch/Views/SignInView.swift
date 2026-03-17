@@ -64,9 +64,6 @@ struct SignInView: View {
     private var signInButtons: some View {
         VStack(spacing: CatchSpacing.space12) {
             appleSignInButton
-
-            dividerRow
-
             googleSignInButton
             emailSignInButton
 
@@ -100,23 +97,6 @@ struct SignInView: View {
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
     }
 
-    // MARK: - Divider
-
-    private var dividerRow: some View {
-        HStack(spacing: CatchSpacing.space12) {
-            Rectangle()
-                .fill(CatchTheme.textSecondary.opacity(0.15))
-                .frame(height: 1)
-            Text(CatchStrings.SignIn.orDivider)
-                .font(.caption.weight(.medium))
-                .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
-            Rectangle()
-                .fill(CatchTheme.textSecondary.opacity(0.15))
-                .frame(height: 1)
-        }
-        .padding(.vertical, CatchSpacing.space4)
-    }
-
     // MARK: - Google
 
     private var googleSignInButton: some View {
@@ -124,20 +104,26 @@ struct SignInView: View {
             Task { await handleGoogleSignIn() }
         } label: {
             HStack(spacing: CatchSpacing.space10) {
-                Image(systemName: "globe")
-                    .font(.body.weight(.medium))
+                Image("GoogleLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20)
                 Text(CatchStrings.ProfileSetup.signInWithGoogle)
                     .font(.body.weight(.medium))
             }
-            .foregroundStyle(.white)
+            .foregroundStyle(CatchTheme.textPrimary)
             .frame(maxWidth: .infinity)
             .frame(height: 52)
-            .background(Color(red: 0.26, green: 0.52, blue: 0.96))
+            .background(CatchTheme.cardBackground)
             .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
+            .overlay(
+                RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall)
+                    .stroke(CatchTheme.textSecondary.opacity(0.15), lineWidth: 1)
+            )
             .shadow(
-                color: Color(red: 0.26, green: 0.52, blue: 0.96).opacity(0.25),
-                radius: 6,
-                y: 3
+                color: .black.opacity(0.08),
+                radius: 4,
+                y: 2
             )
         }
     }

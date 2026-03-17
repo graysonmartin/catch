@@ -5,6 +5,7 @@ import CatchCore
 struct catchApp: App {
     @AppStorage(AppStorageKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = false
     @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
+    @State private var isCheckingProfile = false
     @State private var authService: SupabaseAuthService
     @State private var followService: SupabaseFollowService
     @State private var breedClassifier = VisionBreedClassifierService()
@@ -95,6 +96,15 @@ struct catchApp: App {
                 .onAppear {
                     installToastWindow()
                 }
+                .onChange(of: authService.authState) { oldState, newState in
+                    if oldState == .unknown, newState.isSignedIn, !hasCompletedProfileSetup {
+                        isCheckingProfile = true
+                        Task { await checkExistingProfile() }
+                    }
+                    if newState == .signedOut {
+                        hasCompletedProfileSetup = false
+                    }
+                }
         }
     }
 
@@ -110,7 +120,7 @@ struct catchApp: App {
     private var mainContent: some View {
         if !hasCompletedOnboarding {
             OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
-        } else if authService.authState == .unknown {
+        } else if authService.authState == .unknown || isCheckingProfile {
             PawLoadingView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(CatchTheme.background)
@@ -145,11 +155,24 @@ struct catchApp: App {
                 .task {
                     await authService.refreshSessionIfNeeded()
                 }
-                .onChange(of: authService.authState) { _, newState in
-                    if newState == .signedOut {
-                        hasCompletedProfileSetup = false
-                    }
-                }
         }
+    }
+
+    private func checkExistingProfile() async {
+        guard let userID = authService.authState.user?.id else {
+            isCheckingProfile = false
+            return
+        }
+
+        do {
+            let profile = try await profileSyncService.fetchProfile(userID: userID)
+            if profile != nil {
+                hasCompletedProfileSetup = true
+            }
+        } catch {
+            // Profile check failed — fall through to ProfileSetupView
+        }
+
+        isCheckingProfile = false
     }
 }
