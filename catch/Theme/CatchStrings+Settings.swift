@@ -7,11 +7,6 @@ extension CatchStrings {
         // Navigation
         static let title = String(localized: "settings")
 
-        // Display name
-        static let displayNameSection = String(localized: "display name")
-        static let displayNamePlaceholder = String(localized: "what should we call you")
-        static let displayNameFooter = String(localized: "this is what other catchers see")
-
         // Notifications
         static let notificationsSection = String(localized: "notifications")
         static let notificationsToggle = String(localized: "push notifications")
