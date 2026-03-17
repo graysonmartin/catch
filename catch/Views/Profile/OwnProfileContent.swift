@@ -15,6 +15,7 @@ struct OwnProfileContent: View {
     @State private var isShowingFindPeople = false
     @State private var isShowingCollection = false
     @State private var searchText = ""
+    @State private var avatarData: Data?
 
     private var cats: [Cat] { catDataService.cats }
 
@@ -100,8 +101,14 @@ struct OwnProfileContent: View {
             get: { isShowingEditSheet ? profile : nil },
             set: { _ in isShowingEditSheet = false }
         )) { editProfile in
-            EditProfileView(profile: editProfile) { updatedProfile in
+            EditProfileView(profile: editProfile, avatarData: avatarData) { updatedProfile, updatedAvatarData in
+                if let newUrl = updatedProfile.avatarUrl,
+                   let data = updatedAvatarData,
+                   let image = UIImage(data: data) {
+                    RemoteImageCache.shared.setImage(image, for: newUrl)
+                }
                 profile = updatedProfile
+                avatarData = updatedAvatarData
             }
         }
         .task {
@@ -131,6 +138,12 @@ struct OwnProfileContent: View {
             // Profile load failure is non-critical
         }
         isLoadingProfile = false
+        if let urlString = profile?.avatarUrl {
+            avatarData = await RemoteImageCache.shared.jpegData(
+                for: urlString,
+                compressionQuality: CatchTheme.jpegCompressionQuality
+            )
+        }
     }
 
     // MARK: - Profile Header

@@ -28,7 +28,16 @@ struct RemoteImageView<Placeholder: View>: View {
             }
         }
         .task(id: urlString) {
-            guard uiImage == nil, let url = URL(string: urlString) else { return }
+            if let cached = RemoteImageCache.shared.image(for: urlString) {
+                uiImage = cached
+                return
+            }
+            uiImage = nil
+            isFailed = false
+            guard let url = URL(string: urlString) else {
+                isFailed = true
+                return
+            }
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
                 guard let downloaded = UIImage(data: data) else {

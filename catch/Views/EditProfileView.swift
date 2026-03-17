@@ -7,7 +7,7 @@ struct EditProfileView: View {
     @Environment(ToastManager.self) private var toastManager
 
     private let profile: UserProfile
-    var onSave: ((UserProfile) -> Void)?
+    var onSave: ((UserProfile, Data?) -> Void)?
 
     @State private var displayName: String
     @State private var bio: String
@@ -17,18 +17,17 @@ struct EditProfileView: View {
     @State private var visibilitySettings: VisibilitySettings
     @State private var usernameAvailability: UsernameAvailability = .idle
 
-    @State private var isLoadingAvatar = false
     @State private var didChangeAvatar = false
 
-    init(profile: UserProfile, onSave: ((UserProfile) -> Void)? = nil) {
+    init(profile: UserProfile, avatarData: Data?, onSave: ((UserProfile, Data?) -> Void)? = nil) {
         self.profile = profile
         self.onSave = onSave
         _displayName = State(initialValue: profile.displayName)
         _bio = State(initialValue: profile.bio)
         _username = State(initialValue: profile.username ?? "")
-        _avatarData = State(initialValue: nil)
         _isPrivate = State(initialValue: profile.isPrivate)
         _visibilitySettings = State(initialValue: profile.visibilitySettings)
+        _avatarData = State(initialValue: avatarData)
     }
 
     var body: some View {
@@ -44,9 +43,8 @@ struct EditProfileView: View {
                     visibilitySection
                 }
             }
-            .task { await loadExistingAvatar() }
             .onChange(of: avatarData) { _, _ in
-                if !isLoadingAvatar { didChangeAvatar = true }
+                didChangeAvatar = true
             }
             .navigationTitle(CatchStrings.Profile.editProfileTitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -106,22 +104,6 @@ struct EditProfileView: View {
 
     // MARK: - Actions
 
-    private func loadExistingAvatar() async {
-        guard avatarData == nil,
-              let urlString = profile.avatarUrl,
-              let url = URL(string: urlString) else { return }
-        isLoadingAvatar = true
-        defer { isLoadingAvatar = false }
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            guard let uiImage = UIImage(data: data),
-                  let jpeg = uiImage.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) else { return }
-            avatarData = jpeg
-        } catch {
-            // Avatar load failed — user can still pick a new photo
-        }
-    }
-
     private func save() {
         var updated = profile
         updated.displayName = displayName.trimmingCharacters(in: .whitespaces)
@@ -133,12 +115,12 @@ struct EditProfileView: View {
 
         Task {
             do {
-                let avatarPayload = didChangeAvatar ? avatarData : nil
-                let newAvatarUrl = try await profileSyncService.syncProfile(updated, avatarData: avatarPayload)
-                if let newAvatarUrl {
-                    updated.avatarUrl = newAvatarUrl
-                }
-                onSave?(updated)
+                let avatarChange: AvatarChange = didChangeAvatar
+                    ? (avatarData.map { .updated($0) } ?? .removed)
+                    : .noChange
+                let newAvatarUrl = try await profileSyncService.syncProfile(updated, avatarChange: avatarChange)
+                updated.avatarUrl = newAvatarUrl
+                onSave?(updated, avatarData)
                 dismiss()
             } catch {
                 toastManager.showError(CatchStrings.Toast.profileSaveFailed)

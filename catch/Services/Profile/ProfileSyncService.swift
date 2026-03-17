@@ -1,9 +1,17 @@
 import Foundation
 import CatchCore
 
+enum AvatarChange {
+    case noChange
+    case removed
+    case updated(Data)
+}
+
 @MainActor
 @Observable
 final class ProfileSyncService {
+    private static let avatarFileName = "avatar.jpg"
+
     private let profileRepository: any SupabaseProfileRepository
     private let assetService: any SupabaseAssetService
 
@@ -13,16 +21,28 @@ final class ProfileSyncService {
     }
 
     @discardableResult
-    func syncProfile(_ profile: UserProfile, avatarData: Data? = nil) async throws -> String? {
+    func syncProfile(_ profile: UserProfile, avatarChange: AvatarChange = .noChange) async throws -> String? {
         guard let userID = profile.supabaseUserID else { return nil }
 
         var avatarUrl = profile.avatarUrl
-        if let avatarData {
+        switch avatarChange {
+        case .noChange:
+            break
+        case .removed:
+            try await assetService.deletePhoto(
+                bucket: .profilePhotos,
+                path: "\(userID)/\(Self.avatarFileName)"
+            )
+            if let oldUrl = avatarUrl {
+                RemoteImageCache.shared.removeImage(for: oldUrl)
+            }
+            avatarUrl = nil
+        case .updated(let data):
             avatarUrl = try await assetService.uploadPhoto(
-                avatarData,
+                data,
                 bucket: .profilePhotos,
                 ownerID: userID,
-                fileName: "avatar.jpg"
+                fileName: Self.avatarFileName
             )
         }
 
