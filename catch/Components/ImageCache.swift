@@ -46,6 +46,24 @@ final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
         cache.removeAllObjects()
     }
 
+    /// Prefetches images for the given URLs concurrently, caching each result.
+    /// Skips URLs already in the cache.
+    func prefetch(urls: [String]) async {
+        let uncached = urls.filter { image(for: $0) == nil }
+        guard !uncached.isEmpty else { return }
+
+        await withTaskGroup(of: Void.self) { group in
+            for urlString in uncached {
+                group.addTask {
+                    guard let url = URL(string: urlString),
+                          let (data, _) = try? await URLSession.shared.data(from: url),
+                          let downloaded = UIImage(data: data) else { return }
+                    self.setImage(downloaded, for: urlString)
+                }
+            }
+        }
+    }
+
     /// Returns JPEG data for the given URL, checking the in-memory cache first
     /// and falling back to a network fetch. Caches the image on a cache miss.
     func jpegData(for urlString: String, compressionQuality: CGFloat) async -> Data? {

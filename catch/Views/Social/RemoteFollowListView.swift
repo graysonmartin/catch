@@ -79,6 +79,7 @@ struct RemoteFollowListView: View {
                 : try await followService.fetchFollowing(for: userID)
 
             await batchResolveProfiles()
+            await prefetchAvatars()
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }
@@ -93,6 +94,11 @@ struct RemoteFollowListView: View {
         guard !targetIDs.isEmpty else { return }
 
         resolvedProfiles = await browseService.batchFetchProfiles(userIDs: targetIDs)
+    }
+
+    private func prefetchAvatars() async {
+        let avatarURLs = resolvedProfiles.values.compactMap(\.avatarURL).filter { !$0.isEmpty }
+        await RemoteImageCache.shared.prefetch(urls: avatarURLs)
     }
 }
 
