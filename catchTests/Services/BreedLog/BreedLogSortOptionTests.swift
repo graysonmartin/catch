@@ -17,7 +17,6 @@ final class BreedLogSortOptionTests: XCTestCase {
             isDiscovered: isDiscovered,
             catCount: isDiscovered ? 1 : 0,
             firstDiscoveredDate: isDiscovered ? Date() : nil,
-            previewPhotoData: nil,
             previewPhotoUrl: nil
         )
     }

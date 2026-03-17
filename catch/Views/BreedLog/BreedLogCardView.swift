@@ -40,12 +40,7 @@ struct BreedLogCardView: View {
 
     @ViewBuilder
     private var photoOrSilhouette: some View {
-        if let data = entry.previewPhotoData,
-           let uiImage = ImageDownsampler.shared.downsample(data: data, to: CGSize(width: 70, height: 70)) {
-            Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
-        } else if let url = entry.previewPhotoUrl {
+        if let url = entry.previewPhotoUrl {
             RemoteImageView(urlString: url) {
                 Image(systemName: entry.catalogEntry.icon)
                     .font(.title2)
