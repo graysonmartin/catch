@@ -6,9 +6,9 @@ public enum SupabaseFeedMapper {
     /// Converts a feed row's encounter data to a `CloudEncounter`.
     public static func toCloudEncounter(_ row: SupabaseFeedRow) -> CloudEncounter {
         CloudEncounter(
-            recordName: row.id.uuidString,
-            ownerID: row.ownerID.uuidString,
-            catRecordName: row.catID.uuidString,
+            recordName: row.id.uuidString.lowercased(),
+            ownerID: row.ownerID.uuidString.lowercased(),
+            catRecordName: row.catID.uuidString.lowercased(),
             date: row.date,
             locationName: row.locationName ?? "",
             locationLatitude: row.locationLat,
@@ -22,7 +22,7 @@ public enum SupabaseFeedMapper {
     /// Converts a feed row's nested cat data to a `CloudCat`.
     public static func toCloudCat(_ cat: SupabaseFeedCat, ownerID: String) -> CloudCat {
         CloudCat(
-            recordName: cat.id.uuidString,
+            recordName: cat.id.uuidString.lowercased(),
             ownerID: ownerID,
             name: cat.name.isEmpty ? nil : cat.name,
             breed: cat.breed ?? "",
@@ -41,8 +41,8 @@ public enum SupabaseFeedMapper {
     /// Converts a feed row's nested profile data to a `CloudUserProfile`.
     public static func toCloudUserProfile(_ profile: SupabaseFeedProfile) -> CloudUserProfile {
         CloudUserProfile(
-            recordName: profile.id.uuidString,
-            appleUserID: profile.id.uuidString,
+            recordName: profile.id.uuidString.lowercased(),
+            appleUserID: profile.id.uuidString.lowercased(),
             displayName: profile.displayName,
             bio: profile.bio,
             username: profile.username,

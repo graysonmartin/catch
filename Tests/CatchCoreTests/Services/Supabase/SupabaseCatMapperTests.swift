@@ -11,7 +11,7 @@ final class SupabaseCatMapperTests: XCTestCase {
 
         let result = SupabaseCatMapper.toCloudCat(cat)
 
-        XCTAssertEqual(result.recordName, id.uuidString)
+        XCTAssertEqual(result.recordName, id.uuidString.lowercased())
     }
 
     func testMapsOwnerID() {
@@ -20,7 +20,7 @@ final class SupabaseCatMapperTests: XCTestCase {
 
         let result = SupabaseCatMapper.toCloudCat(cat)
 
-        XCTAssertEqual(result.ownerID, ownerID.uuidString)
+        XCTAssertEqual(result.ownerID, ownerID.uuidString.lowercased())
     }
 
     func testMapsNameAndBreed() {

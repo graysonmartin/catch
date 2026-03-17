@@ -186,12 +186,12 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
         let (counts, userLikes) = try await (countsResult, userLikesResult)
 
         for row in counts {
-            let encounterID = row.id.uuidString
+            let encounterID = row.id.uuidString.lowercased()
             likeCounts[encounterID] = row.likeCount
             commentCounts[encounterID] = row.commentCount
         }
 
-        let likedIDs = Set(userLikes.map { $0.encounterID.uuidString })
+        let likedIDs = Set(userLikes.map { $0.encounterID.uuidString.lowercased() })
         likedEncounters.formUnion(likedIDs)
     }
 

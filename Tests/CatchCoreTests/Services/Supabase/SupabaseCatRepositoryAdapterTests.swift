@@ -41,7 +41,7 @@ final class SupabaseCatRepositoryAdapterTests: XCTestCase {
 
         let result = try await adapter.save(payload, ownerID: "owner-1")
 
-        XCTAssertEqual(result, insertedCat.id.uuidString)
+        XCTAssertEqual(result, insertedCat.id.uuidString.lowercased())
         XCTAssertEqual(mockRepo.insertCatCalls.count, 1)
         XCTAssertEqual(mockRepo.insertCatCalls.first?.ownerID, "owner-1")
         XCTAssertEqual(mockRepo.insertCatCalls.first?.name, "whiskers")
@@ -70,7 +70,7 @@ final class SupabaseCatRepositoryAdapterTests: XCTestCase {
 
         let result = try await adapter.save(payload, ownerID: "owner-1")
 
-        XCTAssertEqual(result, updatedCat.id.uuidString)
+        XCTAssertEqual(result, updatedCat.id.uuidString.lowercased())
         XCTAssertEqual(mockRepo.updateCatCalls.count, 1)
         XCTAssertEqual(mockRepo.updateCatCalls.first?.id, "550e8400-e29b-41d4-a716-446655440000")
         XCTAssertEqual(mockRepo.updateCatCalls.first?.payload.name, "new name")
@@ -93,12 +93,12 @@ final class SupabaseCatRepositoryAdapterTests: XCTestCase {
         let cat2 = SupabaseCat.fixture(ownerID: ownerID, name: "cat 2")
         mockRepo.fetchCatsResult = [cat1, cat2]
 
-        let results = try await adapter.fetchAll(ownerID: ownerID.uuidString)
+        let results = try await adapter.fetchAll(ownerID: ownerID.uuidString.lowercased())
 
         XCTAssertEqual(results.count, 2)
         XCTAssertEqual(results[0].name, "cat 1")
         XCTAssertEqual(results[1].name, "cat 2")
-        XCTAssertEqual(mockRepo.fetchCatsCalls, [ownerID.uuidString])
+        XCTAssertEqual(mockRepo.fetchCatsCalls, [ownerID.uuidString.lowercased()])
     }
 
     func testFetchAllReturnsEmptyForNoResults() async throws {

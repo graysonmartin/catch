@@ -14,9 +14,9 @@ final class SupabaseSocialModelsTests: XCTestCase {
 
         let domain = like.toDomain()
 
-        XCTAssertEqual(domain.id, id.uuidString)
-        XCTAssertEqual(domain.encounterRecordName, encounterID.uuidString)
-        XCTAssertEqual(domain.userID, userID.uuidString)
+        XCTAssertEqual(domain.id, id.uuidString.lowercased())
+        XCTAssertEqual(domain.encounterRecordName, encounterID.uuidString.lowercased())
+        XCTAssertEqual(domain.userID, userID.uuidString.lowercased())
         XCTAssertEqual(domain.createdAt, date)
     }
 
@@ -26,9 +26,9 @@ final class SupabaseSocialModelsTests: XCTestCase {
         let userID = UUID()
         let json = """
         {
-            "id": "\(id.uuidString)",
-            "encounter_id": "\(encounterID.uuidString)",
-            "user_id": "\(userID.uuidString)",
+            "id": "\(id.uuidString.lowercased())",
+            "encounter_id": "\(encounterID.uuidString.lowercased())",
+            "user_id": "\(userID.uuidString.lowercased())",
             "created_at": "2025-03-15T10:00:00Z"
         }
         """
@@ -57,8 +57,8 @@ final class SupabaseSocialModelsTests: XCTestCase {
 
         let user = like.toLikedByUser()
 
-        XCTAssertEqual(user.id, id.uuidString)
-        XCTAssertEqual(user.userID, userID.uuidString)
+        XCTAssertEqual(user.id, id.uuidString.lowercased())
+        XCTAssertEqual(user.userID, userID.uuidString.lowercased())
         XCTAssertEqual(user.displayName, "CatPerson")
         XCTAssertEqual(user.username, "catperson99")
         XCTAssertEqual(user.likedAt, date)
@@ -76,7 +76,7 @@ final class SupabaseSocialModelsTests: XCTestCase {
 
         let user = like.toLikedByUser()
 
-        XCTAssertEqual(user.displayName, String(userID.uuidString.prefix(8)))
+        XCTAssertEqual(user.displayName, String(userID.uuidString.lowercased().prefix(8)))
         XCTAssertNil(user.username)
     }
 
@@ -97,9 +97,9 @@ final class SupabaseSocialModelsTests: XCTestCase {
 
         let domain = comment.toDomain()
 
-        XCTAssertEqual(domain.id, id.uuidString)
-        XCTAssertEqual(domain.encounterRecordName, encounterID.uuidString)
-        XCTAssertEqual(domain.userID, userID.uuidString)
+        XCTAssertEqual(domain.id, id.uuidString.lowercased())
+        XCTAssertEqual(domain.encounterRecordName, encounterID.uuidString.lowercased())
+        XCTAssertEqual(domain.userID, userID.uuidString.lowercased())
         XCTAssertEqual(domain.text, "nice cat")
         XCTAssertEqual(domain.createdAt, date)
         XCTAssertNil(domain.displayName)
@@ -147,9 +147,9 @@ final class SupabaseSocialModelsTests: XCTestCase {
         let userID = UUID()
         let json = """
         {
-            "id": "\(id.uuidString)",
-            "encounter_id": "\(encounterID.uuidString)",
-            "user_id": "\(userID.uuidString)",
+            "id": "\(id.uuidString.lowercased())",
+            "encounter_id": "\(encounterID.uuidString.lowercased())",
+            "user_id": "\(userID.uuidString.lowercased())",
             "text": "what a legend",
             "created_at": "2025-03-15T10:00:00Z"
         }
@@ -168,7 +168,7 @@ final class SupabaseSocialModelsTests: XCTestCase {
         let id = UUID()
         let json = """
         {
-            "id": "\(id.uuidString)",
+            "id": "\(id.uuidString.lowercased())",
             "like_count": 42,
             "comment_count": 7
         }

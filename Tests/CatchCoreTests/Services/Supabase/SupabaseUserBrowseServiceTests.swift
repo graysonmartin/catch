@@ -45,20 +45,20 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
             id: userID, displayName: "cat lord", followerCount: 10, followingCount: 5
         )
         let cat = CloudCat(
-            recordName: "cat-1", ownerID: userID.uuidString, name: "Muffin",
+            recordName: "cat-1", ownerID: userID.uuidString.lowercased(), name: "Muffin",
             breed: "", estimatedAge: "3", locationName: "park",
             locationLatitude: nil, locationLongitude: nil, notes: "",
             isOwned: false, createdAt: Date(), photos: []
         )
         mockCatRepo.fetchAllResult = [cat]
         let encounter = CloudEncounter(
-            recordName: "enc-1", ownerID: userID.uuidString, catRecordName: "cat-1",
+            recordName: "enc-1", ownerID: userID.uuidString.lowercased(), catRecordName: "cat-1",
             date: Date(), locationName: "park", locationLatitude: nil, locationLongitude: nil,
             notes: "spotted", photos: []
         )
         mockEncounterRepo.fetchAllResult = [encounter]
 
-        let data = try await sut.fetchUserData(userID: userID.uuidString)
+        let data = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
 
         XCTAssertEqual(data.profile.displayName, "cat lord")
         XCTAssertEqual(data.cats.count, 1)
@@ -91,7 +91,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         mockCatRepo.fetchAllError = NSError(domain: "test", code: 1, userInfo: [NSLocalizedDescriptionKey: "boom"])
 
         do {
-            _ = try await sut.fetchUserData(userID: userID.uuidString)
+            _ = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
             XCTFail("expected networkError")
         } catch let error as UserBrowseError {
             if case .networkError = error {
@@ -113,14 +113,14 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         )
         mockCatRepo.fetchAllResult = [
             CloudCat(
-                recordName: "cat-hidden", ownerID: userID.uuidString, name: "Ghost",
+                recordName: "cat-hidden", ownerID: userID.uuidString.lowercased(), name: "Ghost",
                 breed: "", estimatedAge: "?", locationName: "classified",
                 locationLatitude: nil, locationLongitude: nil, notes: "",
                 isOwned: true, createdAt: Date(), photos: []
             )
         ]
 
-        let data = try await sut.fetchUserData(userID: userID.uuidString)
+        let data = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
 
         XCTAssertEqual(data.profile.displayName, "shiv")
         XCTAssertTrue(data.profile.isPrivate)
@@ -134,10 +134,10 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testPrivateProfileReturnsContentWhenFollowing() async throws {
         let userID = UUID()
-        mockFollowService.simulateFollowing(followeeID: userID.uuidString)
+        mockFollowService.simulateFollowing(followeeID: userID.uuidString.lowercased())
         mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "shiv", isPrivate: true)
         let cat = CloudCat(
-            recordName: "cat-visible", ownerID: userID.uuidString, name: "Ghost",
+            recordName: "cat-visible", ownerID: userID.uuidString.lowercased(), name: "Ghost",
             breed: "", estimatedAge: "?", locationName: "home",
             locationLatitude: nil, locationLongitude: nil, notes: "",
             isOwned: true, createdAt: Date(), photos: []
@@ -145,7 +145,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         mockCatRepo.fetchAllResult = [cat]
         mockEncounterRepo.fetchAllResult = []
 
-        let data = try await sut.fetchUserData(userID: userID.uuidString)
+        let data = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
 
         XCTAssertEqual(data.cats.count, 1)
         XCTAssertEqual(data.cats.first?.name, "Ghost")
@@ -153,10 +153,10 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
 
     func testOwnPrivateProfileAlwaysReturnsContent() async throws {
         let userID = UUID()
-        currentUserID = userID.uuidString
+        currentUserID = userID.uuidString.lowercased()
         mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "me", isPrivate: true)
         let cat = CloudCat(
-            recordName: "cat-mine", ownerID: userID.uuidString, name: "Steven",
+            recordName: "cat-mine", ownerID: userID.uuidString.lowercased(), name: "Steven",
             breed: "", estimatedAge: "5", locationName: "couch",
             locationLatitude: nil, locationLongitude: nil, notes: "",
             isOwned: true, createdAt: Date(), photos: []
@@ -164,7 +164,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         mockCatRepo.fetchAllResult = [cat]
         mockEncounterRepo.fetchAllResult = []
 
-        let data = try await sut.fetchUserData(userID: userID.uuidString)
+        let data = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
 
         XCTAssertEqual(data.cats.count, 1, "own private profile should always return content")
         XCTAssertEqual(data.cats.first?.name, "Steven")
@@ -174,7 +174,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         let userID = UUID()
         mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "tuong")
         let cat = CloudCat(
-            recordName: "cat-pub", ownerID: userID.uuidString, name: "Chairman Meow",
+            recordName: "cat-pub", ownerID: userID.uuidString.lowercased(), name: "Chairman Meow",
             breed: "", estimatedAge: "6", locationName: "fire escape",
             locationLatitude: nil, locationLongitude: nil, notes: "",
             isOwned: false, createdAt: Date(), photos: []
@@ -182,7 +182,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         mockCatRepo.fetchAllResult = [cat]
         mockEncounterRepo.fetchAllResult = []
 
-        let data = try await sut.fetchUserData(userID: userID.uuidString)
+        let data = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
 
         XCTAssertEqual(data.cats.count, 1)
         XCTAssertEqual(data.cats.first?.name, "Chairman Meow")
@@ -196,9 +196,9 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         mockCatRepo.fetchAllResult = []
         mockEncounterRepo.fetchAllResult = []
 
-        _ = try await sut.fetchUserData(userID: userID.uuidString)
+        _ = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
 
-        let cached = sut.cachedData(for: userID.uuidString)
+        let cached = sut.cachedData(for: userID.uuidString.lowercased())
         XCTAssertNotNil(cached)
         XCTAssertEqual(cached?.profile.displayName, "cached user")
     }
@@ -213,8 +213,8 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         mockCatRepo.fetchAllResult = []
         mockEncounterRepo.fetchAllResult = []
 
-        _ = try await sut.fetchUserData(userID: userID.uuidString)
-        _ = try await sut.fetchUserData(userID: userID.uuidString)
+        _ = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
+        _ = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
 
         XCTAssertEqual(mockProfileRepo.fetchProfileCalls.count, 1)
     }
@@ -225,10 +225,10 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         mockCatRepo.fetchAllResult = []
         mockEncounterRepo.fetchAllResult = []
 
-        _ = try await sut.fetchUserData(userID: userID.uuidString)
+        _ = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
         sut.clearCache()
 
-        XCTAssertNil(sut.cachedData(for: userID.uuidString))
+        XCTAssertNil(sut.cachedData(for: userID.uuidString.lowercased()))
     }
 
     // MARK: - fetchDisplayName
@@ -237,7 +237,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         let userID = UUID()
         mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "cool person")
 
-        let name = await sut.fetchDisplayName(userID: userID.uuidString)
+        let name = await sut.fetchDisplayName(userID: userID.uuidString.lowercased())
         XCTAssertEqual(name, "cool person")
     }
 
@@ -245,8 +245,8 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         let userID = UUID()
         mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "cool person")
 
-        _ = await sut.fetchDisplayName(userID: userID.uuidString)
-        _ = await sut.fetchDisplayName(userID: userID.uuidString)
+        _ = await sut.fetchDisplayName(userID: userID.uuidString.lowercased())
+        _ = await sut.fetchDisplayName(userID: userID.uuidString.lowercased())
 
         XCTAssertEqual(mockProfileRepo.fetchProfileCalls.count, 1)
     }
@@ -264,10 +264,10 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         let userID = UUID()
         mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "fetched")
 
-        let profile = await sut.fetchProfile(userID: userID.uuidString)
+        let profile = await sut.fetchProfile(userID: userID.uuidString.lowercased())
 
         XCTAssertEqual(profile?.displayName, "fetched")
-        XCTAssertEqual(profile?.recordName, userID.uuidString)
+        XCTAssertEqual(profile?.recordName, userID.uuidString.lowercased())
     }
 
     func testFetchProfileReturnsNilWhenNotFound() async {
@@ -283,10 +283,10 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         mockCatRepo.fetchAllResult = []
         mockEncounterRepo.fetchAllResult = []
 
-        _ = try await sut.fetchUserData(userID: userID.uuidString)
+        _ = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
         mockProfileRepo.fetchProfileCalls.removeAll()
 
-        let profile = await sut.fetchProfile(userID: userID.uuidString)
+        let profile = await sut.fetchProfile(userID: userID.uuidString.lowercased())
 
         XCTAssertEqual(profile?.displayName, "cached")
         XCTAssertTrue(mockProfileRepo.fetchProfileCalls.isEmpty, "should use cache, not fetch again")
@@ -304,7 +304,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         mockCatRepo.fetchAllResult = []
         mockEncounterRepo.fetchAllResult = []
 
-        _ = try await sut.fetchUserData(userID: userID.uuidString)
+        _ = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
         XCTAssertFalse(sut.isLoading)
     }
 
@@ -325,7 +325,7 @@ final class SupabaseUserBrowseServiceTests: XCTestCase {
         mockCatRepo.fetchAllResult = []
         mockEncounterRepo.fetchAllResult = []
 
-        let data = try await sut.fetchUserData(userID: userID.uuidString)
+        let data = try await sut.fetchUserData(userID: userID.uuidString.lowercased())
 
         XCTAssertEqual(data.followerCount, 99)
         XCTAssertEqual(data.followingCount, 42)

@@ -23,9 +23,9 @@ public struct SupabaseLike: Codable, Sendable {
 
     public func toDomain() -> EncounterLike {
         EncounterLike(
-            id: id.uuidString,
-            encounterRecordName: encounterID.uuidString,
-            userID: userID.uuidString,
+            id: id.uuidString.lowercased(),
+            encounterRecordName: encounterID.uuidString.lowercased(),
+            userID: userID.uuidString.lowercased(),
             createdAt: createdAt
         )
     }
@@ -78,9 +78,9 @@ public struct SupabaseLikeWithProfile: Codable, Sendable {
 
     public func toLikedByUser() -> LikedByUser {
         LikedByUser(
-            id: id.uuidString,
-            userID: userID.uuidString,
-            displayName: profiles?.displayName ?? String(userID.uuidString.prefix(8)),
+            id: id.uuidString.lowercased(),
+            userID: userID.uuidString.lowercased(),
+            displayName: profiles?.displayName ?? String(userID.uuidString.lowercased().prefix(8)),
             username: profiles?.username,
             likedAt: createdAt
         )

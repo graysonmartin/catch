@@ -3,8 +3,8 @@ import Foundation
 public enum SupabaseProfileMapper {
     public static func toCloudUserProfile(_ profile: SupabaseProfile) -> CloudUserProfile {
         CloudUserProfile(
-            recordName: profile.id.uuidString,
-            appleUserID: profile.id.uuidString,
+            recordName: profile.id.uuidString.lowercased(),
+            appleUserID: profile.id.uuidString.lowercased(),
             displayName: profile.displayName,
             bio: profile.bio,
             username: profile.username,

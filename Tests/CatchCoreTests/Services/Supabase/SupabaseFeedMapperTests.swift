@@ -10,9 +10,9 @@ final class SupabaseFeedMapperTests: XCTestCase {
         let row = SupabaseFeedRow.fixture()
         let encounter = SupabaseFeedMapper.toCloudEncounter(row)
 
-        XCTAssertEqual(encounter.recordName, row.id.uuidString)
-        XCTAssertEqual(encounter.ownerID, row.ownerID.uuidString)
-        XCTAssertEqual(encounter.catRecordName, row.catID.uuidString)
+        XCTAssertEqual(encounter.recordName, row.id.uuidString.lowercased())
+        XCTAssertEqual(encounter.ownerID, row.ownerID.uuidString.lowercased())
+        XCTAssertEqual(encounter.catRecordName, row.catID.uuidString.lowercased())
         XCTAssertEqual(encounter.date, row.date)
         XCTAssertEqual(encounter.locationName, "test park")
         XCTAssertEqual(encounter.locationLatitude, 37.7749)
@@ -46,7 +46,7 @@ final class SupabaseFeedMapperTests: XCTestCase {
         let ownerID = "owner-123"
         let cloudCat = SupabaseFeedMapper.toCloudCat(cat, ownerID: ownerID)
 
-        XCTAssertEqual(cloudCat.recordName, cat.id.uuidString)
+        XCTAssertEqual(cloudCat.recordName, cat.id.uuidString.lowercased())
         XCTAssertEqual(cloudCat.ownerID, ownerID)
         XCTAssertEqual(cloudCat.name, "Whiskers")
         XCTAssertEqual(cloudCat.breed, "tabby")
@@ -67,8 +67,8 @@ final class SupabaseFeedMapperTests: XCTestCase {
         let profile = SupabaseFeedProfile.fixture()
         let cloudProfile = SupabaseFeedMapper.toCloudUserProfile(profile)
 
-        XCTAssertEqual(cloudProfile.recordName, profile.id.uuidString)
-        XCTAssertEqual(cloudProfile.appleUserID, profile.id.uuidString)
+        XCTAssertEqual(cloudProfile.recordName, profile.id.uuidString.lowercased())
+        XCTAssertEqual(cloudProfile.appleUserID, profile.id.uuidString.lowercased())
         XCTAssertEqual(cloudProfile.displayName, "alice")
         XCTAssertEqual(cloudProfile.username, "alice99")
         XCTAssertEqual(cloudProfile.bio, "cat lover")

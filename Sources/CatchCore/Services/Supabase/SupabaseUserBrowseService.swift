@@ -115,7 +115,7 @@ public final class SupabaseUserBrowseService: UserBrowseService {
         if !uncachedIDs.isEmpty {
             let profiles = (try? await profileRepository.fetchProfiles(ids: uncachedIDs)) ?? []
             for profile in profiles {
-                displayNameCache[profile.id.uuidString] = profile.displayName
+                displayNameCache[profile.id.uuidString.lowercased()] = profile.displayName
             }
         }
 
@@ -140,6 +140,10 @@ public final class SupabaseUserBrowseService: UserBrowseService {
         let profile = SupabaseProfileMapper.toCloudUserProfile(supabaseProfile)
         displayNameCache[userID] = profile.displayName
         return profile
+    }
+
+    public func invalidateCache(for userID: String) {
+        cache.removeValue(forKey: userID)
     }
 
     public func clearCache() {

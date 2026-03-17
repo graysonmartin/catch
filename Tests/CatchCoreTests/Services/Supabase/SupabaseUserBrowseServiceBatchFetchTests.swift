@@ -44,9 +44,9 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
         let userID = UUID()
         mockProfileRepo.fetchProfileResult = .fixture(id: userID, displayName: "cool person")
 
-        _ = await sut.fetchDisplayName(userID: userID.uuidString)
+        _ = await sut.fetchDisplayName(userID: userID.uuidString.lowercased())
 
-        XCTAssertEqual(sut.cachedDisplayName(for: userID.uuidString), "cool person")
+        XCTAssertEqual(sut.cachedDisplayName(for: userID.uuidString.lowercased()), "cool person")
     }
 
     // MARK: - batchFetchDisplayNames
@@ -61,12 +61,12 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
             .fixture(id: id3, displayName: "charlie")
         ]
 
-        let result = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString, id2.uuidString, id3.uuidString])
+        let result = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString.lowercased(), id2.uuidString.lowercased(), id3.uuidString.lowercased()])
 
         XCTAssertEqual(result.count, 3)
-        XCTAssertEqual(result[id1.uuidString], "alice")
-        XCTAssertEqual(result[id2.uuidString], "bob")
-        XCTAssertEqual(result[id3.uuidString], "charlie")
+        XCTAssertEqual(result[id1.uuidString.lowercased()], "alice")
+        XCTAssertEqual(result[id2.uuidString.lowercased()], "bob")
+        XCTAssertEqual(result[id3.uuidString.lowercased()], "charlie")
     }
 
     func testBatchFetchDisplayNamesPopulatesCache() async {
@@ -77,29 +77,29 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
             .fixture(id: id2, displayName: "bob")
         ]
 
-        _ = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString, id2.uuidString])
+        _ = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString.lowercased(), id2.uuidString.lowercased()])
 
-        XCTAssertEqual(sut.cachedDisplayName(for: id1.uuidString), "alice")
-        XCTAssertEqual(sut.cachedDisplayName(for: id2.uuidString), "bob")
+        XCTAssertEqual(sut.cachedDisplayName(for: id1.uuidString.lowercased()), "alice")
+        XCTAssertEqual(sut.cachedDisplayName(for: id2.uuidString.lowercased()), "bob")
     }
 
     func testBatchFetchDisplayNamesSkipsCachedUsers() async {
         let id1 = UUID()
         let id2 = UUID()
         mockProfileRepo.fetchProfileResult = .fixture(id: id1, displayName: "alice")
-        _ = await sut.fetchDisplayName(userID: id1.uuidString)
+        _ = await sut.fetchDisplayName(userID: id1.uuidString.lowercased())
         mockProfileRepo.fetchProfileCalls.removeAll()
 
         mockProfileRepo.fetchProfilesResult = [
             .fixture(id: id2, displayName: "bob")
         ]
 
-        let result = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString, id2.uuidString])
+        let result = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString.lowercased(), id2.uuidString.lowercased()])
 
         XCTAssertEqual(mockProfileRepo.fetchProfilesCalls.count, 1)
-        XCTAssertEqual(mockProfileRepo.fetchProfilesCalls.first, [id2.uuidString], "should only fetch uncached user")
-        XCTAssertEqual(result[id1.uuidString], "alice")
-        XCTAssertEqual(result[id2.uuidString], "bob")
+        XCTAssertEqual(mockProfileRepo.fetchProfilesCalls.first, [id2.uuidString.lowercased()], "should only fetch uncached user")
+        XCTAssertEqual(result[id1.uuidString.lowercased()], "alice")
+        XCTAssertEqual(result[id2.uuidString.lowercased()], "bob")
     }
 
     func testBatchFetchDisplayNamesHandlesNotFoundUsers() async {
@@ -109,11 +109,11 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
             .fixture(id: id1, displayName: "alice")
         ]
 
-        let result = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString, id2.uuidString])
+        let result = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString.lowercased(), id2.uuidString.lowercased()])
 
         XCTAssertEqual(result.count, 1)
-        XCTAssertEqual(result[id1.uuidString], "alice")
-        XCTAssertNil(result[id2.uuidString])
+        XCTAssertEqual(result[id1.uuidString.lowercased()], "alice")
+        XCTAssertNil(result[id2.uuidString.lowercased()])
     }
 
     func testBatchFetchDisplayNamesWithEmptyArrayReturnsEmpty() async {
@@ -126,17 +126,17 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
     func testBatchFetchDisplayNamesAllCachedSkipsNetwork() async {
         let id1 = UUID()
         let id2 = UUID()
-        mockProfileRepo.fetchProfileResultsByID[id1.uuidString] = .fixture(id: id1, displayName: "alice")
-        mockProfileRepo.fetchProfileResultsByID[id2.uuidString] = .fixture(id: id2, displayName: "bob")
-        _ = await sut.fetchDisplayName(userID: id1.uuidString)
-        _ = await sut.fetchDisplayName(userID: id2.uuidString)
+        mockProfileRepo.fetchProfileResultsByID[id1.uuidString.lowercased()] = .fixture(id: id1, displayName: "alice")
+        mockProfileRepo.fetchProfileResultsByID[id2.uuidString.lowercased()] = .fixture(id: id2, displayName: "bob")
+        _ = await sut.fetchDisplayName(userID: id1.uuidString.lowercased())
+        _ = await sut.fetchDisplayName(userID: id2.uuidString.lowercased())
         mockProfileRepo.fetchProfileCalls.removeAll()
 
-        let result = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString, id2.uuidString])
+        let result = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString.lowercased(), id2.uuidString.lowercased()])
 
         XCTAssertTrue(mockProfileRepo.fetchProfilesCalls.isEmpty, "should not batch fetch when all cached")
-        XCTAssertEqual(result[id1.uuidString], "alice")
-        XCTAssertEqual(result[id2.uuidString], "bob")
+        XCTAssertEqual(result[id1.uuidString.lowercased()], "alice")
+        XCTAssertEqual(result[id2.uuidString.lowercased()], "bob")
     }
 
     func testBatchFetchedNamesAvailableViaFetchDisplayName() async {
@@ -145,11 +145,11 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
             .fixture(id: id1, displayName: "alice")
         ]
 
-        _ = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString])
+        _ = await sut.batchFetchDisplayNames(userIDs: [id1.uuidString.lowercased()])
         mockProfileRepo.fetchProfileCalls.removeAll()
         mockProfileRepo.fetchProfilesCalls.removeAll()
 
-        let name = await sut.fetchDisplayName(userID: id1.uuidString)
+        let name = await sut.fetchDisplayName(userID: id1.uuidString.lowercased())
 
         XCTAssertEqual(name, "alice")
         XCTAssertTrue(mockProfileRepo.fetchProfileCalls.isEmpty, "should use cache, not fetch again")
@@ -161,7 +161,7 @@ final class SupabaseUserBrowseServiceBatchFetchTests: XCTestCase {
             .fixture(id: id, displayName: "user-\(i)")
         }
 
-        _ = await sut.batchFetchDisplayNames(userIDs: ids.map(\.uuidString))
+        _ = await sut.batchFetchDisplayNames(userIDs: ids.map { $0.uuidString.lowercased() })
 
         XCTAssertEqual(mockProfileRepo.fetchProfilesCalls.count, 1, "should use single batch query, not N individual fetches")
     }

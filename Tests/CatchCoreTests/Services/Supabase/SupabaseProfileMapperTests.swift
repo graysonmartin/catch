@@ -9,8 +9,8 @@ final class SupabaseProfileMapperTests: XCTestCase {
 
         let result = SupabaseProfileMapper.toCloudUserProfile(profile)
 
-        XCTAssertEqual(result.recordName, id.uuidString)
-        XCTAssertEqual(result.appleUserID, id.uuidString)
+        XCTAssertEqual(result.recordName, id.uuidString.lowercased())
+        XCTAssertEqual(result.appleUserID, id.uuidString.lowercased())
     }
 
     func testMapsDisplayNameAndBio() {

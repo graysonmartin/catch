@@ -266,6 +266,7 @@ struct RemoteProfileContent: View {
                             followerCountAdjustment -= 1
                             do {
                                 try await followService.unfollow(targetID: userID, by: authenticatedUserID)
+                                browseService?.invalidateCache(for: userID)
                             } catch {
                                 followerCountAdjustment += 1
                                 toastManager.showError(CatchStrings.Toast.unfollowFailed)
@@ -292,6 +293,7 @@ struct RemoteProfileContent: View {
                                 by: authenticatedUserID,
                                 isTargetPrivate: isPrivate
                             )
+                            browseService?.invalidateCache(for: userID)
                         } catch {
                             if !isPrivate {
                                 followerCountAdjustment -= 1
@@ -334,6 +336,7 @@ struct RemoteProfileContent: View {
                                 by: authenticatedUserID,
                                 isTargetPrivate: true
                             )
+                            browseService?.invalidateCache(for: userID)
                         } catch {
                             toastManager.showError(CatchStrings.Toast.followFailed)
                         }
@@ -494,6 +497,7 @@ struct RemoteProfileContent: View {
         loadError = nil
         do {
             data = try await browseService.fetchUserData(userID: userID)
+            followerCountAdjustment = 0
         } catch let error as UserBrowseError {
             loadError = error
         } catch {

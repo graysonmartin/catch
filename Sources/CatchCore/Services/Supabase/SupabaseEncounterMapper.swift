@@ -7,9 +7,9 @@ public enum SupabaseEncounterMapper {
     /// Photo URLs are not resolved to `Data` here — callers handle asset loading.
     public static func toCloudEncounter(_ encounter: SupabaseEncounter) -> CloudEncounter {
         CloudEncounter(
-            recordName: encounter.id.uuidString,
-            ownerID: encounter.ownerID.uuidString,
-            catRecordName: encounter.catID.uuidString,
+            recordName: encounter.id.uuidString.lowercased(),
+            ownerID: encounter.ownerID.uuidString.lowercased(),
+            catRecordName: encounter.catID.uuidString.lowercased(),
             date: encounter.date,
             locationName: encounter.locationName ?? "",
             locationLatitude: encounter.locationLat,

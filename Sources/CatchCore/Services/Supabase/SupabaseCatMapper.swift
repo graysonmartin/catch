@@ -7,8 +7,8 @@ public enum SupabaseCatMapper {
     /// Photo URLs are not resolved to `Data` here — callers handle asset loading.
     public static func toCloudCat(_ cat: SupabaseCat) -> CloudCat {
         CloudCat(
-            recordName: cat.id.uuidString,
-            ownerID: cat.ownerID.uuidString,
+            recordName: cat.id.uuidString.lowercased(),
+            ownerID: cat.ownerID.uuidString.lowercased(),
             name: cat.name.isEmpty ? nil : cat.name,
             breed: cat.breed ?? "",
             estimatedAge: cat.estimatedAge ?? "",

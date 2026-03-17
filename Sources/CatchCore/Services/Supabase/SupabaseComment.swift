@@ -26,9 +26,9 @@ public struct SupabaseComment: Codable, Sendable {
 
     public func toDomain() -> EncounterComment {
         EncounterComment(
-            id: id.uuidString,
-            encounterRecordName: encounterID.uuidString,
-            userID: userID.uuidString,
+            id: id.uuidString.lowercased(),
+            encounterRecordName: encounterID.uuidString.lowercased(),
+            userID: userID.uuidString.lowercased(),
             text: text,
             createdAt: createdAt
         )
@@ -83,9 +83,9 @@ public struct SupabaseCommentWithProfile: Codable, Sendable {
 
     public func toDomain() -> EncounterComment {
         EncounterComment(
-            id: id.uuidString,
-            encounterRecordName: encounterID.uuidString,
-            userID: userID.uuidString,
+            id: id.uuidString.lowercased(),
+            encounterRecordName: encounterID.uuidString.lowercased(),
+            userID: userID.uuidString.lowercased(),
             displayName: profiles?.displayName,
             text: text,
             createdAt: createdAt
