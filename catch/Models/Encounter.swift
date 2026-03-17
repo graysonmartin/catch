@@ -50,6 +50,12 @@ struct Encounter: Identifiable, Hashable, Sendable {
 
     static func == (lhs: Encounter, rhs: Encounter) -> Bool {
         lhs.id == rhs.id
+            && lhs.date == rhs.date
+            && lhs.location == rhs.location
+            && lhs.notes == rhs.notes
+            && lhs.photoUrls == rhs.photoUrls
+            && lhs.likeCount == rhs.likeCount
+            && lhs.commentCount == rhs.commentCount
     }
 
     // MARK: - Supabase Mapping

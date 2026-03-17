@@ -72,6 +72,13 @@ struct Cat: Identifiable, Hashable, Sendable {
 
     static func == (lhs: Cat, rhs: Cat) -> Bool {
         lhs.id == rhs.id
+            && lhs.name == rhs.name
+            && lhs.breed == rhs.breed
+            && lhs.location == rhs.location
+            && lhs.notes == rhs.notes
+            && lhs.isOwned == rhs.isOwned
+            && lhs.photoUrls == rhs.photoUrls
+            && lhs.encounters == rhs.encounters
     }
 
     // MARK: - Supabase Mapping

@@ -10,6 +10,7 @@ struct OwnProfileContent: View {
 
     @Binding var selectedTab: Int
     @State private var profile: UserProfile?
+    @State private var isLoadingProfile = true
     @State private var isShowingEditSheet = false
     @State private var isShowingFindPeople = false
     @State private var isShowingCollection = false
@@ -32,6 +33,9 @@ struct OwnProfileContent: View {
             VStack(spacing: CatchSpacing.space24) {
                 if let profile {
                     profileHeader(profile)
+                } else if isLoadingProfile {
+                    PawLoadingView(size: .inline)
+                        .padding(.top, CatchSpacing.space24)
                 } else {
                     setupBanner
                 }
@@ -109,7 +113,10 @@ struct OwnProfileContent: View {
     // MARK: - Data Loading
 
     private func loadProfile() async {
-        guard let userID = authService.authState.user?.id else { return }
+        guard let userID = authService.authState.user?.id else {
+            isLoadingProfile = false
+            return
+        }
         do {
             if let cloudProfile = try await profileSyncService.fetchProfile(userID: userID) {
                 profile = UserProfile(
@@ -124,6 +131,7 @@ struct OwnProfileContent: View {
         } catch {
             // Profile load failure is non-critical
         }
+        isLoadingProfile = false
     }
 
     // MARK: - Profile Header

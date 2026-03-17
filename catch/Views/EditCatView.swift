@@ -135,6 +135,7 @@ struct EditCatView: View {
             _ = try await catDataService.updateCat(updatedCat, photos: photos)
             dismiss()
         } catch {
+            print("❌ Update cat failed: \(error)")
             toastManager.showError(CatchStrings.Toast.catUpdateFailed)
         }
     }

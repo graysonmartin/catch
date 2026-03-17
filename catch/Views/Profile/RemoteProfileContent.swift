@@ -159,11 +159,23 @@ struct RemoteProfileContent: View {
 
     @ViewBuilder
     private func avatarImage(data: UserBrowseData) -> some View {
-        Image(systemName: "person.crop.circle.fill")
-            .resizable()
-            .scaledToFit()
+        if let avatarUrl = data.profile.avatarURL, !avatarUrl.isEmpty {
+            RemoteImageView(urlString: avatarUrl) {
+                Image(systemName: "person.crop.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 120, height: 120)
+                    .foregroundStyle(CatchTheme.secondary)
+            }
             .frame(width: 120, height: 120)
-            .foregroundStyle(CatchTheme.secondary)
+            .clipShape(Circle())
+        } else {
+            Image(systemName: "person.crop.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 120, height: 120)
+                .foregroundStyle(CatchTheme.secondary)
+        }
     }
 
     private func compactSocialStat(count: Int, label: String) -> some View {
@@ -253,6 +265,7 @@ struct RemoteProfileContent: View {
                         Task {
                             do {
                                 try await followService.unfollow(targetID: userID, by: currentUserID)
+                                await loadData()
                             } catch {
                                 toastManager.showError(CatchStrings.Toast.unfollowFailed)
                             }
@@ -275,6 +288,7 @@ struct RemoteProfileContent: View {
                                 by: currentUserID,
                                 isTargetPrivate: isPrivate
                             )
+                            await loadData()
                         } catch {
                             toastManager.showError(CatchStrings.Toast.followFailed)
                         }
@@ -316,6 +330,7 @@ struct RemoteProfileContent: View {
                                 by: currentUserID,
                                 isTargetPrivate: isPrivate
                             )
+                            await loadData()
                         } catch {
                             toastManager.showError(CatchStrings.Toast.followFailed)
                         }
@@ -480,6 +495,8 @@ struct RemoteProfileContent: View {
         guard !recordNames.isEmpty else { return }
         do {
             try await socialService.loadInteractionData(for: recordNames)
+        } catch is CancellationError {
+        } catch let error as NSError where error.code == NSURLErrorCancelled {
         } catch {
             toastManager.showError(CatchStrings.Toast.feedLoadFailed)
         }

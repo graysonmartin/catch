@@ -130,11 +130,9 @@ CREATE POLICY encounters_delete ON encounters
 -- FOLLOWS
 -- =============================================================================
 
--- visible to either party in the follow relationship
+-- follow relationships are public (any authenticated user can browse)
 CREATE POLICY follows_select ON follows
-    FOR SELECT USING (
-        follower_id = auth.uid() OR followee_id = auth.uid()
-    );
+    FOR SELECT USING (TRUE);
 
 -- users can only create follows where they are the follower
 CREATE POLICY follows_insert ON follows

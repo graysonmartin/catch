@@ -4,6 +4,7 @@ import CatchCore
 struct EditProfileView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(ProfileSyncService.self) private var profileSyncService
+    @Environment(ToastManager.self) private var toastManager
 
     private let profile: UserProfile
     var onSave: ((UserProfile) -> Void)?
@@ -110,7 +111,18 @@ struct EditProfileView: View {
         updated.username = trimmedUsername.isEmpty ? nil : trimmedUsername
         updated.isPrivate = isPrivate
         updated.visibilitySettings = visibilitySettings
-        onSave?(updated)
-        dismiss()
+
+        Task {
+            do {
+                let newAvatarUrl = try await profileSyncService.syncProfile(updated, avatarData: avatarData)
+                if let newAvatarUrl {
+                    updated.avatarUrl = newAvatarUrl
+                }
+                onSave?(updated)
+                dismiss()
+            } catch {
+                toastManager.showError(CatchStrings.Toast.profileSaveFailed)
+            }
+        }
     }
 }

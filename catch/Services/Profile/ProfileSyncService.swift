@@ -5,19 +5,33 @@ import CatchCore
 @Observable
 final class ProfileSyncService {
     private let profileRepository: any SupabaseProfileRepository
+    private let assetService: any SupabaseAssetService
 
-    init(profileRepository: any SupabaseProfileRepository) {
+    init(profileRepository: any SupabaseProfileRepository, assetService: any SupabaseAssetService) {
         self.profileRepository = profileRepository
+        self.assetService = assetService
     }
 
-    func syncProfile(_ profile: UserProfile) async throws {
-        guard let userID = profile.supabaseUserID else { return }
+    @discardableResult
+    func syncProfile(_ profile: UserProfile, avatarData: Data? = nil) async throws -> String? {
+        guard let userID = profile.supabaseUserID else { return nil }
+
+        var avatarUrl = profile.avatarUrl
+        if let avatarData {
+            avatarUrl = try await assetService.uploadPhoto(
+                avatarData,
+                bucket: .profilePhotos,
+                ownerID: userID,
+                fileName: "avatar.jpg"
+            )
+        }
 
         let payload = SupabaseProfilePayload(
             displayName: profile.displayName,
             username: profile.username ?? "",
             bio: profile.bio,
-            isPrivate: profile.isPrivate
+            isPrivate: profile.isPrivate,
+            avatarUrl: avatarUrl
         )
 
         // Try update first; if profile doesn't exist, create it
@@ -27,6 +41,7 @@ final class ProfileSyncService {
         } else {
             _ = try await profileRepository.createProfile(payload, id: userID)
         }
+        return avatarUrl
     }
 
     func fetchProfile(userID: String) async throws -> CloudUserProfile? {

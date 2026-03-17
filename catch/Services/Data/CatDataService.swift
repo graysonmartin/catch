@@ -36,8 +36,10 @@ final class CatDataService {
         isLoading = true
         defer { isLoading = false }
 
-        let supabaseCats = try await catRepository.fetchCats(ownerID: userID)
-        let supabaseEncounters = try await encounterRepository.fetchEncounters(ownerID: userID)
+        async let catsTask = catRepository.fetchCats(ownerID: userID)
+        async let encountersTask = encounterRepository.fetchEncounters(ownerID: userID)
+        let supabaseCats = try await catsTask
+        let supabaseEncounters = try await encountersTask
 
         let encountersByCat = Dictionary(grouping: supabaseEncounters) { $0.catID }
 

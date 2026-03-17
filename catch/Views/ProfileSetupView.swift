@@ -475,7 +475,7 @@ extension ProfileSetupView {
         )
         Task {
             do {
-                try await profileSyncService.syncProfile(profile)
+                try await profileSyncService.syncProfile(profile, avatarData: avatarData)
             } catch {
                 toastManager.showError(CatchStrings.Toast.profileSaveFailed)
             }

@@ -72,7 +72,8 @@ struct catchApp: App {
         _socialInteractionService = State(initialValue: socialInteraction)
         _socialFeedService = State(initialValue: socialFeed)
         _profileSyncService = State(initialValue: ProfileSyncService(
-            profileRepository: profileRepo
+            profileRepository: profileRepo,
+            assetService: assets
         ))
         _catDataService = State(initialValue: CatDataService(
             catRepository: catRepo,
@@ -97,6 +98,17 @@ struct catchApp: App {
     private var mainContent: some View {
         if !hasCompletedOnboarding {
             OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
+        } else if authService.authState == .unknown {
+            PawLoadingView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(CatchTheme.background)
+        } else if !authService.authState.isSignedIn {
+            ProfileSetupView {
+                hasCompletedProfileSetup = true
+            }
+            .environment(authService)
+            .environment(profileSyncService)
+            .environment(toastManager)
         } else if !hasCompletedProfileSetup {
             ProfileSetupView {
                 hasCompletedProfileSetup = true
@@ -121,6 +133,11 @@ struct catchApp: App {
                 .environment(encounterDataService)
                 .task {
                     await authService.refreshSessionIfNeeded()
+                }
+                .onChange(of: authService.authState) { _, newState in
+                    if newState == .signedOut {
+                        hasCompletedProfileSetup = false
+                    }
                 }
         }
     }
