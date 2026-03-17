@@ -220,6 +220,7 @@
 		E8TI00000103 /* CatchStrings+TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000003 /* CatchStrings+TextInput.swift */; };
 		E8TM00000101 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
 		E8TM00000102 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000002 /* ToastView.swift */; };
+		E8TW00000101 /* ToastWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TW00000001 /* ToastWindow.swift */; };
 		E8TM00000103 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
 		E8TM00000201 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
 		E8TM00000203 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
@@ -402,6 +403,7 @@
 		E8TI00000003 /* CatchStrings+TextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+TextInput.swift"; sourceTree = "<group>"; };
 		E8TM00000001 /* ToastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
 		E8TM00000002 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		E8TW00000001 /* ToastWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastWindow.swift; sourceTree = "<group>"; };
 		E8TM00000003 /* CatchStrings+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Toast.swift"; sourceTree = "<group>"; };
 		E8TM00000004 /* ToastManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManagerTests.swift; sourceTree = "<group>"; };
 		E8UF00000001 /* UsernameFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameFieldView.swift; sourceTree = "<group>"; };
@@ -543,6 +545,7 @@
 				E8CL00000004 /* CollectionSortFilterBar.swift */,
 				E8TM00000001 /* ToastManager.swift */,
 				E8TM00000002 /* ToastView.swift */,
+				E8TW00000001 /* ToastWindow.swift */,
 				E8TI00000001 /* LimitedTextFieldView.swift */,
 				E8TI00000002 /* LimitedSingleLineFieldView.swift */,
 				E8FP00000001 /* FullScreenPhotoViewer.swift */,
@@ -1227,6 +1230,7 @@
 				E8SF00000104 /* SocialFeedItemView.swift in Sources */,
 				E8TM00000101 /* ToastManager.swift in Sources */,
 				E8TM00000102 /* ToastView.swift in Sources */,
+				E8TW00000101 /* ToastWindow.swift in Sources */,
 				E8TM00000103 /* CatchStrings+Toast.swift in Sources */,
 				E8TI00000101 /* LimitedTextFieldView.swift in Sources */,
 				E8TI00000102 /* LimitedSingleLineFieldView.swift in Sources */,
