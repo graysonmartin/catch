@@ -34,7 +34,8 @@ struct FollowRowView: View {
         } label: {
             HStack(spacing: CatchSpacing.space12) {
                 Image(systemName: "person.crop.circle.fill")
-                    .font(.title2)
+                    .resizable()
+                    .frame(width: 36, height: 36)
                     .foregroundStyle(CatchTheme.secondary)
 
                 VStack(alignment: .leading, spacing: CatchSpacing.space2) {
@@ -48,11 +49,8 @@ struct FollowRowView: View {
                         Text(UsernameValidator.formatDisplay(username))
                             .font(.caption)
                             .foregroundStyle(CatchTheme.primary)
+                            .lineLimit(1)
                     }
-
-                    Text(CatchStrings.Social.since(follow.createdAt))
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary)
                 }
 
                 Spacer()

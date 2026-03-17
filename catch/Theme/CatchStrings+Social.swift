@@ -49,11 +49,6 @@ extension CatchStrings {
         static let areYouSure = String(localized: "are you sure?")
         static let unfollowConfirmMessage = String(localized: "you'll stop seeing their posts in your feed")
 
-        static func since(_ date: Date) -> String {
-            let formatted = date.formatted(.dateTime.month(.abbreviated).year())
-            return String(localized: "since \(formatted)")
-        }
-
         // PendingRequestRowView
         static let wantsToFollowYou = String(localized: "wants to follow you")
 
