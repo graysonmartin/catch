@@ -110,23 +110,7 @@ private struct RemoteFollowRow: View {
 
     var body: some View {
         HStack(spacing: CatchSpacing.space12) {
-            Group {
-                if let avatarUrl = profile?.avatarURL, !avatarUrl.isEmpty {
-                    RemoteImageView(urlString: avatarUrl) {
-                        Image(systemName: "person.crop.circle.fill")
-                            .resizable()
-                            .frame(width: 36, height: 36)
-                            .foregroundStyle(CatchTheme.secondary)
-                    }
-                    .frame(width: 36, height: 36)
-                    .clipShape(Circle())
-                } else {
-                    Image(systemName: "person.crop.circle.fill")
-                        .resizable()
-                        .frame(width: 36, height: 36)
-                        .foregroundStyle(CatchTheme.secondary)
-                }
-            }
+            UserAvatarView(avatarURL: profile?.avatarURL)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(profile?.displayName ?? CatchStrings.Social.loadingName)

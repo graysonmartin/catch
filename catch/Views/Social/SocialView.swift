@@ -20,9 +20,9 @@ struct SocialView: View {
     @Environment(SupabaseUserBrowseService.self) private var browseService: SupabaseUserBrowseService?
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
+    @State private var isInitialLoad = true
     @State private var isLoadingMoreFollowers = false
     @State private var isLoadingMoreFollowing = false
-    @State private var isResolvingNames = false
     @State var selectedTab: SocialTab
 
     var body: some View {
@@ -36,18 +36,23 @@ struct SocialView: View {
             .padding(.horizontal)
             .padding(.vertical, CatchSpacing.space8)
 
-            List {
-                switch selectedTab {
-                case .followers:
-                    followersContent
-                case .following:
-                    followingContent
+            if isInitialLoad {
+                PawLoadingView()
+                    .frame(maxHeight: .infinity)
+            } else {
+                List {
+                    switch selectedTab {
+                    case .followers:
+                        followersContent
+                    case .following:
+                        followingContent
+                    }
                 }
-            }
-            .listStyle(.insetGrouped)
-            .overlay {
-                if isCurrentTabEmpty {
-                    emptyState
+                .listStyle(.insetGrouped)
+                .overlay {
+                    if isCurrentTabEmpty {
+                        emptyState
+                    }
                 }
             }
         }
@@ -58,7 +63,12 @@ struct SocialView: View {
             await refresh()
         }
         .task {
-            await refresh()
+            let hasData = !followService.followers.isEmpty || !followService.following.isEmpty
+            if hasData {
+                isInitialLoad = false
+            } else {
+                await refresh()
+            }
         }
     }
 
@@ -211,37 +221,46 @@ struct SocialView: View {
     }
 
     private func refresh() async {
-        guard let userID = authService.authState.user?.id else { return }
+        guard let userID = authService.authState.user?.id else {
+            isInitialLoad = false
+            return
+        }
         do {
             try await followService.refresh(for: userID)
             await batchResolveProfiles()
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }
+        isInitialLoad = false
     }
 
-    private func batchResolveProfiles() async {
+    private func batchResolveProfiles(for userIDs: [String]? = nil) async {
         guard let browseService else { return }
-        isResolvingNames = true
-        defer { isResolvingNames = false }
 
-        var allUserIDs: [String] = []
-        allUserIDs.append(contentsOf: followService.followers.map(\.followerID))
-        allUserIDs.append(contentsOf: followService.following.map(\.followeeID))
-        allUserIDs.append(contentsOf: followService.pendingRequests.map(\.followerID))
+        let ids: [String]
+        if let userIDs {
+            ids = userIDs
+        } else {
+            var allUserIDs: [String] = []
+            allUserIDs.append(contentsOf: followService.followers.map(\.followerID))
+            allUserIDs.append(contentsOf: followService.following.map(\.followeeID))
+            allUserIDs.append(contentsOf: followService.pendingRequests.map(\.followerID))
+            ids = Array(Set(allUserIDs))
+        }
+        guard !ids.isEmpty else { return }
 
-        let uniqueIDs = Array(Set(allUserIDs))
-        guard !uniqueIDs.isEmpty else { return }
-
-        _ = await browseService.batchFetchProfiles(userIDs: uniqueIDs)
+        _ = await browseService.batchFetchProfiles(userIDs: ids)
     }
 
     private func loadMoreFollowers() async {
         guard !isLoadingMoreFollowers else { return }
         isLoadingMoreFollowers = true
         defer { isLoadingMoreFollowers = false }
+        let previousCount = followService.followers.count
         do {
             try await followService.loadMoreFollowers(for: currentUserID)
+            let newIDs = followService.followers.dropFirst(previousCount).map(\.followerID)
+            await batchResolveProfiles(for: Array(newIDs))
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }
@@ -251,8 +270,11 @@ struct SocialView: View {
         guard !isLoadingMoreFollowing else { return }
         isLoadingMoreFollowing = true
         defer { isLoadingMoreFollowing = false }
+        let previousCount = followService.following.count
         do {
             try await followService.loadMoreFollowing(for: currentUserID)
+            let newIDs = followService.following.dropFirst(previousCount).map(\.followeeID)
+            await batchResolveProfiles(for: Array(newIDs))
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }
