@@ -208,7 +208,8 @@ extension ProfileSetupView {
         )
         Task {
             do {
-                try await profileSyncService.syncProfile(profile, avatarData: avatarData)
+                let avatarChange: AvatarChange = avatarData.map { .updated($0) } ?? .noChange
+                try await profileSyncService.syncProfile(profile, avatarChange: avatarChange)
                 onComplete()
             } catch {
                 toastManager.showError(CatchStrings.Toast.profileSaveFailed)

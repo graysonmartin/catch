@@ -7,7 +7,7 @@ struct EditProfileView: View {
     @Environment(ToastManager.self) private var toastManager
 
     private let profile: UserProfile
-    var onSave: ((UserProfile) -> Void)?
+    var onSave: ((UserProfile, Data?) -> Void)?
 
     @State private var displayName: String
     @State private var bio: String
@@ -17,15 +17,17 @@ struct EditProfileView: View {
     @State private var visibilitySettings: VisibilitySettings
     @State private var usernameAvailability: UsernameAvailability = .idle
 
-    init(profile: UserProfile, onSave: ((UserProfile) -> Void)? = nil) {
+    @State private var didChangeAvatar = false
+
+    init(profile: UserProfile, avatarData: Data?, onSave: ((UserProfile, Data?) -> Void)? = nil) {
         self.profile = profile
         self.onSave = onSave
         _displayName = State(initialValue: profile.displayName)
         _bio = State(initialValue: profile.bio)
         _username = State(initialValue: profile.username ?? "")
-        _avatarData = State(initialValue: nil)
         _isPrivate = State(initialValue: profile.isPrivate)
         _visibilitySettings = State(initialValue: profile.visibilitySettings)
+        _avatarData = State(initialValue: avatarData)
     }
 
     var body: some View {
@@ -40,6 +42,9 @@ struct EditProfileView: View {
                 if !isPrivate {
                     visibilitySection
                 }
+            }
+            .onChange(of: avatarData) { _, _ in
+                didChangeAvatar = true
             }
             .navigationTitle(CatchStrings.Profile.editProfileTitle)
             .navigationBarTitleDisplayMode(.inline)
@@ -75,10 +80,6 @@ struct EditProfileView: View {
             )
         } header: {
             Text(CatchStrings.Profile.info)
-        } footer: {
-            if !username.isEmpty {
-                Text(CatchStrings.Profile.usernameFooter)
-            }
         }
     }
 
@@ -114,11 +115,12 @@ struct EditProfileView: View {
 
         Task {
             do {
-                let newAvatarUrl = try await profileSyncService.syncProfile(updated, avatarData: avatarData)
-                if let newAvatarUrl {
-                    updated.avatarUrl = newAvatarUrl
-                }
-                onSave?(updated)
+                let avatarChange: AvatarChange = didChangeAvatar
+                    ? (avatarData.map { .updated($0) } ?? .removed)
+                    : .noChange
+                let newAvatarUrl = try await profileSyncService.syncProfile(updated, avatarChange: avatarChange)
+                updated.avatarUrl = newAvatarUrl
+                onSave?(updated, avatarData)
                 dismiss()
             } catch {
                 toastManager.showError(CatchStrings.Toast.profileSaveFailed)

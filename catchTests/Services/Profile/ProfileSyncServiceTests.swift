@@ -68,6 +68,28 @@ final class ProfileSyncServiceTests: XCTestCase {
         XCTAssertTrue(mockProfileRepo.createProfileCalls.isEmpty)
     }
 
+    func testSyncProfileWithRemovedAvatarDeletesFromStorage() async throws {
+        let profile = UserProfile(
+            displayName: "Test",
+            bio: "",
+            username: "testuser",
+            supabaseUserID: "supa-789",
+            isPrivate: false,
+            avatarUrl: "https://example.com/old-avatar.jpg"
+        )
+
+        mockProfileRepo.fetchProfileResult = .fixture(id: UUID(), displayName: "Test")
+        mockProfileRepo.updateProfileResult = .fixture(id: UUID(), displayName: "Test")
+
+        let result = try await sut.syncProfile(profile, avatarChange: .removed)
+
+        XCTAssertNil(result)
+        XCTAssertEqual(mockAssetService.deletePhotoCalls.count, 1)
+        XCTAssertEqual(mockAssetService.deletePhotoCalls.first?.bucket, .profilePhotos)
+        XCTAssertEqual(mockAssetService.deletePhotoCalls.first?.path, "supa-789/avatar.jpg")
+        XCTAssertNil(mockProfileRepo.updateProfileCalls.first?.payload.avatarUrl)
+    }
+
     func testSyncProfileWithNilSupabaseUserIDDoesNothing() async throws {
         let profile = UserProfile(displayName: "No ID")
 
@@ -134,6 +156,8 @@ private final class MockSupabaseProfileRepo: SupabaseProfileRepository {
 
 @MainActor
 private final class MockSupabaseAssetService: SupabaseAssetService {
+    var deletePhotoCalls: [(bucket: SupabaseStorageBucket, path: String)] = []
+
     func uploadPhoto(_ data: Data, bucket: SupabaseStorageBucket, ownerID: String, fileName: String) async throws -> String {
         "https://example.com/\(fileName)"
     }
@@ -142,7 +166,9 @@ private final class MockSupabaseAssetService: SupabaseAssetService {
         photos.indices.map { "https://example.com/photo_\($0).jpg" }
     }
 
-    func deletePhoto(bucket: SupabaseStorageBucket, path: String) async throws {}
+    func deletePhoto(bucket: SupabaseStorageBucket, path: String) async throws {
+        deletePhotoCalls.append((bucket, path))
+    }
 
     func publicURL(bucket: SupabaseStorageBucket, path: String) -> String {
         "https://example.com/\(path)"
