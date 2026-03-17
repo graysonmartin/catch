@@ -45,6 +45,14 @@ struct BreedLogCardView: View {
             Image(uiImage: uiImage)
                 .resizable()
                 .scaledToFill()
+        } else if let url = entry.previewPhotoUrl {
+            RemoteImageView(urlString: url) {
+                Image(systemName: entry.catalogEntry.icon)
+                    .font(.title2)
+                    .foregroundStyle(CatchTheme.primary)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(CatchTheme.secondary.opacity(0.3))
+            }
         } else if entry.isDiscovered {
             Image(systemName: entry.catalogEntry.icon)
                 .font(.title2)

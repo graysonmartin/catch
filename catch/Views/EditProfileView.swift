@@ -4,8 +4,9 @@ import CatchCore
 struct EditProfileView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(ProfileSyncService.self) private var profileSyncService
-    @Bindable var profile: UserProfile
+    @Environment(ToastManager.self) private var toastManager
 
+    private let profile: UserProfile
     var onSave: ((UserProfile) -> Void)?
 
     @State private var displayName: String
@@ -22,7 +23,7 @@ struct EditProfileView: View {
         _displayName = State(initialValue: profile.displayName)
         _bio = State(initialValue: profile.bio)
         _username = State(initialValue: profile.username ?? "")
-        _avatarData = State(initialValue: profile.avatarData)
+        _avatarData = State(initialValue: nil)
         _isPrivate = State(initialValue: profile.isPrivate)
         _visibilitySettings = State(initialValue: profile.visibilitySettings)
     }
@@ -103,14 +104,25 @@ struct EditProfileView: View {
     // MARK: - Actions
 
     private func save() {
-        profile.displayName = displayName.trimmingCharacters(in: .whitespaces)
-        profile.bio = bio.trimmingCharacters(in: .whitespaces)
+        var updated = profile
+        updated.displayName = displayName.trimmingCharacters(in: .whitespaces)
+        updated.bio = bio.trimmingCharacters(in: .whitespaces)
         let trimmedUsername = username.trimmingCharacters(in: .whitespaces)
-        profile.username = trimmedUsername.isEmpty ? nil : trimmedUsername
-        profile.avatarData = avatarData
-        profile.isPrivate = isPrivate
-        profile.visibilitySettings = visibilitySettings
-        onSave?(profile)
-        dismiss()
+        updated.username = trimmedUsername.isEmpty ? nil : trimmedUsername
+        updated.isPrivate = isPrivate
+        updated.visibilitySettings = visibilitySettings
+
+        Task {
+            do {
+                let newAvatarUrl = try await profileSyncService.syncProfile(updated, avatarData: avatarData)
+                if let newAvatarUrl {
+                    updated.avatarUrl = newAvatarUrl
+                }
+                onSave?(updated)
+                dismiss()
+            } catch {
+                toastManager.showError(CatchStrings.Toast.profileSaveFailed)
+            }
+        }
     }
 }

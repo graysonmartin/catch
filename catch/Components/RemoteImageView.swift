@@ -1,33 +1,47 @@
 import SwiftUI
 
-/// Shared component for loading remote images via AsyncImage.
-/// Displays a loading indicator while fetching, and a placeholder on failure.
 struct RemoteImageView<Placeholder: View>: View {
     private let urlString: String
     private let placeholder: Placeholder
 
+    @State private var uiImage: UIImage?
+    @State private var isFailed = false
+
     init(urlString: String, @ViewBuilder placeholder: () -> Placeholder) {
         self.urlString = urlString
         self.placeholder = placeholder()
+        // Check cache synchronously to avoid flicker
+        _uiImage = State(initialValue: RemoteImageCache.shared.image(for: urlString))
     }
 
     var body: some View {
-        if let url = URL(string: urlString) {
-            AsyncImage(url: url) { phase in
-                switch phase {
-                case .success(let image):
-                    image
-                        .resizable()
-                        .scaledToFill()
-                case .failure:
-                    placeholder
-                default:
-                    ProgressView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        Group {
+            if let uiImage {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+            } else if isFailed {
+                placeholder
+            } else {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+        }
+        .task(id: urlString) {
+            guard uiImage == nil, let url = URL(string: urlString) else { return }
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                guard let downloaded = UIImage(data: data) else {
+                    isFailed = true
+                    return
+                }
+                RemoteImageCache.shared.setImage(downloaded, for: urlString)
+                uiImage = downloaded
+            } catch {
+                if !(error is CancellationError) {
+                    isFailed = true
                 }
             }
-        } else {
-            placeholder
         }
     }
 }

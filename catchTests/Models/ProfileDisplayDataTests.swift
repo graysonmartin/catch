@@ -1,24 +1,8 @@
 import XCTest
-import SwiftData
 import CatchCore
 
 @MainActor
 final class ProfileDisplayDataTests: XCTestCase {
-
-    private var container: ModelContainer!
-    private var context: ModelContext!
-
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        container = try ModelContainer.forTesting()
-        context = container.mainContext
-    }
-
-    override func tearDown() {
-        context = nil
-        container = nil
-        super.tearDown()
-    }
 
     // MARK: - Local init
 
@@ -26,8 +10,7 @@ final class ProfileDisplayDataTests: XCTestCase {
         let profile = Fixtures.userProfile(
             displayName: "grayson",
             bio: "cat obsessed",
-            username: "grayson_m",
-            in: context
+            username: "grayson_m"
         )
 
         let data = ProfileDisplayData(local: profile, catCount: 5, encounterCount: 12)
@@ -40,25 +23,16 @@ final class ProfileDisplayDataTests: XCTestCase {
         XCTAssertFalse(data.isPrivate)
     }
 
-    func testLocalInitMapsAvatarData() {
-        let avatar = Data([0x89, 0x50, 0x4E, 0x47])
-        let profile = Fixtures.userProfile(avatarData: avatar, in: context)
-
-        let data = ProfileDisplayData(local: profile, catCount: 0, encounterCount: 0)
-
-        XCTAssertEqual(data.avatarData, avatar)
-    }
-
     func testLocalInitMapsNilAvatar() {
-        let profile = Fixtures.userProfile(in: context)
+        let profile = Fixtures.userProfile()
 
         let data = ProfileDisplayData(local: profile, catCount: 0, encounterCount: 0)
 
-        XCTAssertNil(data.avatarData)
+        XCTAssertNil(data.avatarUrl)
     }
 
     func testLocalInitMapsPrivateFlag() {
-        let profile = Fixtures.userProfile(isPrivate: true, in: context)
+        let profile = Fixtures.userProfile(isPrivate: true)
 
         let data = ProfileDisplayData(local: profile, catCount: 0, encounterCount: 0)
 
@@ -66,7 +40,7 @@ final class ProfileDisplayDataTests: XCTestCase {
     }
 
     func testLocalInitMapsCreatedAt() {
-        let profile = Fixtures.userProfile(in: context)
+        let profile = Fixtures.userProfile()
 
         let data = ProfileDisplayData(local: profile, catCount: 0, encounterCount: 0)
 
@@ -78,7 +52,7 @@ final class ProfileDisplayDataTests: XCTestCase {
     }
 
     func testLocalInitNilUsername() {
-        let profile = Fixtures.userProfile(username: nil, in: context)
+        let profile = Fixtures.userProfile(username: nil)
 
         let data = ProfileDisplayData(local: profile, catCount: 0, encounterCount: 0)
 
@@ -110,7 +84,7 @@ final class ProfileDisplayDataTests: XCTestCase {
 
         let data = ProfileDisplayData(remote: browseData)
 
-        XCTAssertNil(data.avatarData)
+        XCTAssertNil(data.avatarUrl)
     }
 
     func testRemoteInitMapsPrivateFlag() {
@@ -119,15 +93,6 @@ final class ProfileDisplayDataTests: XCTestCase {
         let data = ProfileDisplayData(remote: browseData)
 
         XCTAssertTrue(data.isPrivate)
-    }
-
-    func testRemoteInitCountsFromArrays() {
-        let browseData = makeUserBrowseData(catCount: 2, encounterCount: 5)
-
-        let data = ProfileDisplayData(remote: browseData)
-
-        XCTAssertEqual(data.catCount, 2)
-        XCTAssertEqual(data.encounterCount, 5)
     }
 
     // MARK: - Helpers

@@ -11,16 +11,18 @@ final class DefaultBreedLogService: BreedLogService {
             let firstDate = matchingCats
                 .map(\.createdAt)
                 .min()
-            let previewPhoto = matchingCats
-                .first(where: { !$0.photos.isEmpty })?
-                .photos.first
+
+            let previewUrl = matchingCats
+                .first(where: { !$0.photoUrls.isEmpty })?
+                .photoUrls.first
 
             return BreedLogEntry(
                 catalogEntry: entry,
                 isDiscovered: !matchingCats.isEmpty,
                 catCount: matchingCats.count,
                 firstDiscoveredDate: firstDate,
-                previewPhotoData: previewPhoto
+                previewPhotoData: nil,
+                previewPhotoUrl: previewUrl
             )
         }
     }
@@ -36,13 +38,17 @@ final class DefaultBreedLogService: BreedLogService {
             let previewPhoto = matchingCats
                 .first(where: { !$0.photos.isEmpty })?
                 .photos.first
+            let previewUrl = matchingCats
+                .first(where: { !$0.photoUrls.isEmpty })?
+                .photoUrls.first
 
             return BreedLogEntry(
                 catalogEntry: entry,
                 isDiscovered: !matchingCats.isEmpty,
                 catCount: matchingCats.count,
                 firstDiscoveredDate: firstDate,
-                previewPhotoData: previewPhoto
+                previewPhotoData: previewPhoto,
+                previewPhotoUrl: previewUrl
             )
         }
     }

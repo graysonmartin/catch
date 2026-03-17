@@ -168,7 +168,8 @@ BEGIN
     END IF;
     RETURN NULL;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER
+SET search_path = public;
 
 CREATE TRIGGER trg_like_count
     AFTER INSERT OR DELETE ON encounter_likes
@@ -192,7 +193,8 @@ BEGIN
     END IF;
     RETURN NULL;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER
+SET search_path = public;
 
 CREATE TRIGGER trg_comment_count
     AFTER INSERT OR DELETE ON encounter_comments
@@ -241,7 +243,8 @@ BEGIN
     END IF;
     RETURN NULL;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER
+SET search_path = public;
 
 CREATE TRIGGER trg_follow_counts
     AFTER INSERT OR UPDATE OR DELETE ON follows

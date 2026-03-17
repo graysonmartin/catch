@@ -1,11 +1,9 @@
 import SwiftUI
-import SwiftData
 import CatchCore
 
 struct AddCatView: View {
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(DefaultCatSyncService.self) private var catSyncService: DefaultCatSyncService?
+    @Environment(CatDataService.self) private var catDataService
     @Environment(VisionBreedClassifierService.self) private var breedClassifier: VisionBreedClassifierService?
     @Environment(ToastManager.self) private var toastManager
 
@@ -127,42 +125,29 @@ struct AddCatView: View {
 
     private func save() async {
         let trimmedName = isUnnamed ? nil : name.trimmingCharacters(in: .whitespaces)
-        let cat = Cat(
-            name: trimmedName,
-            breed: breed,
-            estimatedAge: "",
-            location: location,
-            notes: notes,
-            isOwned: isOwned,
-            photos: photos
-        )
-
-        let encounter = Encounter(
-            date: encounterDate,
-            location: location,
-            notes: "",
-            cat: cat,
-            photos: photos
-        )
 
         isSaving = true
         defer { isSaving = false }
 
         do {
-            try await catSyncService?.syncNewCat(cat, firstEncounter: encounter)
+            let cat = try await catDataService.createCat(
+                name: trimmedName,
+                breed: breed,
+                location: location,
+                notes: notes,
+                isOwned: isOwned,
+                photos: photos,
+                encounterDate: encounterDate
+            )
+            onSave?()
+
+            if cat.isSteven {
+                showStevenEasterEgg = true
+            } else {
+                dismiss()
+            }
         } catch {
             toastManager.showError(CatchStrings.Toast.catSyncFailed)
-            return
-        }
-
-        modelContext.insert(cat)
-        modelContext.insert(encounter)
-        onSave?()
-
-        if cat.isSteven {
-            showStevenEasterEgg = true
-        } else {
-            dismiss()
         }
     }
 }

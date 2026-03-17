@@ -16,13 +16,13 @@ struct EncounterDetailData: Identifiable {
     let photos: [Data]
     let photoUrls: [String]
 
-    // MARK: - Local SwiftData init
+    // MARK: - Local init
 
     init(local encounter: Encounter, isFirstEncounter: Bool) {
-        self.id = encounter.cloudKitRecordName ?? UUID().uuidString
+        self.id = encounter.id.uuidString
         self.catName = encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat
-        self.catPhotoData = encounter.cat?.photos.first
-        self.catPhotoUrl = nil
+        self.catPhotoData = nil
+        self.catPhotoUrl = encounter.cat?.photoUrls.first
         self.breed = encounter.cat?.breed ?? ""
         self.isFirstEncounter = isFirstEncounter
         self.isUnnamed = encounter.cat?.isUnnamed ?? false
@@ -30,8 +30,8 @@ struct EncounterDetailData: Identifiable {
         self.date = encounter.date
         self.locationName = encounter.location.name
         self.notes = encounter.notes
-        self.photos = encounter.photos.isEmpty ? (encounter.cat?.photos ?? []) : encounter.photos
-        self.photoUrls = []
+        self.photos = []
+        self.photoUrls = encounter.photoUrls.isEmpty ? (encounter.cat?.photoUrls ?? []) : encounter.photoUrls
     }
 
     // MARK: - Remote CloudKit init

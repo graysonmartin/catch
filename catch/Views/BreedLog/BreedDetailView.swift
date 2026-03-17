@@ -51,6 +51,17 @@ struct BreedDetailView: View {
                 .scaledToFill()
                 .frame(width: 100, height: 100)
                 .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+        } else if let url = entry.previewPhotoUrl {
+            RemoteImageView(urlString: url) {
+                Image(systemName: entry.catalogEntry.icon)
+                    .font(.system(size: 44))
+                    .foregroundStyle(entry.catalogEntry.rarity.color)
+                    .frame(width: 100, height: 100)
+                    .background(entry.catalogEntry.rarity.color.opacity(0.12))
+                    .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+            }
+            .frame(width: 100, height: 100)
+            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         } else {
             Image(systemName: entry.catalogEntry.icon)
                 .font(.system(size: 44))
@@ -119,7 +130,7 @@ struct BreedDetailView: View {
 
             ForEach(cats) { cat in
                 HStack(spacing: CatchSpacing.space12) {
-                    CatPhotoView(photoData: cat.photos.first, size: 44)
+                    CatPhotoView(photoData: nil, photoUrl: cat.photoUrls.first, size: 44)
 
                     VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                         Text(cat.displayName)

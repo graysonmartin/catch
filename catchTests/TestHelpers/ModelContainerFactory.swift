@@ -1,10 +1,2 @@
-import SwiftData
-
-extension ModelContainer {
-    @MainActor
-    static func forTesting() throws -> ModelContainer {
-        let schema = CatchSchema.current
-        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        return try ModelContainer(for: schema, configurations: config)
-    }
-}
+// ModelContainerFactory is no longer used — SwiftData has been removed.
+// Tests now use plain struct instances directly.

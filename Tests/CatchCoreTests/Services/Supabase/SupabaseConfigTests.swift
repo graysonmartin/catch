@@ -11,7 +11,7 @@ final class SupabaseConfigTests: XCTestCase {
         SupabaseConfig.current = .development
         let url = SupabaseConfig.url
         XCTAssertEqual(url.scheme, "https")
-        XCTAssertEqual(url.host, "jxvuloqmmvuvrnnqgddf.supabase.co")
+        XCTAssertEqual(url.host, "tqmjfpevabhfaxotfvge.supabase.co")
     }
 
     func testProductionURLIsValid() {
@@ -50,6 +50,6 @@ final class SupabaseConfigTests: XCTestCase {
     func testDefaultEnvironmentIsDevelopment() {
         // Reset to default
         SupabaseConfig.current = .development
-        XCTAssertEqual(SupabaseConfig.url.host, "jxvuloqmmvuvrnnqgddf.supabase.co")
+        XCTAssertEqual(SupabaseConfig.url.host, "tqmjfpevabhfaxotfvge.supabase.co")
     }
 }

@@ -1,5 +1,4 @@
 import XCTest
-import SwiftData
 import CatchCore
 
 @MainActor
@@ -7,24 +6,20 @@ final class ProfileSyncServiceTests: XCTestCase {
 
     private var mockProfileRepo: MockSupabaseProfileRepo!
     private var sut: ProfileSyncService!
-    private var container: ModelContainer!
 
     override func setUp() async throws {
         mockProfileRepo = MockSupabaseProfileRepo()
         sut = ProfileSyncService(profileRepository: mockProfileRepo)
-        container = try ModelContainer.forTesting()
     }
 
     override func tearDown() async throws {
         mockProfileRepo = nil
         sut = nil
-        container = nil
     }
 
     // MARK: - syncProfile
 
     func testSyncProfileCreatesWhenNoExistingProfile() async throws {
-        let context = container.mainContext
         let profile = UserProfile(
             displayName: "Test User",
             bio: "A bio",
@@ -32,7 +27,6 @@ final class ProfileSyncServiceTests: XCTestCase {
             supabaseUserID: "supa-123",
             isPrivate: false
         )
-        context.insert(profile)
 
         mockProfileRepo.fetchProfileResult = nil
         mockProfileRepo.createProfileResult = .fixture(
@@ -50,7 +44,6 @@ final class ProfileSyncServiceTests: XCTestCase {
     }
 
     func testSyncProfileUpdatesWhenExistingProfile() async throws {
-        let context = container.mainContext
         let profile = UserProfile(
             displayName: "Updated User",
             bio: "New bio",
@@ -58,7 +51,6 @@ final class ProfileSyncServiceTests: XCTestCase {
             supabaseUserID: "supa-456",
             isPrivate: true
         )
-        context.insert(profile)
 
         mockProfileRepo.fetchProfileResult = .fixture(id: UUID(), displayName: "Old Name")
         mockProfileRepo.updateProfileResult = .fixture(id: UUID(), displayName: "Updated User")
@@ -71,9 +63,7 @@ final class ProfileSyncServiceTests: XCTestCase {
     }
 
     func testSyncProfileWithNilSupabaseUserIDDoesNothing() async throws {
-        let context = container.mainContext
         let profile = UserProfile(displayName: "No ID")
-        context.insert(profile)
 
         try await sut.syncProfile(profile)
 

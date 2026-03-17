@@ -18,8 +18,9 @@ private enum FeedItemLayout {
 struct FeedItemView: View {
     let encounter: Encounter
 
-    @Environment(\.modelContext) private var modelContext
-    @Environment(DefaultEncounterSyncService.self) private var encounterSyncService: DefaultEncounterSyncService?
+    @Environment(EncounterDataService.self) private var encounterDataService
+    @Environment(CatDataService.self) private var catDataService
+    @Environment(ToastManager.self) private var toastManager
 
     @State private var showDetail = false
     @State private var showEditEncounter = false
@@ -72,7 +73,7 @@ struct FeedItemView: View {
 
     private var header: some View {
         HStack(spacing: CatchSpacing.space12) {
-            CatPhotoView(photoData: encounter.cat?.photos.first, size: FeedItemLayout.thumbnailSize)
+            CatPhotoView(photoData: nil, photoUrl: encounter.cat?.photoUrls.first, size: FeedItemLayout.thumbnailSize)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack(spacing: CatchSpacing.space4) {
@@ -108,9 +109,9 @@ struct FeedItemView: View {
 
     @ViewBuilder
     private var photoSection: some View {
-        if let photos = (!encounter.photos.isEmpty ? encounter.photos : encounter.cat?.photos),
-           !photos.isEmpty {
-            PhotoCarouselView(photos: photos, height: FeedItemLayout.carouselHeight, cornerRadius: CatchTheme.cornerRadiusSmall, onTap: { showDetail = true })
+        let urls = !encounter.photoUrls.isEmpty ? encounter.photoUrls : (encounter.cat?.photoUrls ?? [])
+        if !urls.isEmpty {
+            PhotoCarouselView(photos: [], photoUrls: urls, height: FeedItemLayout.carouselHeight, cornerRadius: CatchTheme.cornerRadiusSmall, onTap: { showDetail = true })
         }
     }
 
@@ -156,18 +157,7 @@ struct FeedItemView: View {
 
     @ViewBuilder
     private var interactionSection: some View {
-        if let recordName = encounter.cloudKitRecordName {
-            InteractionBar(encounterRecordName: recordName, showDetail: $showDetail, isOwnEncounter: true)
-        } else {
-            HStack {
-                Spacer()
-                (Text(CatchStrings.Feed.spottedByPrefix)
-                    .foregroundStyle(CatchTheme.textSecondary) +
-                Text(CatchStrings.Social.you)
-                    .foregroundStyle(CatchTheme.primary))
-                    .font(.caption.weight(.medium))
-            }
-        }
+        InteractionBar(encounterRecordName: encounter.id.uuidString, showDetail: $showDetail, isOwnEncounter: true)
     }
 
     // MARK: - Overflow Menu
@@ -197,10 +187,13 @@ struct FeedItemView: View {
     // MARK: - Actions
 
     private func deleteEncounter() {
-        let recordName = encounter.cloudKitRecordName
-        modelContext.delete(encounter)
-        if let recordName {
-            Task { try? await encounterSyncService?.deleteEncounter(recordName: recordName) }
+        Task {
+            do {
+                try await encounterDataService.deleteEncounter(id: encounter.id)
+                try await catDataService.loadCats()
+            } catch {
+                toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
+            }
         }
     }
 

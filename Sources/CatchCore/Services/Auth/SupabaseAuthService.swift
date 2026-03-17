@@ -182,7 +182,7 @@ public final class SupabaseAuthService: @unchecked Sendable {
 
     private func mapSessionUser(_ supaUser: Supabase.User, provider: AuthProvider) -> AuthUser {
         AuthUser(
-            id: supaUser.id.uuidString,
+            id: supaUser.id.uuidString.lowercased(),
             email: supaUser.email,
             fullName: supaUser.userMetadata["full_name"]?.value as? String,
             provider: provider

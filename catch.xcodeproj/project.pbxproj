@@ -35,6 +35,8 @@
 		E8000001AA000038 /* EditEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002C /* EditEncounterView.swift */; };
 		E8000001AA00003A /* ClusterMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002E /* ClusterMapView.swift */; };
 		E8000001AA00003B /* MapAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002F /* MapAnnotations.swift */; };
+		E8EC00000101 /* Error+Cancellation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EC00000001 /* Error+Cancellation.swift */; };
+		E8IC00000101 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IC00000001 /* ImageCache.swift */; };
 		E8000001AA000051 /* ImageDownsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000050 /* ImageDownsampler.swift */; };
 		E8000001AA000052 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
 		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
@@ -149,6 +151,8 @@
 		E8EI00000101 /* EngagementIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EI00000001 /* EngagementIndicator.swift */; };
 		E8ES00000101 /* EncounterDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ES00000001 /* EncounterDetailSheet.swift */; };
 		E8RS00000104 /* DefaultRestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000004 /* DefaultRestoreService.swift */; };
+		E8DA00000101 /* CatDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DA00000001 /* CatDataService.swift */; };
+		E8DA00000102 /* EncounterDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DA00000002 /* EncounterDataService.swift */; };
 		E8F60000010B /* MockCatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010B /* MockCatRepository.swift */; };
 		E8F60000010C /* MockEncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010C /* MockEncounterRepository.swift */; };
 		E8RS00000204 /* DefaultRestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000004 /* DefaultRestoreService.swift */; };
@@ -256,6 +260,8 @@
 		E8000001AA00002C /* EditEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEncounterView.swift; sourceTree = "<group>"; };
 		E8000001AA00002E /* ClusterMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterMapView.swift; sourceTree = "<group>"; };
 		E8000001AA00002F /* MapAnnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotations.swift; sourceTree = "<group>"; };
+		E8EC00000001 /* Error+Cancellation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Cancellation.swift"; sourceTree = "<group>"; };
+		E8IC00000001 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		E8000001AA000050 /* ImageDownsampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownsampler.swift; sourceTree = "<group>"; };
 		E8000001AA000060 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		E8000001AA000062 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
@@ -341,6 +347,8 @@
 		E8EI00000001 /* EngagementIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagementIndicator.swift; sourceTree = "<group>"; };
 		E8ES00000001 /* EncounterDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailSheet.swift; sourceTree = "<group>"; };
 		E8RS00000004 /* DefaultRestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultRestoreService.swift; sourceTree = "<group>"; };
+		E8DA00000001 /* CatDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDataService.swift; sourceTree = "<group>"; };
+		E8DA00000002 /* EncounterDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDataService.swift; sourceTree = "<group>"; };
 		E8F50000010B /* MockCatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatRepository.swift; sourceTree = "<group>"; };
 		E8F50000010C /* MockEncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterRepository.swift; sourceTree = "<group>"; };
 		E8F500000302 /* DefaultCatSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCatSyncService.swift; sourceTree = "<group>"; };
@@ -530,6 +538,7 @@
 				E8D800000001 /* StevenEasterEggView.swift */,
 				E8SI00000009 /* InteractionBar.swift */,
 				E8CI00000001 /* CommentInputBar.swift */,
+				E8IC00000001 /* ImageCache.swift */,
 				E8EI00000001 /* EngagementIndicator.swift */,
 				E8CL00000004 /* CollectionSortFilterBar.swift */,
 				E8TM00000001 /* ToastManager.swift */,
@@ -720,6 +729,15 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
+		E8DA0000F001 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				E8DA00000001 /* CatDataService.swift */,
+				E8DA00000002 /* EncounterDataService.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		E8C7643E7D80FDFED273606F /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -729,6 +747,7 @@
 				E8BL0000F001 /* BreedLog */,
 				E8C29A31E399698E3B36A45C /* CloudKit */,
 				E8F500000020 /* CloudSync */,
+				E8DA0000F001 /* Data */,
 				E8E500000020 /* Follow */,
 				E8PY0000F001 /* Profile */,
 				E8ST0000F001 /* Settings */,
@@ -879,6 +898,7 @@
 		E8F500000300 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				E8EC00000001 /* Error+Cancellation.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1145,6 +1165,8 @@
 				E8000001BB000002 /* DataSeeder.swift in Sources */,
 				E8000001AA000035 /* CatPickerView.swift in Sources */,
 				E8000001AA000036 /* OnboardingView.swift in Sources */,
+				E8EC00000101 /* Error+Cancellation.swift in Sources */,
+				E8IC00000101 /* ImageCache.swift in Sources */,
 				E8000001AA000051 /* ImageDownsampler.swift in Sources */,
 				E8000001AA000052 /* UserProfile.swift in Sources */,
 				E8000001AA000059 /* CatCardView.swift in Sources */,
@@ -1154,6 +1176,8 @@
 				E8C416B598694B0E8BBA51A5 /* AppleAuthService.swift in Sources */,
 				E8KC00000101 /* KeychainServiceImpl.swift in Sources */,
 				E8RS00000104 /* DefaultRestoreService.swift in Sources */,
+				E8DA00000101 /* CatDataService.swift in Sources */,
+				E8DA00000102 /* EncounterDataService.swift in Sources */,
 				E8E600000007 /* SocialView.swift in Sources */,
 				E8E600000008 /* FindPeopleView.swift in Sources */,
 				E8E600000009 /* FollowRowView.swift in Sources */,

@@ -40,18 +40,22 @@ struct ProfileHeaderView: View {
 
     @ViewBuilder
     private var avatarImage: some View {
-        if let imageData = data.avatarData, let uiImage = UIImage(data: imageData) {
-            Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
-                .frame(width: avatarSize, height: avatarSize)
-                .clipShape(Circle())
+        if let avatarUrl = data.avatarUrl {
+            RemoteImageView(urlString: avatarUrl) {
+                avatarPlaceholder
+            }
+            .frame(width: avatarSize, height: avatarSize)
+            .clipShape(Circle())
         } else {
-            Image(systemName: "person.crop.circle.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: avatarSize, height: avatarSize)
-                .foregroundStyle(CatchTheme.secondary)
+            avatarPlaceholder
         }
+    }
+
+    private var avatarPlaceholder: some View {
+        Image(systemName: "person.crop.circle.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: avatarSize, height: avatarSize)
+            .foregroundStyle(CatchTheme.secondary)
     }
 }

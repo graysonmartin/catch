@@ -1,5 +1,4 @@
 import Foundation
-import SwiftData
 import CatchCore
 
 extension Location {
@@ -17,13 +16,10 @@ enum Fixtures {
     static func cat(
         name: String? = "Mr. Whiskers",
         breed: String? = nil,
-        cloudKitRecordName: String? = nil,
-        in context: ModelContext
+        id: UUID = UUID(),
+        ownerID: UUID = UUID()
     ) -> Cat {
-        let cat = Cat(name: name, breed: breed)
-        cat.cloudKitRecordName = cloudKitRecordName
-        context.insert(cat)
-        return cat
+        Cat(id: id, name: name, breed: breed, ownerID: ownerID)
     }
 
     static func encounter(
@@ -31,14 +27,19 @@ enum Fixtures {
         date: Date = Date(),
         location: Location = .empty,
         notes: String = "",
-        photos: [Data] = [],
-        cloudKitRecordName: String? = nil,
-        in context: ModelContext
+        photoUrls: [String] = [],
+        id: UUID = UUID()
     ) -> Encounter {
-        let encounter = Encounter(date: date, location: location, notes: notes, cat: cat, photos: photos)
-        encounter.cloudKitRecordName = cloudKitRecordName
-        context.insert(encounter)
-        return encounter
+        Encounter(
+            id: id,
+            date: date,
+            location: location,
+            notes: notes,
+            catID: cat.id,
+            ownerID: cat.ownerID,
+            photoUrls: photoUrls,
+            cat: cat
+        )
     }
 
     @discardableResult
@@ -46,24 +47,17 @@ enum Fixtures {
         displayName: String = "test user",
         bio: String = "test bio",
         username: String? = nil,
-        avatarData: Data? = nil,
-        appleUserID: String? = nil,
-        cloudKitRecordName: String? = nil,
+        supabaseUserID: String? = nil,
         isPrivate: Bool = false,
-        visibilitySettings: VisibilitySettings = .default,
-        in context: ModelContext
+        visibilitySettings: VisibilitySettings = .default
     ) -> UserProfile {
-        let profile = UserProfile(
+        UserProfile(
             displayName: displayName,
             bio: bio,
             username: username,
-            avatarData: avatarData,
-            appleUserID: appleUserID,
-            cloudKitRecordName: cloudKitRecordName,
+            supabaseUserID: supabaseUserID,
             isPrivate: isPrivate,
             visibilitySettings: visibilitySettings
         )
-        context.insert(profile)
-        return profile
     }
 }

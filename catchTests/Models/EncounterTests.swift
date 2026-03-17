@@ -1,22 +1,8 @@
 import XCTest
-import SwiftData
 import CatchCore
 
 @MainActor
 final class EncounterTests: XCTestCase {
-
-    var container: ModelContainer!
-    var context: ModelContext!
-
-    override func setUp() async throws {
-        container = try ModelContainer.forTesting()
-        context = container.mainContext
-    }
-
-    override func tearDown() async throws {
-        container = nil
-        context = nil
-    }
 
     func test_encounterInitDefaults() {
         let before = Date()
@@ -26,28 +12,16 @@ final class EncounterTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(encounter.date, before)
         XCTAssertLessThanOrEqual(encounter.date, after)
         XCTAssertEqual(encounter.notes, "")
-        XCTAssertNil(encounter.cat)
-        XCTAssertTrue(encounter.photos.isEmpty)
+        XCTAssertNil(encounter.catID)
+        XCTAssertTrue(encounter.photoUrls.isEmpty)
     }
 
-    func test_encounterPersistence_insertAndFetch() throws {
-        let encounter = Encounter(notes: "spotted by the dumpster again")
-        context.insert(encounter)
-        try context.save()
+    func test_encounterWithCat() {
+        let cat = Fixtures.cat(name: "Potato")
+        let encounter = Fixtures.encounter(for: cat, notes: "spotted by the dumpster again")
 
-        let fetched = try context.fetch(FetchDescriptor<Encounter>())
-        XCTAssertEqual(fetched.count, 1)
-        XCTAssertEqual(fetched.first?.notes, "spotted by the dumpster again")
-    }
-
-    func test_encounterLinksTocat() throws {
-        let cat = Fixtures.cat(name: "Potato", in: context)
-        _ = Fixtures.encounter(for: cat, in: context)
-        try context.save()
-
-        let fetched = try context.fetch(FetchDescriptor<Encounter>()).first
-        XCTAssertNotNil(fetched?.cat)
-        XCTAssertEqual(fetched?.cat?.name, "Potato")
+        XCTAssertEqual(encounter.catID, cat.id)
+        XCTAssertEqual(encounter.notes, "spotted by the dumpster again")
     }
 
     func test_encounterLocation_hasCoordinates() {
@@ -63,68 +37,46 @@ final class EncounterTests: XCTestCase {
         XCTAssertEqual(encounter.location.name, "")
     }
 
-    func test_multipleEncountersForOneCat() throws {
-        let cat = Fixtures.cat(name: "Regulars", in: context)
-        _ = Fixtures.encounter(for: cat, in: context)
-        _ = Fixtures.encounter(for: cat, in: context)
-        _ = Fixtures.encounter(for: cat, in: context)
-        try context.save()
-
-        let fetched = try context.fetch(FetchDescriptor<Encounter>())
-        XCTAssertEqual(fetched.count, 3)
-        XCTAssertTrue(fetched.allSatisfy { $0.cat?.name == "Regulars" })
+    func test_encounterPhotoUrls_canBeSet() {
+        let cat = Fixtures.cat()
+        let encounter = Fixtures.encounter(for: cat, photoUrls: ["url1", "url2"])
+        XCTAssertEqual(encounter.photoUrls.count, 2)
+        XCTAssertEqual(encounter.photoUrls[0], "url1")
     }
 
-    func test_encounterWithPhotos_initAndAccess() {
-        let photoData = [Data([0xFF, 0xD8, 0xFF]), Data([0x89, 0x50, 0x4E])]
-        let encounter = Encounter(photos: photoData)
-        XCTAssertEqual(encounter.photos.count, 2)
-        XCTAssertEqual(encounter.photos[0], Data([0xFF, 0xD8, 0xFF]))
+    func test_encounterPhotoUrls_defaultsToEmpty() {
+        let encounter = Encounter()
+        XCTAssertEqual(encounter.photoUrls.count, 0)
     }
 
-    func test_encounterPhotos_persistAndFetch() throws {
-        let photoData = [Data([0xFF, 0xD8, 0xFF, 0xE0])]
-        let cat = Fixtures.cat(name: "Snapper", in: context)
-        _ = Fixtures.encounter(for: cat, photos: photoData, in: context)
-        try context.save()
+    // MARK: - Payload generation
 
-        let fetched = try context.fetch(FetchDescriptor<Encounter>())
-        XCTAssertEqual(fetched.count, 1)
-        XCTAssertEqual(fetched.first?.photos.count, 1)
-        XCTAssertEqual(fetched.first?.photos.first, Data([0xFF, 0xD8, 0xFF, 0xE0]))
+    func test_toInsertPayload() {
+        let catID = UUID()
+        let encounter = Encounter(
+            date: Date(),
+            location: Location(name: "Park", latitude: 37.0, longitude: -122.0),
+            notes: "test",
+            catID: catID,
+            photoUrls: ["url1"]
+        )
+
+        let payload = encounter.toInsertPayload(ownerID: "owner-123")
+        XCTAssertEqual(payload.ownerID, "owner-123")
+        XCTAssertEqual(payload.catID, catID.uuidString)
+        XCTAssertEqual(payload.notes, "test")
+        XCTAssertEqual(payload.photoUrls, ["url1"])
     }
 
-    func test_encounterPhotos_defaultsToEmpty() throws {
-        let cat = Fixtures.cat(name: "NoPics", in: context)
-        _ = Fixtures.encounter(for: cat, in: context)
-        try context.save()
+    func test_toUpdatePayload() {
+        let encounter = Encounter(
+            date: Date(),
+            location: Location(name: "Home", latitude: nil, longitude: nil),
+            notes: "updated"
+        )
 
-        let fetched = try context.fetch(FetchDescriptor<Encounter>())
-        XCTAssertEqual(fetched.first?.photos.count, 0)
-    }
-
-    func test_deleteEncounter_removeFromStore() throws {
-        let cat = Fixtures.cat(name: "Fleeting", in: context)
-        let encounter = Fixtures.encounter(for: cat, in: context)
-        try context.save()
-
-        context.delete(encounter)
-        try context.save()
-
-        let fetched = try context.fetch(FetchDescriptor<Encounter>())
-        XCTAssertEqual(fetched.count, 0)
-    }
-
-    func test_deleteEncounter_doesNotDeleteCat() throws {
-        let cat = Fixtures.cat(name: "Survivor", in: context)
-        let encounter = Fixtures.encounter(for: cat, in: context)
-        try context.save()
-
-        context.delete(encounter)
-        try context.save()
-
-        let cats = try context.fetch(FetchDescriptor<Cat>())
-        XCTAssertEqual(cats.count, 1)
-        XCTAssertEqual(cats.first?.name, "Survivor")
+        let payload = encounter.toUpdatePayload()
+        XCTAssertEqual(payload.notes, "updated")
+        XCTAssertNil(payload.locationLat)
     }
 }

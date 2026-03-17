@@ -56,7 +56,7 @@ private struct CatPickerRow: View {
 
     var body: some View {
         HStack(spacing: CatchSpacing.space12) {
-            CatPhotoView(photoData: cat.photos.first, size: 48)
+            CatPhotoView(photoData: nil, photoUrl: cat.photoUrls.first, size: 48)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space3) {
                 HStack(spacing: CatchSpacing.space4) {

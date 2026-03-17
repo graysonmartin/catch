@@ -36,7 +36,7 @@ enum FeedItem: Identifiable {
     var encounterRecordName: String? {
         switch self {
         case .local(let encounter):
-            return encounter.cloudKitRecordName
+            return encounter.id.uuidString
         case .remote(let encounter, _, _, _):
             return encounter.recordName
         }

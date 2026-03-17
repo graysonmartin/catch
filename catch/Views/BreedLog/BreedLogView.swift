@@ -1,9 +1,8 @@
 import SwiftUI
-import SwiftData
 import CatchCore
 
 struct BreedLogView: View {
-    @Query(sort: \Cat.name) private var queriedCats: [Cat]
+    @Environment(CatDataService.self) private var catDataService
     @State private var sortOption: BreedLogSortOption = .rarity
     @State private var sortDirection: BreedLogSortDirection = BreedLogSortOption.rarity.defaultDirection
     @State private var selectedEntry: BreedLogEntry?
@@ -22,7 +21,7 @@ struct BreedLogView: View {
     }
 
     private var breedLog: [BreedLogEntry] {
-        let log = externalEntries ?? service.buildBreedLog(from: queriedCats)
+        let log = externalEntries ?? service.buildBreedLog(from: catDataService.cats)
         return sortOption.sorted(log, direction: sortDirection)
     }
 
@@ -61,7 +60,7 @@ struct BreedLogView: View {
         .sheet(item: $selectedEntry) { entry in
             BreedDetailView(
                 entry: entry,
-                cats: externalEntries != nil ? [] : service.catsForBreed(entry.id, from: queriedCats)
+                cats: externalEntries != nil ? [] : service.catsForBreed(entry.id, from: catDataService.cats)
             )
         }
     }

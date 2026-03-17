@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 import MapKit
 
 private enum MapConfig {
@@ -8,7 +7,6 @@ private enum MapConfig {
     static let spiderfyRadiusMultiplier: Double = 0.08
     static let overlapThreshold: CLLocationDegrees = 0.001
     static let maxSpiderfyCount = 9
-    static let photoComparisonPrefixSize = 64
 
     static let clusterReuseID = "cluster"
     static let overflowReuseID = "overflow"
@@ -22,25 +20,22 @@ struct PinSnapshot: Equatable {
     let name: String?
     let latitude: Double?
     let longitude: Double?
-    let photoCount: Int
-    let firstPhotoPrefix: Data?
+    let photoUrlCount: Int
 
     init(pin: MapPin) {
         switch pin {
         case .local(let cat):
-            self.id = "local-\(cat.persistentModelID)"
+            self.id = "local-\(cat.id)"
             self.name = cat.name
             self.latitude = cat.location.latitude
             self.longitude = cat.location.longitude
-            self.photoCount = cat.photos.count
-            self.firstPhotoPrefix = cat.photos.first.map { Data($0.prefix(MapConfig.photoComparisonPrefixSize)) }
+            self.photoUrlCount = cat.photoUrls.count
         case .remote(let encounter, let cat, _):
             self.id = "remote-\(encounter.recordName)"
             self.name = cat?.name
             self.latitude = encounter.locationLatitude
             self.longitude = encounter.locationLongitude
-            self.photoCount = cat?.photos.count ?? 0
-            self.firstPhotoPrefix = cat?.photos.first.map { Data($0.prefix(MapConfig.photoComparisonPrefixSize)) }
+            self.photoUrlCount = cat?.photoUrls.count ?? 0
         }
     }
 }
@@ -187,7 +182,6 @@ struct ClusterMapView: UIViewRepresentable {
                 let centerLat = group.map(\.coordinate.latitude).reduce(0, +) / Double(group.count)
                 let centerLng = group.map(\.coordinate.longitude).reduce(0, +) / Double(group.count)
 
-                // Local cats with more encounters surface first; remote pins sort to the end
                 let sorted = group.sorted { ($0.pin?.encounterSortWeight ?? 0) > ($1.pin?.encounterSortWeight ?? 0) }
                 let visible = Array(sorted.prefix(maxSpiderfyCount))
                 let overflow = Array(sorted.dropFirst(maxSpiderfyCount))

@@ -19,10 +19,10 @@ enum MapPin {
     case local(Cat)
     case remote(encounter: CloudEncounter, cat: CloudCat?, owner: CloudUserProfile)
 
-    var photoData: Data? {
+    var photoUrl: String? {
         switch self {
-        case .local(let cat): return cat.photos.first
-        case .remote(_, let cat, _): return cat?.photos.first
+        case .local(let cat): return cat.photoUrls.first
+        case .remote(_, let cat, _): return cat?.photoUrls.first
         }
     }
 
@@ -96,38 +96,19 @@ class CatAnnotationView: MKAnnotationView {
         guard let catAnnotation = annotation as? CatAnnotation, let pin = catAnnotation.pin else { return }
 
         let size = AnnotationLayout.catPinSize
-        let inset = AnnotationLayout.catPinBorderInset
         let borderColor = pin.isRemote ? CatchTheme.remotePinUIColor : CatchTheme.primaryUIColor
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
 
-        image = renderer.image { ctx in
-            if let photoData = pin.photoData,
-               let photo = ImageDownsampler.shared.downsample(data: photoData, to: CGSize(width: size, height: size)) {
-                let path = UIBezierPath(ovalIn: CGRect(x: inset, y: inset, width: size - inset * 2, height: size - inset * 2))
-                ctx.cgContext.saveGState()
-                path.addClip()
-                let aspect = photo.size.width / photo.size.height
-                let drawRect: CGRect
-                if aspect > 1 {
-                    let h = size; let w = h * aspect
-                    drawRect = CGRect(x: (size - w) / 2, y: 0, width: w, height: h)
-                } else {
-                    let w = size; let h = w / aspect
-                    drawRect = CGRect(x: 0, y: (size - h) / 2, width: w, height: h)
-                }
-                photo.draw(in: drawRect)
-                ctx.cgContext.restoreGState()
-                borderColor.setStroke()
-                UIBezierPath(ovalIn: CGRect(x: inset, y: inset, width: size - inset * 2, height: size - inset * 2)).stroke()
-            } else {
-                borderColor.setFill()
-                UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: size, height: size)).fill()
-                let config = UIImage.SymbolConfiguration(pointSize: AnnotationLayout.catIconPointSize, weight: .medium)
-                if let icon = UIImage(systemName: "cat.fill", withConfiguration: config)?
-                    .withTintColor(.white, renderingMode: .alwaysOriginal) {
-                    let o = CGPoint(x: (size - icon.size.width) / 2, y: (size - icon.size.height) / 2)
-                    icon.draw(at: o)
-                }
+        // For URL-based photos, show a colored circle with a cat icon
+        // Full remote image loading in annotation views would be too heavy
+        image = renderer.image { _ in
+            borderColor.setFill()
+            UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: size, height: size)).fill()
+            let config = UIImage.SymbolConfiguration(pointSize: AnnotationLayout.catIconPointSize, weight: .medium)
+            if let icon = UIImage(systemName: "cat.fill", withConfiguration: config)?
+                .withTintColor(.white, renderingMode: .alwaysOriginal) {
+                let o = CGPoint(x: (size - icon.size.width) / 2, y: (size - icon.size.height) / 2)
+                icon.draw(at: o)
             }
         }
     }
