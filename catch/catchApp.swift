@@ -101,8 +101,8 @@ struct catchApp: App {
                 .onAppear {
                     installToastWindow()
                 }
-                .onChange(of: authService.authState) { _, newState in
-                    if newState.isSignedIn, !hasCompletedProfileSetup {
+                .onChange(of: authService.authState) { oldState, newState in
+                    if oldState == .unknown, newState.isSignedIn, !hasCompletedProfileSetup {
                         isCheckingProfile = true
                         Task { await checkExistingProfile() }
                     }

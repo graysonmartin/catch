@@ -12,7 +12,7 @@ struct ProfileSetupView: View {
     @State private var bio = ""
     @State private var avatarData: Data?
     @State private var usernameAvailability: UsernameAvailability = .idle
-    @State private var isRestoringProfile = false
+    @State private var isRestoringProfile = true
 
     var onComplete: () -> Void
 
@@ -191,6 +191,8 @@ extension ProfileSetupView {
 
             isRestoringProfile = false
             onComplete()
+        } catch where error.isCancellation {
+            isRestoringProfile = false
         } catch {
             isRestoringProfile = false
             toastManager.showError(CatchStrings.ProfileSetup.signInFailed)
