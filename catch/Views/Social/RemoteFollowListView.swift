@@ -32,7 +32,6 @@ struct RemoteFollowListView: View {
                         RemoteFollowRow(
                             targetUserID: targetID,
                             profile: resolvedProfiles[targetID],
-                            since: follow.createdAt,
                             isResolved: resolvedProfiles[targetID] != nil
                         )
                     }
@@ -122,7 +121,6 @@ enum RemoteFollowTab {
 private struct RemoteFollowRow: View {
     let targetUserID: String
     let profile: CloudUserProfile?
-    let since: Date
     let isResolved: Bool
 
     var body: some View {
@@ -152,22 +150,12 @@ private struct RemoteFollowRow: View {
                     .lineLimit(1)
                     .redacted(reason: isResolved ? [] : .placeholder)
 
-                HStack(spacing: CatchSpacing.space4) {
-                    if let username = profile?.username, !username.isEmpty {
-                        Text(UsernameValidator.formatDisplay(username))
-                            .font(.caption)
-                            .foregroundStyle(CatchTheme.primary)
-
-                        Text(CatchStrings.Common.middot)
-                            .font(.caption)
-                            .foregroundStyle(CatchTheme.textSecondary)
-                    }
-
-                    Text(CatchStrings.Social.since(since))
+                if let username = profile?.username, !username.isEmpty {
+                    Text(UsernameValidator.formatDisplay(username))
                         .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary)
+                        .foregroundStyle(CatchTheme.primary)
+                        .lineLimit(1)
                 }
-                .lineLimit(1)
             }
         }
     }

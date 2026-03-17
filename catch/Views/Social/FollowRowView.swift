@@ -45,22 +45,12 @@ struct FollowRowView: View {
                         .lineLimit(1)
                         .redacted(reason: hasResolvedName ? [] : .placeholder)
 
-                    HStack(spacing: CatchSpacing.space4) {
-                        if let username = resolvedUsername, !username.isEmpty {
-                            Text(UsernameValidator.formatDisplay(username))
-                                .font(.caption)
-                                .foregroundStyle(CatchTheme.primary)
-
-                            Text(CatchStrings.Common.middot)
-                                .font(.caption)
-                                .foregroundStyle(CatchTheme.textSecondary)
-                        }
-
-                        Text(CatchStrings.Social.since(follow.createdAt))
+                    if let username = resolvedUsername, !username.isEmpty {
+                        Text(UsernameValidator.formatDisplay(username))
                             .font(.caption)
-                            .foregroundStyle(CatchTheme.textSecondary)
+                            .foregroundStyle(CatchTheme.primary)
+                            .lineLimit(1)
                     }
-                    .lineLimit(1)
                 }
 
                 Spacer()
