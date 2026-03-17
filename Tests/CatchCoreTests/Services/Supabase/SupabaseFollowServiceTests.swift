@@ -30,10 +30,10 @@ final class SupabaseFollowServiceTests: XCTestCase {
             status: "active"
         )
 
-        try await sut.follow(targetID: targetID.uuidString, by: currentUserID, isTargetPrivate: false)
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
 
         XCTAssertEqual(sut.following.count, 1)
-        XCTAssertEqual(sut.following.first?.followeeID, targetID.uuidString)
+        XCTAssertEqual(sut.following.first?.followeeID, targetID.uuidString.lowercased())
         XCTAssertTrue(sut.following.first?.isActive ?? false)
         XCTAssertTrue(sut.outgoingPending.isEmpty)
     }
@@ -46,7 +46,7 @@ final class SupabaseFollowServiceTests: XCTestCase {
             status: "pending"
         )
 
-        try await sut.follow(targetID: targetID.uuidString, by: currentUserID, isTargetPrivate: true)
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: true)
 
         XCTAssertTrue(sut.following.isEmpty)
         XCTAssertEqual(sut.outgoingPending.count, 1)
@@ -68,10 +68,10 @@ final class SupabaseFollowServiceTests: XCTestCase {
     func testFollowAlreadyFollowingThrows() async throws {
         let targetID = UUID()
         mockRepo.insertFollowResult = .fixture(followeeID: targetID, status: "active")
-        try await sut.follow(targetID: targetID.uuidString, by: currentUserID, isTargetPrivate: false)
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
 
         do {
-            try await sut.follow(targetID: targetID.uuidString, by: currentUserID, isTargetPrivate: false)
+            try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
             XCTFail("Expected alreadyFollowing error")
         } catch let error as FollowServiceError {
             XCTAssertEqual(error, .alreadyFollowing)
@@ -81,10 +81,10 @@ final class SupabaseFollowServiceTests: XCTestCase {
     func testFollowAlreadyPendingThrows() async throws {
         let targetID = UUID()
         mockRepo.insertFollowResult = .fixture(followeeID: targetID, status: "pending")
-        try await sut.follow(targetID: targetID.uuidString, by: currentUserID, isTargetPrivate: true)
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: true)
 
         do {
-            try await sut.follow(targetID: targetID.uuidString, by: currentUserID, isTargetPrivate: true)
+            try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: true)
             XCTFail("Expected requestAlreadyPending error")
         } catch let error as FollowServiceError {
             XCTAssertEqual(error, .requestAlreadyPending)
@@ -95,12 +95,12 @@ final class SupabaseFollowServiceTests: XCTestCase {
         let targetID = UUID()
         mockRepo.insertFollowResult = .fixture(status: "pending")
 
-        try await sut.follow(targetID: targetID.uuidString, by: currentUserID, isTargetPrivate: true)
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: true)
 
         XCTAssertEqual(mockRepo.insertFollowCalls.count, 1)
         let payload = mockRepo.insertFollowCalls.first!
         XCTAssertEqual(payload.followerID, currentUserID)
-        XCTAssertEqual(payload.followeeID, targetID.uuidString)
+        XCTAssertEqual(payload.followeeID, targetID.uuidString.lowercased())
         XCTAssertEqual(payload.status, "pending")
     }
 
@@ -110,27 +110,27 @@ final class SupabaseFollowServiceTests: XCTestCase {
         let targetID = UUID()
         let followID = UUID()
         mockRepo.insertFollowResult = .fixture(id: followID, followeeID: targetID, status: "active")
-        try await sut.follow(targetID: targetID.uuidString, by: currentUserID, isTargetPrivate: false)
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
         XCTAssertEqual(sut.following.count, 1)
 
-        try await sut.unfollow(targetID: targetID.uuidString, by: currentUserID)
+        try await sut.unfollow(targetID: targetID.uuidString.lowercased(), by: currentUserID)
 
         XCTAssertTrue(sut.following.isEmpty)
         XCTAssertEqual(mockRepo.deleteFollowCalls.count, 1)
-        XCTAssertEqual(mockRepo.deleteFollowCalls.first, followID.uuidString)
+        XCTAssertEqual(mockRepo.deleteFollowCalls.first, followID.uuidString.lowercased())
     }
 
     func testUnfollowCancelsPendingRequest() async throws {
         let targetID = UUID()
         let followID = UUID()
         mockRepo.insertFollowResult = .fixture(id: followID, followeeID: targetID, status: "pending")
-        try await sut.follow(targetID: targetID.uuidString, by: currentUserID, isTargetPrivate: true)
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: true)
         XCTAssertEqual(sut.outgoingPending.count, 1)
 
-        try await sut.unfollow(targetID: targetID.uuidString, by: currentUserID)
+        try await sut.unfollow(targetID: targetID.uuidString.lowercased(), by: currentUserID)
 
         XCTAssertTrue(sut.outgoingPending.isEmpty)
-        XCTAssertEqual(mockRepo.deleteFollowCalls.first, followID.uuidString)
+        XCTAssertEqual(mockRepo.deleteFollowCalls.first, followID.uuidString.lowercased())
     }
 
     func testUnfollowNotFoundThrows() async throws {
@@ -150,8 +150,8 @@ final class SupabaseFollowServiceTests: XCTestCase {
         let followerID = UUID()
         let followID = UUID()
         let pendingFollow = Follow(
-            id: followID.uuidString,
-            followerID: followerID.uuidString,
+            id: followID.uuidString.lowercased(),
+            followerID: followerID.uuidString.lowercased(),
             followeeID: currentUserID,
             status: .pending,
             createdAt: Date()
@@ -184,7 +184,7 @@ final class SupabaseFollowServiceTests: XCTestCase {
     func testDeclineRequestRemovesFromPending() async throws {
         let followID = UUID()
         let pendingFollow = Follow(
-            id: followID.uuidString,
+            id: followID.uuidString.lowercased(),
             followerID: "someone",
             followeeID: currentUserID,
             status: .pending,
@@ -221,7 +221,7 @@ final class SupabaseFollowServiceTests: XCTestCase {
         try await sut.removeFollower(sut.followers.first!)
 
         XCTAssertTrue(sut.followers.isEmpty)
-        XCTAssertEqual(mockRepo.deleteFollowCalls.first, followID.uuidString)
+        XCTAssertEqual(mockRepo.deleteFollowCalls.first, followID.uuidString.lowercased())
     }
 
     // MARK: - Refresh
@@ -355,7 +355,7 @@ final class SupabaseFollowServiceTests: XCTestCase {
         let result = try await sut.fetchFollowers(for: "some-user")
 
         XCTAssertEqual(result.count, 1)
-        XCTAssertEqual(result.first?.id, id.uuidString)
+        XCTAssertEqual(result.first?.id, id.uuidString.lowercased())
         XCTAssertTrue(result.first?.isActive ?? false)
     }
 
@@ -366,7 +366,7 @@ final class SupabaseFollowServiceTests: XCTestCase {
         let result = try await sut.fetchFollowing(for: "some-user")
 
         XCTAssertEqual(result.count, 1)
-        XCTAssertEqual(result.first?.id, id.uuidString)
+        XCTAssertEqual(result.first?.id, id.uuidString.lowercased())
     }
 
     // MARK: - Cache Lookups
@@ -374,18 +374,18 @@ final class SupabaseFollowServiceTests: XCTestCase {
     func testIsFollowingReturnsTrueForFollowedUser() async throws {
         let targetID = UUID()
         mockRepo.insertFollowResult = .fixture(followeeID: targetID, status: "active")
-        try await sut.follow(targetID: targetID.uuidString, by: currentUserID, isTargetPrivate: false)
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
 
-        XCTAssertTrue(sut.isFollowing(targetID.uuidString))
+        XCTAssertTrue(sut.isFollowing(targetID.uuidString.lowercased()))
         XCTAssertFalse(sut.isFollowing("unknown"))
     }
 
     func testPendingRequestToReturnsMatchingPending() async throws {
         let targetID = UUID()
         mockRepo.insertFollowResult = .fixture(followeeID: targetID, status: "pending")
-        try await sut.follow(targetID: targetID.uuidString, by: currentUserID, isTargetPrivate: true)
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: true)
 
-        XCTAssertNotNil(sut.pendingRequestTo(targetID.uuidString))
+        XCTAssertNotNil(sut.pendingRequestTo(targetID.uuidString.lowercased()))
         XCTAssertNil(sut.pendingRequestTo("unknown"))
     }
 
@@ -432,5 +432,150 @@ final class SupabaseFollowServiceTests: XCTestCase {
 
         XCTAssertEqual(sut.pendingRequests.count, 1)
         XCTAssertNil(sut.pendingRequests.first?.followerDisplayName)
+    }
+
+    // MARK: - Optimistic Updates
+
+    func testFollowOptimisticallyAddsToFollowingBeforeAPIReturns() async throws {
+        let targetID = UUID()
+        mockRepo.insertFollowResult = .fixture(followeeID: targetID, status: "active")
+
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
+
+        XCTAssertEqual(sut.following.count, 1)
+        XCTAssertEqual(sut.following.first?.followeeID, targetID.uuidString.lowercased())
+    }
+
+    func testFollowRollsBackOnAPIError() async {
+        let targetID = UUID()
+        mockRepo.insertFollowError = NSError(domain: "test", code: 500)
+
+        do {
+            try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
+            XCTFail("Expected error")
+        } catch {
+            // Expected
+        }
+
+        XCTAssertTrue(sut.following.isEmpty)
+        XCTAssertFalse(sut.isFollowing(targetID.uuidString.lowercased()))
+    }
+
+    func testFollowPrivateRollsBackPendingOnAPIError() async {
+        let targetID = UUID()
+        mockRepo.insertFollowError = NSError(domain: "test", code: 500)
+
+        do {
+            try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: true)
+            XCTFail("Expected error")
+        } catch {
+            // Expected
+        }
+
+        XCTAssertTrue(sut.outgoingPending.isEmpty)
+        XCTAssertNil(sut.pendingRequestTo(targetID.uuidString.lowercased()))
+    }
+
+    func testFollowReplacesOptimisticIDWithRealID() async throws {
+        let targetID = UUID()
+        let realID = UUID()
+        mockRepo.insertFollowResult = .fixture(id: realID, followeeID: targetID, status: "active")
+
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
+
+        XCTAssertEqual(sut.following.count, 1)
+        XCTAssertEqual(sut.following.first?.id, realID.uuidString.lowercased())
+    }
+
+    func testUnfollowOptimisticallyRemovesFromFollowing() async throws {
+        let targetID = UUID()
+        let followID = UUID()
+        mockRepo.insertFollowResult = .fixture(id: followID, followeeID: targetID, status: "active")
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
+        XCTAssertEqual(sut.following.count, 1)
+
+        try await sut.unfollow(targetID: targetID.uuidString.lowercased(), by: currentUserID)
+
+        XCTAssertTrue(sut.following.isEmpty)
+    }
+
+    func testUnfollowRollsBackOnAPIError() async throws {
+        let targetID = UUID()
+        let followID = UUID()
+        mockRepo.insertFollowResult = .fixture(id: followID, followeeID: targetID, status: "active")
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
+        XCTAssertEqual(sut.following.count, 1)
+
+        mockRepo.deleteFollowError = NSError(domain: "test", code: 500)
+
+        do {
+            try await sut.unfollow(targetID: targetID.uuidString.lowercased(), by: currentUserID)
+            XCTFail("Expected error")
+        } catch {
+            // Expected
+        }
+
+        XCTAssertEqual(sut.following.count, 1)
+        XCTAssertTrue(sut.isFollowing(targetID.uuidString.lowercased()))
+    }
+
+    func testUnfollowPendingRollsBackOnAPIError() async throws {
+        let targetID = UUID()
+        let followID = UUID()
+        mockRepo.insertFollowResult = .fixture(id: followID, followeeID: targetID, status: "pending")
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: true)
+        XCTAssertEqual(sut.outgoingPending.count, 1)
+
+        mockRepo.deleteFollowError = NSError(domain: "test", code: 500)
+
+        do {
+            try await sut.unfollow(targetID: targetID.uuidString.lowercased(), by: currentUserID)
+            XCTFail("Expected error")
+        } catch {
+            // Expected
+        }
+
+        XCTAssertEqual(sut.outgoingPending.count, 1)
+        XCTAssertNotNil(sut.pendingRequestTo(targetID.uuidString.lowercased()))
+    }
+
+    func testFollowErrorIsNetworkError() async {
+        let targetID = UUID()
+        mockRepo.insertFollowError = NSError(domain: "test", code: 500)
+
+        do {
+            try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
+            XCTFail("Expected error")
+        } catch let error as FollowServiceError {
+            if case .networkError = error {
+                // Expected
+            } else {
+                XCTFail("Expected networkError, got \(error)")
+            }
+        } catch {
+            XCTFail("Unexpected error type: \(error)")
+        }
+    }
+
+    func testUnfollowErrorIsNetworkError() async throws {
+        let targetID = UUID()
+        let followID = UUID()
+        mockRepo.insertFollowResult = .fixture(id: followID, followeeID: targetID, status: "active")
+        try await sut.follow(targetID: targetID.uuidString.lowercased(), by: currentUserID, isTargetPrivate: false)
+
+        mockRepo.deleteFollowError = NSError(domain: "test", code: 500)
+
+        do {
+            try await sut.unfollow(targetID: targetID.uuidString.lowercased(), by: currentUserID)
+            XCTFail("Expected error")
+        } catch let error as FollowServiceError {
+            if case .networkError = error {
+                // Expected
+            } else {
+                XCTFail("Expected networkError, got \(error)")
+            }
+        } catch {
+            XCTFail("Unexpected error type: \(error)")
+        }
     }
 }

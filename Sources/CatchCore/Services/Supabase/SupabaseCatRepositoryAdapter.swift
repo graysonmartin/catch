@@ -20,16 +20,16 @@ public final class SupabaseCatRepositoryAdapter: CatRepository, @unchecked Senda
         if let existingID = payload.recordName {
             let updatePayload = SupabaseCatMapper.updatePayload(from: payload)
             let updated = try await repository.updateCat(id: existingID, updatePayload)
-            return updated.id.uuidString
+            return updated.id.uuidString.lowercased()
         } else {
-            let recordName = UUID().uuidString
+            let recordName = UUID().uuidString.lowercased()
             let insertPayload = SupabaseCatMapper.insertPayload(
                 from: payload,
                 ownerID: ownerID,
                 recordName: recordName
             )
             let inserted = try await repository.insertCat(insertPayload)
-            return inserted.id.uuidString
+            return inserted.id.uuidString.lowercased()
         }
     }
 

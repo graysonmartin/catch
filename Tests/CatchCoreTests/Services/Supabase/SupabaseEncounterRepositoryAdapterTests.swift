@@ -38,7 +38,7 @@ final class SupabaseEncounterRepositoryAdapterTests: XCTestCase {
 
         let result = try await adapter.save(payload, ownerID: "owner-1")
 
-        XCTAssertEqual(result, insertedEncounter.id.uuidString)
+        XCTAssertEqual(result, insertedEncounter.id.uuidString.lowercased())
         XCTAssertEqual(mockRepo.insertEncounterCalls.count, 1)
         XCTAssertEqual(mockRepo.insertEncounterCalls.first?.ownerID, "owner-1")
         XCTAssertEqual(mockRepo.insertEncounterCalls.first?.catID, "cat-1")
@@ -66,7 +66,7 @@ final class SupabaseEncounterRepositoryAdapterTests: XCTestCase {
 
         let result = try await adapter.save(payload, ownerID: "owner-1")
 
-        XCTAssertEqual(result, updatedEncounter.id.uuidString)
+        XCTAssertEqual(result, updatedEncounter.id.uuidString.lowercased())
         XCTAssertEqual(mockRepo.updateEncounterCalls.count, 1)
         XCTAssertEqual(mockRepo.updateEncounterCalls.first?.id, "550e8400-e29b-41d4-a716-446655440000")
         XCTAssertTrue(mockRepo.insertEncounterCalls.isEmpty)
@@ -88,12 +88,12 @@ final class SupabaseEncounterRepositoryAdapterTests: XCTestCase {
         let enc2 = SupabaseEncounter.fixture(ownerID: ownerID, notes: "second")
         mockRepo.fetchEncountersResult = [enc1, enc2]
 
-        let results = try await adapter.fetchAll(ownerID: ownerID.uuidString)
+        let results = try await adapter.fetchAll(ownerID: ownerID.uuidString.lowercased())
 
         XCTAssertEqual(results.count, 2)
         XCTAssertEqual(results[0].notes, "first")
         XCTAssertEqual(results[1].notes, "second")
-        XCTAssertEqual(mockRepo.fetchEncountersByOwnerCalls, [ownerID.uuidString])
+        XCTAssertEqual(mockRepo.fetchEncountersByOwnerCalls, [ownerID.uuidString.lowercased()])
     }
 
     func testFetchAllReturnsEmptyForNoResults() async throws {

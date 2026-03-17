@@ -90,9 +90,9 @@ final class SupabaseFollowTests: XCTestCase {
 
         let follow = supabaseFollow.toDomain()
 
-        XCTAssertEqual(follow.id, id.uuidString)
-        XCTAssertEqual(follow.followerID, followerID.uuidString)
-        XCTAssertEqual(follow.followeeID, followeeID.uuidString)
+        XCTAssertEqual(follow.id, id.uuidString.lowercased())
+        XCTAssertEqual(follow.followerID, followerID.uuidString.lowercased())
+        XCTAssertEqual(follow.followeeID, followeeID.uuidString.lowercased())
         XCTAssertEqual(follow.status, .active)
         XCTAssertTrue(follow.isActive)
         XCTAssertEqual(follow.createdAt, date)

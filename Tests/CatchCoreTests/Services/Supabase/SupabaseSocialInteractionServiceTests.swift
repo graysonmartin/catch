@@ -171,7 +171,7 @@ final class SupabaseSocialInteractionServiceTests: XCTestCase {
             text: "what a legend"
         )
 
-        XCTAssertEqual(comment.id, commentID.uuidString)
+        XCTAssertEqual(comment.id, commentID.uuidString.lowercased())
         XCTAssertEqual(comment.text, "what a legend")
         XCTAssertEqual(comment.displayName, "CatFan")
         XCTAssertEqual(sut.commentCount(for: encounterID), 1)
@@ -321,19 +321,19 @@ final class SupabaseSocialInteractionServiceTests: XCTestCase {
 
         let sut = SupabaseSocialInteractionService(
             repository: mockRepo,
-            getCurrentUserID: { userUUID.uuidString }
+            getCurrentUserID: { userUUID.uuidString.lowercased() }
         )
 
         try await sut.loadInteractionData(
-            for: [enc1.uuidString, enc2.uuidString]
+            for: [enc1.uuidString.lowercased(), enc2.uuidString.lowercased()]
         )
 
-        XCTAssertEqual(sut.likeCount(for: enc1.uuidString), 5)
-        XCTAssertEqual(sut.commentCount(for: enc1.uuidString), 3)
-        XCTAssertEqual(sut.likeCount(for: enc2.uuidString), 0)
-        XCTAssertEqual(sut.commentCount(for: enc2.uuidString), 1)
-        XCTAssertTrue(sut.isLiked(enc1.uuidString))
-        XCTAssertFalse(sut.isLiked(enc2.uuidString))
+        XCTAssertEqual(sut.likeCount(for: enc1.uuidString.lowercased()), 5)
+        XCTAssertEqual(sut.commentCount(for: enc1.uuidString.lowercased()), 3)
+        XCTAssertEqual(sut.likeCount(for: enc2.uuidString.lowercased()), 0)
+        XCTAssertEqual(sut.commentCount(for: enc2.uuidString.lowercased()), 1)
+        XCTAssertTrue(sut.isLiked(enc1.uuidString.lowercased()))
+        XCTAssertFalse(sut.isLiked(enc2.uuidString.lowercased()))
     }
 
     func testLoadInteractionDataNoOpWhenNotSignedIn() async throws {

@@ -11,7 +11,8 @@ final class FollowServiceErrorTests: XCTestCase {
             .alreadyFollowing,
             .requestAlreadyPending,
             .followNotFound,
-            .unauthorized
+            .unauthorized,
+            .networkError("connection failed")
         ]
         for error in cases {
             XCTAssertNotNil(error.errorDescription)
@@ -26,10 +27,12 @@ final class FollowServiceErrorTests: XCTestCase {
         XCTAssertEqual(FollowServiceError.requestAlreadyPending, .requestAlreadyPending)
         XCTAssertEqual(FollowServiceError.followNotFound, .followNotFound)
         XCTAssertEqual(FollowServiceError.unauthorized, .unauthorized)
+        XCTAssertEqual(FollowServiceError.networkError("x"), .networkError("x"))
     }
 
     func test_equatable_differsBetweenCases() {
         XCTAssertNotEqual(FollowServiceError.notSignedIn, .cannotFollowSelf)
         XCTAssertNotEqual(FollowServiceError.alreadyFollowing, .requestAlreadyPending)
+        XCTAssertNotEqual(FollowServiceError.networkError("a"), .networkError("b"))
     }
 }

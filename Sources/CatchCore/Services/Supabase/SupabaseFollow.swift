@@ -17,9 +17,9 @@ public struct SupabaseFollow: Codable {
 
     public func toDomain() -> Follow {
         Follow(
-            id: id.uuidString,
-            followerID: followerID.uuidString,
-            followeeID: followeeID.uuidString,
+            id: id.uuidString.lowercased(),
+            followerID: followerID.uuidString.lowercased(),
+            followeeID: followeeID.uuidString.lowercased(),
             status: FollowStatus(rawValue: status) ?? .pending,
             createdAt: createdAt
         )
@@ -74,9 +74,9 @@ public struct SupabaseFollowWithProfile: Codable {
 
     public func toDomain() -> Follow {
         Follow(
-            id: id.uuidString,
-            followerID: followerID.uuidString,
-            followeeID: followeeID.uuidString,
+            id: id.uuidString.lowercased(),
+            followerID: followerID.uuidString.lowercased(),
+            followeeID: followeeID.uuidString.lowercased(),
             status: FollowStatus(rawValue: status) ?? .pending,
             createdAt: createdAt,
             followerDisplayName: profiles?.displayName

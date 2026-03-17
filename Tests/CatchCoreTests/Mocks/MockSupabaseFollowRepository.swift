@@ -20,6 +20,7 @@ final class MockSupabaseFollowRepository: SupabaseFollowRepository {
     var fetchPendingIncomingResult: [SupabaseFollowWithProfile] = []
     var fetchPendingOutgoingResult: [SupabaseFollow] = []
     var insertFollowResult: SupabaseFollow?
+    var insertFollowError: (any Error)?
     var updateFollowStatusResult: SupabaseFollow?
     var deleteFollowError: (any Error)?
     var countFollowersResult: Int = 0
@@ -58,6 +59,7 @@ final class MockSupabaseFollowRepository: SupabaseFollowRepository {
 
     func insertFollow(_ payload: SupabaseFollowInsertPayload) async throws -> SupabaseFollow {
         insertFollowCalls.append(payload)
+        if let insertFollowError { throw insertFollowError }
         if let error { throw error }
         guard let result = insertFollowResult else {
             throw NSError(domain: "MockSupabaseFollowRepository", code: 0, userInfo: [NSLocalizedDescriptionKey: "no stubbed insert result"])

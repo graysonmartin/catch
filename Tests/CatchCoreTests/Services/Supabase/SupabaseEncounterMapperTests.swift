@@ -11,7 +11,7 @@ final class SupabaseEncounterMapperTests: XCTestCase {
 
         let result = SupabaseEncounterMapper.toCloudEncounter(encounter)
 
-        XCTAssertEqual(result.recordName, id.uuidString)
+        XCTAssertEqual(result.recordName, id.uuidString.lowercased())
     }
 
     func testMapsOwnerID() {
@@ -20,7 +20,7 @@ final class SupabaseEncounterMapperTests: XCTestCase {
 
         let result = SupabaseEncounterMapper.toCloudEncounter(encounter)
 
-        XCTAssertEqual(result.ownerID, ownerID.uuidString)
+        XCTAssertEqual(result.ownerID, ownerID.uuidString.lowercased())
     }
 
     func testMapsCatIDToCatRecordName() {
@@ -29,7 +29,7 @@ final class SupabaseEncounterMapperTests: XCTestCase {
 
         let result = SupabaseEncounterMapper.toCloudEncounter(encounter)
 
-        XCTAssertEqual(result.catRecordName, catID.uuidString)
+        XCTAssertEqual(result.catRecordName, catID.uuidString.lowercased())
     }
 
     func testMapsDateAndLocation() {

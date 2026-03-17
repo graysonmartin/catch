@@ -23,16 +23,16 @@ public final class SupabaseEncounterRepositoryAdapter: EncounterRepository, @unc
         if let existingID = payload.recordName {
             let updatePayload = SupabaseEncounterMapper.updatePayload(from: payload)
             let updated = try await repository.updateEncounter(id: existingID, updatePayload)
-            return updated.id.uuidString
+            return updated.id.uuidString.lowercased()
         } else {
-            let recordName = UUID().uuidString
+            let recordName = UUID().uuidString.lowercased()
             let insertPayload = SupabaseEncounterMapper.insertPayload(
                 from: payload,
                 ownerID: ownerID,
                 recordName: recordName
             )
             let inserted = try await repository.insertEncounter(insertPayload)
-            return inserted.id.uuidString
+            return inserted.id.uuidString.lowercased()
         }
     }
 
