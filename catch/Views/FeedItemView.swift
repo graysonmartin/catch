@@ -20,6 +20,7 @@ struct FeedItemView: View {
 
     @Environment(EncounterDataService.self) private var encounterDataService
     @Environment(CatDataService.self) private var catDataService
+    @Environment(FeedDataService.self) private var feedDataService
     @Environment(ToastManager.self) private var toastManager
 
     @State private var showDetail = false
@@ -191,6 +192,7 @@ struct FeedItemView: View {
             do {
                 try await encounterDataService.deleteEncounter(id: encounter.id)
                 try await catDataService.loadCats()
+                feedDataService.removeEncounter(id: encounter.id)
             } catch {
                 toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
             }

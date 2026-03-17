@@ -1,8 +1,6 @@
 import Foundation
-import Observation
-@testable import CatchCore
+import CatchCore
 
-@Observable
 @MainActor
 final class MockSupabaseEncounterRepository: SupabaseEncounterRepository {
     private(set) var fetchEncounterCalls: [String] = []
@@ -18,7 +16,6 @@ final class MockSupabaseEncounterRepository: SupabaseEncounterRepository {
     var insertEncounterResult: SupabaseEncounter?
     var updateEncounterResult: SupabaseEncounter?
     var fetchEncounterFeedResult: [SupabaseEncounterFeedRow] = []
-    /// Optional per-cursor results for pagination testing.
     var fetchEncounterFeedResultsByCursor: [String?: [SupabaseEncounterFeedRow]] = [:]
     var errorToThrow: (any Error)?
 
@@ -44,19 +41,16 @@ final class MockSupabaseEncounterRepository: SupabaseEncounterRepository {
         insertEncounterCalls.append(payload)
         if let error = errorToThrow { throw error }
         guard let result = insertEncounterResult else {
-            throw NSError(domain: "MockSupabaseEncounterRepository", code: 0, userInfo: [NSLocalizedDescriptionKey: "no stubbed insert result"])
+            throw NSError(domain: "Mock", code: 0)
         }
         return result
     }
 
-    func updateEncounter(
-        id: String,
-        _ payload: SupabaseEncounterUpdatePayload
-    ) async throws -> SupabaseEncounter {
+    func updateEncounter(id: String, _ payload: SupabaseEncounterUpdatePayload) async throws -> SupabaseEncounter {
         updateEncounterCalls.append((id, payload))
         if let error = errorToThrow { throw error }
         guard let result = updateEncounterResult else {
-            throw NSError(domain: "MockSupabaseEncounterRepository", code: 0, userInfo: [NSLocalizedDescriptionKey: "no stubbed update result"])
+            throw NSError(domain: "Mock", code: 0)
         }
         return result
     }
@@ -73,7 +67,6 @@ final class MockSupabaseEncounterRepository: SupabaseEncounterRepository {
     ) async throws -> [SupabaseEncounterFeedRow] {
         fetchEncounterFeedCalls.append((ownerID, limit, cursor))
         if let error = errorToThrow { throw error }
-
         if let cursorResult = fetchEncounterFeedResultsByCursor[cursor] {
             return cursorResult
         }
@@ -95,89 +88,5 @@ final class MockSupabaseEncounterRepository: SupabaseEncounterRepository {
         fetchEncounterFeedResult = []
         fetchEncounterFeedResultsByCursor = [:]
         errorToThrow = nil
-    }
-}
-
-// MARK: - SupabaseEncounterFeedRow Fixture
-
-extension SupabaseEncounterFeedRow {
-    static func fixture(
-        id: UUID = UUID(),
-        ownerID: UUID = UUID(),
-        catID: UUID = UUID(),
-        date: Date = Date(),
-        locationName: String? = "park",
-        locationLat: Double? = 37.7749,
-        locationLng: Double? = -122.4194,
-        notes: String? = nil,
-        photoUrls: [String] = [],
-        likeCount: Int = 0,
-        commentCount: Int = 0,
-        createdAt: Date = Date(),
-        cat: SupabaseFeedCat? = nil
-    ) -> SupabaseEncounterFeedRow {
-        SupabaseEncounterFeedRow(
-            id: id,
-            ownerID: ownerID,
-            catID: catID,
-            date: date,
-            locationName: locationName,
-            locationLat: locationLat,
-            locationLng: locationLng,
-            notes: notes,
-            photoUrls: photoUrls,
-            likeCount: likeCount,
-            commentCount: commentCount,
-            createdAt: createdAt,
-            cat: cat ?? SupabaseFeedCat(
-                id: catID,
-                name: "Test Cat",
-                breed: nil,
-                estimatedAge: nil,
-                locationName: locationName,
-                locationLat: locationLat,
-                locationLng: locationLng,
-                notes: nil,
-                isOwned: false,
-                photoUrls: [],
-                createdAt: createdAt
-            )
-        )
-    }
-}
-
-// MARK: - SupabaseEncounter Fixture
-
-extension SupabaseEncounter {
-    static func fixture(
-        id: UUID = UUID(),
-        ownerID: UUID = UUID(),
-        catID: UUID = UUID(),
-        date: Date = Date(),
-        locationName: String? = "park",
-        locationLat: Double? = 37.7749,
-        locationLng: Double? = -122.4194,
-        notes: String? = nil,
-        photoUrls: [String] = [],
-        likeCount: Int = 0,
-        commentCount: Int = 0,
-        createdAt: Date = Date(),
-        updatedAt: Date = Date()
-    ) -> SupabaseEncounter {
-        SupabaseEncounter(
-            id: id,
-            ownerID: ownerID,
-            catID: catID,
-            date: date,
-            locationName: locationName,
-            locationLat: locationLat,
-            locationLng: locationLng,
-            notes: notes,
-            photoUrls: photoUrls,
-            likeCount: likeCount,
-            commentCount: commentCount,
-            createdAt: createdAt,
-            updatedAt: updatedAt
-        )
     }
 }

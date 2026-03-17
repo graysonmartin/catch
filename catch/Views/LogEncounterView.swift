@@ -5,6 +5,7 @@ struct LogEncounterView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(CatDataService.self) private var catDataService
     @Environment(EncounterDataService.self) private var encounterDataService
+    @Environment(FeedDataService.self) private var feedDataService
     @Environment(ToastManager.self) private var toastManager
 
     @State private var selectedCat: Cat?
@@ -146,13 +147,15 @@ struct LogEncounterView: View {
         defer { isSaving = false }
 
         do {
-            _ = try await encounterDataService.createEncounter(
+            var encounter = try await encounterDataService.createEncounter(
                 catID: cat.id,
                 date: date,
                 location: location,
                 notes: notes,
                 photos: photos
             )
+            encounter.cat = cat
+            feedDataService.prependEncounter(encounter)
             try await catDataService.loadCats()
             onSave?()
             dismiss()

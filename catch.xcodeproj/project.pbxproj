@@ -156,6 +156,10 @@
 		E8RS00000104 /* DefaultRestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000004 /* DefaultRestoreService.swift */; };
 		E8DA00000101 /* CatDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DA00000001 /* CatDataService.swift */; };
 		E8DA00000102 /* EncounterDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DA00000002 /* EncounterDataService.swift */; };
+		E8FD00000101 /* FeedDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FD00000001 /* FeedDataService.swift */; };
+		E8FD00000201 /* FeedDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FD00000001 /* FeedDataService.swift */; };
+		E8FD00000202 /* FeedDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FD00000002 /* FeedDataServiceTests.swift */; };
+		E8FD00000203 /* MockSupabaseEncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FD00000003 /* MockSupabaseEncounterRepository.swift */; };
 		E8F60000010B /* MockCatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010B /* MockCatRepository.swift */; };
 		E8F60000010C /* MockEncounterRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F50000010C /* MockEncounterRepository.swift */; };
 		E8RS00000204 /* DefaultRestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000004 /* DefaultRestoreService.swift */; };
@@ -353,6 +357,9 @@
 		E8RS00000004 /* DefaultRestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultRestoreService.swift; sourceTree = "<group>"; };
 		E8DA00000001 /* CatDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDataService.swift; sourceTree = "<group>"; };
 		E8DA00000002 /* EncounterDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDataService.swift; sourceTree = "<group>"; };
+		E8FD00000001 /* FeedDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDataService.swift; sourceTree = "<group>"; };
+		E8FD00000002 /* FeedDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDataServiceTests.swift; sourceTree = "<group>"; };
+		E8FD00000003 /* MockSupabaseEncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSupabaseEncounterRepository.swift; sourceTree = "<group>"; };
 		E8F50000010B /* MockCatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatRepository.swift; sourceTree = "<group>"; };
 		E8F50000010C /* MockEncounterRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEncounterRepository.swift; sourceTree = "<group>"; };
 		E8F500000302 /* DefaultCatSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCatSyncService.swift; sourceTree = "<group>"; };
@@ -717,6 +724,7 @@
 				E8UV0000F002 /* Username */,
 				E8SI0000F002 /* Social */,
 				E8SF0000F002 /* SocialFeed */,
+				E8FD0000F002 /* Feed */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 			);
 			path = Services;
@@ -744,6 +752,7 @@
 			children = (
 				E8DA00000001 /* CatDataService.swift */,
 				E8DA00000002 /* EncounterDataService.swift */,
+				E8FD00000001 /* FeedDataService.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -786,6 +795,7 @@
 				E8SF00000005 /* MockSocialFeedService.swift */,
 				E8SF00000008 /* MockSupabaseFeedRepository.swift */,
 				E8ST00000005 /* MockSettingsService.swift */,
+				E8FD00000003 /* MockSupabaseEncounterRepository.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -966,6 +976,14 @@
 				E8SF00000009 /* DefaultSocialFeedServiceTests.swift */,
 			);
 			path = SocialFeed;
+			sourceTree = "<group>";
+		};
+		E8FD0000F002 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				E8FD00000002 /* FeedDataServiceTests.swift */,
+			);
+			path = Feed;
 			sourceTree = "<group>";
 		};
 		E8SI0000F001 /* Social */ = {
@@ -1188,6 +1206,7 @@
 				E8RS00000104 /* DefaultRestoreService.swift in Sources */,
 				E8DA00000101 /* CatDataService.swift in Sources */,
 				E8DA00000102 /* EncounterDataService.swift in Sources */,
+				E8FD00000101 /* FeedDataService.swift in Sources */,
 				E8E600000007 /* SocialView.swift in Sources */,
 				E8E600000008 /* FindPeopleView.swift in Sources */,
 				E8E600000009 /* FollowRowView.swift in Sources */,
@@ -1329,6 +1348,9 @@
 				E8SF00000206 /* DefaultSocialFeedService.swift in Sources */,
 				E8SF00000207 /* MockSupabaseFeedRepository.swift in Sources */,
 				E8SF00000208 /* DefaultSocialFeedServiceTests.swift in Sources */,
+				E8FD00000201 /* FeedDataService.swift in Sources */,
+				E8FD00000202 /* FeedDataServiceTests.swift in Sources */,
+				E8FD00000203 /* MockSupabaseEncounterRepository.swift in Sources */,
 				E8CL00000201 /* CollectionSortOption.swift in Sources */,
 				E8CL00000202 /* CollectionFilter.swift in Sources */,
 				E8CL00000203 /* CollectionSortFilterService.swift in Sources */,

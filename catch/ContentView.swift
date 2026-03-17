@@ -4,6 +4,7 @@ import CatchCore
 struct ContentView: View {
     @Environment(SupabaseFollowService.self) private var followService
     @Environment(SupabaseAuthService.self) private var authService
+    @Environment(CatDataService.self) private var catDataService
     @State private var selectedTab = 0
     @State private var feedScrollToTop = false
 
@@ -37,11 +38,11 @@ struct ContentView: View {
         .tint(CatchTheme.primary)
         .task {
             guard let userID = authService.authState.user?.id else { return }
-            do {
-                try await followService.refresh(for: userID)
-            } catch {
-                // Initial refresh failure is non-critical — user can pull to refresh
-            }
+            async let cats: Void = { try? await catDataService.loadCats() }()
+            async let follows: Void = {
+                try? await followService.refresh(for: userID)
+            }()
+            _ = await (cats, follows)
         }
     }
 }

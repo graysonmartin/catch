@@ -2,34 +2,24 @@ import SwiftUI
 import CatchCore
 
 struct FeedView: View {
-    @Environment(CatDataService.self) private var catDataService
+    @Environment(FeedDataService.self) private var feedDataService
     @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(DefaultSocialFeedService.self) private var socialFeedService: DefaultSocialFeedService?
     @Environment(ToastManager.self) private var toastManager
     @Binding var scrollToTop: Bool
 
-    private var localEncounters: [Encounter] {
-        catDataService.cats
-            .flatMap { cat in cat.encounters.map { enc in
-                var e = enc
-                e.cat = cat
-                return e
-            }}
-            .sorted { $0.date > $1.date }
-    }
-
     private var feedItems: [FeedItem] {
-        let local = localEncounters.map { FeedItem.local($0) }
+        let local = feedDataService.encounters.map { FeedItem.local($0) }
         let remote = socialFeedService?.remoteEncounters ?? []
         return (local + remote).sorted { $0.date > $1.date }
     }
 
     private var isEmpty: Bool {
-        localEncounters.isEmpty && (socialFeedService?.remoteEncounters.isEmpty ?? true)
+        feedDataService.encounters.isEmpty && (socialFeedService?.remoteEncounters.isEmpty ?? true)
     }
 
     private var isInitialLoad: Bool {
-        (socialFeedService?.isLoading == true || catDataService.isLoading) && isEmpty
+        (socialFeedService?.isLoading == true || feedDataService.isLoading) && isEmpty
     }
 
     var body: some View {
@@ -57,12 +47,14 @@ struct FeedView: View {
                 )
             }
             .refreshable {
-                await socialFeedService?.refresh()
-                try? await catDataService.loadCats()
+                async let local: Void = feedDataService.refresh()
+                async let remote: Void = socialFeedService?.refresh() ?? ()
+                _ = await (local, remote)
             }
             .task {
-                try? await catDataService.loadCats()
-                await socialFeedService?.refresh()
+                async let local: Void = feedDataService.refresh()
+                async let remote: Void = socialFeedService?.refresh() ?? ()
+                _ = await (local, remote)
                 await loadInteractionData()
             }
         }
@@ -109,15 +101,28 @@ struct FeedView: View {
 
     @ViewBuilder
     private var loadMoreSection: some View {
-        if socialFeedService?.hasMorePages == true {
-            if socialFeedService?.isLoadingMore == true {
+        let hasLocalMore = feedDataService.hasMorePages
+        let hasRemoteMore = socialFeedService?.hasMorePages == true
+        let isLocalLoadingMore = feedDataService.isLoadingMore
+        let isRemoteLoadingMore = socialFeedService?.isLoadingMore == true
+
+        if hasLocalMore || hasRemoteMore {
+            if isLocalLoadingMore || isRemoteLoadingMore {
                 PawLoadingView(size: .inline)
                     .padding()
             } else {
                 Color.clear
                     .frame(height: 1)
                     .onAppear {
-                        Task { await socialFeedService?.loadMore() }
+                        Task {
+                            async let localMore: Void = feedDataService.loadMore()
+                            async let remoteMore: Void = {
+                                if hasRemoteMore {
+                                    await socialFeedService?.loadMore()
+                                }
+                            }()
+                            _ = await (localMore, remoteMore)
+                        }
                     }
             }
         }

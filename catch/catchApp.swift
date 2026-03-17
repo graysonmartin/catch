@@ -19,6 +19,7 @@ struct catchApp: App {
     @State private var toastWindow = ToastWindow()
     @State private var catDataService: CatDataService
     @State private var encounterDataService: EncounterDataService
+    @State private var feedDataService: FeedDataService
 
     init() {
         #if DEBUG
@@ -88,6 +89,10 @@ struct catchApp: App {
             assetService: assets,
             getUserID: getUserID
         ))
+        _feedDataService = State(initialValue: FeedDataService(
+            encounterRepository: encRepo,
+            getUserID: getUserID
+        ))
     }
 
     var body: some Scene {
@@ -152,6 +157,7 @@ struct catchApp: App {
                 .environment(toastManager)
                 .environment(catDataService)
                 .environment(encounterDataService)
+                .environment(feedDataService)
                 .task {
                     await authService.refreshSessionIfNeeded()
                 }
