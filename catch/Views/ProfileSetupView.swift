@@ -60,7 +60,6 @@ struct ProfileSetupView: View {
             }
         }
         .task {
-            prefillFromUser()
             if isSignedIn {
                 isRestoringProfile = true
                 await restoreExistingProfile()
@@ -328,25 +327,11 @@ extension ProfileSetupView {
                 throw SupabaseAuthError.missingIdentityToken
             }
 
-            let fullName: String? = {
-                guard let components = credential.fullName else { return nil }
-                let formatted = PersonNameComponentsFormatter.localizedString(
-                    from: components, style: .default
-                )
-                return formatted.isEmpty ? nil : formatted
-            }()
-
             signInError = nil
 
             Task {
                 do {
-                    let user = try await authService.signInWithApple(idToken: identityToken, nonce: nonce)
-                    if let fullName, displayName.isEmpty {
-                        displayName = fullName
-                    }
-                    if let email = user.email, displayName.isEmpty {
-                        displayName = email.components(separatedBy: "@").first ?? ""
-                    }
+                    _ = try await authService.signInWithApple(idToken: identityToken, nonce: nonce)
                     isRestoringProfile = true
                     await restoreExistingProfile()
                 } catch {
@@ -383,10 +368,7 @@ extension ProfileSetupView {
                 }
             }
 
-            let user = try await authService.handleOAuthCallback(callbackURL)
-            if let name = user.fullName, displayName.isEmpty {
-                displayName = name
-            }
+            _ = try await authService.handleOAuthCallback(callbackURL)
             signInError = nil
             isRestoringProfile = true
             await restoreExistingProfile()
@@ -410,7 +392,6 @@ extension ProfileSetupView {
                 _ = try await authService.signInWithEmail(trimmedEmail, password: emailPassword)
             }
             signInError = nil
-            prefillFromUser()
             isRestoringProfile = true
             await restoreExistingProfile()
         } catch SupabaseAuthError.signUpRequiresVerification {
@@ -459,11 +440,6 @@ extension ProfileSetupView {
             isRestoringProfile = false
             toastManager.showError(CatchStrings.ProfileSetup.signInFailed)
         }
-    }
-
-    private func prefillFromUser() {
-        guard let user = authService.authState.user else { return }
-        if displayName.isEmpty, let fullName = user.fullName { displayName = fullName }
     }
 
     private func saveProfile() {
