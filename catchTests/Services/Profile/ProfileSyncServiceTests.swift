@@ -5,15 +5,21 @@ import CatchCore
 final class ProfileSyncServiceTests: XCTestCase {
 
     private var mockProfileRepo: MockSupabaseProfileRepo!
+    private var mockAssetService: MockSupabaseAssetService!
     private var sut: ProfileSyncService!
 
     override func setUp() async throws {
         mockProfileRepo = MockSupabaseProfileRepo()
-        sut = ProfileSyncService(profileRepository: mockProfileRepo)
+        mockAssetService = MockSupabaseAssetService()
+        sut = ProfileSyncService(
+            profileRepository: mockProfileRepo,
+            assetService: mockAssetService
+        )
     }
 
     override func tearDown() async throws {
         mockProfileRepo = nil
+        mockAssetService = nil
         sut = nil
     }
 
@@ -123,6 +129,23 @@ private final class MockSupabaseProfileRepo: SupabaseProfileRepository {
     func checkUsernameAvailability(_ username: String) async throws -> Bool {
         checkUsernameCalls.append(username)
         return usernameAvailabilityResult
+    }
+}
+
+@MainActor
+private final class MockSupabaseAssetService: SupabaseAssetService {
+    func uploadPhoto(_ data: Data, bucket: SupabaseStorageBucket, ownerID: String, fileName: String) async throws -> String {
+        "https://example.com/\(fileName)"
+    }
+
+    func uploadPhotos(_ photos: [Data], bucket: SupabaseStorageBucket, ownerID: String) async throws -> [String] {
+        photos.indices.map { "https://example.com/photo_\($0).jpg" }
+    }
+
+    func deletePhoto(bucket: SupabaseStorageBucket, path: String) async throws {}
+
+    func publicURL(bucket: SupabaseStorageBucket, path: String) -> String {
+        "https://example.com/\(path)"
     }
 }
 

@@ -74,29 +74,3 @@ struct ToastView: View {
     }
 }
 
-// MARK: - Toast Overlay Modifier
-
-struct ToastOverlayModifier: ViewModifier {
-    @Environment(ToastManager.self) private var toastManager
-
-    func body(content: Content) -> some View {
-        content
-            .overlay(alignment: .top) {
-                if let toast = toastManager.currentToast {
-                    ToastView(toast: toast) {
-                        toastManager.dismiss()
-                    }
-                    .padding(.top, CatchSpacing.space8)
-                    .transition(.move(edge: .top).combined(with: .opacity))
-                    .zIndex(999)
-                }
-            }
-            .animation(.spring(duration: 0.3), value: toastManager.currentToast)
-    }
-}
-
-extension View {
-    func toastOverlay() -> some View {
-        modifier(ToastOverlayModifier())
-    }
-}

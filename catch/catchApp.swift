@@ -15,6 +15,7 @@ struct catchApp: App {
     @State private var supabaseProvider: SupabaseClientProvider
     @State private var locationSearchService = MKLocationSearchService()
     @State private var toastManager = ToastManager()
+    @State private var toastWindow = ToastWindow()
     @State private var catDataService: CatDataService
     @State private var encounterDataService: EncounterDataService
 
@@ -91,7 +92,18 @@ struct catchApp: App {
     var body: some Scene {
         WindowGroup {
             mainContent
+                .onAppear {
+                    installToastWindow()
+                }
         }
+    }
+
+    private func installToastWindow() {
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first
+        else { return }
+        toastWindow.install(in: windowScene, toastManager: toastManager)
     }
 
     @ViewBuilder
@@ -118,7 +130,6 @@ struct catchApp: App {
             .environment(toastManager)
         } else {
             ContentView()
-                .toastOverlay()
                 .environment(breedClassifier)
                 .environment(authService)
                 .environment(followService)
