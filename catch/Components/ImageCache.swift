@@ -1,6 +1,17 @@
 import UIKit
 
-final class RemoteImageCache: @unchecked Sendable {
+// MARK: - Protocol
+
+protocol ImageCacheService: Sendable {
+    func image(for key: String) -> UIImage?
+    func setImage(_ image: UIImage, for key: String)
+    func removeImage(for key: String)
+    func removeAll()
+}
+
+// MARK: - Implementation
+
+final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
     static let shared = RemoteImageCache()
 
     private let cache = NSCache<NSString, UIImage>()
@@ -9,6 +20,14 @@ final class RemoteImageCache: @unchecked Sendable {
         cache.countLimit = 200
         cache.totalCostLimit = 75 * 1024 * 1024 // 75 MB
     }
+
+    /// Visible initializer for testing only.
+    #if DEBUG
+    init(countLimit: Int, totalCostLimit: Int) {
+        cache.countLimit = countLimit
+        cache.totalCostLimit = totalCostLimit
+    }
+    #endif
 
     func image(for key: String) -> UIImage? {
         cache.object(forKey: key as NSString)
@@ -21,6 +40,10 @@ final class RemoteImageCache: @unchecked Sendable {
     func setImage(_ image: UIImage, for key: String) {
         let cost = Int(image.size.width * image.size.height * image.scale * image.scale * 4)
         cache.setObject(image, forKey: key as NSString, cost: cost)
+    }
+
+    func removeAll() {
+        cache.removeAllObjects()
     }
 
     /// Returns JPEG data for the given URL, checking the in-memory cache first

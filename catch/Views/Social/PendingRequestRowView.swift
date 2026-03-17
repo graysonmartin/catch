@@ -9,6 +9,7 @@ struct PendingRequestRowView: View {
     @Environment(SupabaseUserBrowseService.self) private var browseService: SupabaseUserBrowseService?
     @Environment(ToastManager.self) private var toastManager
     @State private var resolvedName: String?
+    @State private var resolvedAvatarURL: String?
 
     private var displayName: String? {
         resolvedName ?? follow.followerDisplayName
@@ -20,9 +21,7 @@ struct PendingRequestRowView: View {
 
     var body: some View {
         HStack(spacing: CatchSpacing.space12) {
-            Image(systemName: "person.crop.circle.badge.questionmark")
-                .font(.title2)
-                .foregroundStyle(CatchTheme.primary)
+            UserAvatarView(avatarURL: resolvedAvatarURL)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(displayName ?? CatchStrings.Social.loadingName)
@@ -69,14 +68,17 @@ struct PendingRequestRowView: View {
             .buttonStyle(.plain)
         }
         .task {
-            guard follow.followerDisplayName == nil else { return }
-
-            if let cached = browseService?.cachedDisplayName(for: follow.followerID) {
-                resolvedName = cached
+            if let cached = browseService?.cachedData(for: follow.followerID) {
+                resolvedName = cached.profile.displayName
+                resolvedAvatarURL = cached.profile.avatarURL
                 return
             }
 
-            resolvedName = await browseService?.fetchDisplayName(userID: follow.followerID)
+            guard follow.followerDisplayName == nil else { return }
+
+            let profile = await browseService?.fetchProfile(userID: follow.followerID)
+            resolvedName = profile?.displayName
+            resolvedAvatarURL = profile?.avatarURL
         }
     }
 }

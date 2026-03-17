@@ -12,6 +12,7 @@ struct FollowRowView: View {
     @State private var isShowingConfirmation = false
     @State private var resolvedName: String?
     @State private var resolvedUsername: String?
+    @State private var resolvedAvatarURL: String?
 
     private var targetUserID: String {
         isFollowerRow ? follow.followerID : follow.followeeID
@@ -33,10 +34,7 @@ struct FollowRowView: View {
             )
         } label: {
             HStack(spacing: CatchSpacing.space12) {
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .frame(width: 36, height: 36)
-                    .foregroundStyle(CatchTheme.secondary)
+                UserAvatarView(avatarURL: resolvedAvatarURL)
 
                 VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                     Text(resolvedName ?? CatchStrings.Social.loadingName)
@@ -89,6 +87,7 @@ struct FollowRowView: View {
             let profile = await browseService?.fetchProfile(userID: targetUserID)
             resolvedName = profile?.displayName
             resolvedUsername = profile?.username
+            resolvedAvatarURL = profile?.avatarURL
         }
     }
 }
