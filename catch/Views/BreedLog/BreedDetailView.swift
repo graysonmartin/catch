@@ -44,14 +44,7 @@ struct BreedDetailView: View {
 
     @ViewBuilder
     private var headerImage: some View {
-        if let photoData = entry.previewPhotoData,
-           let uiImage = ImageDownsampler.shared.downsample(data: photoData, to: CGSize(width: 160, height: 160)) {
-            Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 100, height: 100)
-                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
-        } else if let url = entry.previewPhotoUrl {
+        if let url = entry.previewPhotoUrl {
             RemoteImageView(urlString: url) {
                 Image(systemName: entry.catalogEntry.icon)
                     .font(.system(size: 44))

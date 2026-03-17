@@ -6,7 +6,6 @@ struct BreedLogEntry: Identifiable {
     let isDiscovered: Bool
     let catCount: Int
     let firstDiscoveredDate: Date?
-    let previewPhotoData: Data?
     let previewPhotoUrl: String?
 
     var id: String { catalogEntry.id }
