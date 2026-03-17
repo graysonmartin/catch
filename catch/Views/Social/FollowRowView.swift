@@ -34,7 +34,8 @@ struct FollowRowView: View {
         } label: {
             HStack(spacing: CatchSpacing.space12) {
                 Image(systemName: "person.crop.circle.fill")
-                    .font(.title2)
+                    .resizable()
+                    .frame(width: 36, height: 36)
                     .foregroundStyle(CatchTheme.secondary)
 
                 VStack(alignment: .leading, spacing: CatchSpacing.space2) {
@@ -44,15 +45,22 @@ struct FollowRowView: View {
                         .lineLimit(1)
                         .redacted(reason: hasResolvedName ? [] : .placeholder)
 
-                    if let username = resolvedUsername, !username.isEmpty {
-                        Text(UsernameValidator.formatDisplay(username))
-                            .font(.caption)
-                            .foregroundStyle(CatchTheme.primary)
-                    }
+                    HStack(spacing: CatchSpacing.space4) {
+                        if let username = resolvedUsername, !username.isEmpty {
+                            Text(UsernameValidator.formatDisplay(username))
+                                .font(.caption)
+                                .foregroundStyle(CatchTheme.primary)
 
-                    Text(CatchStrings.Social.since(follow.createdAt))
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary)
+                            Text(CatchStrings.Common.middot)
+                                .font(.caption)
+                                .foregroundStyle(CatchTheme.textSecondary)
+                        }
+
+                        Text(CatchStrings.Social.since(follow.createdAt))
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.textSecondary)
+                    }
+                    .lineLimit(1)
                 }
 
                 Spacer()

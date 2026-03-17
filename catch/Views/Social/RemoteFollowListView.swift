@@ -131,14 +131,16 @@ private struct RemoteFollowRow: View {
                 if let avatarUrl = profile?.avatarURL, !avatarUrl.isEmpty {
                     RemoteImageView(urlString: avatarUrl) {
                         Image(systemName: "person.crop.circle.fill")
-                            .font(.title2)
+                            .resizable()
+                            .frame(width: 36, height: 36)
                             .foregroundStyle(CatchTheme.secondary)
                     }
                     .frame(width: 36, height: 36)
                     .clipShape(Circle())
                 } else {
                     Image(systemName: "person.crop.circle.fill")
-                        .font(.title2)
+                        .resizable()
+                        .frame(width: 36, height: 36)
                         .foregroundStyle(CatchTheme.secondary)
                 }
             }
@@ -150,15 +152,22 @@ private struct RemoteFollowRow: View {
                     .lineLimit(1)
                     .redacted(reason: isResolved ? [] : .placeholder)
 
-                if let username = profile?.username, !username.isEmpty {
-                    Text(UsernameValidator.formatDisplay(username))
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.primary)
-                }
+                HStack(spacing: CatchSpacing.space4) {
+                    if let username = profile?.username, !username.isEmpty {
+                        Text(UsernameValidator.formatDisplay(username))
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.primary)
 
-                Text(CatchStrings.Social.since(since))
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
+                        Text(CatchStrings.Common.middot)
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.textSecondary)
+                    }
+
+                    Text(CatchStrings.Social.since(since))
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                }
+                .lineLimit(1)
             }
         }
     }
