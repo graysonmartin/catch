@@ -23,7 +23,7 @@ struct RemoteProfileContent: View {
             if browseService?.isLoading == true && data == nil {
                 loadingState
             } else if let data {
-                if data.profile.isPrivate && !isFollowingUser {
+                if data.profile.isPrivate && !isFollowingUser && !isOwnProfile {
                     privateProfileState(data: data)
                 } else {
                     profileContent(data: data)
@@ -38,7 +38,7 @@ struct RemoteProfileContent: View {
         .navigationTitle(displayTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            if !isPrivateHidden {
+            if !isOwnProfile && !isPrivateHidden {
                 ToolbarItem(placement: .topBarTrailing) {
                     toolbarFollowButton
                 }
@@ -246,8 +246,7 @@ struct RemoteProfileContent: View {
 
     @ViewBuilder
     private var toolbarFollowButton: some View {
-        let currentUserID = authService.authState.user?.id ?? ""
-        if userID != currentUserID {
+        if !isOwnProfile {
             if followService.isFollowing(userID) {
                 Button {
                     isShowingUnfollowConfirmation = true
@@ -264,7 +263,7 @@ struct RemoteProfileContent: View {
                     Button(CatchStrings.Social.unfollow, role: .destructive) {
                         Task {
                             do {
-                                try await followService.unfollow(targetID: userID, by: currentUserID)
+                                try await followService.unfollow(targetID: userID, by: authenticatedUserID)
                                 await loadData()
                             } catch {
                                 toastManager.showError(CatchStrings.Toast.unfollowFailed)
@@ -285,7 +284,7 @@ struct RemoteProfileContent: View {
                             let isPrivate = data?.profile.isPrivate ?? false
                             try await followService.follow(
                                 targetID: userID,
-                                by: currentUserID,
+                                by: authenticatedUserID,
                                 isTargetPrivate: isPrivate
                             )
                             await loadData()
@@ -310,8 +309,7 @@ struct RemoteProfileContent: View {
 
     @ViewBuilder
     private var inlineFollowButton: some View {
-        let currentUserID = authService.authState.user?.id ?? ""
-        if userID != currentUserID {
+        if !isOwnProfile {
             if followService.pendingRequestTo(userID) != nil {
                 Text(CatchStrings.Social.requestedStatus)
                     .font(.subheadline.weight(.medium))
@@ -327,7 +325,7 @@ struct RemoteProfileContent: View {
                             let isPrivate = data?.profile.isPrivate ?? false
                             try await followService.follow(
                                 targetID: userID,
-                                by: currentUserID,
+                                by: authenticatedUserID,
                                 isTargetPrivate: isPrivate
                             )
                             await loadData()
@@ -460,13 +458,22 @@ struct RemoteProfileContent: View {
         data?.profile.displayName ?? initialDisplayName ?? CatchStrings.Social.profileFallbackTitle
     }
 
+    private var isOwnProfile: Bool {
+        guard let currentUserID = authService.authState.user?.id else { return false }
+        return userID == currentUserID
+    }
+
+    private var authenticatedUserID: String {
+        authService.authState.user?.id ?? ""
+    }
+
     private var isFollowingUser: Bool {
         followService.isFollowing(userID)
     }
 
     private var isPrivateHidden: Bool {
         guard let data else { return false }
-        return data.profile.isPrivate && !isFollowingUser
+        return data.profile.isPrivate && !isFollowingUser && !isOwnProfile
     }
 
     private func breedCount(data: UserBrowseData) -> Int {
