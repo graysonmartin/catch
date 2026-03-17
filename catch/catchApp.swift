@@ -5,6 +5,7 @@ import CatchCore
 struct catchApp: App {
     @AppStorage(AppStorageKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = false
     @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
+    @State private var isCheckingProfile = false
     @State private var authService: SupabaseAuthService
     @State private var followService: SupabaseFollowService
     @State private var breedClassifier = VisionBreedClassifierService()
@@ -15,6 +16,7 @@ struct catchApp: App {
     @State private var supabaseProvider: SupabaseClientProvider
     @State private var locationSearchService = MKLocationSearchService()
     @State private var toastManager = ToastManager()
+    @State private var toastWindow = ToastWindow()
     @State private var catDataService: CatDataService
     @State private var encounterDataService: EncounterDataService
     @State private var feedDataService: FeedDataService
@@ -96,14 +98,34 @@ struct catchApp: App {
     var body: some Scene {
         WindowGroup {
             mainContent
+                .onAppear {
+                    installToastWindow()
+                }
+                .onChange(of: authService.authState) { oldState, newState in
+                    if oldState == .unknown, newState.isSignedIn, !hasCompletedProfileSetup {
+                        isCheckingProfile = true
+                        Task { await checkExistingProfile() }
+                    }
+                    if newState == .signedOut {
+                        hasCompletedProfileSetup = false
+                    }
+                }
         }
+    }
+
+    private func installToastWindow() {
+        guard let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first
+        else { return }
+        toastWindow.install(in: windowScene, toastManager: toastManager)
     }
 
     @ViewBuilder
     private var mainContent: some View {
         if !hasCompletedOnboarding {
             OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
-        } else if authService.authState == .unknown {
+        } else if authService.authState == .unknown || isCheckingProfile {
             PawLoadingView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(CatchTheme.background)
@@ -123,7 +145,6 @@ struct catchApp: App {
             .environment(toastManager)
         } else {
             ContentView()
-                .toastOverlay()
                 .environment(breedClassifier)
                 .environment(authService)
                 .environment(followService)
@@ -140,11 +161,24 @@ struct catchApp: App {
                 .task {
                     await authService.refreshSessionIfNeeded()
                 }
-                .onChange(of: authService.authState) { _, newState in
-                    if newState == .signedOut {
-                        hasCompletedProfileSetup = false
-                    }
-                }
         }
+    }
+
+    private func checkExistingProfile() async {
+        guard let userID = authService.authState.user?.id else {
+            isCheckingProfile = false
+            return
+        }
+
+        do {
+            let profile = try await profileSyncService.fetchProfile(userID: userID)
+            if profile != nil {
+                hasCompletedProfileSetup = true
+            }
+        } catch {
+            // Profile check failed — fall through to ProfileSetupView
+        }
+
+        isCheckingProfile = false
     }
 }

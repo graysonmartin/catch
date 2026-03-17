@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E8SN00000101 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SN00000001 /* SignInView.swift */; };
+		E8SN00000102 /* CatchStrings+SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SN00000002 /* CatchStrings+SignIn.swift */; };
+		E8SN00000302 /* CatchStrings+SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SN00000002 /* CatchStrings+SignIn.swift */; };
 		E80000012B5A00000001 /* catchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80000012B5A00000010 /* catchApp.swift */; };
 		E80000012B5A00000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80000012B5A00000011 /* ContentView.swift */; };
 		E80000012B5A00000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E80000012B5A00000012 /* Assets.xcassets */; };
@@ -224,6 +227,7 @@
 		E8TI00000103 /* CatchStrings+TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TI00000003 /* CatchStrings+TextInput.swift */; };
 		E8TM00000101 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
 		E8TM00000102 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000002 /* ToastView.swift */; };
+		E8TW00000101 /* ToastWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TW00000001 /* ToastWindow.swift */; };
 		E8TM00000103 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
 		E8TM00000201 /* ToastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000001 /* ToastManager.swift */; };
 		E8TM00000203 /* CatchStrings+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8TM00000003 /* CatchStrings+Toast.swift */; };
@@ -376,6 +380,8 @@
 		E8PF00000005 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		E8PL00000001 /* PawLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PawLoadingView.swift; sourceTree = "<group>"; };
 		E8PS00000001 /* ProfileSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupView.swift; sourceTree = "<group>"; };
+		E8SN00000001 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		E8SN00000002 /* CatchStrings+SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+SignIn.swift"; sourceTree = "<group>"; };
 		E8PS00000002 /* CatchStrings+ProfileSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+ProfileSetup.swift"; sourceTree = "<group>"; };
 		E8PT00000002 /* ProfileCollectionTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionTab.swift; sourceTree = "<group>"; };
 		E8PT00000003 /* ProfileDiaryTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDiaryTab.swift; sourceTree = "<group>"; };
@@ -409,6 +415,7 @@
 		E8TI00000003 /* CatchStrings+TextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+TextInput.swift"; sourceTree = "<group>"; };
 		E8TM00000001 /* ToastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManager.swift; sourceTree = "<group>"; };
 		E8TM00000002 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		E8TW00000001 /* ToastWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastWindow.swift; sourceTree = "<group>"; };
 		E8TM00000003 /* CatchStrings+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Toast.swift"; sourceTree = "<group>"; };
 		E8TM00000004 /* ToastManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastManagerTests.swift; sourceTree = "<group>"; };
 		E8UF00000001 /* UsernameFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameFieldView.swift; sourceTree = "<group>"; };
@@ -511,6 +518,7 @@
 				E8000001AA000072 /* RemoteCatMapSheet.swift */,
 				E8000001AA00002A /* OnboardingView.swift */,
 				E8PS00000001 /* ProfileSetupView.swift */,
+				E8SN00000001 /* SignInView.swift */,
 				E8RS00000002 /* DataRestoreView.swift */,
 				E8RV00000001 /* DatabaseRecoveryView.swift */,
 				E8000001AA000062 /* EditProfileView.swift */,
@@ -550,6 +558,7 @@
 				E8CL00000004 /* CollectionSortFilterBar.swift */,
 				E8TM00000001 /* ToastManager.swift */,
 				E8TM00000002 /* ToastView.swift */,
+				E8TW00000001 /* ToastWindow.swift */,
 				E8TI00000001 /* LimitedTextFieldView.swift */,
 				E8TI00000002 /* LimitedSingleLineFieldView.swift */,
 				E8FP00000001 /* FullScreenPhotoViewer.swift */,
@@ -584,6 +593,7 @@
 				E8TI00000003 /* CatchStrings+TextInput.swift */,
 				E8ST00000004 /* CatchStrings+Settings.swift */,
 				E8PS00000002 /* CatchStrings+ProfileSetup.swift */,
+				E8SN00000002 /* CatchStrings+SignIn.swift */,
 				E8RS00000003 /* CatchStrings+Restore.swift */,
 				E8RV00000002 /* CatchStrings+Recovery.swift */,
 				E8AK00000001 /* AppStorageKeys.swift */,
@@ -1246,6 +1256,7 @@
 				E8SF00000104 /* SocialFeedItemView.swift in Sources */,
 				E8TM00000101 /* ToastManager.swift in Sources */,
 				E8TM00000102 /* ToastView.swift in Sources */,
+				E8TW00000101 /* ToastWindow.swift in Sources */,
 				E8TM00000103 /* CatchStrings+Toast.swift in Sources */,
 				E8TI00000101 /* LimitedTextFieldView.swift in Sources */,
 				E8TI00000102 /* LimitedSingleLineFieldView.swift in Sources */,
@@ -1257,7 +1268,9 @@
 				E8RV00000101 /* DatabaseRecoveryView.swift in Sources */,
 				E8RV00000102 /* CatchStrings+Recovery.swift in Sources */,
 				E8PS00000101 /* ProfileSetupView.swift in Sources */,
+				E8SN00000101 /* SignInView.swift in Sources */,
 				E8PS00000102 /* CatchStrings+ProfileSetup.swift in Sources */,
+				E8SN00000102 /* CatchStrings+SignIn.swift in Sources */,
 				E8AK00000101 /* AppStorageKeys.swift in Sources */,
 				E8PY00000101 /* ProfileSyncService.swift in Sources */,
 				E8AP00000101 /* AvatarPickerView.swift in Sources */,
@@ -1355,6 +1368,7 @@
 				E8PY00000201 /* ProfileSyncService.swift in Sources */,
 				E8PY00000202 /* ProfileSyncServiceTests.swift in Sources */,
 				E8RS00000203 /* CatchStrings+Restore.swift in Sources */,
+				E8SN00000302 /* CatchStrings+SignIn.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
