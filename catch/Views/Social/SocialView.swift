@@ -20,7 +20,6 @@ struct SocialView: View {
     @Environment(SupabaseUserBrowseService.self) private var browseService: SupabaseUserBrowseService?
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
-    @State private var isInitialLoad = true
     @State private var isLoadingMoreFollowers = false
     @State private var isLoadingMoreFollowing = false
     @State var selectedTab: SocialTab
@@ -36,23 +35,18 @@ struct SocialView: View {
             .padding(.horizontal)
             .padding(.vertical, CatchSpacing.space8)
 
-            if isInitialLoad {
-                PawLoadingView()
-                    .frame(maxHeight: .infinity)
-            } else {
-                List {
-                    switch selectedTab {
-                    case .followers:
-                        followersContent
-                    case .following:
-                        followingContent
-                    }
+            List {
+                switch selectedTab {
+                case .followers:
+                    followersContent
+                case .following:
+                    followingContent
                 }
-                .listStyle(.insetGrouped)
-                .overlay {
-                    if isCurrentTabEmpty {
-                        emptyState
-                    }
+            }
+            .listStyle(.insetGrouped)
+            .overlay {
+                if isCurrentTabEmpty {
+                    emptyState
                 }
             }
         }
@@ -63,12 +57,7 @@ struct SocialView: View {
             await refresh()
         }
         .task {
-            let hasData = !followService.followers.isEmpty || !followService.following.isEmpty
-            if hasData {
-                isInitialLoad = false
-            } else {
-                await refresh()
-            }
+            await refresh()
         }
     }
 
@@ -221,17 +210,13 @@ struct SocialView: View {
     }
 
     private func refresh() async {
-        guard let userID = authService.authState.user?.id else {
-            isInitialLoad = false
-            return
-        }
+        guard let userID = authService.authState.user?.id else { return }
         do {
             try await followService.refresh(for: userID)
             await batchResolveProfiles()
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }
-        isInitialLoad = false
     }
 
     private func batchResolveProfiles(for userIDs: [String]? = nil) async {

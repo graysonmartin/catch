@@ -84,9 +84,13 @@ struct FollowRowView: View {
                 resolvedName = profile.displayName
                 resolvedUsername = profile.username
                 resolvedAvatarURL = profile.avatarURL
-            } else if let cached = browseService?.cachedDisplayName(for: targetUserID) {
-                resolvedName = cached
+                return
             }
+
+            let profile = await browseService?.fetchProfile(userID: targetUserID)
+            resolvedName = profile?.displayName
+            resolvedUsername = profile?.username
+            resolvedAvatarURL = profile?.avatarURL
         }
     }
 }
