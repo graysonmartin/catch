@@ -148,6 +148,8 @@ private final class MockSupabaseProfileRepo: SupabaseProfileRepository {
 
     func searchUsers(query: String) async throws -> [SupabaseProfile] { [] }
 
+    func fetchRecentPublicUsers(excluding excludedIDs: Set<String>, limit: Int) async throws -> [SupabaseProfile] { [] }
+
     func checkUsernameAvailability(_ username: String) async throws -> Bool {
         checkUsernameCalls.append(username)
         return usernameAvailabilityResult

@@ -5,6 +5,7 @@ struct FeedView: View {
     @Environment(FeedDataService.self) private var feedDataService
     @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(DefaultSocialFeedService.self) private var socialFeedService: DefaultSocialFeedService?
+    @Environment(SuggestedPeopleService.self) private var suggestedPeopleService: SuggestedPeopleService?
     @Environment(ToastManager.self) private var toastManager
     @Binding var scrollToTop: Bool
     @State private var isShowingFindPeople = false
@@ -23,12 +24,21 @@ struct FeedView: View {
         (socialFeedService?.isLoading == true || feedDataService.isLoading) && isEmpty
     }
 
+    private var shouldShowSuggestions: Bool {
+        feedItems.count < 3
+    }
+
+    private var hasSuggestions: Bool {
+        guard let service = suggestedPeopleService else { return false }
+        return !service.suggestedPeople.isEmpty
+    }
+
     var body: some View {
         NavigationStack {
             Group {
                 if isInitialLoad {
                     PawLoadingView()
-                } else if isEmpty {
+                } else if isEmpty && !hasSuggestions {
                     EmptyStateView(
                         icon: "pawprint.circle",
                         title: CatchStrings.Feed.emptyTitle,
@@ -69,7 +79,8 @@ struct FeedView: View {
                 let wasAlreadyLoaded = feedDataService.hasLoaded
                 async let local: Void = feedDataService.loadIfNeeded()
                 async let remote: Void = socialFeedService?.loadIfNeeded() ?? ()
-                _ = await (local, remote)
+                async let suggestions: Void = suggestedPeopleService?.loadIfNeeded() ?? ()
+                _ = await (local, remote, suggestions)
                 if !wasAlreadyLoaded {
                     await loadInteractionData()
                 }
@@ -83,6 +94,10 @@ struct FeedView: View {
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(spacing: CatchSpacing.space16) {
+                    if shouldShowSuggestions {
+                        SuggestedPeopleSection()
+                    }
+
                     ForEach(feedItems) { item in
                         switch item {
                         case .local(let encounter):

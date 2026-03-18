@@ -33,5 +33,14 @@ extension CatchStrings {
         static let deleteEncounter = String(localized: "delete encounter")
         static let deleteEncounterTitle = String(localized: "delete this encounter?")
         static let deleteEncounterMessage = String(localized: "gone forever. no undo.")
+
+        // Suggested people
+        static let suggestedHeader = String(localized: "here's who's been spotting cats")
+
+        static func catCount(_ count: Int) -> String {
+            count == 1
+                ? String(localized: "1 cat logged")
+                : String(localized: "\(count) cats logged")
+        }
     }
 }

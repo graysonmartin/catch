@@ -20,6 +20,7 @@ struct catchApp: App {
     @State private var catDataService: CatDataService
     @State private var encounterDataService: EncounterDataService
     @State private var feedDataService: FeedDataService
+    @State private var suggestedPeopleService: SuggestedPeopleService
 
     init() {
         #if DEBUG
@@ -93,6 +94,14 @@ struct catchApp: App {
             encounterRepository: encRepo,
             getUserID: getUserID
         ))
+        _suggestedPeopleService = State(initialValue: SuggestedPeopleService(
+            profileRepository: profileRepo,
+            catRepository: catRepoAdapter,
+            currentUserIDProvider: getUserID,
+            followedIDsProvider: { [follow] in
+                Set(follow.following.map(\.followeeID))
+            }
+        ))
     }
 
     var body: some Scene {
@@ -158,6 +167,7 @@ struct catchApp: App {
                 .environment(catDataService)
                 .environment(encounterDataService)
                 .environment(feedDataService)
+                .environment(suggestedPeopleService)
                 .task {
                     await authService.refreshSessionIfNeeded()
                 }
