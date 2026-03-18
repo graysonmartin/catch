@@ -15,6 +15,7 @@ extension CatchStrings {
 
         // Liked-by list
         static let likedBy = String(localized: "liked by")
+        static let viewLikes = String(localized: "view likes")
         static let noLikesTitle = String(localized: "no likes yet")
         static let noLikesSubtitle = String(localized: "be the first")
 

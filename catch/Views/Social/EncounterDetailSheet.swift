@@ -172,35 +172,41 @@ struct EncounterDetailSheet: View {
     // MARK: - Interaction
 
     private var interactionRow: some View {
-        VStack(alignment: .leading, spacing: CatchSpacing.space8) {
-            HStack(spacing: CatchSpacing.space16) {
-                likeToggle
-                commentCountLabel
-                Spacer()
-            }
+        HStack(spacing: CatchSpacing.space16) {
+            likeSection
             viewLikesButton
+            commentCountLabel
+            Spacer()
         }
         .sheet(isPresented: $showLikedBySheet) {
             LikedByListView(encounterRecordName: encounterRecordName)
         }
     }
 
-    private var likeToggle: some View {
-        Button {
-            guard let socialService else { return }
-            Task {
-                do {
-                    try await socialService.toggleLike(encounterRecordName: encounterRecordName)
-                } catch {
-                    toastManager.showError(CatchStrings.Toast.likeFailed)
+    private var likeSection: some View {
+        HStack(spacing: CatchSpacing.space4) {
+            Button {
+                guard let socialService else { return }
+                Task {
+                    do {
+                        try await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                    } catch {
+                        toastManager.showError(CatchStrings.Toast.likeFailed)
+                    }
                 }
+            } label: {
+                Image(systemName: isLikedByCurrentUser ? "heart.fill" : "heart")
+                    .foregroundStyle(isLikedByCurrentUser ? CatchTheme.primary : CatchTheme.textSecondary)
+                    .contentTransition(.symbolEffect(.replace))
             }
-        } label: {
-            Image(systemName: isLikedByCurrentUser ? "heart.fill" : "heart")
-                .foregroundStyle(isLikedByCurrentUser ? CatchTheme.primary : CatchTheme.textSecondary)
-                .contentTransition(.symbolEffect(.replace))
+            .buttonStyle(.plain)
+
+            if totalLikeCount > 0 {
+                Text("\(totalLikeCount)")
+                    .font(.subheadline)
+                    .foregroundStyle(CatchTheme.textSecondary)
+            }
         }
-        .buttonStyle(.plain)
     }
 
     @ViewBuilder
@@ -209,9 +215,9 @@ struct EncounterDetailSheet: View {
             Button {
                 showLikedBySheet = true
             } label: {
-                Text(CatchStrings.Interaction.likedByCount(totalLikeCount))
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(CatchTheme.textPrimary)
+                Text(CatchStrings.Interaction.viewLikes)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(CatchTheme.primary)
             }
             .buttonStyle(.plain)
         }
