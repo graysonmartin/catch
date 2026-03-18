@@ -5,6 +5,7 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
     public let encounterRecordName: String
     public let userID: String
     public let displayName: String?
+    public let avatarURL: String?
     public let text: String
     public let createdAt: Date
     public let isPending: Bool
@@ -19,6 +20,7 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
         encounterRecordName: String,
         userID: String,
         displayName: String? = nil,
+        avatarURL: String? = nil,
         text: String,
         createdAt: Date,
         isPending: Bool = false
@@ -27,6 +29,7 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
         self.encounterRecordName = encounterRecordName
         self.userID = userID
         self.displayName = displayName
+        self.avatarURL = avatarURL
         self.text = text
         self.createdAt = createdAt
         self.isPending = isPending
@@ -39,6 +42,7 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
             encounterRecordName: encounterRecordName,
             userID: userID,
             displayName: displayName,
+            avatarURL: avatarURL,
             text: text,
             createdAt: createdAt,
             isPending: false

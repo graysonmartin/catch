@@ -111,19 +111,21 @@ final class SupabaseSocialModelsTests: XCTestCase {
         let id = UUID()
         let encounterID = UUID()
         let userID = UUID()
+        let avatarURL = "https://example.com/avatar.jpg"
         let comment = SupabaseCommentWithProfile(
             id: id,
             encounterID: encounterID,
             userID: userID,
             text: "obsessed",
             createdAt: Date(),
-            profiles: .init(displayName: "CatFan")
+            profiles: .init(displayName: "CatFan", avatarURL: avatarURL)
         )
 
         let domain = comment.toDomain()
 
         XCTAssertEqual(domain.text, "obsessed")
         XCTAssertEqual(domain.displayName, "CatFan")
+        XCTAssertEqual(domain.avatarURL, avatarURL)
     }
 
     func testSupabaseCommentWithProfileNilProfileReturnsNilDisplayName() {
@@ -139,6 +141,7 @@ final class SupabaseSocialModelsTests: XCTestCase {
         let domain = comment.toDomain()
 
         XCTAssertNil(domain.displayName)
+        XCTAssertNil(domain.avatarURL)
     }
 
     func testSupabaseCommentDecodesFromJSON() throws {

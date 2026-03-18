@@ -62,13 +62,16 @@ public struct SupabaseCommentWithProfile: Codable, Sendable {
 
     public struct JoinedProfile: Codable, Sendable {
         public let displayName: String
+        public let avatarURL: String?
 
-        public init(displayName: String) {
+        public init(displayName: String, avatarURL: String? = nil) {
             self.displayName = displayName
+            self.avatarURL = avatarURL
         }
 
         private enum CodingKeys: String, CodingKey {
             case displayName = "display_name"
+            case avatarURL = "avatar_url"
         }
     }
 
@@ -87,6 +90,7 @@ public struct SupabaseCommentWithProfile: Codable, Sendable {
             encounterRecordName: encounterID.uuidString.lowercased(),
             userID: userID.uuidString.lowercased(),
             displayName: profiles?.displayName,
+            avatarURL: profiles?.avatarURL,
             text: text,
             createdAt: createdAt
         )

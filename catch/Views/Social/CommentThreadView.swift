@@ -138,7 +138,7 @@ struct CommentThreadView: View {
                 }
             } else {
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: CatchSpacing.space12) {
+                    LazyVStack(alignment: .leading, spacing: CatchSpacing.space16) {
                         ForEach(comments) { comment in
                             CommentRowView(
                                 comment: comment,

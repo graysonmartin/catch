@@ -3,7 +3,7 @@ import CatchCore
 
 private enum Layout {
     static let avatarSize: CGFloat = 32
-    static let avatarFontSize: CGFloat = 14
+    static let initialFontSize: CGFloat = 14
 }
 
 struct CommentRowView: View {
@@ -104,12 +104,22 @@ struct CommentRowView: View {
     // MARK: - Avatar
 
     private var avatar: some View {
+        Group {
+            if let url = comment.avatarURL, !url.isEmpty {
+                UserAvatarView(avatarURL: url, size: Layout.avatarSize)
+            } else {
+                initialAvatar
+            }
+        }
+    }
+
+    private var initialAvatar: some View {
         Circle()
             .fill(CatchTheme.secondary)
             .frame(width: Layout.avatarSize, height: Layout.avatarSize)
             .overlay {
                 Text(String(comment.authorName.prefix(1)).uppercased())
-                    .font(.system(size: Layout.avatarFontSize, weight: .bold))
+                    .font(.system(size: Layout.initialFontSize, weight: .bold))
                     .foregroundStyle(CatchTheme.primary)
             }
     }

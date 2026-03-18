@@ -79,7 +79,7 @@ public final class DefaultSupabaseSocialRepository: SupabaseSocialRepository, @u
         return try await clientProvider.client
             .from(Self.commentsTable)
             .insert(payload)
-            .select("*, profiles!user_id(display_name)")
+            .select("*, profiles!user_id(display_name, avatar_url)")
             .single()
             .execute()
             .value
@@ -100,7 +100,7 @@ public final class DefaultSupabaseSocialRepository: SupabaseSocialRepository, @u
     ) async throws -> [SupabaseCommentWithProfile] {
         try await clientProvider.client
             .from(Self.commentsTable)
-            .select("*, profiles!user_id(display_name)")
+            .select("*, profiles!user_id(display_name, avatar_url)")
             .eq("encounter_id", value: encounterID)
             .order("created_at", ascending: false)
             .range(from: offset, to: offset + limit - 1)
