@@ -1,11 +1,6 @@
 import SwiftUI
 import CatchCore
 
-private enum Layout {
-    static let avatarPreviewSize: CGFloat = 18
-    static let avatarOverlap: CGFloat = 6
-}
-
 struct InteractionBar: View {
     let encounterRecordName: String
     @Binding var showDetail: Bool
@@ -31,16 +26,12 @@ struct InteractionBar: View {
         .sheet(isPresented: $showLikedBySheet) {
             LikedByListView(encounterRecordName: encounterRecordName)
         }
-        .task(id: likeCount) {
-            guard likeCount > 0 else { return }
-            await socialService?.loadLikerAvatarPreview(for: encounterRecordName)
-        }
     }
 
     // MARK: - Subviews
 
     private var likeSection: some View {
-        HStack(spacing: CatchSpacing.space6) {
+        HStack(spacing: CatchSpacing.space4) {
             Button {
                 guard let socialService else { return }
                 Task {
@@ -61,34 +52,11 @@ struct InteractionBar: View {
                 Button {
                     showLikedBySheet = true
                 } label: {
-                    likePreviewLabel
+                    Text("\(likeCount)")
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.textSecondary)
                 }
                 .buttonStyle(.plain)
-            }
-        }
-    }
-
-    private var likePreviewLabel: some View {
-        HStack(spacing: CatchSpacing.space4) {
-            let avatars = likerAvatars
-            if !avatars.isEmpty {
-                avatarStack(urls: avatars)
-            }
-            Text("\(likeCount)")
-                .font(.caption)
-                .foregroundStyle(CatchTheme.textSecondary)
-        }
-    }
-
-    private func avatarStack(urls: [String]) -> some View {
-        HStack(spacing: -Layout.avatarOverlap) {
-            ForEach(Array(urls.enumerated()), id: \.offset) { index, url in
-                UserAvatarView(avatarURL: url, size: Layout.avatarPreviewSize)
-                    .overlay(
-                        Circle()
-                            .stroke(CatchTheme.background, lineWidth: 1.5)
-                    )
-                    .zIndex(Double(urls.count - index))
             }
         }
     }
@@ -145,9 +113,5 @@ struct InteractionBar: View {
 
     private var commentCount: Int {
         socialService?.commentCount(for: encounterRecordName) ?? 0
-    }
-
-    private var likerAvatars: [String] {
-        socialService?.likerAvatars(for: encounterRecordName) ?? []
     }
 }

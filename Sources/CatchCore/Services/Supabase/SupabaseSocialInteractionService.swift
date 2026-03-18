@@ -8,7 +8,6 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
     public private(set) var likeCounts: [String: Int] = [:]
     public private(set) var commentCounts: [String: Int] = [:]
     public private(set) var likedEncounters: Set<String> = []
-    public private(set) var likerAvatarPreviews: [String: [String]] = [:]
 
     private let repository: any SupabaseSocialRepository
     private let clientProvider: (any SupabaseClientProviding)?
@@ -197,33 +196,6 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
 
         let likedIDs = Set(userLikes.map { $0.encounterID.uuidString.lowercased() })
         likedEncounters.formUnion(likedIDs)
-    }
-
-    private static let avatarPreviewLimit = 3
-
-    /// Fetches a small preview of liker avatar URLs for a single encounter.
-    /// Results are cached — subsequent calls for the same encounter are no-ops.
-    public func loadLikerAvatarPreview(for encounterRecordName: String) async {
-        let key = encounterRecordName.lowercased()
-        guard likerAvatarPreviews[key] == nil else { return }
-        guard (likeCounts[key] ?? 0) > 0 else { return }
-
-        do {
-            let rows = try await repository.fetchLikes(
-                encounterID: key,
-                limit: Self.avatarPreviewLimit,
-                offset: 0
-            )
-            let urls = rows.compactMap { $0.profiles?.avatarURL }
-            likerAvatarPreviews[key] = urls
-        } catch {
-            // Non-critical — preview just won't show
-        }
-    }
-
-    /// Returns cached liker avatar preview URLs for an encounter.
-    public func likerAvatars(for encounterRecordName: String) -> [String] {
-        likerAvatarPreviews[encounterRecordName.lowercased()] ?? []
     }
 
     // MARK: - Realtime
