@@ -1,5 +1,6 @@
 import SwiftUI
 import PhotosUI
+import UniformTypeIdentifiers
 import CatchCore
 
 struct PhotoPickerView: View {
@@ -11,6 +12,7 @@ struct PhotoPickerView: View {
     @State private var isShowingCamera = false
     @State private var isShowingPhotoSourceSheet = false
     @State private var isShowingLibraryPicker = false
+    @State private var draggedItemID: UUID?
 
     init(
         selectedPhotos: Binding<[PhotoItem]>,
@@ -29,11 +31,31 @@ struct PhotoPickerView: View {
             if !selectedPhotos.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: CatchSpacing.space8) {
-                        ForEach(Array(selectedPhotos.enumerated()), id: \.element.id) { index, _ in
+                        ForEach(Array(selectedPhotos.enumerated()), id: \.element.id) { index, item in
                             photoThumbnail(at: index)
+                                .opacity(draggedItemID == item.id ? 0.5 : 1.0)
+                                .onDrag {
+                                    draggedItemID = item.id
+                                    return NSItemProvider(object: item.id.uuidString as NSString)
+                                }
+                                .onDrop(
+                                    of: [UTType.text],
+                                    delegate: PhotoReorderDropDelegate(
+                                        targetItem: item,
+                                        photos: $selectedPhotos,
+                                        draggedItemID: $draggedItemID
+                                    )
+                                )
                         }
                     }
                     .padding(.horizontal)
+                }
+
+                if selectedPhotos.count > 1 && showsProfilePicBadge {
+                    Text(CatchStrings.Components.dragToReorder)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal)
                 }
             }
 
@@ -163,5 +185,34 @@ struct PhotoPickerView: View {
         .disabled(isAtMinimum)
         .opacity(isAtMinimum ? 0.3 : 1.0)
         .offset(x: CatchSpacing.space4, y: -CatchSpacing.space4)
+    }
+}
+
+// MARK: - PhotoReorderDropDelegate
+
+private struct PhotoReorderDropDelegate: DropDelegate {
+    let targetItem: PhotoItem
+    @Binding var photos: [PhotoItem]
+    @Binding var draggedItemID: UUID?
+
+    func performDrop(info: DropInfo) -> Bool {
+        draggedItemID = nil
+        return true
+    }
+
+    func dropEntered(info: DropInfo) {
+        guard let draggedID = draggedItemID,
+              draggedID != targetItem.id,
+              let fromIndex = photos.firstIndex(where: { $0.id == draggedID }),
+              let toIndex = photos.firstIndex(where: { $0.id == targetItem.id })
+        else { return }
+
+        withAnimation(.easeInOut(duration: 0.2)) {
+            photos.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
+        }
+    }
+
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        DropProposal(operation: .move)
     }
 }
