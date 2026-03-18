@@ -141,7 +141,9 @@ extension SupabaseCommentWithProfile {
         userID: UUID = UUID(),
         text: String = "nice cat",
         createdAt: Date = Date(),
-        displayName: String = "TestUser"
+        displayName: String = "TestUser",
+        username: String? = nil,
+        avatarURL: String? = nil
     ) -> SupabaseCommentWithProfile {
         SupabaseCommentWithProfile(
             id: id,
@@ -149,7 +151,7 @@ extension SupabaseCommentWithProfile {
             userID: userID,
             text: text,
             createdAt: createdAt,
-            profiles: .init(displayName: displayName)
+            profiles: .init(displayName: displayName, username: username, avatarURL: avatarURL)
         )
     }
 }

@@ -7,6 +7,7 @@ public struct LikedByUser: Sendable, Equatable, Identifiable {
     public let userID: String
     public let displayName: String
     public let username: String?
+    public let avatarURL: String?
     public let likedAt: Date
 
     public init(
@@ -14,12 +15,14 @@ public struct LikedByUser: Sendable, Equatable, Identifiable {
         userID: String,
         displayName: String,
         username: String?,
+        avatarURL: String? = nil,
         likedAt: Date
     ) {
         self.id = id
         self.userID = userID
         self.displayName = displayName
         self.username = username
+        self.avatarURL = avatarURL
         self.likedAt = likedAt
     }
 }

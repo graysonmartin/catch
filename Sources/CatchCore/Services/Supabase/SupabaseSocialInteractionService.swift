@@ -36,11 +36,12 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
 
     // MARK: - Likes
 
-    public func toggleLike(encounterRecordName: String) async throws {
+    public func toggleLike(encounterRecordName rawName: String) async throws {
         guard let userID = getCurrentUserID() else {
             throw SocialInteractionError.notSignedIn
         }
 
+        let encounterRecordName = rawName.lowercased()
         let wasLiked = likedEncounters.contains(encounterRecordName)
 
         // Optimistic update
@@ -78,11 +79,11 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
     }
 
     public func isLiked(_ encounterRecordName: String) -> Bool {
-        likedEncounters.contains(encounterRecordName)
+        likedEncounters.contains(encounterRecordName.lowercased())
     }
 
     public func likeCount(for encounterRecordName: String) -> Int {
-        likeCounts[encounterRecordName, default: 0]
+        likeCounts[encounterRecordName.lowercased(), default: 0]
     }
 
     public func fetchLikes(
@@ -108,13 +109,14 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
     // MARK: - Comments
 
     public func addComment(
-        encounterRecordName: String,
+        encounterRecordName rawName: String,
         text: String
     ) async throws -> EncounterComment {
         guard let userID = getCurrentUserID() else {
             throw SocialInteractionError.notSignedIn
         }
 
+        let encounterRecordName = rawName.lowercased()
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { throw SocialInteractionError.commentEmpty }
         guard trimmed.count <= TextInputLimits.comment else {
@@ -133,12 +135,13 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
 
     public func deleteComment(
         recordName: String,
-        encounterRecordName: String
+        encounterRecordName rawName: String
     ) async throws {
         guard getCurrentUserID() != nil else {
             throw SocialInteractionError.notSignedIn
         }
 
+        let encounterRecordName = rawName.lowercased()
         try await repository.deleteComment(id: recordName)
         commentCounts[encounterRecordName, default: 1] -= 1
     }
@@ -164,7 +167,7 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
     }
 
     public func commentCount(for encounterRecordName: String) -> Int {
-        commentCounts[encounterRecordName, default: 0]
+        commentCounts[encounterRecordName.lowercased(), default: 0]
     }
 
     // MARK: - Bulk Load

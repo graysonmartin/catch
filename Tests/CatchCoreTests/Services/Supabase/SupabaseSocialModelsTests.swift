@@ -47,12 +47,13 @@ final class SupabaseSocialModelsTests: XCTestCase {
         let id = UUID()
         let userID = UUID()
         let date = Date()
+        let avatarURL = "https://example.com/avatar.jpg"
         let like = SupabaseLikeWithProfile(
             id: id,
             encounterID: UUID(),
             userID: userID,
             createdAt: date,
-            profiles: .init(displayName: "CatPerson", username: "catperson99")
+            profiles: .init(displayName: "CatPerson", username: "catperson99", avatarURL: avatarURL)
         )
 
         let user = like.toLikedByUser()
@@ -61,6 +62,7 @@ final class SupabaseSocialModelsTests: XCTestCase {
         XCTAssertEqual(user.userID, userID.uuidString.lowercased())
         XCTAssertEqual(user.displayName, "CatPerson")
         XCTAssertEqual(user.username, "catperson99")
+        XCTAssertEqual(user.avatarURL, avatarURL)
         XCTAssertEqual(user.likedAt, date)
     }
 
@@ -78,6 +80,7 @@ final class SupabaseSocialModelsTests: XCTestCase {
 
         XCTAssertEqual(user.displayName, String(userID.uuidString.lowercased().prefix(8)))
         XCTAssertNil(user.username)
+        XCTAssertNil(user.avatarURL)
     }
 
     // MARK: - SupabaseComment
@@ -111,19 +114,22 @@ final class SupabaseSocialModelsTests: XCTestCase {
         let id = UUID()
         let encounterID = UUID()
         let userID = UUID()
+        let avatarURL = "https://example.com/avatar.jpg"
         let comment = SupabaseCommentWithProfile(
             id: id,
             encounterID: encounterID,
             userID: userID,
             text: "obsessed",
             createdAt: Date(),
-            profiles: .init(displayName: "CatFan")
+            profiles: .init(displayName: "CatFan", username: "catfan99", avatarURL: avatarURL)
         )
 
         let domain = comment.toDomain()
 
         XCTAssertEqual(domain.text, "obsessed")
         XCTAssertEqual(domain.displayName, "CatFan")
+        XCTAssertEqual(domain.username, "catfan99")
+        XCTAssertEqual(domain.avatarURL, avatarURL)
     }
 
     func testSupabaseCommentWithProfileNilProfileReturnsNilDisplayName() {
@@ -139,6 +145,8 @@ final class SupabaseSocialModelsTests: XCTestCase {
         let domain = comment.toDomain()
 
         XCTAssertNil(domain.displayName)
+        XCTAssertNil(domain.username)
+        XCTAssertNil(domain.avatarURL)
     }
 
     func testSupabaseCommentDecodesFromJSON() throws {

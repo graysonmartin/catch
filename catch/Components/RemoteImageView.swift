@@ -31,29 +31,12 @@ struct RemoteImageView<Placeholder: View>: View {
             isFailed = false
         }
         .task(id: urlString) {
-            // Already displaying an image — skip re-download on tab switch
             if uiImage != nil { return }
-            if let cached = RemoteImageCache.shared.image(for: urlString) {
-                uiImage = cached
-                return
-            }
             isFailed = false
-            guard let url = URL(string: urlString) else {
-                isFailed = true
-                return
-            }
-            do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                guard let downloaded = UIImage(data: data) else {
-                    isFailed = true
-                    return
-                }
-                RemoteImageCache.shared.setImage(downloaded, for: urlString)
+            if let downloaded = await RemoteImageCache.shared.loadImage(for: urlString) {
                 uiImage = downloaded
-            } catch {
-                if !(error is CancellationError) {
-                    isFailed = true
-                }
+            } else {
+                isFailed = true
             }
         }
     }

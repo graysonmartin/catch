@@ -15,11 +15,16 @@ extension CatchStrings {
 
         // Liked-by list
         static let likedBy = String(localized: "liked by")
+        static let viewLikes = String(localized: "view likes")
         static let noLikesTitle = String(localized: "no likes yet")
         static let noLikesSubtitle = String(localized: "be the first")
 
         static func likeCount(_ count: Int) -> String {
             count == 1 ? String(localized: "1 like") : String(localized: "\(count) likes")
+        }
+
+        static func likedByCount(_ count: Int) -> String {
+            count == 1 ? String(localized: "liked by 1 person") : String(localized: "liked by \(count) people")
         }
 
         static func commentCount(_ count: Int) -> String {

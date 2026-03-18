@@ -16,6 +16,10 @@ final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
 
     private let cache = NSCache<NSString, UIImage>()
 
+    /// Tracks in-flight downloads so concurrent requests for the same URL share one fetch.
+    private var inFlightRequests: [String: Task<UIImage?, Never>] = [:]
+    private let lock = NSLock()
+
     private init() {
         cache.countLimit = 200
         cache.totalCostLimit = 75 * 1024 * 1024 // 75 MB
@@ -44,6 +48,33 @@ final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
 
     func removeAll() {
         cache.removeAllObjects()
+    }
+
+    /// Returns a cached image or downloads it, deduplicating concurrent requests for the same URL.
+    func loadImage(for urlString: String) async -> UIImage? {
+        if let cached = image(for: urlString) { return cached }
+
+        let existingTask: Task<UIImage?, Never>? = lock.withLock {
+            inFlightRequests[urlString]
+        }
+        if let task = existingTask {
+            return await task.value
+        }
+
+        let task = Task<UIImage?, Never> {
+            guard let url = URL(string: urlString),
+                  let (data, _) = try? await URLSession.shared.data(from: url),
+                  let downloaded = UIImage(data: data) else {
+                lock.withLock { inFlightRequests[urlString] = nil }
+                return nil
+            }
+            setImage(downloaded, for: urlString)
+            lock.withLock { inFlightRequests[urlString] = nil }
+            return downloaded
+        }
+
+        lock.withLock { inFlightRequests[urlString] = task }
+        return await task.value
     }
 
     /// Prefetches images for the given URLs concurrently, caching each result.

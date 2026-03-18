@@ -174,6 +174,7 @@ struct EncounterDetailSheet: View {
     private var interactionRow: some View {
         HStack(spacing: CatchSpacing.space16) {
             likeSection
+            viewLikesButton
             commentCountLabel
             Spacer()
         }
@@ -201,15 +202,24 @@ struct EncounterDetailSheet: View {
             .buttonStyle(.plain)
 
             if totalLikeCount > 0 {
-                Button {
-                    showLikedBySheet = true
-                } label: {
-                    Text("\(totalLikeCount)")
-                        .font(.subheadline)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                }
-                .buttonStyle(.plain)
+                Text("\(totalLikeCount)")
+                    .font(.subheadline)
+                    .foregroundStyle(CatchTheme.textSecondary)
             }
+        }
+    }
+
+    @ViewBuilder
+    private var viewLikesButton: some View {
+        if totalLikeCount > 0 {
+            Button {
+                showLikedBySheet = true
+            } label: {
+                Text(CatchStrings.Interaction.viewLikes)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(CatchTheme.primary)
+            }
+            .buttonStyle(.plain)
         }
     }
 
