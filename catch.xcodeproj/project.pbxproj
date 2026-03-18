@@ -214,6 +214,7 @@
 		E8SF00000208 /* DefaultSocialFeedServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SF00000009 /* DefaultSocialFeedServiceTests.swift */; };
 		E8SI00000108 /* CatchStrings+Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000008 /* CatchStrings+Interaction.swift */; };
 		E8SI00000109 /* InteractionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI00000009 /* InteractionBar.swift */; };
+		E8MF00000101 /* MapFilterChipRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8MF00000001 /* MapFilterChipRow.swift */; };
 		E8SI0000010A /* CommentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000A /* CommentRowView.swift */; };
 		E8SI0000010B /* CommentThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000B /* CommentThreadView.swift */; };
 		E8SI00000208 /* MockSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000C /* MockSocialInteractionService.swift */; };
@@ -409,6 +410,7 @@
 		E8SF00000009 /* DefaultSocialFeedServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSocialFeedServiceTests.swift; sourceTree = "<group>"; };
 		E8SI00000008 /* CatchStrings+Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Interaction.swift"; sourceTree = "<group>"; };
 		E8SI00000009 /* InteractionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionBar.swift; sourceTree = "<group>"; };
+		E8MF00000001 /* MapFilterChipRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilterChipRow.swift; sourceTree = "<group>"; };
 		E8SI0000000A /* CommentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRowView.swift; sourceTree = "<group>"; };
 		E8SI0000000B /* CommentThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentThreadView.swift; sourceTree = "<group>"; };
 		E8SI0000000C /* MockSocialInteractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSocialInteractionService.swift; sourceTree = "<group>"; };
@@ -562,6 +564,7 @@
 				E8D800000001 /* StevenEasterEggView.swift */,
 				E8SD00000001 /* SwipeToDeleteView.swift */,
 				E8SI00000009 /* InteractionBar.swift */,
+				E8MF00000001 /* MapFilterChipRow.swift */,
 				E8CI00000001 /* CommentInputBar.swift */,
 				E8IC00000001 /* ImageCache.swift */,
 				E8EI00000001 /* EngagementIndicator.swift */,
@@ -1255,6 +1258,7 @@
 				E8CS0000010C /* CatchStrings+Diary.swift in Sources */,
 				E8SI00000108 /* CatchStrings+Interaction.swift in Sources */,
 				E8SI00000109 /* InteractionBar.swift in Sources */,
+				E8MF00000101 /* MapFilterChipRow.swift in Sources */,
 				E8CI00000101 /* CommentInputBar.swift in Sources */,
 				E8EI00000101 /* EngagementIndicator.swift in Sources */,
 				E8ER00000101 /* EncounterRowView.swift in Sources */,
