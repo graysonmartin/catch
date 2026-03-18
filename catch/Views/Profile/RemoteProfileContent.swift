@@ -494,11 +494,8 @@ struct RemoteProfileContent: View {
 
     private func loadData() async {
         guard let browseService else { return }
-        // Always re-fetch own profile — local changes (new cats, encounters)
-        // won't appear if we serve stale cached data.
-        if isOwnProfile {
-            browseService.invalidateCache(for: userID)
-        }
+        // Always re-fetch fresh data — cached profiles miss new cats/encounters.
+        browseService.invalidateCache(for: userID)
         loadError = nil
         do {
             data = try await browseService.fetchUserData(userID: userID)
