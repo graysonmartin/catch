@@ -9,6 +9,7 @@ final class DefaultSocialFeedService: SocialFeedService {
     private(set) var isLoading = false
     private(set) var isLoadingMore = false
     private(set) var hasMorePages = false
+    private(set) var hasLoaded = false
 
     private let repository: any SupabaseFeedRepository
     private let followService: any FollowService
@@ -30,6 +31,11 @@ final class DefaultSocialFeedService: SocialFeedService {
         self.pageSize = pageSize
     }
 
+    func loadIfNeeded() async {
+        guard !hasLoaded else { return }
+        await refresh()
+    }
+
     func refresh() async {
         let followedIDs = followService.following.map(\.followeeID)
         guard !followedIDs.isEmpty else {
@@ -37,6 +43,7 @@ final class DefaultSocialFeedService: SocialFeedService {
             nextCursor = nil
             earliestEncounterPerCat = [:]
             hasMorePages = false
+            hasLoaded = true
             return
         }
 
@@ -54,6 +61,7 @@ final class DefaultSocialFeedService: SocialFeedService {
             remoteEncounters = mapRows(rows)
             nextCursor = cursorFromRows(rows)
             hasMorePages = rows.count >= pageSize
+            hasLoaded = true
         } catch {
             remoteEncounters = []
             nextCursor = nil
@@ -115,8 +123,10 @@ final class DefaultSocialFeedService: SocialFeedService {
         }
     }
 
+    private static let iso8601Formatter = ISO8601DateFormatter()
+
     private func cursorFromRows(_ rows: [SupabaseFeedRow]) -> String? {
         guard let last = rows.last else { return nil }
-        return ISO8601DateFormatter().string(from: last.date)
+        return Self.iso8601Formatter.string(from: last.date)
     }
 }

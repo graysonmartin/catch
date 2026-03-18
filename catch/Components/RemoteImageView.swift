@@ -23,8 +23,7 @@ struct RemoteImageView<Placeholder: View>: View {
             } else if isFailed {
                 placeholder
             } else {
-                ProgressView()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                placeholder
             }
         }
         .onChange(of: urlString) {
@@ -32,11 +31,12 @@ struct RemoteImageView<Placeholder: View>: View {
             isFailed = false
         }
         .task(id: urlString) {
+            // Already displaying an image — skip re-download on tab switch
+            if uiImage != nil { return }
             if let cached = RemoteImageCache.shared.image(for: urlString) {
                 uiImage = cached
                 return
             }
-            uiImage = nil
             isFailed = false
             guard let url = URL(string: urlString) else {
                 isFailed = true

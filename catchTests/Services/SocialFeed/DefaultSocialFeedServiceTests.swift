@@ -25,6 +25,47 @@ final class DefaultSocialFeedServiceTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - Load If Needed
+
+    func testLoadIfNeededCallsRefreshOnFirstCall() async {
+        mockFollowService.simulateFollowing(followeeID: "user-a")
+        mockRepo.fetchFeedResult = [.fixture()]
+
+        await sut.loadIfNeeded()
+
+        XCTAssertEqual(sut.remoteEncounters.count, 1)
+        XCTAssertTrue(sut.hasLoaded)
+    }
+
+    func testLoadIfNeededSkipsRefreshWhenAlreadyLoaded() async {
+        mockFollowService.simulateFollowing(followeeID: "user-a")
+        mockRepo.fetchFeedResult = [.fixture()]
+
+        await sut.refresh()
+        let callCountAfterRefresh = mockRepo.fetchFeedCalls.count
+
+        await sut.loadIfNeeded()
+
+        // No additional fetch call should have been made
+        XCTAssertEqual(mockRepo.fetchFeedCalls.count, callCountAfterRefresh)
+    }
+
+    func testRefreshResetsAndReloadsEvenWhenAlreadyLoaded() async {
+        mockFollowService.simulateFollowing(followeeID: "user-a")
+        mockRepo.fetchFeedResult = [.fixture()]
+
+        await sut.loadIfNeeded()
+        XCTAssertTrue(sut.hasLoaded)
+        XCTAssertEqual(mockRepo.fetchFeedCalls.count, 1)
+
+        mockRepo.fetchFeedResult = [.fixture(), .fixture()]
+        await sut.refresh()
+
+        // refresh should still fetch even though hasLoaded is true
+        XCTAssertEqual(mockRepo.fetchFeedCalls.count, 2)
+        XCTAssertEqual(sut.remoteEncounters.count, 2)
+    }
+
     // MARK: - Empty State
 
     func testRefreshWithNoFollowsReturnsEmpty() async {
