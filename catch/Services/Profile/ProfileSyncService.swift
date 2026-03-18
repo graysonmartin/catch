@@ -87,12 +87,11 @@ final class ProfileSyncService {
 
     private func deleteOldAvatar(oldUrl: String, userID: String) async {
         RemoteImageCache.shared.removeImage(for: oldUrl)
-        // Extract filename from URL to delete from storage
-        if let oldFileName = oldUrl.split(separator: "/").last.map(String.init) {
-            try? await assetService.deletePhoto(
-                bucket: .profilePhotos,
-                path: "\(userID)/\(oldFileName)"
-            )
-        }
+        guard let url = URL(string: oldUrl) else { return }
+        let oldFileName = url.lastPathComponent
+        try? await assetService.deletePhoto(
+            bucket: .profilePhotos,
+            path: "\(userID)/\(oldFileName)"
+        )
     }
 }

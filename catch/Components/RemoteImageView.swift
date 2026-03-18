@@ -13,7 +13,7 @@ struct RemoteImageView<Placeholder: View>: View {
         self.useFitMode = useFitMode
         self.placeholder = placeholder()
         // Check cache synchronously to avoid flicker
-        _uiImage = State(initialValue: RemoteImageCache.shared.image(for: urlString))
+        _uiImage = State(initialValue: RemoteImageCache.shared.memoryImage(for: urlString))
     }
 
     var body: some View {
@@ -29,7 +29,7 @@ struct RemoteImageView<Placeholder: View>: View {
             }
         }
         .onChange(of: urlString) {
-            uiImage = RemoteImageCache.shared.image(for: urlString)
+            uiImage = RemoteImageCache.shared.memoryImage(for: urlString)
             isFailed = false
         }
         .task(id: urlString) {

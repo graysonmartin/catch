@@ -4,7 +4,7 @@ import CommonCrypto
 // MARK: - Protocol
 
 protocol ImageCacheService: Sendable {
-    func image(for key: String) -> UIImage?
+    func memoryImage(for key: String) -> UIImage?
     func setImage(_ image: UIImage, for key: String)
     func removeImage(for key: String)
     func removeAll()
@@ -154,7 +154,7 @@ final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
 
     /// Returns the image only if it's in the **memory** cache (synchronous, fast).
     /// Used in view init paths to avoid flicker — never blocks on disk I/O.
-    func image(for key: String) -> UIImage? {
+    func memoryImage(for key: String) -> UIImage? {
         memoryCache.object(forKey: key as NSString)
     }
 
@@ -177,20 +177,26 @@ final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
 
     /// Returns a cached image or downloads it, checking memory → disk → network.
     /// Deduplicates concurrent requests for the same URL.
-    func loadImage(for urlString: String) async -> UIImage? {
+    /// - Parameters:
+    ///   - urlString: The URL to fetch the image from.
+    ///   - cacheKey: Optional stable identifier to use as cache key instead of the raw URL.
+    ///     Use this when URLs may vary for the same logical image (query params, signed URLs).
+    func loadImage(for urlString: String, cacheKey: String? = nil) async -> UIImage? {
+        let key = cacheKey ?? urlString
+
         // L1: memory (fast, no I/O)
-        if let memoryHit = image(for: urlString) { return memoryHit }
+        if let memoryHit = memoryImage(for: key) { return memoryHit }
 
         // L2: disk (async, off main thread)
-        if let data = await diskCache.data(for: urlString),
+        if let data = await diskCache.data(for: key),
            let diskHit = UIImage(data: data) {
-            setMemoryImage(diskHit, for: urlString)
+            setMemoryImage(diskHit, for: key)
             return diskHit
         }
 
         // L3: network (deduplicated)
         let existingTask: Task<UIImage?, Never>? = lock.withLock {
-            inFlightRequests[urlString]
+            inFlightRequests[key]
         }
         if let task = existingTask {
             return await task.value
@@ -202,23 +208,25 @@ final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
                   let http = response as? HTTPURLResponse,
                   200..<300 ~= http.statusCode,
                   let downloaded = UIImage(data: data) else {
-                lock.withLock { inFlightRequests[urlString] = nil }
+                lock.withLock { inFlightRequests[key] = nil }
                 return nil
             }
-            setMemoryImage(downloaded, for: urlString)
-            diskCache.store(data, for: urlString)
-            lock.withLock { inFlightRequests[urlString] = nil }
+            setMemoryImage(downloaded, for: key)
+            diskCache.store(data, for: key)
+            lock.withLock { inFlightRequests[key] = nil }
             return downloaded
         }
 
-        lock.withLock { inFlightRequests[urlString] = task }
+        lock.withLock { inFlightRequests[key] = task }
         return await task.value
     }
 
     /// Prefetches up to `maxPrefetchCount` images with bounded concurrency.
     /// Skips URLs already in the memory cache.
     func prefetch(urls: [String]) async {
-        let uncached = Array(urls.lazy.filter { self.image(for: $0) == nil }.prefix(Self.maxPrefetchCount))
+        let uncached = Array(
+            urls.lazy.filter { self.memoryImage(for: $0) == nil }.prefix(Self.maxPrefetchCount)
+        )
         guard !uncached.isEmpty else { return }
 
         await withTaskGroup(of: Void.self) { group in
@@ -239,7 +247,7 @@ final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
     /// Returns JPEG data for the given URL, checking the cache first
     /// and falling back to a network fetch. Caches the image on a cache miss.
     func jpegData(for urlString: String, compressionQuality: CGFloat) async -> Data? {
-        if let cached = image(for: urlString) {
+        if let cached = memoryImage(for: urlString) {
             return cached.jpegData(compressionQuality: compressionQuality)
         }
         guard let downloaded = await loadImage(for: urlString) else {
