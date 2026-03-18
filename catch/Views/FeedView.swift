@@ -7,6 +7,7 @@ struct FeedView: View {
     @Environment(DefaultSocialFeedService.self) private var socialFeedService: DefaultSocialFeedService?
     @Environment(ToastManager.self) private var toastManager
     @Binding var scrollToTop: Bool
+    @State private var isShowingFindPeople = false
 
     private var feedItems: [FeedItem] {
         let local = feedDataService.encounters.map { FeedItem.local($0) }
@@ -40,6 +41,19 @@ struct FeedView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(CatchTheme.background)
             .navigationTitle(CatchStrings.Tabs.feed)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isShowingFindPeople = true
+                    } label: {
+                        Image(systemName: "person.badge.plus")
+                            .foregroundStyle(CatchTheme.primary)
+                    }
+                }
+            }
+            .sheet(isPresented: $isShowingFindPeople) {
+                FindPeopleView()
+            }
             .navigationDestination(for: RemoteProfileRoute.self) { route in
                 RemoteProfileContent(
                     userID: route.userID,

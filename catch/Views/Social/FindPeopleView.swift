@@ -20,7 +20,12 @@ struct FindPeopleView: View {
     var body: some View {
         NavigationStack {
             List {
-                if results.isEmpty && !searchText.isEmpty && !isSearching {
+                if isSearching && results.isEmpty {
+                    PawLoadingView(size: .inline, label: CatchStrings.Social.searching)
+                        .frame(maxWidth: .infinity)
+                        .listRowSeparator(.hidden)
+                        .padding(.top, CatchSpacing.space24)
+                } else if results.isEmpty && !searchText.isEmpty {
                     ContentUnavailableView(
                         CatchStrings.Social.noOneFound,
                         systemImage: "person.slash",
@@ -132,13 +137,15 @@ struct FindPeopleView: View {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !query.isEmpty else {
             results = []
+            isSearching = false
             return
         }
+
+        isSearching = true
 
         try? await Task.sleep(for: .milliseconds(500))
         guard !Task.isCancelled else { return }
 
-        isSearching = true
         defer { isSearching = false }
 
         do {
