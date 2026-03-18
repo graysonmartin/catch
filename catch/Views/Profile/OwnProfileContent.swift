@@ -31,28 +31,31 @@ struct OwnProfileContent: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: CatchSpacing.space24) {
-                if let profile {
-                    profileHeader(profile)
-                } else if isLoadingProfile {
-                    PawLoadingView(size: .inline)
-                        .padding(.top, CatchSpacing.space24)
-                } else {
-                    setupBanner
-                }
+        Group {
+            if isLoadingProfile {
+                PawLoadingView()
+            } else {
+                ScrollView {
+                    VStack(spacing: CatchSpacing.space24) {
+                        if let profile {
+                            profileHeader(profile)
+                        } else {
+                            setupBanner
+                        }
 
-                ProfileDiaryTab(
-                    encounters: encounters,
-                    searchText: searchText
-                )
+                        ProfileDiaryTab(
+                            encounters: encounters,
+                            searchText: searchText
+                        )
 
-                if let profile {
-                    authSection(profile)
-                    joinDateSection(profile)
+                        if let profile {
+                            authSection(profile)
+                            joinDateSection(profile)
+                        }
+                    }
+                    .padding(.vertical, CatchSpacing.space24)
                 }
             }
-            .padding(.vertical, CatchSpacing.space24)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(CatchTheme.background)
