@@ -22,6 +22,8 @@ extension CatchStrings {
         static let emptySubtitle = String(localized: "set up your profile so people know who you are")
         static let setUpProfile = String(localized: "set up profile")
         static let breedLog = String(localized: "breed log")
+        static let profileLoadError = String(localized: "couldn't load your profile")
+        static let retry = String(localized: "tap to retry")
 
         static func lurkingSince(_ date: Date) -> String {
             let formatted = date.formatted(.dateTime.month(.wide).year())
