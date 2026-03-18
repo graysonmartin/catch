@@ -6,7 +6,9 @@ protocol SocialFeedService: Observable, Sendable {
     var isLoading: Bool { get }
     var isLoadingMore: Bool { get }
     var hasMorePages: Bool { get }
+    var hasLoaded: Bool { get }
 
+    func loadIfNeeded() async
     func refresh() async
     func loadMore() async
 }

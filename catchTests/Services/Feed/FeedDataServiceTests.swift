@@ -23,6 +23,41 @@ final class FeedDataServiceTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - Load If Needed
+
+    func testLoadIfNeededCallsRefreshOnFirstCall() async {
+        mockRepo.fetchEncounterFeedResult = [.fixture()]
+
+        await sut.loadIfNeeded()
+
+        XCTAssertEqual(sut.encounters.count, 1)
+        XCTAssertTrue(sut.hasLoaded)
+        XCTAssertEqual(mockRepo.fetchEncounterFeedCalls.count, 1)
+    }
+
+    func testLoadIfNeededSkipsRefreshWhenAlreadyLoaded() async {
+        mockRepo.fetchEncounterFeedResult = [.fixture()]
+
+        await sut.refresh()
+        let callCount = mockRepo.fetchEncounterFeedCalls.count
+
+        await sut.loadIfNeeded()
+
+        XCTAssertEqual(mockRepo.fetchEncounterFeedCalls.count, callCount)
+    }
+
+    func testRefreshStillWorksAfterLoadIfNeeded() async {
+        mockRepo.fetchEncounterFeedResult = [.fixture()]
+        await sut.loadIfNeeded()
+        XCTAssertEqual(sut.encounters.count, 1)
+
+        mockRepo.fetchEncounterFeedResult = [.fixture(), .fixture()]
+        await sut.refresh()
+
+        XCTAssertEqual(mockRepo.fetchEncounterFeedCalls.count, 2)
+        XCTAssertEqual(sut.encounters.count, 2)
+    }
+
     // MARK: - Refresh
 
     func testRefreshFetchesFirstPage() async {

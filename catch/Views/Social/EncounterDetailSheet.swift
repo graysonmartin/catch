@@ -242,13 +242,8 @@ struct EncounterDetailSheet: View {
     @ViewBuilder
     private var commentSection: some View {
         if isLoading && comments.isEmpty {
-            HStack {
-                Spacer()
-                ProgressView()
-                    .tint(CatchTheme.primary)
-                Spacer()
-            }
-            .padding(.vertical, CatchSpacing.space24)
+            PawLoadingView(size: .inline)
+                .padding(.vertical, CatchSpacing.space24)
         } else if comments.isEmpty {
             EmptyStateView(
                 icon: "bubble.right",

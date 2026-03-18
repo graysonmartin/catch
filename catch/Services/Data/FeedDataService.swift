@@ -12,6 +12,7 @@ final class FeedDataService {
     private(set) var isLoading = false
     private(set) var isLoadingMore = false
     private(set) var hasMorePages = false
+    private(set) var hasLoaded = false
 
     private let encounterRepository: any SupabaseEncounterRepository
     private let getUserID: @Sendable () -> String?
@@ -29,6 +30,15 @@ final class FeedDataService {
         self.encounterRepository = encounterRepository
         self.getUserID = getUserID
         self.pageSize = pageSize
+    }
+
+    // MARK: - Load If Needed
+
+    /// Loads the first page only if data hasn't been fetched yet.
+    /// Use `refresh()` for forced re-fetch (e.g. pull-to-refresh).
+    func loadIfNeeded() async {
+        guard !hasLoaded else { return }
+        await refresh()
     }
 
     // MARK: - Refresh
@@ -49,6 +59,7 @@ final class FeedDataService {
             encounters = mapRows(rows)
             nextCursor = cursorFromRows(rows)
             hasMorePages = rows.count >= pageSize
+            hasLoaded = true
         } catch {
             logger.error("Failed to refresh feed: \(error.localizedDescription)")
             encounters = []

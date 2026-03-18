@@ -11,6 +11,7 @@ struct OwnProfileContent: View {
     @Binding var selectedTab: Int
     @State private var profile: UserProfile?
     @State private var isLoadingProfile = true
+    @State private var hasLoadedProfile = false
     @State private var isShowingEditSheet = false
     @State private var isShowingFindPeople = false
     @State private var isShowingCollection = false
@@ -112,6 +113,7 @@ struct OwnProfileContent: View {
             }
         }
         .task {
+            guard !hasLoadedProfile else { return }
             await loadProfile()
         }
     }
@@ -138,6 +140,7 @@ struct OwnProfileContent: View {
             // Profile load failure is non-critical
         }
         isLoadingProfile = false
+        hasLoadedProfile = true
         if let urlString = profile?.avatarUrl {
             avatarData = await RemoteImageCache.shared.jpegData(
                 for: urlString,

@@ -52,10 +52,13 @@ struct FeedView: View {
                 _ = await (local, remote)
             }
             .task {
-                async let local: Void = feedDataService.refresh()
-                async let remote: Void = socialFeedService?.refresh() ?? ()
+                let wasAlreadyLoaded = feedDataService.hasLoaded
+                async let local: Void = feedDataService.loadIfNeeded()
+                async let remote: Void = socialFeedService?.loadIfNeeded() ?? ()
                 _ = await (local, remote)
-                await loadInteractionData()
+                if !wasAlreadyLoaded {
+                    await loadInteractionData()
+                }
             }
         }
     }

@@ -23,7 +23,7 @@ struct RemoteImageView<Placeholder: View>: View {
             } else if isFailed {
                 placeholder
             } else {
-                ProgressView()
+                PawLoadingView(size: .inline)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
