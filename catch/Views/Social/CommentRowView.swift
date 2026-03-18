@@ -85,7 +85,7 @@ struct CommentRowView: View {
             NavigationLink(value: profileRoute) {
                 Text(comment.authorName)
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(CatchTheme.textPrimary)
+                    .foregroundStyle(CatchTheme.primary)
             }
             .buttonStyle(.plain)
         } else {
