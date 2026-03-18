@@ -164,13 +164,19 @@ private struct LikedByRow: View {
     }
 
     private var avatar: some View {
-        Circle()
-            .fill(CatchTheme.secondary)
-            .frame(width: Layout.avatarSize, height: Layout.avatarSize)
-            .overlay {
-                Text(String(user.displayName.prefix(1)).uppercased())
-                    .font(.system(size: Layout.avatarFontSize, weight: .bold))
-                    .foregroundStyle(CatchTheme.primary)
+        Group {
+            if let url = user.avatarURL, !url.isEmpty {
+                UserAvatarView(avatarURL: url, size: Layout.avatarSize)
+            } else {
+                Circle()
+                    .fill(CatchTheme.secondary)
+                    .frame(width: Layout.avatarSize, height: Layout.avatarSize)
+                    .overlay {
+                        Text(String(user.displayName.prefix(1)).uppercased())
+                            .font(.system(size: Layout.avatarFontSize, weight: .bold))
+                            .foregroundStyle(CatchTheme.primary)
+                    }
             }
+        }
     }
 }

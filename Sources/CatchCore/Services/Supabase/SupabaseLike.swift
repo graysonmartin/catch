@@ -56,15 +56,18 @@ public struct SupabaseLikeWithProfile: Codable, Sendable {
     public struct JoinedProfile: Codable, Sendable {
         public let displayName: String
         public let username: String?
+        public let avatarURL: String?
 
-        public init(displayName: String, username: String?) {
+        public init(displayName: String, username: String?, avatarURL: String? = nil) {
             self.displayName = displayName
             self.username = username
+            self.avatarURL = avatarURL
         }
 
         private enum CodingKeys: String, CodingKey {
             case displayName = "display_name"
             case username
+            case avatarURL = "avatar_url"
         }
     }
 
@@ -82,6 +85,7 @@ public struct SupabaseLikeWithProfile: Codable, Sendable {
             userID: userID.uuidString.lowercased(),
             displayName: profiles?.displayName ?? String(userID.uuidString.lowercased().prefix(8)),
             username: profiles?.username,
+            avatarURL: profiles?.avatarURL,
             likedAt: createdAt
         )
     }
