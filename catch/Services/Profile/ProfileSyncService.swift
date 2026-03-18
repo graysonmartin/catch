@@ -10,7 +10,6 @@ enum AvatarChange {
 @MainActor
 @Observable
 final class ProfileSyncService {
-    private static let avatarFileName = "avatar.jpg"
 
     private let profileRepository: any SupabaseProfileRepository
     private let assetService: any SupabaseAssetService
@@ -29,21 +28,23 @@ final class ProfileSyncService {
         case .noChange:
             break
         case .removed:
-            try await assetService.deletePhoto(
-                bucket: .profilePhotos,
-                path: "\(userID)/\(Self.avatarFileName)"
-            )
             if let oldUrl = avatarUrl {
-                RemoteImageCache.shared.removeImage(for: oldUrl)
+                await deleteOldAvatar(oldUrl: oldUrl, userID: userID)
             }
             avatarUrl = nil
         case .updated(let data):
-            avatarUrl = try await assetService.uploadPhoto(
+            let versionedName = "avatar_\(UUID().uuidString.prefix(8)).jpg"
+            let newUrl = try await assetService.uploadPhoto(
                 data,
                 bucket: .profilePhotos,
                 ownerID: userID,
-                fileName: Self.avatarFileName
+                fileName: versionedName
             )
+            // Delete old avatar only after new one is confirmed uploaded
+            if let oldUrl = avatarUrl {
+                await deleteOldAvatar(oldUrl: oldUrl, userID: userID)
+            }
+            avatarUrl = newUrl
         }
 
         let payload = SupabaseProfilePayload(
@@ -82,5 +83,17 @@ final class ProfileSyncService {
     func searchUsers(query: String) async throws -> [CloudUserProfile] {
         let profiles = try await profileRepository.searchUsers(query: query)
         return profiles.map { SupabaseProfileMapper.toCloudUserProfile($0) }
+    }
+
+    // MARK: - Private
+
+    private func deleteOldAvatar(oldUrl: String, userID: String) async {
+        RemoteImageCache.shared.removeImage(for: oldUrl)
+        guard let url = URL(string: oldUrl) else { return }
+        let oldFileName = url.lastPathComponent
+        try? await assetService.deletePhoto(
+            bucket: .profilePhotos,
+            path: "\(userID)/\(oldFileName)"
+        )
     }
 }

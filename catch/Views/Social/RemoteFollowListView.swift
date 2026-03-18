@@ -13,7 +13,6 @@ struct RemoteFollowListView: View {
     @State private var follows: [Follow] = []
     @State private var isLoading = true
     @State private var resolvedProfiles: [String: CloudUserProfile] = [:]
-    @State private var resolvedAvatars: [String: UIImage] = [:]
 
     var body: some View {
         Group {
@@ -33,7 +32,6 @@ struct RemoteFollowListView: View {
                         RemoteFollowRow(
                             targetUserID: targetID,
                             profile: resolvedProfiles[targetID],
-                            avatarImage: resolvedAvatars[targetID],
                             isResolved: resolvedProfiles[targetID] != nil
                         )
                     }
@@ -99,29 +97,8 @@ struct RemoteFollowListView: View {
     }
 
     private func prefetchAvatars() async {
-        await withTaskGroup(of: (String, UIImage?).self) { group in
-            for (userID, profile) in resolvedProfiles {
-                guard let urlString = profile.avatarURL, !urlString.isEmpty else { continue }
-                group.addTask {
-                    if let cached = RemoteImageCache.shared.image(for: urlString) {
-                        return (userID, cached)
-                    }
-                    guard let url = URL(string: urlString),
-                          let (data, _) = try? await URLSession.shared.data(from: url),
-                          let image = UIImage(data: data) else {
-                        return (userID, nil)
-                    }
-                    RemoteImageCache.shared.setImage(image, for: urlString)
-                    return (userID, image)
-                }
-            }
-
-            for await (userID, image) in group {
-                if let image {
-                    resolvedAvatars[userID] = image
-                }
-            }
-        }
+        let urls = resolvedProfiles.values.compactMap { $0.avatarURL }.filter { !$0.isEmpty }
+        await RemoteImageCache.shared.prefetch(urls: urls)
     }
 }
 
@@ -135,20 +112,11 @@ enum RemoteFollowTab {
 private struct RemoteFollowRow: View {
     let targetUserID: String
     let profile: CloudUserProfile?
-    let avatarImage: UIImage?
     let isResolved: Bool
 
     var body: some View {
         HStack(spacing: CatchSpacing.space12) {
-            if let image = avatarImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 36, height: 36)
-                    .clipShape(Circle())
-            } else {
-                UserAvatarView(avatarURL: profile?.avatarURL)
-            }
+            UserAvatarView(avatarURL: profile?.avatarURL)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(profile?.displayName ?? CatchStrings.Social.loadingName)

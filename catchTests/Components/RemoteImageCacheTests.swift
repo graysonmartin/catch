@@ -18,7 +18,7 @@ final class RemoteImageCacheTests: XCTestCase {
     // MARK: - Basic Operations
 
     func test_image_returnsNilForUnknownKey() {
-        XCTAssertNil(sut.image(for: "https://example.com/missing.jpg"))
+        XCTAssertNil(sut.memoryImage(for: "https://example.com/missing.jpg"))
     }
 
     func test_setImage_thenRetrieve_returnsSameImage() {
@@ -27,7 +27,7 @@ final class RemoteImageCacheTests: XCTestCase {
 
         sut.setImage(image, for: key)
 
-        let result = sut.image(for: key)
+        let result = sut.memoryImage(for: key)
         XCTAssertNotNil(result)
         XCTAssertEqual(result, image)
     }
@@ -39,8 +39,8 @@ final class RemoteImageCacheTests: XCTestCase {
         sut.setImage(image1, for: "key1")
         sut.setImage(image2, for: "key2")
 
-        XCTAssertEqual(sut.image(for: "key1"), image1)
-        XCTAssertEqual(sut.image(for: "key2"), image2)
+        XCTAssertEqual(sut.memoryImage(for: "key1"), image1)
+        XCTAssertEqual(sut.memoryImage(for: "key2"), image2)
     }
 
     func test_setImage_sameKey_overwritesPrevious() {
@@ -50,7 +50,7 @@ final class RemoteImageCacheTests: XCTestCase {
         sut.setImage(original, for: "key")
         sut.setImage(replacement, for: "key")
 
-        XCTAssertEqual(sut.image(for: "key"), replacement)
+        XCTAssertEqual(sut.memoryImage(for: "key"), replacement)
     }
 
     // MARK: - removeAll
@@ -61,8 +61,8 @@ final class RemoteImageCacheTests: XCTestCase {
 
         sut.removeAll()
 
-        XCTAssertNil(sut.image(for: "key1"))
-        XCTAssertNil(sut.image(for: "key2"))
+        XCTAssertNil(sut.memoryImage(for: "key1"))
+        XCTAssertNil(sut.memoryImage(for: "key2"))
     }
 
     func test_removeAll_allowsSubsequentInsertions() {
@@ -72,7 +72,7 @@ final class RemoteImageCacheTests: XCTestCase {
         let newImage = makeImage(width: 20, height: 20)
         sut.setImage(newImage, for: "key")
 
-        XCTAssertEqual(sut.image(for: "key"), newImage)
+        XCTAssertEqual(sut.memoryImage(for: "key"), newImage)
     }
 
     // MARK: - Protocol Conformance
