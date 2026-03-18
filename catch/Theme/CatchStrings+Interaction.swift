@@ -22,6 +22,10 @@ extension CatchStrings {
             count == 1 ? String(localized: "1 like") : String(localized: "\(count) likes")
         }
 
+        static func likedByCount(_ count: Int) -> String {
+            count == 1 ? String(localized: "liked by 1 person") : String(localized: "liked by \(count) people")
+        }
+
         static func commentCount(_ count: Int) -> String {
             count == 1 ? String(localized: "1 comment") : String(localized: "\(count) comments")
         }
