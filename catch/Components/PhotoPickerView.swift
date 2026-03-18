@@ -50,12 +50,16 @@ struct PhotoPickerView: View {
                 titleVisibility: .hidden
             ) {
                 if CameraCaptureView.isCameraAvailable {
-                    Button(CatchStrings.Components.takePhoto) {
+                    Button {
                         isShowingCamera = true
+                    } label: {
+                        Label(CatchStrings.Components.takePhoto, systemImage: "camera")
                     }
                 }
-                Button(CatchStrings.Components.chooseFromLibrary) {
+                Button {
                     isShowingLibraryPicker = true
+                } label: {
+                    Label(CatchStrings.Components.chooseFromLibrary, systemImage: "photo.on.rectangle")
                 }
             }
             .photosPicker(
