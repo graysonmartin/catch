@@ -6,12 +6,14 @@ import UIKit
 protocol ImageCacheService: Sendable {
     func memoryImage(for key: String) -> UIImage?
     func setImage(_ image: UIImage, for key: String)
+    func setImage(_ image: UIImage, data: Data, for key: String)
     func removeImage(for key: String)
     func removeAll()
 }
 
 // MARK: - Disk Cache
 
+/// All mutable state is serialized on `ioQueue`.
 private final class DiskImageCache: @unchecked Sendable {
 
     private let directory: URL
@@ -27,21 +29,11 @@ private final class DiskImageCache: @unchecked Sendable {
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     }
 
-    /// Reads data from disk asynchronously on a background queue.
+    /// Reads data from disk on a background queue. Returns nil on cache miss.
     func data(for key: String) async -> Data? {
         await withCheckedContinuation { continuation in
             ioQueue.async { [self] in
-                let path = filePath(for: key)
-                guard FileManager.default.fileExists(atPath: path.path) else {
-                    continuation.resume(returning: nil)
-                    return
-                }
-                // Touch access date for LRU eviction
-                try? FileManager.default.setAttributes(
-                    [.modificationDate: Date()],
-                    ofItemAtPath: path.path
-                )
-                let data = try? Data(contentsOf: path)
+                let data = try? Data(contentsOf: filePath(for: key))
                 continuation.resume(returning: data)
             }
         }
@@ -103,7 +95,7 @@ private final class DiskImageCache: @unchecked Sendable {
 
         guard totalSize > maxBytes else { return }
 
-        // Evict oldest-accessed first
+        // Evict oldest-written first (FIFO)
         entries.sort { $0.date < $1.date }
         for entry in entries {
             guard totalSize > maxBytes else { break }
@@ -129,6 +121,8 @@ private let cachedSession: URLSession = {
 
 // MARK: - Implementation
 
+/// Thread-safe: `memoryCache` (NSCache) is internally synchronized;
+/// `inFlightRequests` is guarded by `lock`.
 final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
     static let shared = RemoteImageCache()
 
