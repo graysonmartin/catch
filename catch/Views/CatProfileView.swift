@@ -18,6 +18,7 @@ struct CatProfileView: View {
     @State private var encounterToDelete: Encounter?
     @State private var isDeleting = false
     @State private var ownerAvatarUrl: String?
+    @State private var encounterRowHeight: CGFloat = 76
 
     init(cat: Cat) {
         _cat = State(initialValue: cat)
@@ -25,6 +26,10 @@ struct CatProfileView: View {
 
     private var sortedEncounters: [Encounter] {
         cat.encounters.sorted { $0.date > $1.date }
+    }
+
+    private var isLastEncounter: Bool {
+        cat.encounters.count == 1
     }
 
     var body: some View {
@@ -42,19 +47,30 @@ struct CatProfileView: View {
         .background(CatchTheme.background)
         .navigationTitle(cat.displayName)
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(item: $encounterToEdit) { encounter in
+        .sheet(item: $encounterToEdit, onDismiss: {
+            Task { await refreshCat() }
+        }) { encounter in
             EditEncounterView(encounter: encounter)
         }
-        .sheet(isPresented: $showingEdit) {
+        .sheet(isPresented: $showingEdit, onDismiss: {
+            Task { await refreshCat() }
+        }) {
             EditCatView(cat: cat)
         }
-        .sheet(isPresented: $showingLogEncounter) {
+        .sheet(isPresented: $showingLogEncounter, onDismiss: {
+            Task { await refreshCat() }
+        }) {
             LogEncounterView(preselectedCat: cat)
         }
-        .alert(CatchStrings.CatProfile.deleteEncounterTitle, isPresented: Binding(
-            get: { encounterToDelete != nil },
-            set: { if !$0 { encounterToDelete = nil } }
-        )) {
+        .alert(
+            isLastEncounter
+                ? CatchStrings.CatProfile.deleteLastEncounterTitle
+                : CatchStrings.CatProfile.deleteEncounterTitle,
+            isPresented: Binding(
+                get: { encounterToDelete != nil },
+                set: { if !$0 { encounterToDelete = nil } }
+            )
+        ) {
             Button(CatchStrings.Common.delete, role: .destructive) {
                 if let encounter = encounterToDelete {
                     Task { await deleteEncounter(encounter) }
@@ -65,7 +81,11 @@ struct CatProfileView: View {
                 encounterToDelete = nil
             }
         } message: {
-            Text(CatchStrings.CatProfile.deleteEncounterMessage)
+            Text(
+                isLastEncounter
+                    ? CatchStrings.CatProfile.deleteLastEncounterMessage
+                    : CatchStrings.CatProfile.deleteEncounterMessage
+            )
         }
         .alert(CatchStrings.CatProfile.deleteCatTitle(name: cat.displayName), isPresented: $showingDeleteCat) {
             Button(CatchStrings.Common.delete, role: .destructive) {
@@ -149,7 +169,7 @@ struct CatProfileView: View {
 
             HStack(spacing: CatchSpacing.space8) {
                 if let breed = cat.breed, !breed.isEmpty {
-                    Text(breed)
+                    Label(breed, systemImage: "pawprint.fill")
                         .font(.subheadline)
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
@@ -270,21 +290,50 @@ struct CatProfileView: View {
     }
 
     private var encountersList: some View {
-        VStack(spacing: CatchSpacing.space8) {
+        List {
             ForEach(sortedEncounters) { encounter in
                 EncounterRowView(encounter: encounter)
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        encounterToEdit = encounter
+                        var encounterWithCat = encounter
+                        encounterWithCat.cat = cat
+                        encounterToEdit = encounterWithCat
                     }
-                    .contextMenu {
-                        Button(CatchStrings.Common.delete, role: .destructive) {
+                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                        Button {
                             encounterToDelete = encounter
+                        } label: {
+                            Label(CatchStrings.Common.delete, systemImage: "trash")
                         }
+                        .tint(.red)
                     }
+                    .background(
+                        GeometryReader { geo in
+                            Color.clear.preference(
+                                key: RowHeightPreferenceKey.self,
+                                value: geo.size.height
+                            )
+                        }
+                    )
+            }
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets(
+                top: CatchSpacing.space4,
+                leading: CatchSpacing.space16,
+                bottom: CatchSpacing.space4,
+                trailing: CatchSpacing.space16
+            ))
+        }
+        .listStyle(.plain)
+        .scrollDisabled(true)
+        .scrollContentBackground(.hidden)
+        .frame(height: CGFloat(sortedEncounters.count) * (encounterRowHeight + CatchSpacing.space8))
+        .onPreferenceChange(RowHeightPreferenceKey.self) { height in
+            if height > 0 {
+                encounterRowHeight = height
             }
         }
-        .padding(.horizontal, CatchSpacing.space16)
     }
 
     // MARK: - Delete
@@ -347,7 +396,15 @@ struct CatProfileView: View {
             try await encounterDataService.deleteEncounter(id: encounter.id)
             try await catDataService.loadCats()
             feedDataService.removeEncounter(id: encounter.id)
-            await refreshCat()
+
+            // The DB trigger deletes the cat when its last encounter is removed.
+            // If the cat no longer exists, dismiss the profile.
+            let refreshed = try? await catDataService.fetchCat(id: cat.id)
+            if let refreshed {
+                cat = refreshed
+            } else {
+                dismiss()
+            }
         } catch {
             toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
         }
@@ -367,5 +424,15 @@ struct CatProfileView: View {
         } catch {
             toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
         }
+    }
+}
+
+// MARK: - Row Height Measurement
+
+private struct RowHeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        let next = nextValue()
+        if next > value { value = next }
     }
 }

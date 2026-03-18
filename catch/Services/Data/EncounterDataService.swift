@@ -55,15 +55,29 @@ final class EncounterDataService {
 
     // MARK: - Update
 
-    func updateEncounter(_ encounter: Encounter, photos: [Data]) async throws -> Encounter {
+    func updateEncounter(_ encounter: Encounter, photos: [PhotoItem]) async throws -> Encounter {
         guard let userID = getUserID() else {
             throw CatDataServiceError.notSignedIn
         }
 
         var updated = encounter
-        if !photos.isEmpty {
-            let newUrls = try await uploadPhotos(photos, ownerID: userID)
-            updated.photoUrls = newUrls
+
+        // Upload local photos and resolve all items to final URLs in order.
+        let localPhotos = photos.localData
+        var uploadedUrls: [String] = []
+        if !localPhotos.isEmpty {
+            uploadedUrls = try await uploadPhotos(localPhotos, ownerID: userID)
+        }
+
+        var uploadIndex = 0
+        updated.photoUrls = photos.map { item in
+            switch item.content {
+            case .remote(let url):
+                return url
+            case .local:
+                defer { uploadIndex += 1 }
+                return uploadedUrls[uploadIndex]
+            }
         }
 
         let result = try await encounterRepository.updateEncounter(

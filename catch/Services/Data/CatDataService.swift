@@ -116,17 +116,29 @@ final class CatDataService {
 
     // MARK: - Update
 
-    func updateCat(_ cat: Cat, photos: [Data]) async throws -> Cat {
+    func updateCat(_ cat: Cat, photos: [PhotoItem]) async throws -> Cat {
         guard let userID = getUserID() else {
             throw CatDataServiceError.notSignedIn
         }
 
         var updatedCat = cat
 
-        // Upload any new photos
-        if !photos.isEmpty {
-            let newUrls = try await uploadPhotos(photos, ownerID: userID)
-            updatedCat.photoUrls = newUrls
+        // Upload local photos and resolve all items to final URLs in order.
+        let localPhotos = photos.localData
+        var uploadedUrls: [String] = []
+        if !localPhotos.isEmpty {
+            uploadedUrls = try await uploadPhotos(localPhotos, ownerID: userID)
+        }
+
+        var uploadIndex = 0
+        updatedCat.photoUrls = photos.map { item in
+            switch item.content {
+            case .remote(let url):
+                return url
+            case .local:
+                defer { uploadIndex += 1 }
+                return uploadedUrls[uploadIndex]
+            }
         }
 
         let updated = try await catRepository.updateCat(

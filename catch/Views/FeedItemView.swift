@@ -191,8 +191,9 @@ struct FeedItemView: View {
         Task {
             do {
                 try await encounterDataService.deleteEncounter(id: encounter.id)
-                try await catDataService.loadCats()
                 feedDataService.removeEncounter(id: encounter.id)
+                // Reload cats — the DB trigger may have deleted the orphaned cat.
+                try await catDataService.loadCats()
             } catch {
                 toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
             }

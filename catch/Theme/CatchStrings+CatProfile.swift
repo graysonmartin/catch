@@ -10,6 +10,8 @@ extension CatchStrings {
         static let deleteThisCat = String(localized: "delete this cat")
         static let deleteEncounterTitle = String(localized: "delete encounter?")
         static let deleteEncounterMessage = String(localized: "gone forever. can't undo this.")
+        static let deleteLastEncounterTitle = String(localized: "delete this cat?")
+        static let deleteLastEncounterMessage = String(localized: "this is the last encounter. deleting it removes the cat entirely.")
         static let deleteCatMessage = String(localized: "this deletes all their encounters too. can't undo.")
         static let aboutSection = String(localized: "about")
         static let encounterTimeline = String(localized: "timeline")

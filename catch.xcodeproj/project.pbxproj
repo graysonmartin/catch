@@ -116,6 +116,7 @@
 		E8CS00000109 /* CatchStrings+Social.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000009 /* CatchStrings+Social.swift */; };
 		E8CS0000010A /* CatchStrings+BreedLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000A /* CatchStrings+BreedLog.swift */; };
 		E8CS0000010B /* CatchStrings+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000B /* CatchStrings+Components.swift */; };
+		E8SD00000101 /* SwipeToDeleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SD00000001 /* SwipeToDeleteView.swift */; };
 		E8CS0000010C /* CatchStrings+Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000C /* CatchStrings+Diary.swift */; };
 		E8CS00000302 /* CatchStrings+Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000002 /* CatchStrings+Feed.swift */; };
 		E8CS00000303 /* CatchStrings+CatProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000003 /* CatchStrings+CatProfile.swift */; };
@@ -333,6 +334,7 @@
 		E8CS0000000A /* CatchStrings+BreedLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+BreedLog.swift"; sourceTree = "<group>"; };
 		E8CS0000000B /* CatchStrings+Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Components.swift"; sourceTree = "<group>"; };
 		E8CS0000000C /* CatchStrings+Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Diary.swift"; sourceTree = "<group>"; };
+		E8SD00000001 /* SwipeToDeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToDeleteView.swift; sourceTree = "<group>"; };
 		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
 		E8DB00000001 /* DatabaseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseState.swift; sourceTree = "<group>"; };
@@ -553,6 +555,7 @@
 				E8DR00000002 /* RemoteDiaryEntryRow.swift */,
 				E8SC00000001 /* StatCardView.swift */,
 				E8D800000001 /* StevenEasterEggView.swift */,
+				E8SD00000001 /* SwipeToDeleteView.swift */,
 				E8SI00000009 /* InteractionBar.swift */,
 				E8CI00000001 /* CommentInputBar.swift */,
 				E8IC00000001 /* ImageCache.swift */,
@@ -1144,6 +1147,7 @@
 			files = (
 				E80000012B5A00000002 /* ContentView.swift in Sources */,
 				E80000012B5A00000001 /* catchApp.swift in Sources */,
+				E8SD00000101 /* SwipeToDeleteView.swift in Sources */,
 				E8DB00000101 /* DatabaseState.swift in Sources */,
 				E8BL00000101 /* BreedRarity.swift in Sources */,
 				E8BL00000102 /* BreedCatalogEntry.swift in Sources */,

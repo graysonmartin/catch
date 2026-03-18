@@ -16,7 +16,7 @@ struct AddCatView: View {
     @State private var location = Location.empty
     @State private var notes = ""
     @State private var isOwned = false
-    @State private var photos: [Data] = []
+    @State private var photos: [PhotoItem] = []
     @State private var encounterDate = Date()
     @State private var breedSuggestion: BreedPrediction?
     @State private var isDismissedSuggestion = false
@@ -29,7 +29,8 @@ struct AddCatView: View {
                 Section(CatchStrings.Common.photos) {
                     PhotoPickerView(
                         selectedPhotos: $photos,
-                        thumbnailSize: 120
+                        thumbnailSize: 120,
+                        showsProfilePicBadge: true
                     )
                     if photos.isEmpty {
                         Text(CatchStrings.Log.photoRequired)
@@ -53,7 +54,7 @@ struct AddCatView: View {
                     Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
                 }
 
-                Section {
+                Section(CatchStrings.Log.detailsSection) {
                     if !isUnnamed {
                         LimitedSingleLineFieldView(
                             CatchStrings.Common.name,
@@ -104,9 +105,10 @@ struct AddCatView: View {
                 if isUnnamed { name = "" }
             }
             .onChange(of: photos) {
-                guard breed == nil, !isDismissedSuggestion, !photos.isEmpty else { return }
+                let localPhotos = photos.localData
+                guard breed == nil, !isDismissedSuggestion, !localPhotos.isEmpty else { return }
                 Task {
-                    breedSuggestion = await breedClassifier?.classifyBest(imageDataArray: photos)
+                    breedSuggestion = await breedClassifier?.classifyBest(imageDataArray: localPhotos)
                 }
             }
             .overlay {
@@ -136,7 +138,7 @@ struct AddCatView: View {
                 location: location,
                 notes: notes,
                 isOwned: isOwned,
-                photos: photos,
+                photos: photos.localData,
                 encounterDate: encounterDate
             )
             if var encounter = cat.encounters.first {

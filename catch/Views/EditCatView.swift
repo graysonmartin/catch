@@ -15,7 +15,7 @@ struct EditCatView: View {
     @State private var location: Location
     @State private var notes: String
     @State private var isOwned: Bool
-    @State private var photos: [Data]
+    @State private var photos: [PhotoItem]
     @State private var breedSuggestion: BreedPrediction?
     @State private var isDismissedSuggestion = false
     @State private var isSaving = false
@@ -28,7 +28,7 @@ struct EditCatView: View {
         _location = State(initialValue: cat.location)
         _notes = State(initialValue: cat.notes)
         _isOwned = State(initialValue: cat.isOwned)
-        _photos = State(initialValue: [])
+        _photos = State(initialValue: cat.photoUrls.map { .remote($0) })
     }
 
     var body: some View {
@@ -37,9 +37,10 @@ struct EditCatView: View {
                 Section(CatchStrings.Common.photos) {
                     PhotoPickerView(
                         selectedPhotos: $photos,
-                        thumbnailSize: 120
+                        thumbnailSize: 120,
+                        showsProfilePicBadge: true
                     )
-                    if photos.isEmpty && cat.photoUrls.isEmpty {
+                    if photos.isEmpty {
                         Text(CatchStrings.Log.photoRequired)
                             .font(.caption)
                             .foregroundStyle(CatchTheme.primary)
@@ -61,7 +62,7 @@ struct EditCatView: View {
                     Toggle(CatchStrings.Common.iOwnThisCat, isOn: $isOwned)
                 }
 
-                Section {
+                Section(CatchStrings.Log.detailsSection) {
                     if !isUnnamed {
                         LimitedSingleLineFieldView(
                             CatchStrings.Common.name,
@@ -106,9 +107,10 @@ struct EditCatView: View {
                 if isUnnamed { name = "" }
             }
             .onChange(of: photos) {
-                guard breed == nil, !isDismissedSuggestion, !photos.isEmpty else { return }
+                let localPhotos = photos.localData
+                guard breed == nil, !isDismissedSuggestion, !localPhotos.isEmpty else { return }
                 Task {
-                    breedSuggestion = await breedClassifier?.classifyBest(imageDataArray: photos)
+                    breedSuggestion = await breedClassifier?.classifyBest(imageDataArray: localPhotos)
                 }
             }
         }
@@ -116,7 +118,7 @@ struct EditCatView: View {
 
     private var canSave: Bool {
         (isUnnamed || !name.trimmingCharacters(in: .whitespaces).isEmpty)
-            && (!photos.isEmpty || !cat.photoUrls.isEmpty)
+            && !photos.isEmpty
     }
 
     private func save() async {

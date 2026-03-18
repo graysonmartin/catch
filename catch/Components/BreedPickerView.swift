@@ -24,6 +24,8 @@ struct BreedPickerView: View {
             }
         } label: {
             HStack {
+                Image(systemName: "pawprint.fill")
+                    .foregroundStyle(breed != nil ? CatchTheme.primary : CatchTheme.textSecondary)
                 Text(CatchStrings.Common.breed)
                     .foregroundStyle(CatchTheme.textPrimary)
                 Spacer()
