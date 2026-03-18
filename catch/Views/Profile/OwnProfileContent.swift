@@ -12,6 +12,7 @@ struct OwnProfileContent: View {
     @State private var profile: UserProfile?
     @State private var isLoadingProfile = true
     @State private var hasLoadedProfile = false
+    @State private var profileLoadError: Error?
     @State private var isShowingEditSheet = false
     @State private var isShowingFindPeople = false
     @State private var isShowingCollection = false
@@ -35,9 +36,11 @@ struct OwnProfileContent: View {
             VStack(spacing: CatchSpacing.space24) {
                 if let profile {
                     profileHeader(profile)
-                } else if isLoadingProfile {
+                } else if isLoadingProfile || authService.authState == .unknown {
                     PawLoadingView(size: .inline)
                         .padding(.top, CatchSpacing.space24)
+                } else if authService.authState.isSignedIn, profileLoadError != nil {
+                    profileErrorView
                 } else {
                     setupBanner
                 }
@@ -121,10 +124,12 @@ struct OwnProfileContent: View {
     // MARK: - Data Loading
 
     private func loadProfile() async {
-        guard let userID = authService.authState.user?.id else {
+        let userID = await resolveUserID()
+        guard let userID else {
             isLoadingProfile = false
             return
         }
+        profileLoadError = nil
         do {
             if let cloudProfile = try await profileSyncService.fetchProfile(userID: userID) {
                 profile = UserProfile(
@@ -137,7 +142,7 @@ struct OwnProfileContent: View {
                 )
             }
         } catch {
-            // Profile load failure is non-critical
+            profileLoadError = error
         }
         isLoadingProfile = false
         hasLoadedProfile = true
@@ -147,6 +152,22 @@ struct OwnProfileContent: View {
                 compressionQuality: CatchTheme.jpegCompressionQuality
             )
         }
+    }
+
+    /// Waits for auth state to resolve if it's still `.unknown`, then returns the user ID.
+    private func resolveUserID() async -> String? {
+        if let userID = authService.authState.user?.id {
+            return userID
+        }
+        // Auth state is .unknown or .signedOut — wait briefly for it to resolve
+        guard authService.authState == .unknown else { return nil }
+        for _ in 0..<20 {
+            try? await Task.sleep(for: .milliseconds(100))
+            if authService.authState != .unknown {
+                return authService.authState.user?.id
+            }
+        }
+        return authService.authState.user?.id
     }
 
     // MARK: - Profile Header
@@ -280,6 +301,30 @@ struct OwnProfileContent: View {
 
     private var breedCount: Int {
         Set(cats.compactMap(\.breed)).count
+    }
+
+    // MARK: - Profile Error
+
+    private var profileErrorView: some View {
+        VStack(spacing: CatchSpacing.space10) {
+            Image(systemName: "wifi.exclamationmark")
+                .font(.title2)
+                .foregroundStyle(CatchTheme.primary)
+            Text(CatchStrings.Profile.profileLoadError)
+                .font(.subheadline)
+                .foregroundStyle(CatchTheme.textSecondary)
+            Button {
+                isLoadingProfile = true
+                profileLoadError = nil
+                hasLoadedProfile = false
+                Task { await loadProfile() }
+            } label: {
+                Text(CatchStrings.Profile.retry)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(CatchTheme.primary)
+            }
+        }
+        .padding(CatchSpacing.space24)
     }
 
     // MARK: - Setup Banner
