@@ -3,12 +3,14 @@ import SwiftUI
 struct RemoteImageView<Placeholder: View>: View {
     private let urlString: String
     private let placeholder: Placeholder
+    private let useFitMode: Bool
 
     @State private var uiImage: UIImage?
     @State private var isFailed = false
 
-    init(urlString: String, @ViewBuilder placeholder: () -> Placeholder) {
+    init(urlString: String, useFitMode: Bool = false, @ViewBuilder placeholder: () -> Placeholder) {
         self.urlString = urlString
+        self.useFitMode = useFitMode
         self.placeholder = placeholder()
         // Check cache synchronously to avoid flicker
         _uiImage = State(initialValue: RemoteImageCache.shared.image(for: urlString))
@@ -19,7 +21,7 @@ struct RemoteImageView<Placeholder: View>: View {
             if let uiImage {
                 Image(uiImage: uiImage)
                     .resizable()
-                    .scaledToFill()
+                    .aspectRatio(contentMode: useFitMode ? .fit : .fill)
             } else if isFailed {
                 placeholder
             } else {
