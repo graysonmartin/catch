@@ -5,14 +5,18 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
     public let encounterRecordName: String
     public let userID: String
     public let displayName: String?
+    public let username: String?
     public let avatarURL: String?
     public let text: String
     public let createdAt: Date
     public let isPending: Bool
 
-    /// The name shown in the UI, falling back to a truncated userID.
+    /// The name shown in the UI — prefers @username, falls back to display name, then truncated userID.
     public var authorName: String {
-        displayName ?? String(userID.prefix(8))
+        if let username {
+            return "@\(username)"
+        }
+        return displayName ?? String(userID.prefix(8))
     }
 
     public init(
@@ -20,6 +24,7 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
         encounterRecordName: String,
         userID: String,
         displayName: String? = nil,
+        username: String? = nil,
         avatarURL: String? = nil,
         text: String,
         createdAt: Date,
@@ -29,6 +34,7 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
         self.encounterRecordName = encounterRecordName
         self.userID = userID
         self.displayName = displayName
+        self.username = username
         self.avatarURL = avatarURL
         self.text = text
         self.createdAt = createdAt
@@ -42,6 +48,7 @@ public struct EncounterComment: Sendable, Equatable, Identifiable {
             encounterRecordName: encounterRecordName,
             userID: userID,
             displayName: displayName,
+            username: username,
             avatarURL: avatarURL,
             text: text,
             createdAt: createdAt,

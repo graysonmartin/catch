@@ -118,13 +118,14 @@ final class SupabaseSocialModelsTests: XCTestCase {
             userID: userID,
             text: "obsessed",
             createdAt: Date(),
-            profiles: .init(displayName: "CatFan", avatarURL: avatarURL)
+            profiles: .init(displayName: "CatFan", username: "catfan99", avatarURL: avatarURL)
         )
 
         let domain = comment.toDomain()
 
         XCTAssertEqual(domain.text, "obsessed")
         XCTAssertEqual(domain.displayName, "CatFan")
+        XCTAssertEqual(domain.username, "catfan99")
         XCTAssertEqual(domain.avatarURL, avatarURL)
     }
 
@@ -141,6 +142,7 @@ final class SupabaseSocialModelsTests: XCTestCase {
         let domain = comment.toDomain()
 
         XCTAssertNil(domain.displayName)
+        XCTAssertNil(domain.username)
         XCTAssertNil(domain.avatarURL)
     }
 

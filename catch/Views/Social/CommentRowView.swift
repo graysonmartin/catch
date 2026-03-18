@@ -2,8 +2,8 @@ import SwiftUI
 import CatchCore
 
 private enum Layout {
-    static let avatarSize: CGFloat = 32
-    static let initialFontSize: CGFloat = 14
+    static let avatarSize: CGFloat = 40
+    static let initialFontSize: CGFloat = 16
 }
 
 struct CommentRowView: View {
@@ -22,10 +22,10 @@ struct CommentRowView: View {
     }
 
     var body: some View {
-        HStack(alignment: .top, spacing: CatchSpacing.space8) {
+        HStack(alignment: .top, spacing: CatchSpacing.space10) {
             authorLink
-            VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                HStack {
+            VStack(alignment: .leading, spacing: CatchSpacing.space4) {
+                HStack(alignment: .center) {
                     authorNameLink
                     if comment.isPending {
                         Text(CatchStrings.Interaction.sending)
@@ -53,6 +53,7 @@ struct CommentRowView: View {
                     .foregroundStyle(CatchTheme.textPrimary)
             }
         }
+        .padding(.vertical, CatchSpacing.space4)
         .opacity(comment.isPending ? 0.6 : 1.0)
         .alert(CatchStrings.Interaction.deleteComment, isPresented: $showDeleteConfirm) {
             Button(CatchStrings.Common.delete, role: .destructive) {
