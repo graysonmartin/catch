@@ -70,10 +70,17 @@ private final class DiskImageCache: @unchecked Sendable {
         return directory.appendingPathComponent(hash)
     }
 
+    private static let hexChars = Array("0123456789abcdef".unicodeScalars)
+
     private func sha256(_ string: String) -> String {
-        SHA256.hash(data: Data(string.utf8))
-            .compactMap { String(format: "%02x", $0) }
-            .joined()
+        let digest = SHA256.hash(data: Data(string.utf8))
+        var hex = String()
+        hex.reserveCapacity(SHA256.byteCount * 2)
+        for byte in digest {
+            hex.unicodeScalars.append(Self.hexChars[Int(byte >> 4)])
+            hex.unicodeScalars.append(Self.hexChars[Int(byte & 0x0F)])
+        }
+        return hex
     }
 
     private func evictIfNeeded() {

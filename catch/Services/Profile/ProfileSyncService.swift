@@ -33,16 +33,18 @@ final class ProfileSyncService {
             }
             avatarUrl = nil
         case .updated(let data):
-            if let oldUrl = avatarUrl {
-                await deleteOldAvatar(oldUrl: oldUrl, userID: userID)
-            }
             let versionedName = "avatar_\(UUID().uuidString.prefix(8)).jpg"
-            avatarUrl = try await assetService.uploadPhoto(
+            let newUrl = try await assetService.uploadPhoto(
                 data,
                 bucket: .profilePhotos,
                 ownerID: userID,
                 fileName: versionedName
             )
+            // Delete old avatar only after new one is confirmed uploaded
+            if let oldUrl = avatarUrl {
+                await deleteOldAvatar(oldUrl: oldUrl, userID: userID)
+            }
+            avatarUrl = newUrl
         }
 
         let payload = SupabaseProfilePayload(
