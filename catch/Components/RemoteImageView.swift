@@ -27,6 +27,10 @@ struct RemoteImageView<Placeholder: View>: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
+        .onChange(of: urlString) {
+            uiImage = RemoteImageCache.shared.image(for: urlString)
+            isFailed = false
+        }
         .task(id: urlString) {
             if let cached = RemoteImageCache.shared.image(for: urlString) {
                 uiImage = cached

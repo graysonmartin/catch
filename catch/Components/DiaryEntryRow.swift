@@ -25,7 +25,7 @@ struct DiaryEntryRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: CatchSpacing.space12) {
-            CatPhotoView(photoData: nil, photoUrl: cat?.photoUrls.first, size: DiaryRowLayout.thumbnailSize)
+            CatPhotoView(photoData: nil, photoUrl: encounter.photoUrls.first ?? cat?.photoUrls.first, size: DiaryRowLayout.thumbnailSize)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack(spacing: CatchSpacing.space4) {

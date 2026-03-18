@@ -13,7 +13,7 @@ struct EditEncounterView: View {
     @State private var date: Date
     @State private var location: Location
     @State private var notes: String
-    @State private var photos: [Data]
+    @State private var photos: [PhotoItem]
     @State private var isSaving = false
 
     init(encounter: Encounter) {
@@ -21,7 +21,7 @@ struct EditEncounterView: View {
         _date = State(initialValue: encounter.date)
         _location = State(initialValue: encounter.location)
         _notes = State(initialValue: encounter.notes)
-        _photos = State(initialValue: [])
+        _photos = State(initialValue: encounter.photoUrls.map { .remote($0) })
     }
 
     var body: some View {

@@ -1,22 +1,27 @@
 import SwiftUI
 import PhotosUI
-import UniformTypeIdentifiers
 import CatchCore
 
 struct PhotoPickerView: View {
-    @Binding var selectedPhotos: [Data]
+    @Binding var selectedPhotos: [PhotoItem]
     private let minimumPhotos: Int
     private let thumbnailSize: CGFloat
+    private let showsProfilePicBadge: Bool
     @State private var pickerItems: [PhotosPickerItem] = []
-    @State private var draggingIndex: Int?
     @State private var isShowingCamera = false
     @State private var isShowingPhotoSourceSheet = false
     @State private var isShowingLibraryPicker = false
 
-    init(selectedPhotos: Binding<[Data]>, minimumPhotos: Int = 0, thumbnailSize: CGFloat = 100) {
+    init(
+        selectedPhotos: Binding<[PhotoItem]>,
+        minimumPhotos: Int = 0,
+        thumbnailSize: CGFloat = 100,
+        showsProfilePicBadge: Bool = false
+    ) {
         _selectedPhotos = selectedPhotos
         self.minimumPhotos = minimumPhotos
         self.thumbnailSize = thumbnailSize
+        self.showsProfilePicBadge = showsProfilePicBadge
     }
 
     var body: some View {
@@ -24,29 +29,12 @@ struct PhotoPickerView: View {
             if !selectedPhotos.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: CatchSpacing.space8) {
-                        ForEach(selectedPhotos.indices, id: \.self) { index in
+                        ForEach(Array(selectedPhotos.enumerated()), id: \.element.id) { index, _ in
                             photoThumbnail(at: index)
-                                .onDrag {
-                                    draggingIndex = index
-                                    return NSItemProvider(object: "\(index)" as NSString)
-                                }
-                                .onDrop(
-                                    of: [UTType.text],
-                                    delegate: PhotoDropDelegate(
-                                        currentIndex: index,
-                                        draggingIndex: $draggingIndex,
-                                        photos: $selectedPhotos
-                                    )
-                                )
                         }
                     }
                     .padding(.horizontal)
                 }
-
-                Text(CatchStrings.Components.dragToReorder)
-                    .font(.caption2)
-                    .foregroundStyle(CatchTheme.textSecondary)
-                    .padding(.horizontal)
             }
 
             Button {
@@ -82,7 +70,7 @@ struct PhotoPickerView: View {
                         if let data = try? await item.loadTransferable(type: Data.self),
                            let uiImage = UIImage(data: data),
                            let compressed = uiImage.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) {
-                            selectedPhotos.append(compressed)
+                            selectedPhotos.append(.local(compressed))
                         }
                     }
                     pickerItems.removeAll()
@@ -91,7 +79,7 @@ struct PhotoPickerView: View {
             .fullScreenCover(isPresented: $isShowingCamera) {
                 CameraCaptureView(
                     onCapture: { data in
-                        selectedPhotos.append(data)
+                        selectedPhotos.append(.local(data))
                         isShowingCamera = false
                     },
                     onCancel: {
@@ -106,19 +94,31 @@ struct PhotoPickerView: View {
     @ViewBuilder
     private func photoThumbnail(at index: Int) -> some View {
         let isPrimary = index == 0
+        let item = selectedPhotos[index]
 
         ZStack(alignment: .topTrailing) {
-            CatPhotoView(photoData: selectedPhotos[index], size: thumbnailSize)
+            thumbnailImage(for: item)
                 .overlay(alignment: .bottomLeading) {
-                    if isPrimary {
-                        primaryBadge
-                    } else {
-                        setAsPrimaryButton(index: index)
+                    if showsProfilePicBadge {
+                        if isPrimary {
+                            primaryBadge
+                        } else {
+                            setAsPrimaryButton(index: index)
+                        }
                     }
                 }
-                .opacity(draggingIndex == index ? 0.5 : 1.0)
 
             deleteButton(index: index)
+        }
+    }
+
+    @ViewBuilder
+    private func thumbnailImage(for item: PhotoItem) -> some View {
+        switch item.content {
+        case .local(let data):
+            CatPhotoView(photoData: data, size: thumbnailSize)
+        case .remote(let url):
+            CatPhotoView(photoData: nil, photoUrl: url, size: thumbnailSize)
         }
     }
 
@@ -163,33 +163,5 @@ struct PhotoPickerView: View {
         .disabled(isAtMinimum)
         .opacity(isAtMinimum ? 0.3 : 1.0)
         .offset(x: CatchSpacing.space4, y: -CatchSpacing.space4)
-    }
-}
-
-// MARK: - Drop Delegate
-
-private struct PhotoDropDelegate: DropDelegate {
-    let currentIndex: Int
-    @Binding var draggingIndex: Int?
-    @Binding var photos: [Data]
-
-    func performDrop(info: DropInfo) -> Bool {
-        draggingIndex = nil
-        return true
-    }
-
-    func dropEntered(info: DropInfo) {
-        guard let dragging = draggingIndex, dragging != currentIndex else { return }
-        withAnimation(.easeInOut(duration: 0.2)) {
-            photos.move(
-                fromOffsets: IndexSet(integer: dragging),
-                toOffset: currentIndex > dragging ? currentIndex + 1 : currentIndex
-            )
-            draggingIndex = currentIndex
-        }
-    }
-
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-        DropProposal(operation: .move)
     }
 }

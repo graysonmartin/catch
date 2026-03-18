@@ -119,6 +119,7 @@
 		E8CS00000109 /* CatchStrings+Social.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000009 /* CatchStrings+Social.swift */; };
 		E8CS0000010A /* CatchStrings+BreedLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000A /* CatchStrings+BreedLog.swift */; };
 		E8CS0000010B /* CatchStrings+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000B /* CatchStrings+Components.swift */; };
+		E8SD00000101 /* SwipeToDeleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SD00000001 /* SwipeToDeleteView.swift */; };
 		E8CS0000010C /* CatchStrings+Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000C /* CatchStrings+Diary.swift */; };
 		E8CS00000302 /* CatchStrings+Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000002 /* CatchStrings+Feed.swift */; };
 		E8CS00000303 /* CatchStrings+CatProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000003 /* CatchStrings+CatProfile.swift */; };
@@ -155,6 +156,7 @@
 		E8E60000003A /* RemoteFollowListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8E50000003A /* RemoteFollowListView.swift */; };
 		E8ED00000101 /* EncounterDetailData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ED00000001 /* EncounterDetailData.swift */; };
 		E8EI00000101 /* EngagementIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EI00000001 /* EngagementIndicator.swift */; };
+		E8ER00000101 /* EncounterRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ER00000001 /* EncounterRowView.swift */; };
 		E8ES00000101 /* EncounterDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ES00000001 /* EncounterDetailSheet.swift */; };
 		E8RS00000104 /* DefaultRestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000004 /* DefaultRestoreService.swift */; };
 		E8DA00000101 /* CatDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DA00000001 /* CatDataService.swift */; };
@@ -337,6 +339,7 @@
 		E8CS0000000A /* CatchStrings+BreedLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+BreedLog.swift"; sourceTree = "<group>"; };
 		E8CS0000000B /* CatchStrings+Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Components.swift"; sourceTree = "<group>"; };
 		E8CS0000000C /* CatchStrings+Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Diary.swift"; sourceTree = "<group>"; };
+		E8SD00000001 /* SwipeToDeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToDeleteView.swift; sourceTree = "<group>"; };
 		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
 		E8DB00000001 /* DatabaseState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseState.swift; sourceTree = "<group>"; };
@@ -358,6 +361,7 @@
 		E8E50000003A /* RemoteFollowListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFollowListView.swift; sourceTree = "<group>"; };
 		E8ED00000001 /* EncounterDetailData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailData.swift; sourceTree = "<group>"; };
 		E8EI00000001 /* EngagementIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EngagementIndicator.swift; sourceTree = "<group>"; };
+		E8ER00000001 /* EncounterRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterRowView.swift; sourceTree = "<group>"; };
 		E8ES00000001 /* EncounterDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailSheet.swift; sourceTree = "<group>"; };
 		E8RS00000004 /* DefaultRestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultRestoreService.swift; sourceTree = "<group>"; };
 		E8DA00000001 /* CatDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDataService.swift; sourceTree = "<group>"; };
@@ -556,10 +560,12 @@
 				E8DR00000002 /* RemoteDiaryEntryRow.swift */,
 				E8SC00000001 /* StatCardView.swift */,
 				E8D800000001 /* StevenEasterEggView.swift */,
+				E8SD00000001 /* SwipeToDeleteView.swift */,
 				E8SI00000009 /* InteractionBar.swift */,
 				E8CI00000001 /* CommentInputBar.swift */,
 				E8IC00000001 /* ImageCache.swift */,
 				E8EI00000001 /* EngagementIndicator.swift */,
+				E8ER00000001 /* EncounterRowView.swift */,
 				E8CL00000004 /* CollectionSortFilterBar.swift */,
 				E8TM00000001 /* ToastManager.swift */,
 				E8TM00000002 /* ToastView.swift */,
@@ -1148,6 +1154,7 @@
 			files = (
 				E80000012B5A00000002 /* ContentView.swift in Sources */,
 				E80000012B5A00000001 /* catchApp.swift in Sources */,
+				E8SD00000101 /* SwipeToDeleteView.swift in Sources */,
 				E8DB00000101 /* DatabaseState.swift in Sources */,
 				E8BL00000101 /* BreedRarity.swift in Sources */,
 				E8BL00000102 /* BreedCatalogEntry.swift in Sources */,
@@ -1250,6 +1257,7 @@
 				E8SI00000109 /* InteractionBar.swift in Sources */,
 				E8CI00000101 /* CommentInputBar.swift in Sources */,
 				E8EI00000101 /* EngagementIndicator.swift in Sources */,
+				E8ER00000101 /* EncounterRowView.swift in Sources */,
 				E8SI0000010A /* CommentRowView.swift in Sources */,
 				E8SI0000010B /* CommentThreadView.swift in Sources */,
 				E8ED00000101 /* EncounterDetailData.swift in Sources */,

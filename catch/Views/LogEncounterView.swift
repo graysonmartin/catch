@@ -12,7 +12,7 @@ struct LogEncounterView: View {
     @State private var date = Date()
     @State private var location = Location.empty
     @State private var notes = ""
-    @State private var photos: [Data] = []
+    @State private var photos: [PhotoItem] = []
     @State private var showingAddCat = false
     @State private var isSaving = false
 
@@ -99,6 +99,11 @@ struct LogEncounterView: View {
 
                 Section(CatchStrings.Common.photos) {
                     PhotoPickerView(selectedPhotos: $photos)
+                    if photos.isEmpty {
+                        Text(CatchStrings.Log.photoRequired)
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.primary)
+                    }
                 }
 
                 Section(CatchStrings.Common.notes) {
@@ -121,7 +126,7 @@ struct LogEncounterView: View {
                         ProgressView()
                     } else {
                         Button(CatchStrings.Common.save) { Task { await save() } }
-                            .disabled(selectedCat == nil)
+                            .disabled(selectedCat == nil || photos.isEmpty)
                             .fontWeight(.semibold)
                     }
                 }
@@ -152,7 +157,7 @@ struct LogEncounterView: View {
                 date: date,
                 location: location,
                 notes: notes,
-                photos: photos
+                photos: photos.localData
             )
             encounter.cat = cat
             feedDataService.prependEncounter(encounter)
