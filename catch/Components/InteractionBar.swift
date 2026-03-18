@@ -13,18 +13,15 @@ struct InteractionBar: View {
     @State private var showLikedBySheet = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: CatchSpacing.space6) {
-            HStack(spacing: CatchSpacing.space16) {
-                likeSection
-                commentButton
-                Spacer()
-                if let ownerRoute {
-                    ownerLink(route: ownerRoute)
-                } else if isOwnEncounter {
-                    spottedByYouLabel
-                }
+        HStack(spacing: CatchSpacing.space16) {
+            likeSection
+            commentButton
+            Spacer()
+            if let ownerRoute {
+                ownerLink(route: ownerRoute)
+            } else if isOwnEncounter {
+                spottedByYouLabel
             }
-            likedByRow
         }
         .sheet(isPresented: $showLikedBySheet) {
             LikedByListView(encounterRecordName: encounterRecordName)
@@ -50,6 +47,17 @@ struct InteractionBar: View {
                     .contentTransition(.symbolEffect(.replace))
             }
             .buttonStyle(.plain)
+
+            if likeCount > 0 {
+                Button {
+                    showLikedBySheet = true
+                } label: {
+                    Text("\(likeCount)")
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
 
@@ -91,20 +99,6 @@ struct InteractionBar: View {
             }
         }
         .buttonStyle(.plain)
-    }
-
-    @ViewBuilder
-    private var likedByRow: some View {
-        if likeCount > 0 {
-            Button {
-                showLikedBySheet = true
-            } label: {
-                Text(CatchStrings.Interaction.likedByCount(likeCount))
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(CatchTheme.textPrimary)
-            }
-            .buttonStyle(.plain)
-        }
     }
 
     // MARK: - Helpers

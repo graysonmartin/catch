@@ -172,44 +172,48 @@ struct EncounterDetailSheet: View {
     // MARK: - Interaction
 
     private var interactionRow: some View {
-        HStack(spacing: CatchSpacing.space16) {
-            likeSection
-            commentCountLabel
-            Spacer()
+        VStack(alignment: .leading, spacing: CatchSpacing.space8) {
+            HStack(spacing: CatchSpacing.space16) {
+                likeToggle
+                commentCountLabel
+                Spacer()
+            }
+            viewLikesButton
         }
         .sheet(isPresented: $showLikedBySheet) {
             LikedByListView(encounterRecordName: encounterRecordName)
         }
     }
 
-    private var likeSection: some View {
-        HStack(spacing: CatchSpacing.space4) {
-            Button {
-                guard let socialService else { return }
-                Task {
-                    do {
-                        try await socialService.toggleLike(encounterRecordName: encounterRecordName)
-                    } catch {
-                        toastManager.showError(CatchStrings.Toast.likeFailed)
-                    }
+    private var likeToggle: some View {
+        Button {
+            guard let socialService else { return }
+            Task {
+                do {
+                    try await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                } catch {
+                    toastManager.showError(CatchStrings.Toast.likeFailed)
                 }
+            }
+        } label: {
+            Image(systemName: isLikedByCurrentUser ? "heart.fill" : "heart")
+                .foregroundStyle(isLikedByCurrentUser ? CatchTheme.primary : CatchTheme.textSecondary)
+                .contentTransition(.symbolEffect(.replace))
+        }
+        .buttonStyle(.plain)
+    }
+
+    @ViewBuilder
+    private var viewLikesButton: some View {
+        if totalLikeCount > 0 {
+            Button {
+                showLikedBySheet = true
             } label: {
-                Image(systemName: isLikedByCurrentUser ? "heart.fill" : "heart")
-                    .foregroundStyle(isLikedByCurrentUser ? CatchTheme.primary : CatchTheme.textSecondary)
-                    .contentTransition(.symbolEffect(.replace))
+                Text(CatchStrings.Interaction.likedByCount(totalLikeCount))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(CatchTheme.textPrimary)
             }
             .buttonStyle(.plain)
-
-            if totalLikeCount > 0 {
-                Button {
-                    showLikedBySheet = true
-                } label: {
-                    Text("\(totalLikeCount)")
-                        .font(.subheadline)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                }
-                .buttonStyle(.plain)
-            }
         }
     }
 
