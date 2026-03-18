@@ -31,7 +31,8 @@ struct InteractionBar: View {
         .sheet(isPresented: $showLikedBySheet) {
             LikedByListView(encounterRecordName: encounterRecordName)
         }
-        .task {
+        .task(id: likeCount) {
+            guard likeCount > 0 else { return }
             await socialService?.loadLikerAvatarPreview(for: encounterRecordName)
         }
     }
