@@ -19,6 +19,7 @@ extension CatchStrings {
         static let followingTab = String(localized: "following")
 
         // FindPeopleView
+        static let searching = String(localized: "sniffing around...")
         static let noOneFound = String(localized: "no one found")
         static let tryDifferentUsername = String(localized: "try a different username")
         static let findYourPeople = String(localized: "find your people")
