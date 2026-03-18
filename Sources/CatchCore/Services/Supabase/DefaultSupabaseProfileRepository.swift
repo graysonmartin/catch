@@ -31,7 +31,7 @@ public final class DefaultSupabaseProfileRepository: SupabaseProfileRepository, 
         for chunk in ids.chunked(into: Self.batchChunkSize) {
             let profiles: [SupabaseProfile] = try await clientProvider.client
                 .from(Self.tableName)
-                .select("id, display_name")
+                .select()
                 .in("id", values: chunk)
                 .execute()
                 .value

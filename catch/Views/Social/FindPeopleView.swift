@@ -67,9 +67,7 @@ struct FindPeopleView: View {
 
     private func resultRow(for user: CloudUserProfile) -> some View {
         HStack(spacing: CatchSpacing.space12) {
-            Image(systemName: "person.crop.circle.fill")
-                .font(.title2)
-                .foregroundStyle(CatchTheme.secondary)
+            UserAvatarView(avatarURL: user.avatarURL)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(user.displayName.isEmpty ? CatchStrings.Social.anonymous : user.displayName)

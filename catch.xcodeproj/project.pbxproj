@@ -40,6 +40,9 @@
 		E8000001AA00003B /* MapAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002F /* MapAnnotations.swift */; };
 		E8EC00000101 /* Error+Cancellation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EC00000001 /* Error+Cancellation.swift */; };
 		E8IC00000101 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IC00000001 /* ImageCache.swift */; };
+		E8UA00000101 /* UserAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UA00000001 /* UserAvatarView.swift */; };
+		E8RC00000101 /* RemoteImageCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RC00000001 /* RemoteImageCacheTests.swift */; };
+		E8IC00000201 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IC00000001 /* ImageCache.swift */; };
 		E8000001AA000051 /* ImageDownsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000050 /* ImageDownsampler.swift */; };
 		E8000001AA000052 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
 		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
@@ -289,6 +292,8 @@
 		E8AP00000001 /* AvatarPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarPickerView.swift; sourceTree = "<group>"; };
 		E8CC00000001 /* CameraCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCaptureView.swift; sourceTree = "<group>"; };
 		E8RI00000001 /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
+		E8UA00000001 /* UserAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAvatarView.swift; sourceTree = "<group>"; };
+		E8RC00000001 /* RemoteImageCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageCacheTests.swift; sourceTree = "<group>"; };
 		E8B700000003 /* VisionBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionBreedClassifierService.swift; sourceTree = "<group>"; };
 		E8B700000006 /* BreedPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedPickerView.swift; sourceTree = "<group>"; };
 		E8B700000009 /* MockBreedClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockBreedClassifierService.swift; sourceTree = "<group>"; };
@@ -567,6 +572,7 @@
 				E8AP00000001 /* AvatarPickerView.swift */,
 				E8CC00000001 /* CameraCaptureView.swift */,
 				E8RI00000001 /* RemoteImageView.swift */,
+				E8UA00000001 /* UserAvatarView.swift */,
 				E8UF00000001 /* UsernameFieldView.swift */,
 			);
 			path = Components;
@@ -641,6 +647,7 @@
 			isa = PBXGroup;
 			children = (
 				E8A100000017 /* ImageDownsamplerTests.swift */,
+				E8RC00000001 /* RemoteImageCacheTests.swift */,
 				E8TM00000004 /* ToastManagerTests.swift */,
 				E8FP00000011 /* PhotoViewerStateTests.swift */,
 			);
@@ -1195,6 +1202,7 @@
 				E8000001AA000036 /* OnboardingView.swift in Sources */,
 				E8EC00000101 /* Error+Cancellation.swift in Sources */,
 				E8IC00000101 /* ImageCache.swift in Sources */,
+				E8UA00000101 /* UserAvatarView.swift in Sources */,
 				E8000001AA000051 /* ImageDownsampler.swift in Sources */,
 				E8000001AA000052 /* UserProfile.swift in Sources */,
 				E8000001AA000059 /* CatCardView.swift in Sources */,
@@ -1305,6 +1313,8 @@
 				E8A100000008 /* Encounter.swift in Sources */,
 				E8A10000000B /* ImageDownsampler.swift in Sources */,
 				E8A10000000C /* ImageDownsamplerTests.swift in Sources */,
+				E8IC00000201 /* ImageCache.swift in Sources */,
+				E8RC00000101 /* RemoteImageCacheTests.swift in Sources */,
 				E8FP00000201 /* PhotoViewerState.swift in Sources */,
 				E8FP00000211 /* PhotoViewerStateTests.swift in Sources */,
 				E8A10000000D /* UserProfile.swift in Sources */,

@@ -22,7 +22,6 @@ struct SocialView: View {
     @Environment(ToastManager.self) private var toastManager
     @State private var isLoadingMoreFollowers = false
     @State private var isLoadingMoreFollowing = false
-    @State private var isResolvingNames = false
     @State var selectedTab: SocialTab
 
     var body: some View {
@@ -214,34 +213,39 @@ struct SocialView: View {
         guard let userID = authService.authState.user?.id else { return }
         do {
             try await followService.refresh(for: userID)
-            await batchResolveDisplayNames()
+            await batchResolveProfiles()
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }
     }
 
-    private func batchResolveDisplayNames() async {
+    private func batchResolveProfiles(for userIDs: [String]? = nil) async {
         guard let browseService else { return }
-        isResolvingNames = true
-        defer { isResolvingNames = false }
 
-        var allUserIDs: [String] = []
-        allUserIDs.append(contentsOf: followService.followers.map(\.followerID))
-        allUserIDs.append(contentsOf: followService.following.map(\.followeeID))
-        allUserIDs.append(contentsOf: followService.pendingRequests.map(\.followerID))
+        let ids: [String]
+        if let userIDs {
+            ids = userIDs
+        } else {
+            var allUserIDs: [String] = []
+            allUserIDs.append(contentsOf: followService.followers.map(\.followerID))
+            allUserIDs.append(contentsOf: followService.following.map(\.followeeID))
+            allUserIDs.append(contentsOf: followService.pendingRequests.map(\.followerID))
+            ids = Array(Set(allUserIDs))
+        }
+        guard !ids.isEmpty else { return }
 
-        let uniqueIDs = Array(Set(allUserIDs))
-        guard !uniqueIDs.isEmpty else { return }
-
-        _ = await browseService.batchFetchDisplayNames(userIDs: uniqueIDs)
+        _ = await browseService.batchFetchProfiles(userIDs: ids)
     }
 
     private func loadMoreFollowers() async {
         guard !isLoadingMoreFollowers else { return }
         isLoadingMoreFollowers = true
         defer { isLoadingMoreFollowers = false }
+        let previousCount = followService.followers.count
         do {
             try await followService.loadMoreFollowers(for: currentUserID)
+            let newIDs = followService.followers.dropFirst(previousCount).map(\.followerID)
+            await batchResolveProfiles(for: Array(newIDs))
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }
@@ -251,8 +255,11 @@ struct SocialView: View {
         guard !isLoadingMoreFollowing else { return }
         isLoadingMoreFollowing = true
         defer { isLoadingMoreFollowing = false }
+        let previousCount = followService.following.count
         do {
             try await followService.loadMoreFollowing(for: currentUserID)
+            let newIDs = followService.following.dropFirst(previousCount).map(\.followeeID)
+            await batchResolveProfiles(for: Array(newIDs))
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }

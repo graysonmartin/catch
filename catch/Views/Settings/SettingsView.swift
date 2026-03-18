@@ -130,6 +130,7 @@ struct SettingsView: View {
     private func performSignOut() {
         Task {
             await authService.signOut()
+            RemoteImageCache.shared.removeAll()
             hasCompletedProfileSetup = false
             dismiss()
         }
@@ -139,6 +140,7 @@ struct SettingsView: View {
         let userID = authService.authState.user?.id
         Task {
             await authService.signOut()
+            RemoteImageCache.shared.removeAll()
             hasCompletedProfileSetup = false
             dismiss()
             if let userID {

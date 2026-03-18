@@ -13,6 +13,7 @@ struct RemoteFollowListView: View {
     @State private var follows: [Follow] = []
     @State private var isLoading = true
     @State private var resolvedProfiles: [String: CloudUserProfile] = [:]
+    @State private var resolvedAvatars: [String: UIImage] = [:]
 
     var body: some View {
         Group {
@@ -32,6 +33,7 @@ struct RemoteFollowListView: View {
                         RemoteFollowRow(
                             targetUserID: targetID,
                             profile: resolvedProfiles[targetID],
+                            avatarImage: resolvedAvatars[targetID],
                             isResolved: resolvedProfiles[targetID] != nil
                         )
                     }
@@ -79,6 +81,7 @@ struct RemoteFollowListView: View {
                 : try await followService.fetchFollowing(for: userID)
 
             await batchResolveProfiles()
+            await prefetchAvatars()
         } catch {
             toastManager.showError(CatchStrings.Toast.syncFailed)
         }
@@ -92,19 +95,30 @@ struct RemoteFollowListView: View {
         }
         guard !targetIDs.isEmpty else { return }
 
-        _ = await browseService.batchFetchDisplayNames(userIDs: targetIDs)
+        resolvedProfiles = await browseService.batchFetchProfiles(userIDs: targetIDs)
+    }
 
-        await withTaskGroup(of: (String, CloudUserProfile?).self) { group in
-            for targetID in targetIDs {
+    private func prefetchAvatars() async {
+        await withTaskGroup(of: (String, UIImage?).self) { group in
+            for (userID, profile) in resolvedProfiles {
+                guard let urlString = profile.avatarURL, !urlString.isEmpty else { continue }
                 group.addTask {
-                    let profile = await browseService.fetchProfile(userID: targetID)
-                    return (targetID, profile)
+                    if let cached = RemoteImageCache.shared.image(for: urlString) {
+                        return (userID, cached)
+                    }
+                    guard let url = URL(string: urlString),
+                          let (data, _) = try? await URLSession.shared.data(from: url),
+                          let image = UIImage(data: data) else {
+                        return (userID, nil)
+                    }
+                    RemoteImageCache.shared.setImage(image, for: urlString)
+                    return (userID, image)
                 }
             }
 
-            for await (targetID, profile) in group {
-                if let profile {
-                    resolvedProfiles[targetID] = profile
+            for await (userID, image) in group {
+                if let image {
+                    resolvedAvatars[userID] = image
                 }
             }
         }
@@ -121,26 +135,19 @@ enum RemoteFollowTab {
 private struct RemoteFollowRow: View {
     let targetUserID: String
     let profile: CloudUserProfile?
+    let avatarImage: UIImage?
     let isResolved: Bool
 
     var body: some View {
         HStack(spacing: CatchSpacing.space12) {
-            Group {
-                if let avatarUrl = profile?.avatarURL, !avatarUrl.isEmpty {
-                    RemoteImageView(urlString: avatarUrl) {
-                        Image(systemName: "person.crop.circle.fill")
-                            .resizable()
-                            .frame(width: 36, height: 36)
-                            .foregroundStyle(CatchTheme.secondary)
-                    }
+            if let image = avatarImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
                     .frame(width: 36, height: 36)
                     .clipShape(Circle())
-                } else {
-                    Image(systemName: "person.crop.circle.fill")
-                        .resizable()
-                        .frame(width: 36, height: 36)
-                        .foregroundStyle(CatchTheme.secondary)
-                }
+            } else {
+                UserAvatarView(avatarURL: profile?.avatarURL)
             }
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {

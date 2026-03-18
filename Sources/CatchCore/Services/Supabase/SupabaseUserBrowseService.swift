@@ -15,6 +15,7 @@ public final class SupabaseUserBrowseService: UserBrowseService {
 
     private var cache: [String: UserBrowseData] = [:]
     private var displayNameCache: [String: String] = [:]
+    private var profileCache: [String: CloudUserProfile] = [:]
 
     public init(
         profileRepository: any SupabaseProfileRepository,
@@ -128,9 +129,36 @@ public final class SupabaseUserBrowseService: UserBrowseService {
         return result
     }
 
+    public func batchFetchProfiles(userIDs: [String]) async -> [String: CloudUserProfile] {
+        let uncachedIDs = userIDs.filter { profileCache[$0] == nil && cache[$0] == nil }
+
+        if !uncachedIDs.isEmpty {
+            let profiles = (try? await profileRepository.fetchProfiles(ids: uncachedIDs)) ?? []
+            for supabaseProfile in profiles {
+                let key = supabaseProfile.id.uuidString.lowercased()
+                let profile = SupabaseProfileMapper.toCloudUserProfile(supabaseProfile)
+                profileCache[key] = profile
+                displayNameCache[key] = profile.displayName
+            }
+        }
+
+        var result: [String: CloudUserProfile] = [:]
+        for userID in userIDs {
+            if let cached = cache[userID], !cached.isExpired {
+                result[userID] = cached.profile
+            } else if let cached = profileCache[userID] {
+                result[userID] = cached
+            }
+        }
+        return result
+    }
+
     public func fetchProfile(userID: String) async -> CloudUserProfile? {
         if let cached = cache[userID], !cached.isExpired {
             return cached.profile
+        }
+        if let cached = profileCache[userID] {
+            return cached
         }
 
         guard let supabaseProfile = try? await profileRepository.fetchProfile(id: userID) else {
@@ -139,7 +167,15 @@ public final class SupabaseUserBrowseService: UserBrowseService {
 
         let profile = SupabaseProfileMapper.toCloudUserProfile(supabaseProfile)
         displayNameCache[userID] = profile.displayName
+        profileCache[userID] = profile
         return profile
+    }
+
+    public func cachedProfile(for userID: String) -> CloudUserProfile? {
+        if let cached = cache[userID], !cached.isExpired {
+            return cached.profile
+        }
+        return profileCache[userID]
     }
 
     public func invalidateCache(for userID: String) {
@@ -149,6 +185,7 @@ public final class SupabaseUserBrowseService: UserBrowseService {
     public func clearCache() {
         cache.removeAll()
         displayNameCache.removeAll()
+        profileCache.removeAll()
     }
 
     // MARK: - Debug Seeding
