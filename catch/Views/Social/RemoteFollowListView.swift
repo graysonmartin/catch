@@ -103,15 +103,7 @@ struct RemoteFollowListView: View {
             for (userID, profile) in resolvedProfiles {
                 guard let urlString = profile.avatarURL, !urlString.isEmpty else { continue }
                 group.addTask {
-                    if let cached = RemoteImageCache.shared.image(for: urlString) {
-                        return (userID, cached)
-                    }
-                    guard let url = URL(string: urlString),
-                          let (data, _) = try? await URLSession.shared.data(from: url),
-                          let image = UIImage(data: data) else {
-                        return (userID, nil)
-                    }
-                    RemoteImageCache.shared.setImage(image, for: urlString)
+                    let image = await RemoteImageCache.shared.loadImage(for: urlString)
                     return (userID, image)
                 }
             }
