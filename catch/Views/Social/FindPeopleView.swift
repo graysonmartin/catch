@@ -245,6 +245,8 @@ struct FindPeopleView: View {
                 if isPrivate {
                     sentFollowIDs.insert(targetID)
                 }
+            } catch is RateLimitError {
+                toastManager.showError(CatchStrings.Toast.rateLimitedFollow)
             } catch {
                 toastManager.showError(CatchStrings.Toast.followFailed)
             }

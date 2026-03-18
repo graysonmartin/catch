@@ -13,6 +13,7 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
     private let clientProvider: (any SupabaseClientProviding)?
     private let getCurrentUserID: () -> String?
     private let pageSize: Int
+    private let rateLimiter: any RateLimiting
 
     private var realtimeLikesChannel: RealtimeChannelV2?
     private var realtimeCommentsChannel: RealtimeChannelV2?
@@ -26,12 +27,14 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
         repository: any SupabaseSocialRepository,
         clientProvider: (any SupabaseClientProviding)? = nil,
         getCurrentUserID: @escaping @Sendable () -> String?,
-        pageSize: Int = PaginationConstants.defaultPageSize
+        pageSize: Int = PaginationConstants.defaultPageSize,
+        rateLimiter: any RateLimiting = RateLimiter()
     ) {
         self.repository = repository
         self.clientProvider = clientProvider
         self.getCurrentUserID = getCurrentUserID
         self.pageSize = pageSize
+        self.rateLimiter = rateLimiter
     }
 
     // MARK: - Likes
@@ -40,6 +43,8 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
         guard let userID = getCurrentUserID() else {
             throw SocialInteractionError.notSignedIn
         }
+
+        try rateLimiter.checkAllowed(.like)
 
         let encounterRecordName = rawName.lowercased()
         let wasLiked = likedEncounters.contains(encounterRecordName)
@@ -65,6 +70,7 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
                     userID: userID
                 )
             }
+            rateLimiter.recordAction(.like)
         } catch {
             // Roll back optimistic update
             if wasLiked {
@@ -116,6 +122,8 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
             throw SocialInteractionError.notSignedIn
         }
 
+        try rateLimiter.checkAllowed(.comment)
+
         let encounterRecordName = rawName.lowercased()
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { throw SocialInteractionError.commentEmpty }
@@ -129,6 +137,7 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
             text: trimmed
         )
 
+        rateLimiter.recordAction(.comment)
         commentCounts[encounterRecordName, default: 0] += 1
         return row.toDomain()
     }

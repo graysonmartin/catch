@@ -77,6 +77,8 @@ struct CommentThreadView: View {
             Task {
                 do {
                     try await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                } catch is RateLimitError {
+                    toastManager.showError(CatchStrings.Toast.rateLimitedLike)
                 } catch {
                     toastManager.showError(CatchStrings.Toast.likeFailed)
                 }
@@ -233,6 +235,12 @@ struct CommentThreadView: View {
             if let index = comments.firstIndex(where: { $0.id == pendingComment.id }) {
                 comments[index] = confirmed
             }
+        } catch is RateLimitError {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                comments.removeAll { $0.id == pendingComment.id }
+            }
+            newCommentText = text
+            toastManager.showError(CatchStrings.Toast.rateLimitedComment)
         } catch {
             withAnimation(.easeInOut(duration: 0.2)) {
                 comments.removeAll { $0.id == pendingComment.id }
