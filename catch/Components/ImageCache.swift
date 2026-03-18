@@ -1,5 +1,5 @@
+import CryptoKit
 import UIKit
-import CommonCrypto
 
 // MARK: - Protocol
 
@@ -17,6 +17,8 @@ private final class DiskImageCache: @unchecked Sendable {
     private let directory: URL
     private let maxBytes: Int
     private let ioQueue = DispatchQueue(label: "com.catch.diskImageCache", qos: .utility)
+    private var writesSinceEviction = 0
+    private let evictionInterval = 20
 
     init(subdirectory: String = "RemoteImages", maxBytes: Int = 150 * 1024 * 1024) {
         let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
@@ -49,7 +51,11 @@ private final class DiskImageCache: @unchecked Sendable {
         let path = filePath(for: key)
         ioQueue.async { [self] in
             try? data.write(to: path, options: .atomic)
-            evictIfNeeded()
+            writesSinceEviction += 1
+            if writesSinceEviction >= evictionInterval {
+                writesSinceEviction = 0
+                evictIfNeeded()
+            }
         }
     }
 
@@ -73,12 +79,9 @@ private final class DiskImageCache: @unchecked Sendable {
     }
 
     private func sha256(_ string: String) -> String {
-        let data = Data(string.utf8)
-        var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-        data.withUnsafeBytes { buffer in
-            _ = CC_SHA256(buffer.baseAddress, CC_LONG(buffer.count), &digest)
-        }
-        return digest.map { String(format: "%02x", $0) }.joined()
+        SHA256.hash(data: Data(string.utf8))
+            .compactMap { String(format: "%02x", $0) }
+            .joined()
     }
 
     private func evictIfNeeded() {
@@ -114,11 +117,11 @@ private final class DiskImageCache: @unchecked Sendable {
 
 private let cachedSession: URLSession = {
     let config = URLSessionConfiguration.default
-    // 200 MB disk / 50 MB memory HTTP cache — supplements our own disk cache
-    // for honoring server cache-control headers
+    // Small HTTP cache for Cache-Control header support — our DiskImageCache
+    // is the primary persistence layer, so keep URLCache lean to avoid double-caching
     config.urlCache = URLCache(
         memoryCapacity: 50 * 1024 * 1024,
-        diskCapacity: 200 * 1024 * 1024
+        diskCapacity: 50 * 1024 * 1024
     )
     config.requestCachePolicy = .useProtocolCachePolicy
     return URLSession(configuration: config)
@@ -170,6 +173,12 @@ final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
         }
     }
 
+    /// Stores an image with its original data — avoids re-encoding quality loss.
+    func setImage(_ image: UIImage, data: Data, for key: String) {
+        setMemoryImage(image, for: key)
+        diskCache.store(data, for: key)
+    }
+
     func removeAll() {
         memoryCache.removeAllObjects()
         diskCache.removeAll()
@@ -194,35 +203,31 @@ final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
             return diskHit
         }
 
-        // L3: network (deduplicated)
-        let existingTask: Task<UIImage?, Never>? = lock.withLock {
-            inFlightRequests[key]
-        }
-        if let task = existingTask {
-            return await task.value
-        }
-
-        let task = Task<UIImage?, Never> {
-            guard let url = URL(string: urlString),
-                  let (data, response) = try? await cachedSession.data(from: url),
-                  let http = response as? HTTPURLResponse,
-                  200..<300 ~= http.statusCode,
-                  let downloaded = UIImage(data: data) else {
-                lock.withLock { inFlightRequests[key] = nil }
-                return nil
+        // L3: network — atomic check-and-set to prevent duplicate tasks
+        let task: Task<UIImage?, Never> = lock.withLock {
+            if let existing = inFlightRequests[key] { return existing }
+            let newTask = Task<UIImage?, Never> {
+                guard let url = URL(string: urlString),
+                      let (data, response) = try? await cachedSession.data(from: url),
+                      let http = response as? HTTPURLResponse,
+                      200..<300 ~= http.statusCode,
+                      let downloaded = UIImage(data: data) else {
+                    self.lock.withLock { self.inFlightRequests[key] = nil }
+                    return nil
+                }
+                self.setMemoryImage(downloaded, for: key)
+                self.diskCache.store(data, for: key)
+                self.lock.withLock { self.inFlightRequests[key] = nil }
+                return downloaded
             }
-            setMemoryImage(downloaded, for: key)
-            diskCache.store(data, for: key)
-            lock.withLock { inFlightRequests[key] = nil }
-            return downloaded
+            inFlightRequests[key] = newTask
+            return newTask
         }
-
-        lock.withLock { inFlightRequests[key] = task }
         return await task.value
     }
 
     /// Prefetches up to `maxPrefetchCount` images with bounded concurrency.
-    /// Skips URLs already in the memory cache.
+    /// Skips URLs already in memory — disk-only hits will be promoted to memory.
     func prefetch(urls: [String]) async {
         let uncached = Array(
             urls.lazy.filter { self.memoryImage(for: $0) == nil }.prefix(Self.maxPrefetchCount)

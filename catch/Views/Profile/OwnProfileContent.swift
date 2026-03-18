@@ -109,7 +109,7 @@ struct OwnProfileContent: View {
                 if let newUrl = updatedProfile.avatarUrl,
                    let data = updatedAvatarData,
                    let image = UIImage(data: data) {
-                    RemoteImageCache.shared.setImage(image, for: newUrl)
+                    RemoteImageCache.shared.setImage(image, data: data, for: newUrl)
                 }
                 profile = updatedProfile
                 avatarData = updatedAvatarData
