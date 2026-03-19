@@ -42,8 +42,12 @@ struct CameraCaptureView: UIViewControllerRepresentable {
             _ picker: UIImagePickerController,
             didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
         ) {
-            guard let image = info[.originalImage] as? UIImage,
-                  let compressed = image.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) else {
+            guard let image = info[.originalImage] as? UIImage else {
+                onCancel()
+                return
+            }
+            let resized = ImageResizer.resize(image, maxDimension: ImageResizer.photoMaxDimension)
+            guard let compressed = resized.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) else {
                 onCancel()
                 return
             }

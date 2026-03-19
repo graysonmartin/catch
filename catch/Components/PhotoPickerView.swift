@@ -72,9 +72,11 @@ struct PhotoPickerView: View {
                 Task {
                     for item in newItems {
                         if let data = try? await item.loadTransferable(type: Data.self),
-                           let uiImage = UIImage(data: data),
-                           let compressed = uiImage.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) {
-                            selectedPhotos.append(.local(compressed))
+                           let uiImage = UIImage(data: data) {
+                            let resized = ImageResizer.resize(uiImage, maxDimension: ImageResizer.photoMaxDimension)
+                            if let compressed = resized.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) {
+                                selectedPhotos.append(.local(compressed))
+                            }
                         }
                     }
                     pickerItems.removeAll()

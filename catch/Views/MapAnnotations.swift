@@ -102,8 +102,11 @@ class CatAnnotationView: MKAnnotationView {
 
         let borderColor = pin.isRemote ? CatchTheme.remotePinUIColor : CatchTheme.primaryUIColor
 
+        // Use thumbnail URL for 40px map pins
+        let thumbUrl = pin.photoUrl.map { ThumbnailURL.thumbnailOrOriginal(for: $0) }
+
         // Check cache first — instant, no flicker
-        if let url = pin.photoUrl, let cached = RemoteImageCache.shared.memoryImage(for: url) {
+        if let url = thumbUrl, let cached = RemoteImageCache.shared.memoryImage(for: url) {
             renderPhoto(cached, borderColor: borderColor)
             return
         }
@@ -112,7 +115,7 @@ class CatAnnotationView: MKAnnotationView {
         renderPlaceholder(borderColor: borderColor)
 
         // Load photo async
-        guard let url = pin.photoUrl else { return }
+        guard let url = thumbUrl else { return }
         imageLoadTask = Task { [weak self] in
             guard let loaded = await RemoteImageCache.shared.loadImage(for: url) else { return }
             guard !Task.isCancelled else { return }

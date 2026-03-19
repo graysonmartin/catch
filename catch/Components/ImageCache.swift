@@ -216,6 +216,9 @@ final class RemoteImageCache: ImageCacheService, @unchecked Sendable {
                     self.lock.withLock { self.inFlightRequests[key] = nil }
                     return nil
                 }
+                #if DEBUG
+                print("CACHE MISS (network): \(data.count / 1024)KB — \(urlString.suffix(60))")
+                #endif
                 self.setMemoryImage(downloaded, for: key)
                 self.diskCache.store(data, for: key)
                 self.lock.withLock { self.inFlightRequests[key] = nil }
