@@ -494,8 +494,6 @@ struct RemoteProfileContent: View {
 
     private func loadData() async {
         guard let browseService else { return }
-        // Always re-fetch fresh data — cached profiles miss new cats/encounters.
-        browseService.invalidateCache(for: userID)
         loadError = nil
         do {
             data = try await browseService.fetchUserData(userID: userID)

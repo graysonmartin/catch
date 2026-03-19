@@ -1,9 +1,19 @@
 import SwiftUI
+import CatchCore
 
 struct CatPhotoView: View {
     let photoData: Data?
     var photoUrl: String?
     var size: CGFloat = 80
+    /// When true, loads the thumbnail variant URL for bandwidth savings.
+    /// Set to false when displaying in contexts that need full resolution.
+    var useThumbnail: Bool = true
+
+    /// Resolves to thumbnail URL when appropriate, otherwise the original.
+    private var resolvedUrl: String? {
+        guard let photoUrl else { return nil }
+        return useThumbnail ? ThumbnailURL.thumbnailOrOriginal(for: photoUrl) : photoUrl
+    }
 
     var body: some View {
         Group {
@@ -12,8 +22,8 @@ struct CatPhotoView: View {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()
-            } else if let photoUrl {
-                RemoteImageView(urlString: photoUrl) { placeholder }
+            } else if let url = resolvedUrl {
+                RemoteImageView(urlString: url) { placeholder }
             } else {
                 placeholder
             }

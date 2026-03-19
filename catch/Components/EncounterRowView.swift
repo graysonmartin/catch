@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct EncounterRowView: View {
     let encounter: Encounter
@@ -46,7 +47,7 @@ struct EncounterRowView: View {
     @ViewBuilder
     private var encounterThumbnail: some View {
         if let firstUrl = encounter.photoUrls.first {
-            RemoteImageView(urlString: firstUrl) {
+            RemoteImageView(urlString: ThumbnailURL.thumbnailOrOriginal(for: firstUrl)) {
                 thumbnailPlaceholder
             }
             .frame(width: thumbnailSize, height: thumbnailSize)

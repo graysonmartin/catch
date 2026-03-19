@@ -69,8 +69,11 @@ struct AvatarPickerView: View {
         guard let item else { return }
         Task {
             guard let data = try? await item.loadTransferable(type: Data.self),
-                  let uiImage = UIImage(data: data),
-                  let jpeg = uiImage.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) else {
+                  let uiImage = UIImage(data: data) else {
+                return
+            }
+            let resized = ImageResizer.resize(uiImage, maxDimension: ImageResizer.avatarMaxDimension)
+            guard let jpeg = resized.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) else {
                 return
             }
             avatarData = jpeg

@@ -43,6 +43,10 @@
 		E8UA00000101 /* UserAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UA00000001 /* UserAvatarView.swift */; };
 		E8RC00000101 /* RemoteImageCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RC00000001 /* RemoteImageCacheTests.swift */; };
 		E8IC00000201 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IC00000001 /* ImageCache.swift */; };
+		E8IR00000101 /* ImageResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IR00000001 /* ImageResizer.swift */; };
+		E8IR00000102 /* ImageResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IR00000001 /* ImageResizer.swift */; };
+		E8IR00000202 /* ThumbnailGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IR00000002 /* ThumbnailGeneratorTests.swift */; };
+		E8IR00000203 /* ImageResizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IR00000003 /* ImageResizerTests.swift */; };
 		E8000001AA000051 /* ImageDownsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000050 /* ImageDownsampler.swift */; };
 		E8000001AA000052 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
 		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
@@ -288,6 +292,9 @@
 		E8EC00000001 /* Error+Cancellation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Cancellation.swift"; sourceTree = "<group>"; };
 		E8IC00000001 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		E8000001AA000050 /* ImageDownsampler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownsampler.swift; sourceTree = "<group>"; };
+		E8IR00000001 /* ImageResizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizer.swift; sourceTree = "<group>"; };
+		E8IR00000002 /* ThumbnailGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailGeneratorTests.swift; sourceTree = "<group>"; };
+		E8IR00000003 /* ImageResizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizerTests.swift; sourceTree = "<group>"; };
 		E8000001AA000060 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		E8000001AA000062 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		E8000001AA000065 /* CatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatCardView.swift; sourceTree = "<group>"; };
@@ -580,6 +587,7 @@
 				E8LS00000010 /* LocationFetcher.swift */,
 				E8000001AA000029 /* CatPickerView.swift */,
 				E8000001AA000050 /* ImageDownsampler.swift */,
+				E8IR00000001 /* ImageResizer.swift */,
 				E8PF00000005 /* ProfileHeaderView.swift */,
 				E8DR00000002 /* RemoteDiaryEntryRow.swift */,
 				E8SC00000001 /* StatCardView.swift */,
@@ -693,7 +701,9 @@
 			isa = PBXGroup;
 			children = (
 				E8A100000017 /* ImageDownsamplerTests.swift */,
+				E8IR00000003 /* ImageResizerTests.swift */,
 				E8RC00000001 /* RemoteImageCacheTests.swift */,
+				E8IR00000002 /* ThumbnailGeneratorTests.swift */,
 				E8TM00000004 /* ToastManagerTests.swift */,
 				E8FP00000011 /* PhotoViewerStateTests.swift */,
 			);
@@ -1253,6 +1263,7 @@
 				E8IC00000101 /* ImageCache.swift in Sources */,
 				E8UA00000101 /* UserAvatarView.swift in Sources */,
 				E8000001AA000051 /* ImageDownsampler.swift in Sources */,
+				E8IR00000101 /* ImageResizer.swift in Sources */,
 				E8000001AA000052 /* UserProfile.swift in Sources */,
 				E8000001AA000059 /* CatCardView.swift in Sources */,
 				E8000001AA000054 /* EditProfileView.swift in Sources */,
@@ -1374,7 +1385,10 @@
 				E8A100000008 /* Encounter.swift in Sources */,
 				E8A10000000B /* ImageDownsampler.swift in Sources */,
 				E8A10000000C /* ImageDownsamplerTests.swift in Sources */,
+				E8IR00000102 /* ImageResizer.swift in Sources */,
+				E8IR00000203 /* ImageResizerTests.swift in Sources */,
 				E8IC00000201 /* ImageCache.swift in Sources */,
+				E8IR00000202 /* ThumbnailGeneratorTests.swift in Sources */,
 				E8RC00000101 /* RemoteImageCacheTests.swift in Sources */,
 				E8FP00000201 /* PhotoViewerState.swift in Sources */,
 				E8FP00000211 /* PhotoViewerStateTests.swift in Sources */,

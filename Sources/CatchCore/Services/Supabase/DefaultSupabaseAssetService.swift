@@ -49,8 +49,11 @@ public final class DefaultSupabaseAssetService: SupabaseAssetService, @unchecked
         return try await withThrowingTaskGroup(of: (Int, String).self, returning: [String].self) { group in
             for (index, photoData) in photos.enumerated() {
                 group.addTask {
-                    let fileName = "\(UUID().uuidString)_\(index).jpg"
+                    let baseName = "\(UUID().uuidString)_\(index)"
+                    let fileName = "\(baseName).jpg"
                     let path = "\(ownerID)/\(fileName)"
+
+                    // Upload full image
                     try await client.storage
                         .from(bucket.rawValue)
                         .upload(
@@ -58,6 +61,24 @@ public final class DefaultSupabaseAssetService: SupabaseAssetService, @unchecked
                             file: photoData,
                             options: FileOptions(contentType: contentType, upsert: true)
                         )
+
+                    // Upload thumbnail (best-effort — don't fail the whole upload if thumb fails)
+                    if let thumbData = ThumbnailGenerator.generateThumbnail(from: photoData),
+                       let thumbPath = ThumbnailURL.thumbnailURL(for: path) {
+                        do {
+                            try await client.storage
+                                .from(bucket.rawValue)
+                                .upload(
+                                    path: thumbPath,
+                                    file: thumbData,
+                                    options: FileOptions(contentType: contentType, upsert: true)
+                                )
+                        } catch {
+                            Logger(subsystem: "com.graysonmartin.catch", category: "SupabaseAssetService")
+                                .warning("Thumbnail upload failed for \(thumbPath): \(error.localizedDescription)")
+                        }
+                    }
+
                     return (index, Self.buildPublicURL(bucket: bucket, path: path))
                 }
             }
@@ -74,9 +95,14 @@ public final class DefaultSupabaseAssetService: SupabaseAssetService, @unchecked
         bucket: SupabaseStorageBucket,
         path: String
     ) async throws {
+        // Also delete the thumbnail variant if it exists
+        var paths = [path]
+        if let thumbPath = ThumbnailURL.thumbnailURL(for: path) {
+            paths.append(thumbPath)
+        }
         try await clientProvider.client.storage
             .from(bucket.rawValue)
-            .remove(paths: [path])
+            .remove(paths: paths)
     }
 
     public func publicURL(
