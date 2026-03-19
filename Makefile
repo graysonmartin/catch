@@ -5,7 +5,8 @@ TEST_SCHEME = catchTests
 BUNDLE_ID = com.graysonmartin.catch
 APP_PATH = $(shell find ~/Library/Developer/Xcode/DerivedData/catch-*/Build/Products/Debug-iphonesimulator/catch.app -maxdepth 0 2>/dev/null | head -1)
 
-.PHONY: test test-fast test-all test-verbose test-serial boot-sim kill-sim clean-build build run install reset-sim
+.PHONY: test test-fast test-all test-verbose test-serial boot-sim kill-sim clean-build build run install reset-sim \
+	db-push db-push-prod db-status db-new db-link
 
 # --- Simulator ---
 
@@ -82,6 +83,34 @@ test-serial: boot-sim
 		-destination 'id=$(SIMULATOR_ID)' \
 		-enableCodeCoverage NO \
 		CODE_SIGNING_ALLOWED=NO
+
+# --- Database Migrations ---
+
+SUPABASE = npx supabase
+
+db-push:
+	$(SUPABASE) db push
+	@echo "Migrations applied to linked project (dev)."
+
+db-push-prod:
+	@echo "WARNING: Pushing migrations to PRODUCTION."
+	@echo "Make sure you have linked to the prod project: make db-link ref=<prod-ref>"
+	@read -p "Continue? [y/N] " confirm && [ "$$confirm" = "y" ] || exit 1
+	$(SUPABASE) db push
+	@echo "Migrations applied to PROD."
+
+db-status:
+	$(SUPABASE) migration list --linked
+
+db-new:
+	@test -n "$(name)" || (echo "Usage: make db-new name=create_foo_table" && exit 1)
+	$(SUPABASE) migration new $(name)
+	@echo "Created new migration. Edit the file in supabase/migrations/."
+
+db-link:
+	@test -n "$(ref)" || (echo "Usage: make db-link ref=your-project-ref" && exit 1)
+	$(SUPABASE) link --project-ref $(ref)
+	@echo "Linked to project $(ref)."
 
 # --- Cleanup ---
 
