@@ -17,6 +17,9 @@ struct SettingsView: View {
             notificationsSection
             aboutSection
             dangerZoneSection
+            #if DEBUG
+            debugSection
+            #endif
         }
         .navigationTitle(CatchStrings.Settings.title)
         .navigationBarTitleDisplayMode(.inline)
@@ -124,6 +127,29 @@ struct SettingsView: View {
             Text(CatchStrings.Settings.dangerZoneSection)
         }
     }
+
+    // MARK: - Debug
+
+    #if DEBUG
+    @AppStorage(AppStorageKeys.hasCompletedNewUserWalkthrough) private var hasCompletedWalkthrough = false
+
+    private var debugSection: some View {
+        Section {
+            Button {
+                hasCompletedWalkthrough = false
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.counterclockwise")
+                    Text(CatchStrings.Settings.debugResetWalkthrough)
+                }
+            }
+        } header: {
+            Text(CatchStrings.Settings.debugSection)
+        } footer: {
+            Text(CatchStrings.Settings.debugFooter)
+        }
+    }
+    #endif
 
     // MARK: - Actions
 

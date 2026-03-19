@@ -103,7 +103,7 @@ class CatAnnotationView: MKAnnotationView {
         let borderColor = pin.isRemote ? CatchTheme.remotePinUIColor : CatchTheme.primaryUIColor
 
         // Check cache first — instant, no flicker
-        if let url = pin.photoUrl, let cached = RemoteImageCache.shared.image(for: url) {
+        if let url = pin.photoUrl, let cached = RemoteImageCache.shared.memoryImage(for: url) {
             renderPhoto(cached, borderColor: borderColor)
             return
         }

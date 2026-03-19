@@ -5,6 +5,7 @@ import CatchCore
 struct catchApp: App {
     @AppStorage(AppStorageKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = false
     @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
+    @AppStorage(AppStorageKeys.hasCompletedNewUserWalkthrough) private var hasCompletedNewUserWalkthrough = false
     @State private var isCheckingProfile = false
     @State private var authService: SupabaseAuthService
     @State private var followService: SupabaseFollowService
@@ -117,6 +118,7 @@ struct catchApp: App {
                     }
                     if newState == .signedOut {
                         hasCompletedProfileSetup = false
+                        hasCompletedNewUserWalkthrough = false
                     }
                 }
         }
@@ -139,19 +141,31 @@ struct catchApp: App {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(CatchTheme.background)
         } else if !authService.authState.isSignedIn {
-            ProfileSetupView {
+            ProfileSetupView { isNewUser in
                 hasCompletedProfileSetup = true
+                if !isNewUser {
+                    hasCompletedNewUserWalkthrough = true
+                }
             }
             .environment(authService)
             .environment(profileSyncService)
             .environment(toastManager)
         } else if !hasCompletedProfileSetup {
-            ProfileSetupView {
+            ProfileSetupView { isNewUser in
                 hasCompletedProfileSetup = true
+                if !isNewUser {
+                    hasCompletedNewUserWalkthrough = true
+                }
             }
             .environment(authService)
             .environment(profileSyncService)
             .environment(toastManager)
+        } else if !hasCompletedNewUserWalkthrough {
+            NewUserWalkthroughView(hasCompleted: $hasCompletedNewUserWalkthrough)
+                .environment(authService)
+                .environment(followService)
+                .environment(suggestedPeopleService)
+                .environment(toastManager)
         } else {
             ContentView()
                 .environment(breedClassifier)
@@ -184,6 +198,8 @@ struct catchApp: App {
             let profile = try await profileSyncService.fetchProfile(userID: userID)
             if profile != nil {
                 hasCompletedProfileSetup = true
+                // Returning user — skip the new-user walkthrough
+                hasCompletedNewUserWalkthrough = true
             }
         } catch {
             // Profile check failed — fall through to ProfileSetupView

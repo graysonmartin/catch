@@ -121,6 +121,13 @@
 		E8CS0000010B /* CatchStrings+Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000B /* CatchStrings+Components.swift */; };
 		E8SD00000101 /* SwipeToDeleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SD00000001 /* SwipeToDeleteView.swift */; };
 		E8CS0000010C /* CatchStrings+Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000C /* CatchStrings+Diary.swift */; };
+		E8CS0000010D /* CatchStrings+Walkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000D /* CatchStrings+Walkthrough.swift */; };
+		E8CS0000030D /* CatchStrings+Walkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000D /* CatchStrings+Walkthrough.swift */; };
+		E8WT00000101 /* NewUserWalkthroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000001 /* NewUserWalkthroughView.swift */; };
+		E8WT00000102 /* WalkthroughLocationStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000002 /* WalkthroughLocationStep.swift */; };
+		E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000003 /* WalkthroughPeopleStep.swift */; };
+		E8WT00000104 /* WalkthroughPersonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000004 /* WalkthroughPersonRow.swift */; };
+		E8WT00000105 /* WalkthroughWelcomeStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000005 /* WalkthroughWelcomeStep.swift */; };
 		E8CS00000302 /* CatchStrings+Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000002 /* CatchStrings+Feed.swift */; };
 		E8CS00000303 /* CatchStrings+CatProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000003 /* CatchStrings+CatProfile.swift */; };
 		E8CS00000304 /* CatchStrings+Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000004 /* CatchStrings+Collection.swift */; };
@@ -342,6 +349,12 @@
 		E8CS0000000A /* CatchStrings+BreedLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+BreedLog.swift"; sourceTree = "<group>"; };
 		E8CS0000000B /* CatchStrings+Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Components.swift"; sourceTree = "<group>"; };
 		E8CS0000000C /* CatchStrings+Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Diary.swift"; sourceTree = "<group>"; };
+		E8CS0000000D /* CatchStrings+Walkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Walkthrough.swift"; sourceTree = "<group>"; };
+		E8WT00000001 /* NewUserWalkthroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserWalkthroughView.swift; sourceTree = "<group>"; };
+		E8WT00000002 /* WalkthroughLocationStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughLocationStep.swift; sourceTree = "<group>"; };
+		E8WT00000003 /* WalkthroughPeopleStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughPeopleStep.swift; sourceTree = "<group>"; };
+		E8WT00000004 /* WalkthroughPersonRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughPersonRow.swift; sourceTree = "<group>"; };
+		E8WT00000005 /* WalkthroughWelcomeStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughWelcomeStep.swift; sourceTree = "<group>"; };
 		E8SD00000001 /* SwipeToDeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToDeleteView.swift; sourceTree = "<group>"; };
 		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
@@ -541,6 +554,7 @@
 				E8BL0000F002 /* BreedLog */,
 				E8E500000021 /* Social */,
 				E8ST0000F003 /* Settings */,
+				E8WT0000F001 /* Walkthrough */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -616,9 +630,22 @@
 				E8SN00000002 /* CatchStrings+SignIn.swift */,
 				E8RS00000003 /* CatchStrings+Restore.swift */,
 				E8RV00000002 /* CatchStrings+Recovery.swift */,
+				E8CS0000000D /* CatchStrings+Walkthrough.swift */,
 				E8AK00000001 /* AppStorageKeys.swift */,
 			);
 			path = Theme;
+			sourceTree = "<group>";
+		};
+		E8WT0000F001 /* Walkthrough */ = {
+			isa = PBXGroup;
+			children = (
+				E8WT00000001 /* NewUserWalkthroughView.swift */,
+				E8WT00000002 /* WalkthroughLocationStep.swift */,
+				E8WT00000003 /* WalkthroughPeopleStep.swift */,
+				E8WT00000004 /* WalkthroughPersonRow.swift */,
+				E8WT00000005 /* WalkthroughWelcomeStep.swift */,
+			);
+			path = Walkthrough;
 			sourceTree = "<group>";
 		};
 		E8A100000021 /* catchTests */ = {
@@ -1307,6 +1334,12 @@
 				E8UF00000101 /* UsernameFieldView.swift in Sources */,
 				E8RS00000102 /* DataRestoreView.swift in Sources */,
 				E8RS00000103 /* CatchStrings+Restore.swift in Sources */,
+				E8CS0000010D /* CatchStrings+Walkthrough.swift in Sources */,
+				E8WT00000101 /* NewUserWalkthroughView.swift in Sources */,
+				E8WT00000102 /* WalkthroughLocationStep.swift in Sources */,
+				E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */,
+				E8WT00000104 /* WalkthroughPersonRow.swift in Sources */,
+				E8WT00000105 /* WalkthroughWelcomeStep.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1371,6 +1404,7 @@
 				E8FI00000301 /* FeedItemTests.swift in Sources */,
 				E8PT00000212 /* ProfileDiaryTabTests.swift in Sources */,
 				E8CS0000030C /* CatchStrings+Diary.swift in Sources */,
+				E8CS0000030D /* CatchStrings+Walkthrough.swift in Sources */,
 				E8SI00000208 /* MockSocialInteractionService.swift in Sources */,
 				E8SF00000201 /* FeedItem.swift in Sources */,
 				E8SF00000202 /* SocialFeedService.swift in Sources */,

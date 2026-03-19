@@ -32,5 +32,10 @@ extension CatchStrings {
         static func versionDisplay(_ version: String, _ build: String) -> String {
             String(localized: "\(version) (\(build))")
         }
+
+        // Debug
+        static let debugSection = String(localized: "admin (debug only)")
+        static let debugFooter = String(localized: "this section only shows in debug builds. go wild.")
+        static let debugResetWalkthrough = String(localized: "reset walkthrough")
     }
 }

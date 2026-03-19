@@ -14,9 +14,9 @@ struct ProfileSetupView: View {
     @State private var usernameAvailability: UsernameAvailability = .idle
     @State private var isRestoringProfile = true
 
-    var onComplete: () -> Void
+    var onComplete: (_ isNewUser: Bool) -> Void
 
-    init(onComplete: @escaping () -> Void) {
+    init(onComplete: @escaping (_ isNewUser: Bool) -> Void) {
         self.onComplete = onComplete
     }
 
@@ -190,7 +190,7 @@ extension ProfileSetupView {
             username = cloudProfile.username ?? ""
 
             isRestoringProfile = false
-            onComplete()
+            onComplete(false)
         } catch where error.isCancellation {
             isRestoringProfile = false
         } catch {
@@ -210,7 +210,7 @@ extension ProfileSetupView {
             do {
                 let avatarChange: AvatarChange = avatarData.map { .updated($0) } ?? .noChange
                 try await profileSyncService.syncProfile(profile, avatarChange: avatarChange)
-                onComplete()
+                onComplete(true)
             } catch {
                 toastManager.showError(CatchStrings.Toast.profileSaveFailed)
             }
