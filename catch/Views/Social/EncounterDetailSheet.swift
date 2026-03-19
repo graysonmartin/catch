@@ -154,10 +154,10 @@ struct EncounterDetailSheet: View {
         Text(data.isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat)
             .font(.system(size: 9, weight: .bold))
             .foregroundStyle(data.isFirstEncounter ? CatchTheme.primary : CatchTheme.textSecondary)
-            .padding(.horizontal, 6)
-            .padding(.vertical, 2)
+            .padding(.horizontal, CatchSpacing.space6)
+            .padding(.vertical, CatchSpacing.space2)
             .background(
-                RoundedRectangle(cornerRadius: 4)
+                RoundedRectangle(cornerRadius: CatchSpacing.space4)
                     .fill(data.isFirstEncounter
                         ? CatchTheme.primary.opacity(0.15)
                         : CatchTheme.textSecondary.opacity(0.1))
@@ -167,15 +167,23 @@ struct EncounterDetailSheet: View {
     // MARK: - Breed, Location & Notes
 
     private var breedRow: some View {
-        Label(data.breed, systemImage: "pawprint.fill")
-            .font(.subheadline)
-            .foregroundStyle(CatchTheme.textSecondary)
+        HStack(spacing: CatchSpacing.space6) {
+            Image(systemName: "pawprint.fill")
+                .frame(width: 16, alignment: .center)
+            Text(data.breed)
+        }
+        .font(.subheadline)
+        .foregroundStyle(CatchTheme.textSecondary)
     }
 
     private var locationRow: some View {
-        Label(data.locationName, systemImage: "mappin")
-            .font(.subheadline)
-            .foregroundStyle(CatchTheme.textSecondary)
+        HStack(spacing: CatchSpacing.space6) {
+            Image(systemName: "mappin.circle.fill")
+                .frame(width: 16, alignment: .center)
+            Text(data.locationName)
+        }
+        .font(.subheadline)
+        .foregroundStyle(CatchTheme.textSecondary)
     }
 
     private var notesRow: some View {

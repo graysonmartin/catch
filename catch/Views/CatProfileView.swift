@@ -389,8 +389,9 @@ struct CatProfileView: View {
     private func infoRow(icon: String, label: String, value: String) -> some View {
         HStack(alignment: .top, spacing: CatchSpacing.space8) {
             Image(systemName: icon)
+                .font(.subheadline)
                 .foregroundStyle(CatchTheme.primary)
-                .frame(width: 20)
+                .frame(width: 20, height: 20, alignment: .center)
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(label)
                     .font(.caption)

@@ -18,7 +18,7 @@ extension CatchStrings {
         static let noCatsRegistered = String(localized: "no cats registered yet")
         static let registerOneNow = String(localized: "register one now")
         static let pickACat = String(localized: "pick a cat")
-        static let encounterDetails = String(localized: "Encounter Details")
+        static let encounterDetails = String(localized: "encounter details")
         static let logEncounterTitle = String(localized: "Log Encounter")
         static let whatHappened = String(localized: "What happened?")
 
