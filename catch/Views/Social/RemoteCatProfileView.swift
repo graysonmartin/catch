@@ -35,7 +35,7 @@ struct RemoteCatProfileView: View {
                     photos: cat.photos,
                     photoUrls: cat.photoUrls,
                     height: 250,
-                    cornerRadius: 16
+                    cornerRadius: CatchTheme.cornerRadius
                 )
             }
         }

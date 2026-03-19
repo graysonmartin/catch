@@ -17,8 +17,7 @@ struct RemoteFeedItemView: View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
             header
             photos
-            location
-            notes
+            encounterMetadata
             InteractionBar(encounterRecordName: encounter.recordName, showDetail: $showDetail)
         }
         .padding()
@@ -94,6 +93,25 @@ struct RemoteFeedItemView: View {
         }
     }
 
+    // MARK: - Encounter Metadata
+
+    private var encounterMetadata: some View {
+        VStack(alignment: .leading, spacing: CatchSpacing.space4) {
+            breed
+            location
+            notes
+        }
+    }
+
+    @ViewBuilder
+    private var breed: some View {
+        if let breedName = cat?.breed, !breedName.isEmpty {
+            Label(breedName, systemImage: "pawprint.fill")
+                .font(.subheadline)
+                .foregroundStyle(CatchTheme.textSecondary)
+        }
+    }
+
     @ViewBuilder
     private var location: some View {
         if !encounter.locationName.isEmpty {
@@ -109,6 +127,7 @@ struct RemoteFeedItemView: View {
             Text(encounter.notes)
                 .font(.subheadline)
                 .foregroundStyle(CatchTheme.textPrimary)
+                .lineLimit(3)
         }
     }
 }
