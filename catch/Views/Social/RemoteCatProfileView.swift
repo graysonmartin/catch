@@ -4,7 +4,7 @@ import CatchCore
 struct RemoteCatProfileView: View {
     let cat: CloudCat
     let encounters: [CloudEncounter]
-    let ownerName: String
+    let owner: CloudUserProfile
 
     private var sortedEncounters: [CloudEncounter] {
         encounters
@@ -80,16 +80,53 @@ struct RemoteCatProfileView: View {
 
     private var ownerSection: some View {
         Section {
-            HStack(spacing: CatchSpacing.space8) {
-                Image(systemName: "person.crop.circle.fill")
-                    .foregroundStyle(CatchTheme.secondary)
-                Text(ownerName)
-                    .font(.subheadline)
-                    .foregroundStyle(CatchTheme.textPrimary)
+            NavigationLink {
+                RemoteProfileContent(userID: owner.appleUserID, initialDisplayName: owner.displayName)
+            } label: {
+                HStack(spacing: CatchSpacing.space10) {
+                    ownerAvatarView
+                    VStack(alignment: .leading, spacing: CatchSpacing.space2) {
+                        Text(owner.displayName)
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(CatchTheme.textPrimary)
+                        if let username = owner.username, !username.isEmpty {
+                            Text("@\(username)")
+                                .font(.caption)
+                                .foregroundStyle(CatchTheme.textSecondary)
+                        }
+                    }
+                    Spacer()
+                }
             }
+        } header: {
+            Text(CatchStrings.CatProfile.ownerLabel)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(CatchTheme.textSecondary)
+                .textCase(.uppercase)
         }
         .listRowBackground(CatchTheme.background)
         .listRowSeparator(.hidden)
+    }
+
+    @ViewBuilder
+    private var ownerAvatarView: some View {
+        if let avatarUrl = owner.avatarURL, !avatarUrl.isEmpty {
+            RemoteImageView(urlString: avatarUrl) {
+                ownerAvatarPlaceholder
+            }
+            .frame(width: 36, height: 36)
+            .clipShape(Circle())
+        } else {
+            ownerAvatarPlaceholder
+        }
+    }
+
+    private var ownerAvatarPlaceholder: some View {
+        Image(systemName: "person.crop.circle.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 36, height: 36)
+            .foregroundStyle(CatchTheme.secondary)
     }
 
     private var encountersSection: some View {

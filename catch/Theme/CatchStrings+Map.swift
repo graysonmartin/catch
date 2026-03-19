@@ -25,5 +25,15 @@ extension CatchStrings {
         static func spottedBy(_ name: String) -> String {
             String(localized: "spotted by \(name)")
         }
+
+        // Filters
+        static let filterWho = String(localized: "who")
+        static let filterWhen = String(localized: "when")
+        static let myCats = String(localized: "my cats")
+        static let friendsCats = String(localized: "friends' cats")
+        static let last7Days = String(localized: "last 7 days")
+        static let last30Days = String(localized: "last 30 days")
+        static let allTime = String(localized: "all time")
+        static let resetFilters = String(localized: "reset")
     }
 }

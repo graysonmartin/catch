@@ -235,7 +235,7 @@ struct RemoteProfileContent: View {
             RemoteCollectionTab(
                 cats: data.cats,
                 encounters: data.encounters,
-                ownerName: data.profile.displayName
+                owner: data.profile
             )
         }
         .navigationDestination(isPresented: $isShowingBreedLog) {

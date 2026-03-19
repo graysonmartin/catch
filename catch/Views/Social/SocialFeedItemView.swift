@@ -92,7 +92,7 @@ struct SocialFeedItemView: View {
                 RemoteCatProfileView(
                     cat: cat,
                     encounters: catEncounters,
-                    ownerName: owner.displayName
+                    owner: owner
                 )
             } label: {
                 CatPhotoView(photoData: cat.photos.first, photoUrl: cat.photoUrls.first, size: Layout.thumbnailSize)

@@ -14,6 +14,7 @@ extension CatchStrings {
         static let deleteLastEncounterMessage = String(localized: "this is the last encounter. deleting it removes the cat entirely.")
         static let deleteCatMessage = String(localized: "this deletes all their encounters too. can't undo.")
         static let aboutSection = String(localized: "about")
+        static let ownerLabel = String(localized: "owner")
         static let encounterTimeline = String(localized: "timeline")
         static let noPhotos = String(localized: "no pics yet. kinda mysterious ngl")
         static let ownedBadge = String(localized: "yours")

@@ -6,11 +6,13 @@ import CatchCore
 struct CatMapView: View {
     @Environment(CatDataService.self) private var catDataService
     @Environment(DefaultSocialFeedService.self) private var socialFeedService: DefaultSocialFeedService?
+    @Environment(SupabaseFollowService.self) private var followService
     @Binding var selectedTab: Int
     @State private var selectedCat: Cat?
     @State private var selectedRemote: RemotePinSelection?
     @State private var clusterSelection: ClusterSelection?
     @State private var showMissingLocationSheet = false
+    @State private var filterState = MapFilterState()
 
     private var cats: [Cat] { catDataService.cats }
 
@@ -20,6 +22,10 @@ struct CatMapView: View {
 
     private var catsWithoutLocation: [Cat] {
         cats.filter { !$0.location.hasCoordinates }
+    }
+
+    private var followedUserIDs: Set<String> {
+        Set(followService.following.map(\.followeeID))
     }
 
     /// One pin per unique remote cat — the latest encounter location per cat record.
@@ -43,6 +49,26 @@ struct CatMapView: View {
         catsWithLocation.map { .local($0) } + remotePins
     }
 
+    private var filteredPins: [MapPin] {
+        let ids = followedUserIDs
+        return allPins.filter { pin in
+            switch pin {
+            case .local(let cat):
+                return MapFilterService.shouldShowLocalPin(
+                    lastEncounterDate: cat.lastEncounterDate,
+                    filterState: filterState
+                )
+            case .remote(let encounter, _, _):
+                return MapFilterService.shouldShowRemotePin(
+                    encounterDate: encounter.date,
+                    ownerID: encounter.ownerID,
+                    followedUserIDs: ids,
+                    filterState: filterState
+                )
+            }
+        }
+    }
+
     private func allEncounters(forCatRecord recordName: String) -> [CloudEncounter] {
         (socialFeedService?.remoteEncounters ?? []).compactMap { item in
             guard case .remote(let encounter, _, _, _) = item,
@@ -63,9 +89,9 @@ struct CatMapView: View {
                         action: { selectedTab = 1 }
                     )
                 } else {
-                    ZStack(alignment: .top) {
+                    ZStack {
                         ClusterMapView(
-                            pins: allPins,
+                            pins: filteredPins,
                             onSelectPin: { pin in
                                 switch pin {
                                 case .local(let cat):
@@ -84,24 +110,14 @@ struct CatMapView: View {
                         )
 
                         if !catsWithoutLocation.isEmpty {
-                            Button {
-                                showMissingLocationSheet = true
-                            } label: {
-                                HStack(spacing: CatchSpacing.space6) {
-                                    Image(systemName: "eye.slash")
-                                        .font(.caption2)
-                                    Text(CatchStrings.Map.catsNotShown(catsWithoutLocation.count))
-                                        .font(.caption.weight(.medium))
-                                }
-                                .padding(.horizontal, CatchSpacing.space12)
-                                .padding(.vertical, CatchSpacing.space8)
-                                .background(.ultraThinMaterial)
-                                .clipShape(Capsule())
-                                .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+                            VStack {
+                                missingLocationBanner
+                                    .padding(.top, CatchSpacing.space8)
+                                Spacer()
                             }
-                            .buttonStyle(.plain)
-                            .padding(.top, CatchSpacing.space8)
                         }
+
+                        MapFilterButton(filterState: $filterState)
                     }
                 }
             }
@@ -115,7 +131,7 @@ struct CatMapView: View {
                     RemoteCatProfileView(
                         cat: cat,
                         encounters: selection.encounters,
-                        ownerName: selection.owner.displayName
+                        owner: selection.owner
                     )
                 }
             }
@@ -141,6 +157,25 @@ struct CatMapView: View {
                 }
             }
         }
+    }
+
+    private var missingLocationBanner: some View {
+        Button {
+            showMissingLocationSheet = true
+        } label: {
+            HStack(spacing: CatchSpacing.space6) {
+                Image(systemName: "eye.slash")
+                    .font(.caption2)
+                Text(CatchStrings.Map.catsNotShown(catsWithoutLocation.count))
+                    .font(.caption.weight(.medium))
+            }
+            .padding(.horizontal, CatchSpacing.space12)
+            .padding(.vertical, CatchSpacing.space8)
+            .background(.ultraThinMaterial)
+            .clipShape(Capsule())
+            .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+        }
+        .buttonStyle(.plain)
     }
 }
 
