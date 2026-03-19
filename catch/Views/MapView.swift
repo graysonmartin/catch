@@ -89,7 +89,7 @@ struct CatMapView: View {
                         action: { selectedTab = 1 }
                     )
                 } else {
-                    ZStack(alignment: .top) {
+                    ZStack {
                         ClusterMapView(
                             pins: filteredPins,
                             onSelectPin: { pin in
@@ -109,14 +109,15 @@ struct CatMapView: View {
                             }
                         )
 
-                        VStack(spacing: CatchSpacing.space4) {
-                            MapFilterChipRow(filterState: $filterState)
-                                .background(.ultraThinMaterial)
-
-                            if !catsWithoutLocation.isEmpty {
+                        if !catsWithoutLocation.isEmpty {
+                            VStack {
                                 missingLocationBanner
+                                    .padding(.top, CatchSpacing.space8)
+                                Spacer()
                             }
                         }
+
+                        MapFilterButton(filterState: $filterState)
                     }
                 }
             }
@@ -130,7 +131,7 @@ struct CatMapView: View {
                     RemoteCatProfileView(
                         cat: cat,
                         encounters: selection.encounters,
-                        ownerName: selection.owner.displayName
+                        owner: selection.owner
                     )
                 }
             }

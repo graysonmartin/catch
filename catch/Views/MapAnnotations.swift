@@ -71,6 +71,8 @@ class OverflowAnnotation: MKPointAnnotation {
 // MARK: - Individual cat pin
 
 class CatAnnotationView: MKAnnotationView {
+    private var imageLoadTask: Task<Void, Never>?
+
     override init(annotation: (any MKAnnotation)?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         clusteringIdentifier = AnnotationLayout.clusteringID
@@ -86,6 +88,8 @@ class CatAnnotationView: MKAnnotationView {
     override func prepareForReuse() {
         super.prepareForReuse()
         clusteringIdentifier = AnnotationLayout.clusteringID
+        imageLoadTask?.cancel()
+        imageLoadTask = nil
     }
 
     override var annotation: (any MKAnnotation)? {
@@ -93,14 +97,34 @@ class CatAnnotationView: MKAnnotationView {
     }
 
     private func render() {
+        imageLoadTask?.cancel()
         guard let catAnnotation = annotation as? CatAnnotation, let pin = catAnnotation.pin else { return }
 
-        let size = AnnotationLayout.catPinSize
         let borderColor = pin.isRemote ? CatchTheme.remotePinUIColor : CatchTheme.primaryUIColor
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
 
-        // For URL-based photos, show a colored circle with a cat icon
-        // Full remote image loading in annotation views would be too heavy
+        // Check cache first — instant, no flicker
+        if let url = pin.photoUrl, let cached = RemoteImageCache.shared.image(for: url) {
+            renderPhoto(cached, borderColor: borderColor)
+            return
+        }
+
+        // Show placeholder while loading
+        renderPlaceholder(borderColor: borderColor)
+
+        // Load photo async
+        guard let url = pin.photoUrl else { return }
+        imageLoadTask = Task { [weak self] in
+            guard let loaded = await RemoteImageCache.shared.loadImage(for: url) else { return }
+            guard !Task.isCancelled else { return }
+            await MainActor.run {
+                self?.renderPhoto(loaded, borderColor: borderColor)
+            }
+        }
+    }
+
+    private func renderPlaceholder(borderColor: UIColor) {
+        let size = AnnotationLayout.catPinSize
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
         image = renderer.image { _ in
             borderColor.setFill()
             UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: size, height: size)).fill()
@@ -110,6 +134,34 @@ class CatAnnotationView: MKAnnotationView {
                 let o = CGPoint(x: (size - icon.size.width) / 2, y: (size - icon.size.height) / 2)
                 icon.draw(at: o)
             }
+        }
+    }
+
+    private func renderPhoto(_ photo: UIImage, borderColor: UIColor) {
+        let size = AnnotationLayout.catPinSize
+        let borderWidth: CGFloat = AnnotationLayout.catPinBorderInset + 1
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
+        image = renderer.image { ctx in
+            // Outer border circle
+            borderColor.setFill()
+            UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: size, height: size)).fill()
+
+            // Clip to inner circle and draw photo
+            let innerRect = CGRect(x: borderWidth, y: borderWidth,
+                                   width: size - borderWidth * 2, height: size - borderWidth * 2)
+            ctx.cgContext.saveGState()
+            UIBezierPath(ovalIn: innerRect).addClip()
+
+            let photoSize = photo.size
+            let scale = max(innerRect.width / photoSize.width, innerRect.height / photoSize.height)
+            let drawRect = CGRect(
+                x: innerRect.midX - (photoSize.width * scale) / 2,
+                y: innerRect.midY - (photoSize.height * scale) / 2,
+                width: photoSize.width * scale,
+                height: photoSize.height * scale
+            )
+            photo.draw(in: drawRect)
+            ctx.cgContext.restoreGState()
         }
     }
 }

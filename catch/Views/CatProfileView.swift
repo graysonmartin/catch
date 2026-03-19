@@ -17,7 +17,7 @@ struct CatProfileView: View {
     @State private var showingLogEncounter = false
     @State private var encounterToDelete: Encounter?
     @State private var isDeleting = false
-    @State private var ownerAvatarUrl: String?
+    @State private var ownerProfile: CloudUserProfile?
     @State private var encounterRowHeight: CGFloat = 76
 
     init(cat: Cat) {
@@ -97,20 +97,20 @@ struct CatProfileView: View {
         }
         .task {
             await refreshCat()
-            await loadOwnerAvatar()
+            await loadOwnerProfile()
         }
     }
 
     // MARK: - Photo Header
 
     private var photoHeader: some View {
-        ZStack(alignment: .bottomTrailing) {
+        Group {
             if !cat.photoUrls.isEmpty {
                 PhotoCarouselView(
                     photos: [],
                     photoUrls: cat.photoUrls,
                     height: 280,
-                    cornerRadius: 0,
+                    cornerRadius: CatchTheme.cornerRadius,
                     isTappable: true
                 )
             } else {
@@ -120,36 +120,10 @@ struct CatProfileView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 200)
                     .background(CatchTheme.secondary.opacity(0.15))
+                    .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
             }
-
-            ownerAvatar
-                .padding(CatchSpacing.space12)
         }
-    }
-
-    @ViewBuilder
-    private var ownerAvatar: some View {
-        if let avatarUrl = ownerAvatarUrl {
-            RemoteImageView(urlString: avatarUrl) {
-                avatarPlaceholder
-            }
-            .frame(width: 40, height: 40)
-            .clipShape(Circle())
-            .overlay(Circle().stroke(CatchTheme.cardBackground, lineWidth: 2))
-        } else {
-            avatarPlaceholder
-        }
-    }
-
-    private var avatarPlaceholder: some View {
-        Image(systemName: "person.crop.circle.fill")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 40, height: 40)
-            .foregroundStyle(CatchTheme.secondary)
-            .background(CatchTheme.cardBackground)
-            .clipShape(Circle())
-            .overlay(Circle().stroke(CatchTheme.cardBackground, lineWidth: 2))
+        .padding(.horizontal, CatchSpacing.space16)
     }
 
     // MARK: - Name & Badges
@@ -167,26 +141,17 @@ struct CatProfileView: View {
                 }
             }
 
-            HStack(spacing: CatchSpacing.space8) {
-                if let breed = cat.breed, !breed.isEmpty {
-                    Label(breed, systemImage: "pawprint.fill")
-                        .font(.subheadline)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                }
-                if cat.isOwned {
-                    Text(CatchStrings.CatProfile.ownedBadge)
-                        .font(.caption2.weight(.bold))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, CatchSpacing.space8)
-                        .padding(.vertical, CatchSpacing.space2)
-                        .background(CatchTheme.primary)
-                        .clipShape(Capsule())
-                }
+            if cat.isOwned {
+                Text(CatchStrings.CatProfile.ownedBadge)
+                    .font(.caption2.weight(.bold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, CatchSpacing.space8)
+                    .padding(.vertical, CatchSpacing.space2)
+                    .background(CatchTheme.primary)
+                    .clipShape(Capsule())
             }
 
-            Text(CatchStrings.CatProfile.firstSeen(cat.createdAt))
-                .font(.caption)
-                .foregroundStyle(CatchTheme.textSecondary)
+            ownerRow
         }
         .padding(.horizontal, CatchSpacing.space16)
     }
@@ -225,33 +190,93 @@ struct CatProfileView: View {
 
     // MARK: - Info Card
 
-    private var infoCard: some View {
-        VStack(alignment: .leading, spacing: CatchSpacing.space10) {
-            Text(CatchStrings.CatProfile.aboutSection)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(CatchTheme.textSecondary)
-                .textCase(.uppercase)
+    private var hasBreed: Bool {
+        if let breed = cat.breed, !breed.isEmpty { return true }
+        return false
+    }
 
-            if !cat.estimatedAge.isEmpty {
-                infoRow(icon: "calendar", label: CatchStrings.Common.age, value: cat.estimatedAge)
+    private var hasAboutInfo: Bool {
+        hasBreed || !cat.estimatedAge.isEmpty || !cat.location.name.isEmpty || !cat.notes.isEmpty
+    }
+
+    @ViewBuilder
+    private var infoCard: some View {
+        if hasAboutInfo {
+            VStack(alignment: .leading, spacing: CatchSpacing.space10) {
+                Text(CatchStrings.CatProfile.aboutSection)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(CatchTheme.textSecondary)
+                    .textCase(.uppercase)
+
+                if let breed = cat.breed, !breed.isEmpty {
+                    infoRow(icon: "pawprint.fill", label: CatchStrings.Common.breed, value: breed)
+                }
+                if !cat.estimatedAge.isEmpty {
+                    infoRow(icon: "calendar", label: CatchStrings.Common.age, value: cat.estimatedAge)
+                }
+                if !cat.location.name.isEmpty {
+                    infoRow(icon: "mappin.circle.fill", label: CatchStrings.Common.location, value: cat.location.name)
+                }
+                if !cat.notes.isEmpty {
+                    infoRow(icon: "note.text", label: CatchStrings.Common.notes, value: cat.notes)
+                }
             }
-            if !cat.location.name.isEmpty {
-                infoRow(icon: "mappin.circle.fill", label: CatchStrings.Common.location, value: cat.location.name)
-            }
-            if !cat.notes.isEmpty {
-                infoRow(icon: "note.text", label: CatchStrings.Common.notes, value: cat.notes)
-            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(CatchSpacing.space16)
+            .background(CatchTheme.cardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
+            .shadow(
+                color: .black.opacity(CatchTheme.cardShadowOpacity),
+                radius: CatchTheme.cardShadowRadius,
+                y: CatchTheme.cardShadowY
+            )
+            .padding(.horizontal, CatchSpacing.space16)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(CatchSpacing.space16)
-        .background(CatchTheme.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
-        .shadow(
-            color: .black.opacity(CatchTheme.cardShadowOpacity),
-            radius: CatchTheme.cardShadowRadius,
-            y: CatchTheme.cardShadowY
-        )
-        .padding(.horizontal, CatchSpacing.space16)
+    }
+
+    @ViewBuilder
+    private var ownerRow: some View {
+        if let profile = ownerProfile {
+            NavigationLink {
+                RemoteProfileContent(userID: profile.appleUserID, initialDisplayName: profile.displayName)
+            } label: {
+                HStack(spacing: CatchSpacing.space8) {
+                    ownerAvatarView(profile)
+
+                    Text(profile.displayName)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(CatchTheme.textPrimary)
+
+                    if let username = profile.username, !username.isEmpty {
+                        Text("@\(username)")
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.textSecondary)
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    @ViewBuilder
+    private func ownerAvatarView(_ profile: CloudUserProfile) -> some View {
+        if let avatarUrl = profile.avatarURL, !avatarUrl.isEmpty {
+            RemoteImageView(urlString: avatarUrl) {
+                ownerAvatarPlaceholder
+            }
+            .frame(width: 36, height: 36)
+            .clipShape(Circle())
+        } else {
+            ownerAvatarPlaceholder
+        }
+    }
+
+    private var ownerAvatarPlaceholder: some View {
+        Image(systemName: "person.crop.circle.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 36, height: 36)
+            .foregroundStyle(CatchTheme.secondary)
     }
 
     // MARK: - Encounters
@@ -385,10 +410,10 @@ struct CatProfileView: View {
         cat = refreshed
     }
 
-    private func loadOwnerAvatar() async {
+    private func loadOwnerProfile() async {
         guard let userID = authService.authState.user?.id else { return }
         guard let profile = try? await profileSyncService.fetchProfile(userID: userID) else { return }
-        ownerAvatarUrl = profile.avatarURL
+        ownerProfile = profile
     }
 
     private func deleteEncounter(_ encounter: Encounter) async {

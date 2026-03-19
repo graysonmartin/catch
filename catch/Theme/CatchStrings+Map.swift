@@ -27,6 +27,8 @@ extension CatchStrings {
         }
 
         // Filters
+        static let filterWho = String(localized: "who")
+        static let filterWhen = String(localized: "when")
         static let myCats = String(localized: "my cats")
         static let friendsCats = String(localized: "friends' cats")
         static let last7Days = String(localized: "last 7 days")

@@ -4,7 +4,7 @@ import CatchCore
 struct RemoteCollectionTab: View {
     let cats: [CloudCat]
     let encounters: [CloudEncounter]
-    let ownerName: String
+    let owner: CloudUserProfile
 
     @State private var sortOption: CollectionSortOption = .lastSeen
     @State private var sortDirection: CollectionSortDirection = CollectionSortOption.lastSeen.defaultDirection
@@ -91,7 +91,7 @@ struct RemoteCollectionTab: View {
                                     RemoteCatProfileView(
                                         cat: cat,
                                         encounters: encounters,
-                                        ownerName: ownerName
+                                        owner: owner
                                     )
                                 } label: {
                                     CatCardView(
