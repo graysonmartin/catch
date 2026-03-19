@@ -53,7 +53,7 @@ extension CatchStrings {
         static let showCats = String(localized: "show cats")
         static let showEncounters = String(localized: "show encounters")
         static let visibility = String(localized: "visibility")
-        static let visibilityFooter = String(localized: "controls what people see on your public profile. private mode overrides everything.")
+        static let visibilityFooter = String(localized: "controls what people see on your public profile.")
 
         static func validationMessage(for result: UsernameValidationResult) -> String {
             switch result {

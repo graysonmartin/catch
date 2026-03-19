@@ -96,7 +96,7 @@ struct WalkthroughPeopleStep: View {
                 try await followService.follow(
                     targetID: person.id,
                     by: currentUserID,
-                    isTargetPrivate: person.isPrivate
+                    isTargetPrivate: false
                 )
             } catch {
                 toastManager.showError(CatchStrings.Toast.followFailed)

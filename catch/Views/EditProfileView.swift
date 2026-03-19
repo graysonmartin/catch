@@ -38,10 +38,7 @@ struct EditProfileView: View {
                 }
 
                 infoSection
-                privacySection
-                if !isPrivate {
-                    visibilitySection
-                }
+                visibilitySection
             }
             .onChange(of: avatarData) { _, _ in
                 didChangeAvatar = true
@@ -80,14 +77,6 @@ struct EditProfileView: View {
             )
         } header: {
             Text(CatchStrings.Profile.info)
-        }
-    }
-
-    private var privacySection: some View {
-        Section {
-            Toggle(CatchStrings.Profile.privateProfile, isOn: $isPrivate)
-        } footer: {
-            Text(CatchStrings.Profile.privateFooter)
         }
     }
 

@@ -24,11 +24,7 @@ struct RemoteProfileContent: View {
             if browseService?.isLoading == true && data == nil {
                 loadingState
             } else if let data {
-                if data.profile.isPrivate && !isFollowingUser && !isOwnProfile {
-                    privateProfileState(data: data)
-                } else {
-                    profileContent(data: data)
-                }
+                profileContent(data: data)
             } else if let loadError {
                 errorState(loadError)
             } else {
@@ -39,7 +35,7 @@ struct RemoteProfileContent: View {
         .navigationTitle(displayTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            if !isOwnProfile && !isPrivateHidden {
+            if !isOwnProfile {
                 ToolbarItem(placement: .topBarTrailing) {
                     toolbarFollowButton
                 }
@@ -71,35 +67,6 @@ struct RemoteProfileContent: View {
             .foregroundStyle(CatchTheme.primary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-
-    private func privateProfileState(data: UserBrowseData) -> some View {
-        VStack(spacing: CatchSpacing.space16) {
-            avatarWithSocial(data: data)
-
-            ProfileHeaderView(
-                data: ProfileDisplayData(remote: data),
-                showAvatar: false
-            )
-
-            inlineFollowButton
-
-            VStack(spacing: CatchSpacing.space8) {
-                Image(systemName: "lock.fill")
-                    .font(.title)
-                    .foregroundStyle(CatchTheme.textSecondary)
-                Text(CatchStrings.Social.profileIsPrivate)
-                    .font(.subheadline)
-                    .foregroundStyle(CatchTheme.textSecondary)
-                Text(CatchStrings.Social.followToSee)
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
-            }
-            .padding(.top, CatchSpacing.space32)
-
-            Spacer()
-        }
-        .padding()
     }
 
     // MARK: - Profile content
@@ -283,21 +250,16 @@ struct RemoteProfileContent: View {
             } else {
                 Button {
                     Task {
-                        let isPrivate = data?.profile.isPrivate ?? false
-                        if !isPrivate {
-                            followerCountAdjustment += 1
-                        }
+                        followerCountAdjustment += 1
                         do {
                             try await followService.follow(
                                 targetID: userID,
                                 by: authenticatedUserID,
-                                isTargetPrivate: isPrivate
+                                isTargetPrivate: false
                             )
                             browseService?.invalidateCache(for: userID)
                         } catch {
-                            if !isPrivate {
-                                followerCountAdjustment -= 1
-                            }
+                            followerCountAdjustment -= 1
                             toastManager.showError(CatchStrings.Toast.followFailed)
                         }
                     }
@@ -310,44 +272,6 @@ struct RemoteProfileContent: View {
                         .background(CatchTheme.primary)
                         .clipShape(Capsule())
                 }
-            }
-        }
-    }
-
-    // MARK: - Follow Button (Inline for Private)
-
-    @ViewBuilder
-    private var inlineFollowButton: some View {
-        if !isOwnProfile {
-            if followService.pendingRequestTo(userID) != nil {
-                Text(CatchStrings.Social.requestedStatus)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(CatchTheme.textSecondary)
-                    .padding(.horizontal, CatchSpacing.space24)
-                    .padding(.vertical, CatchSpacing.space8)
-                    .background(CatchTheme.textSecondary.opacity(0.1))
-                    .clipShape(Capsule())
-            } else {
-                Button(CatchStrings.Social.follow) {
-                    Task {
-                        do {
-                            try await followService.follow(
-                                targetID: userID,
-                                by: authenticatedUserID,
-                                isTargetPrivate: true
-                            )
-                            browseService?.invalidateCache(for: userID)
-                        } catch {
-                            toastManager.showError(CatchStrings.Toast.followFailed)
-                        }
-                    }
-                }
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.white)
-                .padding(.horizontal, CatchSpacing.space24)
-                .padding(.vertical, CatchSpacing.space8)
-                .background(CatchTheme.primary)
-                .clipShape(Capsule())
             }
         }
     }
@@ -473,15 +397,6 @@ struct RemoteProfileContent: View {
 
     private var authenticatedUserID: String {
         authService.authState.user?.id ?? ""
-    }
-
-    private var isFollowingUser: Bool {
-        followService.isFollowing(userID)
-    }
-
-    private var isPrivateHidden: Bool {
-        guard let data else { return false }
-        return data.profile.isPrivate && !isFollowingUser && !isOwnProfile
     }
 
     private func breedCount(data: UserBrowseData) -> Int {
