@@ -24,6 +24,7 @@ extension CatchStrings {
         static let tryDifferentUsername = String(localized: "try a different username")
         static let findYourPeople = String(localized: "find your people")
         static let findPeopleSubtitle = String(localized: "search by username to discover other cat spotters")
+        static let suggestedForYou = String(localized: "suggested for you")
         static let searchByUsername = String(localized: "search by username")
         static let anonymous = String(localized: "anonymous")
         static let you = String(localized: "you")

@@ -11,6 +11,7 @@ final class MockSupabaseProfileRepository: SupabaseProfileRepository {
     var updateProfileCalls: [(id: String, payload: SupabaseProfilePayload)] = []
     var searchUsersCalls: [String] = []
     var checkUsernameCalls: [String] = []
+    var fetchRecentPublicUsersCalls: [(excludedIDs: Set<String>, limit: Int)] = []
 
     var fetchProfileResult: SupabaseProfile?
     var fetchProfileResultsByID: [String: SupabaseProfile] = [:]
@@ -20,6 +21,7 @@ final class MockSupabaseProfileRepository: SupabaseProfileRepository {
     var updateProfileResult: SupabaseProfile?
     var searchUsersResult: [SupabaseProfile] = []
     var usernameAvailabilityResult: Bool = true
+    var fetchRecentPublicUsersResult: [SupabaseProfile] = []
 
     func fetchProfile(id: String) async throws -> SupabaseProfile? {
         fetchProfileCalls.append(id)
@@ -59,6 +61,15 @@ final class MockSupabaseProfileRepository: SupabaseProfileRepository {
         return usernameAvailabilityResult
     }
 
+    func fetchRecentPublicUsers(excluding excludedIDs: Set<String>, limit: Int) async throws -> [SupabaseProfile] {
+        fetchRecentPublicUsersCalls.append((excludedIDs, limit))
+        if let error = fetchProfileError { throw error }
+        return fetchRecentPublicUsersResult
+            .filter { !excludedIDs.contains($0.id.uuidString.lowercased()) }
+            .prefix(limit)
+            .map { $0 }
+    }
+
     func reset() {
         fetchProfileCalls = []
         fetchProfilesCalls = []
@@ -66,6 +77,7 @@ final class MockSupabaseProfileRepository: SupabaseProfileRepository {
         updateProfileCalls = []
         searchUsersCalls = []
         checkUsernameCalls = []
+        fetchRecentPublicUsersCalls = []
         fetchProfileResult = nil
         fetchProfileResultsByID = [:]
         fetchProfilesResult = []
@@ -74,6 +86,7 @@ final class MockSupabaseProfileRepository: SupabaseProfileRepository {
         updateProfileResult = nil
         searchUsersResult = []
         usernameAvailabilityResult = true
+        fetchRecentPublicUsersResult = []
     }
 }
 

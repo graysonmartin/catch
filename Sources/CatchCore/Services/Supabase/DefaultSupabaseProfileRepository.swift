@@ -90,6 +90,25 @@ public final class DefaultSupabaseProfileRepository: SupabaseProfileRepository, 
             .value
         return results.isEmpty
     }
+
+    public func fetchRecentPublicUsers(excluding excludedIDs: Set<String>, limit: Int) async throws -> [SupabaseProfile] {
+        // Fetch more than requested so we can filter locally after exclusion
+        let fetchLimit = limit + excludedIDs.count
+        let profiles: [SupabaseProfile] = try await clientProvider.client
+            .from(Self.tableName)
+            .select()
+            .eq("is_private", value: false)
+            .order("follower_count", ascending: false)
+            .limit(fetchLimit)
+            .execute()
+            .value
+
+        let idStrings = excludedIDs
+        return profiles
+            .filter { !idStrings.contains($0.id.uuidString.lowercased()) }
+            .prefix(limit)
+            .map { $0 }
+    }
 }
 
 // MARK: - Array Chunking

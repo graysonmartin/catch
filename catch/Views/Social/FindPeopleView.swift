@@ -6,6 +6,7 @@ struct FindPeopleView: View {
     @Environment(SupabaseFollowService.self) private var followService
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(ProfileSyncService.self) private var profileSyncService
+    @Environment(SuggestedPeopleService.self) private var suggestedPeopleService: SuggestedPeopleService?
     @Environment(ToastManager.self) private var toastManager
 
     @State private var searchText = ""
@@ -17,15 +18,21 @@ struct FindPeopleView: View {
         authService.authState.user?.id ?? ""
     }
 
+    private var suggestedPeople: [SuggestedPerson] {
+        suggestedPeopleService?.suggestedPeople ?? []
+    }
+
     var body: some View {
         NavigationStack {
             List {
-                if isSearching && results.isEmpty {
+                if searchText.isEmpty {
+                    suggestionsSection
+                } else if isSearching && results.isEmpty {
                     PawLoadingView(size: .inline, label: CatchStrings.Social.searching)
                         .frame(maxWidth: .infinity)
                         .listRowSeparator(.hidden)
                         .padding(.top, CatchSpacing.space24)
-                } else if results.isEmpty && !searchText.isEmpty {
+                } else if results.isEmpty {
                     ContentUnavailableView(
                         CatchStrings.Social.noOneFound,
                         systemImage: "person.slash",
@@ -45,15 +52,6 @@ struct FindPeopleView: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .overlay {
-                if searchText.isEmpty && results.isEmpty {
-                    EmptyStateView(
-                        icon: "magnifyingglass",
-                        title: CatchStrings.Social.findYourPeople,
-                        subtitle: CatchStrings.Social.findPeopleSubtitle
-                    )
-                }
-            }
             .searchable(text: $searchText, prompt: CatchStrings.Social.searchByUsername)
             .navigationTitle(CatchStrings.Social.findPeople)
             .navigationBarTitleDisplayMode(.inline)
@@ -65,6 +63,85 @@ struct FindPeopleView: View {
             .task(id: searchText) {
                 await search()
             }
+            .task {
+                await suggestedPeopleService?.loadIfNeeded()
+            }
+        }
+    }
+
+    // MARK: - Suggestions
+
+    @ViewBuilder
+    private var suggestionsSection: some View {
+        if !suggestedPeople.isEmpty {
+            Section {
+                ForEach(suggestedPeople) { person in
+                    NavigationLink {
+                        RemoteProfileContent(
+                            userID: person.id,
+                            initialDisplayName: person.displayName
+                        )
+                    } label: {
+                        suggestedPersonRow(for: person)
+                    }
+                }
+            } header: {
+                Text(CatchStrings.Social.suggestedForYou)
+            }
+        }
+    }
+
+    private func suggestedPersonRow(for person: SuggestedPerson) -> some View {
+        HStack(spacing: CatchSpacing.space12) {
+            UserAvatarView(avatarURL: person.avatarURL)
+
+            VStack(alignment: .leading, spacing: CatchSpacing.space2) {
+                Text(person.displayName.isEmpty ? CatchStrings.Social.anonymous : person.displayName)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(CatchTheme.textPrimary)
+
+                if let username = person.username {
+                    Text(UsernameValidator.formatDisplay(username))
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.primary)
+                }
+            }
+
+            Spacer()
+
+            suggestedPersonAction(for: person)
+        }
+    }
+
+    @ViewBuilder
+    private func suggestedPersonAction(for person: SuggestedPerson) -> some View {
+        let targetID = person.id
+
+        if targetID == currentUserID {
+            Text(CatchStrings.Social.you)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(CatchTheme.textSecondary)
+        } else if followService.isFollowing(targetID) {
+            Text(CatchStrings.Social.followingStatus)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(CatchTheme.textSecondary)
+        } else if followService.pendingRequestTo(targetID) != nil || sentFollowIDs.contains(targetID) {
+            Text(CatchStrings.Social.requestedStatus)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(CatchTheme.textSecondary)
+        } else {
+            Button {
+                performFollow(targetID: targetID, isPrivate: person.isPrivate)
+            } label: {
+                Text(person.isPrivate ? CatchStrings.Social.request : CatchStrings.Social.follow)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, CatchSpacing.space12)
+                    .padding(.vertical, CatchSpacing.space6)
+                    .background(CatchTheme.primary)
+                    .clipShape(Capsule())
+            }
+            .buttonStyle(.plain)
         }
     }
 
@@ -164,6 +241,7 @@ struct FindPeopleView: View {
                     by: currentUserID,
                     isTargetPrivate: isPrivate
                 )
+                suggestedPeopleService?.removeSuggestion(id: targetID)
                 if isPrivate {
                     sentFollowIDs.insert(targetID)
                 }

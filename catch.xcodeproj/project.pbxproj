@@ -182,6 +182,8 @@
 		E8FP00000211 /* PhotoViewerStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FP00000011 /* PhotoViewerStateTests.swift */; };
 		E8KC00000101 /* KeychainServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8KC00000001 /* KeychainServiceImpl.swift */; };
 		E8LB00000101 /* LikedByListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8LB00000001 /* LikedByListView.swift */; };
+		E8SG00000101 /* SuggestedPeopleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SG00000001 /* SuggestedPeopleSection.swift */; };
+		E8SG00000102 /* SuggestedPersonCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SG00000002 /* SuggestedPersonCard.swift */; };
 		E8PF00000101 /* ProfileMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000001 /* ProfileMode.swift */; };
 		E8PF00000102 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000002 /* ProfileView.swift */; };
 		E8PF00000103 /* OwnProfileContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000003 /* OwnProfileContent.swift */; };
@@ -382,6 +384,8 @@
 		E8FP00000011 /* PhotoViewerStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewerStateTests.swift; sourceTree = "<group>"; };
 		E8KC00000001 /* KeychainServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainServiceImpl.swift; sourceTree = "<group>"; };
 		E8LB00000001 /* LikedByListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedByListView.swift; sourceTree = "<group>"; };
+		E8SG00000001 /* SuggestedPeopleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestedPeopleSection.swift; sourceTree = "<group>"; };
+		E8SG00000002 /* SuggestedPersonCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestedPersonCard.swift; sourceTree = "<group>"; };
 		E8PF00000001 /* ProfileMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMode.swift; sourceTree = "<group>"; };
 		E8PF00000002 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		E8PF00000003 /* OwnProfileContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnProfileContent.swift; sourceTree = "<group>"; };
@@ -579,6 +583,7 @@
 				E8CC00000001 /* CameraCaptureView.swift */,
 				E8RI00000001 /* RemoteImageView.swift */,
 				E8UA00000001 /* UserAvatarView.swift */,
+				E8SG00000002 /* SuggestedPersonCard.swift */,
 				E8UF00000001 /* UsernameFieldView.swift */,
 			);
 			path = Components;
@@ -886,6 +891,7 @@
 				E8SI0000000B /* CommentThreadView.swift */,
 				E8ES00000001 /* EncounterDetailSheet.swift */,
 				E8LB00000001 /* LikedByListView.swift */,
+				E8SG00000001 /* SuggestedPeopleSection.swift */,
 			);
 			path = Social;
 			sourceTree = "<group>";
@@ -1266,6 +1272,8 @@
 				E8FP00000102 /* ZoomablePhotoView.swift in Sources */,
 				E8FP00000103 /* PhotoViewerState.swift in Sources */,
 				E8LB00000101 /* LikedByListView.swift in Sources */,
+				E8SG00000101 /* SuggestedPeopleSection.swift in Sources */,
+				E8SG00000102 /* SuggestedPersonCard.swift in Sources */,
 				E8SF00000101 /* FeedItem.swift in Sources */,
 				E8SF00000102 /* SocialFeedService.swift in Sources */,
 				E8SF00000105 /* DefaultSocialFeedService.swift in Sources */,
