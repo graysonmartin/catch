@@ -31,9 +31,15 @@ public struct SuggestedPerson: Sendable, Identifiable {
 @Observable
 @MainActor
 public final class SuggestedPeopleService: @unchecked Sendable {
+    /// Filtered list — excludes already-followed users. Use in Find People.
     public var suggestedPeople: [SuggestedPerson] {
         let excluded = followedIDsProvider()
         return fetchedPeople.filter { !excluded.contains($0.id) }
+    }
+
+    /// Unfiltered list — includes followed users. Use for feed cards.
+    public var allFetchedPeople: [SuggestedPerson] {
+        fetchedPeople
     }
 
     private var fetchedPeople: [SuggestedPerson] = []

@@ -12,7 +12,7 @@ struct SuggestedPeopleSection: View {
     }
 
     var body: some View {
-        let people = suggestedPeopleService.suggestedPeople
+        let people = suggestedPeopleService.allFetchedPeople
         if !people.isEmpty {
             VStack(alignment: .leading, spacing: CatchSpacing.space12) {
                 header
@@ -43,8 +43,8 @@ struct SuggestedPeopleSection: View {
                     )) {
                         SuggestedPersonCard(
                             person: person,
-                            isFollowing: false,
-                            isPending: false,
+                            isFollowing: followService.isFollowing(person.id),
+                            isPending: followService.pendingRequestTo(person.id) != nil,
                             onFollow: { performFollow(person: person) },
                             onTap: {}
                         )
@@ -66,7 +66,7 @@ struct SuggestedPeopleSection: View {
                     by: currentUserID,
                     isTargetPrivate: person.isPrivate
                 )
-                suggestedPeopleService.removeSuggestion(id: person.id)
+                // Card stays visible — shows "following" state
             } catch {
                 toastManager.showError(CatchStrings.Toast.followFailed)
             }
