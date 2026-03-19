@@ -20,6 +20,7 @@ struct SocialFeedItemView: View {
     let catEncounters: [CloudEncounter]
 
     @State private var showDetail = false
+    @State private var showReportSheet = false
 
     private var isUnnamed: Bool {
         cat?.isUnnamed ?? true
@@ -47,7 +48,10 @@ struct SocialFeedItemView: View {
         .contentShape(Rectangle())
         .onTapGesture { showDetail = true }
         .sheet(isPresented: $showDetail) {
-            EncounterDetailSheet(data: detailData)
+            EncounterDetailSheet(data: detailData, isOwnEncounter: false)
+        }
+        .sheet(isPresented: $showReportSheet) {
+            ReportEncounterView(encounterRecordName: encounter.recordName)
         }
     }
 
@@ -82,6 +86,24 @@ struct SocialFeedItemView: View {
                     .foregroundStyle(CatchTheme.primary)
                     .font(.caption)
             }
+
+            reportMenu
+        }
+    }
+
+    private var reportMenu: some View {
+        Menu {
+            Button {
+                showReportSheet = true
+            } label: {
+                Label(CatchStrings.Report.reportPost, systemImage: "flag")
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.body)
+                .foregroundStyle(CatchTheme.textSecondary)
+                .frame(width: 32, height: 32)
+                .contentShape(Rectangle())
         }
     }
 

@@ -11,6 +11,7 @@ struct RemoteFeedItemView: View {
     let cat: CloudCat?
 
     @State private var showDetail = false
+    @State private var showReportSheet = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
@@ -26,8 +27,12 @@ struct RemoteFeedItemView: View {
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
         .sheet(isPresented: $showDetail) {
             EncounterDetailSheet(
-                data: EncounterDetailData(remote: encounter, cat: cat, isFirstEncounter: false)
+                data: EncounterDetailData(remote: encounter, cat: cat, isFirstEncounter: false),
+                isOwnEncounter: false
             )
+        }
+        .sheet(isPresented: $showReportSheet) {
+            ReportEncounterView(encounterRecordName: encounter.recordName)
         }
     }
 
@@ -53,6 +58,24 @@ struct RemoteFeedItemView: View {
                     .foregroundStyle(CatchTheme.primary)
                     .font(.caption)
             }
+
+            reportMenu
+        }
+    }
+
+    private var reportMenu: some View {
+        Menu {
+            Button {
+                showReportSheet = true
+            } label: {
+                Label(CatchStrings.Report.reportPost, systemImage: "flag")
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.body)
+                .foregroundStyle(CatchTheme.textSecondary)
+                .frame(width: 32, height: 32)
+                .contentShape(Rectangle())
         }
     }
 

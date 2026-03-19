@@ -21,6 +21,7 @@ struct catchApp: App {
     @State private var catDataService: CatDataService
     @State private var encounterDataService: EncounterDataService
     @State private var feedDataService: FeedDataService
+    @State private var reportService: SupabaseReportService
     @State private var suggestedPeopleService: SuggestedPeopleService
 
     init() {
@@ -40,6 +41,7 @@ struct catchApp: App {
         let encRepo = DefaultSupabaseEncounterRepository(clientProvider: provider)
         let followRepo = DefaultSupabaseFollowRepository(clientProvider: provider)
         let socialRepo = DefaultSupabaseSocialRepository(clientProvider: provider)
+        let reportRepo = DefaultSupabaseReportRepository(clientProvider: provider)
         let feedRepo = DefaultSupabaseFeedRepository(clientProvider: provider)
         let assets = DefaultSupabaseAssetService(clientProvider: provider)
 
@@ -65,6 +67,11 @@ struct catchApp: App {
             getCurrentUserID: getUserID
         )
 
+        let report = SupabaseReportService(
+            repository: reportRepo,
+            getCurrentUserID: getUserID
+        )
+
         let socialFeed = DefaultSocialFeedService(
             repository: feedRepo,
             followService: follow
@@ -75,6 +82,7 @@ struct catchApp: App {
         _followService = State(initialValue: follow)
         _userBrowseService = State(initialValue: browseService)
         _socialInteractionService = State(initialValue: socialInteraction)
+        _reportService = State(initialValue: report)
         _socialFeedService = State(initialValue: socialFeed)
         _profileSyncService = State(initialValue: ProfileSyncService(
             profileRepository: profileRepo,
@@ -173,6 +181,7 @@ struct catchApp: App {
                 .environment(followService)
                 .environment(userBrowseService)
                 .environment(socialInteractionService)
+                .environment(reportService)
                 .environment(socialFeedService)
                 .environment(profileSyncService)
                 .environment(supabaseProvider)

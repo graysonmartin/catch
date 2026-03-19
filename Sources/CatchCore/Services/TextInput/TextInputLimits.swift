@@ -8,6 +8,7 @@ public enum TextInputLimits {
     public static let encounterNotes = 500
     public static let bio = 300
     public static let comment = 500
+    public static let reportReason = 500
 
     /// Percentage threshold at which the character count indicator appears (0.0–1.0).
     public static let warningThreshold: Double = 0.9

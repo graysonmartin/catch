@@ -250,6 +250,8 @@
 		E8UF00000101 /* UsernameFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8UF00000001 /* UsernameFieldView.swift */; };
 		E8RS00000102 /* DataRestoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000002 /* DataRestoreView.swift */; };
 		E8RS00000103 /* CatchStrings+Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000003 /* CatchStrings+Restore.swift */; };
+		E8RP00000101 /* ReportEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RP00000001 /* ReportEncounterView.swift */; };
+		E8RP00000102 /* CatchStrings+Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RP00000002 /* CatchStrings+Report.swift */; };
 		E8RS00000203 /* CatchStrings+Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000003 /* CatchStrings+Restore.swift */; };
 /* End PBXBuildFile section */
 
@@ -449,6 +451,8 @@
 		E8UF00000001 /* UsernameFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameFieldView.swift; sourceTree = "<group>"; };
 		E8RS00000002 /* DataRestoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataRestoreView.swift; sourceTree = "<group>"; };
 		E8RS00000003 /* CatchStrings+Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Restore.swift"; sourceTree = "<group>"; };
+		E8RP00000001 /* ReportEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportEncounterView.swift; sourceTree = "<group>"; };
+		E8RP00000002 /* CatchStrings+Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Report.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -629,6 +633,7 @@
 				E8PS00000002 /* CatchStrings+ProfileSetup.swift */,
 				E8SN00000002 /* CatchStrings+SignIn.swift */,
 				E8RS00000003 /* CatchStrings+Restore.swift */,
+				E8RP00000002 /* CatchStrings+Report.swift */,
 				E8RV00000002 /* CatchStrings+Recovery.swift */,
 				E8CS0000000D /* CatchStrings+Walkthrough.swift */,
 				E8AK00000001 /* AppStorageKeys.swift */,
@@ -916,6 +921,7 @@
 				E8E500000036 /* RemoteCatProfileView.swift */,
 				E8E500000037 /* RemoteFeedItemView.swift */,
 				E8E50000003A /* RemoteFollowListView.swift */,
+				E8RP00000001 /* ReportEncounterView.swift */,
 				E8SF00000004 /* SocialFeedItemView.swift */,
 				E8SI0000000A /* CommentRowView.swift */,
 				E8SI0000000B /* CommentThreadView.swift */,
@@ -1334,6 +1340,8 @@
 				E8UF00000101 /* UsernameFieldView.swift in Sources */,
 				E8RS00000102 /* DataRestoreView.swift in Sources */,
 				E8RS00000103 /* CatchStrings+Restore.swift in Sources */,
+				E8RP00000101 /* ReportEncounterView.swift in Sources */,
+				E8RP00000102 /* CatchStrings+Report.swift in Sources */,
 				E8CS0000010D /* CatchStrings+Walkthrough.swift in Sources */,
 				E8WT00000101 /* NewUserWalkthroughView.swift in Sources */,
 				E8WT00000102 /* WalkthroughLocationStep.swift in Sources */,
