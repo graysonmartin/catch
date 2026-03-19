@@ -7,8 +7,6 @@ struct SuggestedPeopleSection: View {
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(ToastManager.self) private var toastManager
 
-    @State private var sentFollowIDs: Set<String> = []
-
     private var currentUserID: String {
         authService.authState.user?.id ?? ""
     }
@@ -45,9 +43,8 @@ struct SuggestedPeopleSection: View {
                     )) {
                         SuggestedPersonCard(
                             person: person,
-                            isFollowing: followService.isFollowing(person.id),
-                            isPending: followService.pendingRequestTo(person.id) != nil
-                                || sentFollowIDs.contains(person.id),
+                            isFollowing: false,
+                            isPending: false,
                             onFollow: { performFollow(person: person) },
                             onTap: {}
                         )
@@ -69,9 +66,7 @@ struct SuggestedPeopleSection: View {
                     by: currentUserID,
                     isTargetPrivate: person.isPrivate
                 )
-                if person.isPrivate {
-                    sentFollowIDs.insert(person.id)
-                }
+                suggestedPeopleService.removeSuggestion(id: person.id)
             } catch {
                 toastManager.showError(CatchStrings.Toast.followFailed)
             }

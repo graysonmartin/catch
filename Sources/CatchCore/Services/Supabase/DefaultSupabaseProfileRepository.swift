@@ -98,7 +98,7 @@ public final class DefaultSupabaseProfileRepository: SupabaseProfileRepository, 
             .from(Self.tableName)
             .select()
             .eq("is_private", value: false)
-            .order("updated_at", ascending: false)
+            .order("follower_count", ascending: false)
             .limit(fetchLimit)
             .execute()
             .value

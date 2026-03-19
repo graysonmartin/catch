@@ -31,7 +31,12 @@ public struct SuggestedPerson: Sendable, Identifiable {
 @Observable
 @MainActor
 public final class SuggestedPeopleService: @unchecked Sendable {
-    public private(set) var suggestedPeople: [SuggestedPerson] = []
+    public var suggestedPeople: [SuggestedPerson] {
+        let excluded = followedIDsProvider()
+        return fetchedPeople.filter { !excluded.contains($0.id) }
+    }
+
+    private var fetchedPeople: [SuggestedPerson] = []
     public private(set) var isLoading = false
     public private(set) var hasLoaded = false
 
@@ -40,7 +45,7 @@ public final class SuggestedPeopleService: @unchecked Sendable {
     private let currentUserIDProvider: () -> String?
     private let followedIDsProvider: () -> Set<String>
 
-    private static let suggestedLimit = 10
+    private static let suggestedLimit = 8
 
     public init(
         profileRepository: any SupabaseProfileRepository,
@@ -79,7 +84,7 @@ public final class SuggestedPeopleService: @unchecked Sendable {
             let userIDs = profiles.map { $0.id.uuidString.lowercased() }
             let catCounts = await fetchCatCounts(for: userIDs)
 
-            suggestedPeople = profiles.map { profile in
+            fetchedPeople = profiles.map { profile in
                 let userID = profile.id.uuidString.lowercased()
                 return SuggestedPerson(
                     id: userID,
@@ -91,13 +96,13 @@ public final class SuggestedPeopleService: @unchecked Sendable {
                 )
             }
         } catch {
-            suggestedPeople = []
+            fetchedPeople = []
         }
     }
 
     /// Removes a person from the local suggestions list (e.g. after following them).
     public func removeSuggestion(id: String) {
-        suggestedPeople.removeAll { $0.id == id }
+        fetchedPeople.removeAll { $0.id == id }
     }
 
     // MARK: - Private

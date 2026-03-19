@@ -24,10 +24,6 @@ struct FeedView: View {
         (socialFeedService?.isLoading == true || feedDataService.isLoading) && isEmpty
     }
 
-    private var shouldShowSuggestions: Bool {
-        feedItems.count < 3
-    }
-
     private var hasSuggestions: Bool {
         guard let service = suggestedPeopleService else { return false }
         return !service.suggestedPeople.isEmpty
@@ -94,7 +90,7 @@ struct FeedView: View {
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(spacing: CatchSpacing.space16) {
-                    if shouldShowSuggestions {
+                    if isEmpty {
                         SuggestedPeopleSection()
                     }
 
