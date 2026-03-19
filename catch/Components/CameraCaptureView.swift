@@ -51,7 +51,7 @@ struct CameraCaptureView: UIViewControllerRepresentable {
                 onCancel()
                 return
             }
-            onCapture(compressed)
+            onCapture(EXIFStripper.stripMetadata(from: compressed))
         }
 
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

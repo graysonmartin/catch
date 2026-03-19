@@ -76,7 +76,7 @@ struct AvatarPickerView: View {
             guard let jpeg = resized.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) else {
                 return
             }
-            avatarData = jpeg
+            avatarData = EXIFStripper.stripMetadata(from: jpeg)
         }
     }
 }
