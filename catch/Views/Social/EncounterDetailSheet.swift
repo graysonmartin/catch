@@ -3,6 +3,7 @@ import CatchCore
 
 struct EncounterDetailSheet: View {
     let data: EncounterDetailData
+    var isOwnEncounter: Bool = true
 
     @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(SupabaseAuthService.self) private var authService
@@ -13,6 +14,7 @@ struct EncounterDetailSheet: View {
     @State private var newCommentText = ""
     @State private var isLoading = false
     @State private var showLikedBySheet = false
+    @State private var showReportSheet = false
 
     private var currentUserID: String? {
         authService.authState.user?.id
@@ -34,8 +36,21 @@ struct EncounterDetailSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(CatchStrings.Common.done) { dismiss() }
+                    HStack(spacing: CatchSpacing.space12) {
+                        if !isOwnEncounter {
+                            Button {
+                                showReportSheet = true
+                            } label: {
+                                Image(systemName: "flag")
+                                    .foregroundStyle(CatchTheme.textSecondary)
+                            }
+                        }
+                        Button(CatchStrings.Common.done) { dismiss() }
+                    }
                 }
+            }
+            .sheet(isPresented: $showReportSheet) {
+                ReportEncounterView(encounterRecordName: encounterRecordName)
             }
             .navigationDestination(for: RemoteProfileRoute.self) { route in
                 RemoteProfileContent(
