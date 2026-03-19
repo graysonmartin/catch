@@ -5,12 +5,37 @@ import UIKit
 /// pinch-to-zoom and double-tap-to-zoom behavior.
 /// SwiftUI's `MagnificationGesture` lacks the inertia and rubber-banding
 /// that `UIScrollView` provides natively.
+///
+/// Supports two modes:
+/// - Local `Data` images (decoded synchronously)
+/// - Remote URL images (loaded asynchronously via `RemoteImageCache`)
 struct ZoomablePhotoView: UIViewRepresentable {
 
-    let imageData: Data
-    let onDismiss: () -> Void
+    private let imageSource: ImageSource
+    private let onDismiss: () -> Void
 
     private static let doubleTapScale: CGFloat = 3.0
+
+    // MARK: - Image Source
+
+    enum ImageSource: Equatable {
+        case data(Data)
+        case url(String)
+    }
+
+    // MARK: - Initializers
+
+    init(imageData: Data, onDismiss: @escaping () -> Void) {
+        self.imageSource = .data(imageData)
+        self.onDismiss = onDismiss
+    }
+
+    init(imageUrl: String, onDismiss: @escaping () -> Void) {
+        self.imageSource = .url(imageUrl)
+        self.onDismiss = onDismiss
+    }
+
+    // MARK: - UIViewRepresentable
 
     func makeUIView(context: Context) -> LayoutAwareScrollView {
         let scrollView = LayoutAwareScrollView()
@@ -31,12 +56,18 @@ struct ZoomablePhotoView: UIViewRepresentable {
         scrollView.addSubview(imageView)
 
         // Double-tap to zoom
-        let doubleTap = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handleDoubleTap(_:)))
+        let doubleTap = UITapGestureRecognizer(
+            target: context.coordinator,
+            action: #selector(Coordinator.handleDoubleTap(_:))
+        )
         doubleTap.numberOfTapsRequired = 2
         imageView.addGestureRecognizer(doubleTap)
 
         // Drag-to-dismiss
-        let pan = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handlePan(_:)))
+        let pan = UIPanGestureRecognizer(
+            target: context.coordinator,
+            action: #selector(Coordinator.handlePan(_:))
+        )
         pan.delegate = context.coordinator
         scrollView.addGestureRecognizer(pan)
 
@@ -50,7 +81,7 @@ struct ZoomablePhotoView: UIViewRepresentable {
             centerImage(in: scrollView)
         }
 
-        loadImage(into: imageView, scrollView: scrollView)
+        applyImage(to: imageView, in: scrollView, coordinator: context.coordinator)
 
         return scrollView
     }
@@ -58,11 +89,9 @@ struct ZoomablePhotoView: UIViewRepresentable {
     func updateUIView(_ scrollView: LayoutAwareScrollView, context: Context) {
         guard let imageView = scrollView.viewWithTag(100) as? UIImageView else { return }
 
-        // Only reload if the data actually changed
-        if context.coordinator.currentData != imageData {
+        if context.coordinator.currentSource != imageSource {
             scrollView.zoomScale = 1.0
-            loadImage(into: imageView, scrollView: scrollView)
-            context.coordinator.currentData = imageData
+            applyImage(to: imageView, in: scrollView, coordinator: context.coordinator)
         }
     }
 
@@ -72,8 +101,55 @@ struct ZoomablePhotoView: UIViewRepresentable {
 
     // MARK: - Image Loading
 
-    private func loadImage(into imageView: UIImageView, scrollView: UIScrollView) {
-        guard let uiImage = UIImage(data: imageData) else { return }
+    private func applyImage(
+        to imageView: UIImageView,
+        in scrollView: UIScrollView,
+        coordinator: Coordinator
+    ) {
+        coordinator.currentSource = imageSource
+
+        switch imageSource {
+        case .data(let data):
+            loadLocalImage(data, into: imageView, scrollView: scrollView)
+        case .url(let urlString):
+            loadRemoteImage(urlString, into: imageView, scrollView: scrollView)
+        }
+    }
+
+    private func loadLocalImage(_ data: Data, into imageView: UIImageView, scrollView: UIScrollView) {
+        guard let uiImage = UIImage(data: data) else { return }
+        setImage(uiImage, in: imageView, scrollView: scrollView)
+    }
+
+    private func loadRemoteImage(
+        _ urlString: String,
+        into imageView: UIImageView,
+        scrollView: UIScrollView
+    ) {
+        // Check cache synchronously first
+        if let cached = RemoteImageCache.shared.memoryImage(for: urlString) {
+            setImage(cached, in: imageView, scrollView: scrollView)
+            return
+        }
+
+        // Show placeholder state (empty) while loading
+        imageView.image = nil
+        scrollView.contentSize = .zero
+
+        // Load asynchronously
+        Task { @MainActor in
+            guard let downloaded = await RemoteImageCache.shared.loadImage(
+                for: urlString,
+                cacheKey: urlString
+            ) else { return }
+
+            // Verify the source hasn't changed while loading
+            guard imageView.superview === scrollView else { return }
+            setImage(downloaded, in: imageView, scrollView: scrollView)
+        }
+    }
+
+    private func setImage(_ uiImage: UIImage, in imageView: UIImageView, scrollView: UIScrollView) {
         imageView.image = uiImage
         imageView.frame = CGRect(origin: .zero, size: uiImage.size)
         scrollView.contentSize = uiImage.size
@@ -110,7 +186,7 @@ struct ZoomablePhotoView: UIViewRepresentable {
     final class Coordinator: NSObject, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 
         weak var scrollView: UIScrollView?
-        var currentData: Data?
+        var currentSource: ImageSource?
 
         private let onDismiss: () -> Void
         private var panStartY: CGFloat = 0
@@ -146,12 +222,20 @@ struct ZoomablePhotoView: UIViewRepresentable {
                 scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
             } else {
                 let location = gesture.location(in: scrollView.viewWithTag(100))
-                let zoomRect = zoomRectForScale(ZoomablePhotoView.doubleTapScale, center: location, in: scrollView)
+                let zoomRect = zoomRectForScale(
+                    ZoomablePhotoView.doubleTapScale,
+                    center: location,
+                    in: scrollView
+                )
                 scrollView.zoom(to: zoomRect, animated: true)
             }
         }
 
-        private func zoomRectForScale(_ scale: CGFloat, center: CGPoint, in scrollView: UIScrollView) -> CGRect {
+        private func zoomRectForScale(
+            _ scale: CGFloat,
+            center: CGPoint,
+            in scrollView: UIScrollView
+        ) -> CGRect {
             let width = scrollView.bounds.width / scale
             let height = scrollView.bounds.height / scale
             let x = center.x - width / 2
@@ -162,7 +246,8 @@ struct ZoomablePhotoView: UIViewRepresentable {
         // MARK: - Drag to Dismiss
 
         @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
-            guard let scrollView, scrollView.zoomScale <= scrollView.minimumZoomScale + 0.01 else { return }
+            guard let scrollView,
+                  scrollView.zoomScale <= scrollView.minimumZoomScale + 0.01 else { return }
 
             let translation = gesture.translation(in: scrollView)
 
@@ -228,3 +313,4 @@ final class LayoutAwareScrollView: UIScrollView {
         onLayoutChanged?()
     }
 }
+

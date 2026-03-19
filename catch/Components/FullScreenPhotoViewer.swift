@@ -69,20 +69,9 @@ struct FullScreenPhotoViewer: View {
                 onDismiss: onDismiss
             )
         } else if !photoUrls.isEmpty, index < photoUrls.count {
-            RemoteImageView(urlString: photoUrls[index], useFitMode: true) {
-                Image(systemName: "photo")
-                    .font(.system(size: 40))
-                    .foregroundStyle(.white.opacity(0.5))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-            .contentShape(Rectangle())
-            .gesture(
-                DragGesture(minimumDistance: 100)
-                    .onEnded { value in
-                        if abs(value.translation.height) > 100 {
-                            onDismiss()
-                        }
-                    }
+            ZoomablePhotoView(
+                imageUrl: photoUrls[index],
+                onDismiss: onDismiss
             )
         }
     }
