@@ -64,7 +64,7 @@ struct SuggestedPeopleSection: View {
                 try await followService.follow(
                     targetID: person.id,
                     by: currentUserID,
-                    isTargetPrivate: person.isPrivate
+                    isTargetPrivate: false
                 )
                 // Card stays visible — shows "following" state
             } catch {

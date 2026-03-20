@@ -131,9 +131,9 @@ struct FindPeopleView: View {
                 .foregroundStyle(CatchTheme.textSecondary)
         } else {
             Button {
-                performFollow(targetID: targetID, isPrivate: person.isPrivate)
+                performFollow(targetID: targetID, isPrivate: false)
             } label: {
-                Text(person.isPrivate ? CatchStrings.Social.request : CatchStrings.Social.follow)
+                Text(CatchStrings.Social.follow)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.white)
                     .padding(.horizontal, CatchSpacing.space12)
@@ -194,9 +194,9 @@ struct FindPeopleView: View {
                 .foregroundStyle(CatchTheme.textSecondary)
         } else {
             Button {
-                performFollow(targetID: targetID, isPrivate: user.isPrivate)
+                performFollow(targetID: targetID, isPrivate: false)
             } label: {
-                Text(user.isPrivate ? CatchStrings.Social.request : CatchStrings.Social.follow)
+                Text(CatchStrings.Social.follow)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.white)
                     .padding(.horizontal, CatchSpacing.space12)

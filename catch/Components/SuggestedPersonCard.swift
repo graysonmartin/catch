@@ -76,7 +76,7 @@ struct SuggestedPersonCard: View {
             Button {
                 onFollow()
             } label: {
-                Text(person.isPrivate ? CatchStrings.Social.request : CatchStrings.Social.follow)
+                Text(CatchStrings.Social.follow)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.white)
                     .padding(.horizontal, CatchSpacing.space12)
