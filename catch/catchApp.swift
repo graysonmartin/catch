@@ -28,6 +28,7 @@ struct catchApp: App {
     @StateObject private var appRouter = AppRouter()
     @State private var deviceTokenService: DeviceTokenService?
     @State private var notificationDelegate: NotificationDelegate?
+    @State private var inAppNotificationService: SupabaseInAppNotificationService
 
     init() {
         #if DEBUG
@@ -117,6 +118,10 @@ struct catchApp: App {
             }
         ))
         _deviceTokenService = State(initialValue: DeviceTokenService(
+            clientProvider: provider,
+            getCurrentUserID: getUserID
+        ))
+        _inAppNotificationService = State(initialValue: SupabaseInAppNotificationService(
             clientProvider: provider,
             getCurrentUserID: getUserID
         ))
@@ -217,6 +222,7 @@ struct catchApp: App {
                 .environment(encounterDataService)
                 .environment(feedDataService)
                 .environment(suggestedPeopleService)
+                .environment(inAppNotificationService)
                 .task {
                     await authService.refreshSessionIfNeeded()
                 }
