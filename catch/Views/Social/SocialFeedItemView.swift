@@ -37,7 +37,8 @@ struct SocialFeedItemView: View {
             InteractionBar(
                 encounterRecordName: encounter.recordName,
                 showDetail: $showDetail,
-                ownerRoute: RemoteProfileRoute(userID: owner.appleUserID, displayName: owner.displayName)
+                ownerRoute: RemoteProfileRoute(userID: owner.appleUserID, displayName: owner.displayName),
+                encounterDate: encounter.date
             )
         }
         .padding()
@@ -63,11 +64,12 @@ struct SocialFeedItemView: View {
             catPhotoLink
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
+                Text(cat?.displayName ?? CatchStrings.Social.unknownCat)
+                    .font(.headline)
+                    .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
+                    .lineLimit(1)
+
                 HStack(spacing: CatchSpacing.space4) {
-                    Text(cat?.displayName ?? CatchStrings.Social.unknownCat)
-                        .font(.headline)
-                        .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
-                        .lineLimit(1)
                     pill(
                         text: isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat,
                         isActive: isFirstEncounter
@@ -76,9 +78,6 @@ struct SocialFeedItemView: View {
                         pill(text: CatchStrings.Feed.pillStray, isActive: false)
                     }
                 }
-                Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
             }
 
             Spacer()

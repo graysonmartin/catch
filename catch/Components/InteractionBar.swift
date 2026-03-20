@@ -6,22 +6,23 @@ struct InteractionBar: View {
     @Binding var showDetail: Bool
     var ownerRoute: RemoteProfileRoute?
     var isOwnEncounter: Bool = false
+    var encounterDate: Date?
 
     @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(ToastManager.self) private var toastManager
 
     @State private var showLikedBySheet = false
 
+    private var formattedDate: String? {
+        encounterDate?.formatted(date: .abbreviated, time: .omitted)
+    }
+
     var body: some View {
         HStack(spacing: CatchSpacing.space16) {
             likeSection
             commentButton
             Spacer()
-            if let ownerRoute {
-                ownerLink(route: ownerRoute)
-            } else if isOwnEncounter {
-                spottedByYouLabel
-            }
+            spottedLabel
         }
         .sheet(isPresented: $showLikedBySheet) {
             LikedByListView(encounterRecordName: encounterRecordName)
@@ -81,27 +82,44 @@ struct InteractionBar: View {
         .accessibilityLabel(CatchStrings.Accessibility.commentButton(commentCount))
     }
 
-    private var spottedByYouLabel: some View {
-        (Text(CatchStrings.Feed.spottedByPrefix)
-            .foregroundStyle(CatchTheme.textSecondary) +
-        Text(CatchStrings.Social.you)
-            .foregroundStyle(CatchTheme.primary))
-            .font(.caption.weight(.medium))
+    // MARK: - Spotted Label
+
+    @ViewBuilder
+    private var spottedLabel: some View {
+        if let ownerRoute {
+            NavigationLink(value: ownerRoute) {
+                HStack(spacing: CatchSpacing.space4) {
+                    spottedText(name: ownerRoute.displayName, highlight: false)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
+                }
+            }
+            .buttonStyle(.plain)
+        } else if isOwnEncounter {
+            spottedText(name: CatchStrings.Social.you, highlight: true)
+        } else if let formattedDate {
+            Text(CatchStrings.Feed.spottedOn(formattedDate))
+                .font(.caption.weight(.medium))
+                .foregroundStyle(CatchTheme.textSecondary)
+        }
     }
 
-    private func ownerLink(route: RemoteProfileRoute) -> some View {
-        NavigationLink(value: route) {
-            HStack(spacing: CatchSpacing.space4) {
-                Text(CatchStrings.Feed.spottedBy(route.displayName))
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(CatchTheme.textSecondary)
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 9, weight: .semibold))
-                    .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
+    private func spottedText(name: String, highlight: Bool) -> some View {
+        Group {
+            if let formattedDate {
+                Text(CatchStrings.Feed.spottedOnByPrefix(formattedDate))
+                    .foregroundStyle(CatchTheme.textSecondary) +
+                Text(name)
+                    .foregroundStyle(highlight ? CatchTheme.primary : CatchTheme.textSecondary)
+            } else {
+                Text(CatchStrings.Feed.spottedByPrefix)
+                    .foregroundStyle(CatchTheme.textSecondary) +
+                Text(name)
+                    .foregroundStyle(highlight ? CatchTheme.primary : CatchTheme.textSecondary)
             }
         }
-        .buttonStyle(.plain)
+        .font(.caption.weight(.medium))
     }
 
     // MARK: - Helpers

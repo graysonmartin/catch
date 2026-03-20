@@ -83,11 +83,12 @@ struct FeedItemView: View {
             )
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
+                Text(encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat)
+                    .font(.headline)
+                    .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
+                    .lineLimit(1)
+
                 HStack(spacing: CatchSpacing.space4) {
-                    Text(encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat)
-                        .font(.headline)
-                        .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
-                        .lineLimit(1)
                     pill(
                         text: isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat,
                         isActive: isFirstEncounter
@@ -96,9 +97,6 @@ struct FeedItemView: View {
                         pill(text: CatchStrings.Feed.pillStray, isActive: false)
                     }
                 }
-                Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
             }
 
             Spacer()
@@ -176,7 +174,7 @@ struct FeedItemView: View {
 
     @ViewBuilder
     private var interactionSection: some View {
-        InteractionBar(encounterRecordName: encounter.id.uuidString, showDetail: $showDetail, isOwnEncounter: true)
+        InteractionBar(encounterRecordName: encounter.id.uuidString, showDetail: $showDetail, isOwnEncounter: true, encounterDate: encounter.date)
     }
 
     // MARK: - Overflow Menu

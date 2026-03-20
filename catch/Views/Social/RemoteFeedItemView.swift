@@ -18,7 +18,7 @@ struct RemoteFeedItemView: View {
             header
             photos
             encounterMetadata
-            InteractionBar(encounterRecordName: encounter.recordName, showDetail: $showDetail)
+            InteractionBar(encounterRecordName: encounter.recordName, showDetail: $showDetail, encounterDate: encounter.date)
         }
         .padding()
         .background(CatchTheme.cardBackground)
@@ -53,9 +53,6 @@ struct RemoteFeedItemView: View {
                     .font(.headline)
                     .foregroundStyle(cat?.isUnnamed == true ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                     .lineLimit(1)
-                Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
             }
 
             Spacer()
