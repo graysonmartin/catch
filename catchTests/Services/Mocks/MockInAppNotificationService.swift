@@ -30,35 +30,14 @@ final class MockInAppNotificationService: InAppNotificationService, @unchecked S
     func markAsRead(notificationId: String) async {
         markAsReadCalls.append(notificationId)
         if let index = notifications.firstIndex(where: { $0.id == notificationId }) {
-            let item = notifications[index]
-            notifications[index] = NotificationItem(
-                id: item.id,
-                notificationType: item.notificationType,
-                actorDisplayName: item.actorDisplayName,
-                actorAvatarURL: item.actorAvatarURL,
-                encounterId: item.encounterId,
-                encounterThumbnailURL: item.encounterThumbnailURL,
-                timestamp: item.timestamp,
-                isRead: true
-            )
+            notifications[index] = notifications[index].withReadState(true)
             unreadCount = notifications.filter { !$0.isRead }.count
         }
     }
 
     func markAllAsRead() async {
         markAllAsReadCalls += 1
-        notifications = notifications.map { item in
-            NotificationItem(
-                id: item.id,
-                notificationType: item.notificationType,
-                actorDisplayName: item.actorDisplayName,
-                actorAvatarURL: item.actorAvatarURL,
-                encounterId: item.encounterId,
-                encounterThumbnailURL: item.encounterThumbnailURL,
-                timestamp: item.timestamp,
-                isRead: true
-            )
-        }
+        notifications = notifications.map { $0.withReadState(true) }
         unreadCount = 0
     }
 

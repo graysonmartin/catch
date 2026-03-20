@@ -72,18 +72,26 @@ struct NotificationRowView: View {
         }
     }
 
-    // MARK: - Trailing Thumbnail
+    // MARK: - Trailing Content
 
     @ViewBuilder
     private var trailingContent: some View {
-        if let url = item.encounterThumbnailURL, !url.isEmpty {
-            RemoteImageView(urlString: url) {
-                RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight)
-                    .fill(CatchTheme.secondary.opacity(0.3))
-                    .frame(width: Layout.thumbnailSize, height: Layout.thumbnailSize)
+        switch item.notificationType {
+        case .encounterLiked, .encounterCommented:
+            if let url = item.encounterThumbnailURL, !url.isEmpty {
+                RemoteImageView(urlString: url) {
+                    RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight)
+                        .fill(CatchTheme.secondary.opacity(0.3))
+                        .frame(width: Layout.thumbnailSize, height: Layout.thumbnailSize)
+                }
+                .frame(width: Layout.thumbnailSize, height: Layout.thumbnailSize)
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
             }
-            .frame(width: Layout.thumbnailSize, height: Layout.thumbnailSize)
-            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
+        case .newFollower:
+            Image(systemName: "person.badge.plus")
+                .font(.title3)
+                .foregroundStyle(CatchTheme.primary)
+                .frame(width: Layout.thumbnailSize, height: Layout.thumbnailSize)
         }
     }
 }

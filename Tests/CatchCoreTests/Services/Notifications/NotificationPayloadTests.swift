@@ -17,6 +17,12 @@ final class NotificationPayloadTests: XCTestCase {
         XCTAssertEqual(decoded, payload)
     }
 
+    func test_roundTrip_newFollower() throws {
+        let payload = makePayload(type: .newFollower)
+        let decoded = try encodeThenDecode(payload)
+        XCTAssertEqual(decoded, payload)
+    }
+
     func test_roundTrip_withNilOptionals() throws {
         let payload = NotificationPayload(
             notificationType: .encounterLiked,
@@ -61,10 +67,20 @@ final class NotificationPayloadTests: XCTestCase {
         XCTAssertEqual(NotificationType.encounterCommented.rawValue, "encounter_commented")
     }
 
+    func test_notificationType_newFollower_rawValue() {
+        XCTAssertEqual(NotificationType.newFollower.rawValue, "new_follower")
+    }
+
     func test_notificationType_decodesFromRawValue() throws {
         let json = Data("\"encounter_liked\"".utf8)
         let decoded = try JSONDecoder().decode(NotificationType.self, from: json)
         XCTAssertEqual(decoded, .encounterLiked)
+    }
+
+    func test_notificationType_newFollower_decodesFromRawValue() throws {
+        let json = Data("\"new_follower\"".utf8)
+        let decoded = try JSONDecoder().decode(NotificationType.self, from: json)
+        XCTAssertEqual(decoded, .newFollower)
     }
 
     func test_notificationType_invalidRawValue_throws() {
@@ -107,10 +123,10 @@ final class NotificationPayloadTests: XCTestCase {
     private func makePayload(type: NotificationType) -> NotificationPayload {
         NotificationPayload(
             notificationType: type,
-            entityType: "encounter",
-            entityId: "enc-abc-123",
+            entityType: type == .newFollower ? "follow" : "encounter",
+            entityId: type == .newFollower ? "user-xyz" : "enc-abc-123",
             actorId: "user-xyz",
-            collapseKey: "enc-abc-123",
+            collapseKey: type == .newFollower ? "user-xyz" : "enc-abc-123",
             createdAt: fixedDate,
             version: 1
         )
