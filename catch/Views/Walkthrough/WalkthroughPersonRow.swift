@@ -28,7 +28,7 @@ struct WalkthroughPersonRow: View {
     // MARK: - Subviews
 
     private var avatar: some View {
-        UserAvatarView(avatarURL: person.avatarURL, size: 40)
+        UserAvatarView(avatarURL: person.avatarURL, size: 40, accessibilityName: person.displayName)
     }
 
     private var nameSection: some View {
@@ -41,7 +41,7 @@ struct WalkthroughPersonRow: View {
             if let username = person.username {
                 Text(UsernameValidator.formatDisplay(username))
                     .font(.caption)
-                    .foregroundStyle(CatchTheme.primary)
+                    .foregroundStyle(CatchTheme.accessibleTextOrange)
                     .lineLimit(1)
             }
 

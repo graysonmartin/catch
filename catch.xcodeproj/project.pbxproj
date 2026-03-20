@@ -131,6 +131,8 @@
 		E8CS0000010C /* CatchStrings+Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000C /* CatchStrings+Diary.swift */; };
 		E8CS0000010D /* CatchStrings+Walkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000D /* CatchStrings+Walkthrough.swift */; };
 		E8CS0000030D /* CatchStrings+Walkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000D /* CatchStrings+Walkthrough.swift */; };
+		E8CS0000010F /* CatchStrings+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000F /* CatchStrings+Accessibility.swift */; };
+		E8CS0000030F /* CatchStrings+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000F /* CatchStrings+Accessibility.swift */; };
 		E8WT00000101 /* NewUserWalkthroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000001 /* NewUserWalkthroughView.swift */; };
 		E8WT00000102 /* WalkthroughLocationStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000002 /* WalkthroughLocationStep.swift */; };
 		E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000003 /* WalkthroughPeopleStep.swift */; };
@@ -386,6 +388,7 @@
 		E8CS0000000B /* CatchStrings+Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Components.swift"; sourceTree = "<group>"; };
 		E8CS0000000C /* CatchStrings+Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Diary.swift"; sourceTree = "<group>"; };
 		E8CS0000000D /* CatchStrings+Walkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Walkthrough.swift"; sourceTree = "<group>"; };
+		E8CS0000000F /* CatchStrings+Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Accessibility.swift"; sourceTree = "<group>"; };
 		E8WT00000001 /* NewUserWalkthroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserWalkthroughView.swift; sourceTree = "<group>"; };
 		E8WT00000002 /* WalkthroughLocationStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughLocationStep.swift; sourceTree = "<group>"; };
 		E8WT00000003 /* WalkthroughPeopleStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughPeopleStep.swift; sourceTree = "<group>"; };
@@ -692,6 +695,7 @@
 				E8RP00000002 /* CatchStrings+Report.swift */,
 				E8RV00000002 /* CatchStrings+Recovery.swift */,
 				E8CS0000000D /* CatchStrings+Walkthrough.swift */,
+				E8CS0000000F /* CatchStrings+Accessibility.swift */,
 				E8CS0000000E /* CatchStrings+Notifications.swift */,
 				E8AK00000001 /* AppStorageKeys.swift */,
 				E8AU00000001 /* AppURL.swift */,
@@ -1460,6 +1464,7 @@
 				E8RP00000101 /* ReportEncounterView.swift in Sources */,
 				E8RP00000102 /* CatchStrings+Report.swift in Sources */,
 				E8CS0000010D /* CatchStrings+Walkthrough.swift in Sources */,
+				E8CS0000010F /* CatchStrings+Accessibility.swift in Sources */,
 				E8WT00000101 /* NewUserWalkthroughView.swift in Sources */,
 				E8WT00000102 /* WalkthroughLocationStep.swift in Sources */,
 				E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */,
@@ -1549,6 +1554,7 @@
 				E8PT00000212 /* ProfileDiaryTabTests.swift in Sources */,
 				E8CS0000030C /* CatchStrings+Diary.swift in Sources */,
 				E8CS0000030D /* CatchStrings+Walkthrough.swift in Sources */,
+				E8CS0000030F /* CatchStrings+Accessibility.swift in Sources */,
 				E8SI00000208 /* MockSocialInteractionService.swift in Sources */,
 				E8SF00000201 /* FeedItem.swift in Sources */,
 				E8SF00000202 /* SocialFeedService.swift in Sources */,

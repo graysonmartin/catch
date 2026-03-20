@@ -8,6 +8,8 @@ struct CatPhotoView: View {
     /// When true, loads the thumbnail variant URL for bandwidth savings.
     /// Set to false when displaying in contexts that need full resolution.
     var useThumbnail: Bool = true
+    /// Accessibility label for VoiceOver. When nil, uses a generic placeholder label.
+    var accessibilityName: String?
 
     /// Resolves to thumbnail URL when appropriate, otherwise the original.
     private var resolvedUrl: String? {
@@ -30,6 +32,10 @@ struct CatPhotoView: View {
         }
         .frame(width: size, height: size)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
+        .accessibilityLabel(
+            accessibilityName.map { CatchStrings.Accessibility.catPhoto(name: $0) }
+                ?? CatchStrings.Accessibility.catPhotoPlaceholder
+        )
     }
 
     private var placeholder: some View {

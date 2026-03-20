@@ -36,6 +36,12 @@ struct BreedLogCardView: View {
             y: CatchTheme.cardShadowY
         )
         .opacity(entry.isDiscovered ? 1.0 : 0.5)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(
+            entry.isDiscovered
+                ? CatchStrings.Accessibility.breedCard(name: entry.catalogEntry.displayName, rarity: entry.catalogEntry.rarity.label)
+                : CatchStrings.Accessibility.undiscoveredBreed
+        )
     }
 
     @ViewBuilder

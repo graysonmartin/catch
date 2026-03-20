@@ -37,9 +37,11 @@ struct CommentInputBar: View {
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.title2)
                         .foregroundStyle(canSubmit ? CatchTheme.primary : CatchTheme.textSecondary.opacity(0.3))
+                        .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
                 }
                 .disabled(!canSubmit)
                 .buttonStyle(.plain)
+                .accessibilityLabel(CatchStrings.Accessibility.submitComment)
                 .padding(.bottom, CatchSpacing.space6)
             }
 

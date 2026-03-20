@@ -4,6 +4,11 @@ import CatchCore
 struct MapFilterButton: View {
     @Binding var filterState: MapFilterState
     @State private var isExpanded = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var springAnimation: Animation? {
+        reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.8)
+    }
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -12,7 +17,7 @@ struct MapFilterButton: View {
                 .ignoresSafeArea()
                 .allowsHitTesting(isExpanded)
                 .onTapGesture {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                    withAnimation(springAnimation) {
                         isExpanded = false
                     }
                 }
@@ -20,7 +25,7 @@ struct MapFilterButton: View {
             VStack(alignment: .trailing, spacing: CatchSpacing.space8) {
                 if isExpanded {
                     filterDropdown
-                        .transition(.scale(scale: 0.85, anchor: .bottomTrailing).combined(with: .opacity))
+                        .transition(reduceMotion ? .opacity : .scale(scale: 0.85, anchor: .bottomTrailing).combined(with: .opacity))
                 }
 
                 toggleButton
@@ -33,7 +38,7 @@ struct MapFilterButton: View {
 
     private var toggleButton: some View {
         Button {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+            withAnimation(springAnimation) {
                 isExpanded.toggle()
             }
         } label: {
@@ -41,7 +46,7 @@ struct MapFilterButton: View {
                 Image(systemName: isExpanded ? "xmark" : "line.3.horizontal.decrease")
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(isExpanded ? .white : CatchTheme.textPrimary)
-                    .frame(width: 44, height: 44)
+                    .frame(width: CatchTheme.minTapTarget, height: CatchTheme.minTapTarget)
                     .background(isExpanded ? CatchTheme.primary : CatchTheme.cardBackground)
                     .clipShape(Circle())
                     .shadow(color: .black.opacity(0.12), radius: 6, y: 3)
@@ -51,10 +56,17 @@ struct MapFilterButton: View {
                         .fill(CatchTheme.primary)
                         .frame(width: 10, height: 10)
                         .offset(x: -2, y: 2)
+                        .accessibilityHidden(true)
                 }
             }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(
+            isExpanded
+                ? CatchStrings.Accessibility.closeFilters
+                : CatchStrings.Accessibility.mapFilterButton
+        )
+        .accessibilityHint(filterState.hasActiveFilters ? CatchStrings.Accessibility.mapFilterButtonActiveHint : "")
     }
 
     // MARK: - Dropdown
@@ -96,7 +108,7 @@ struct MapFilterButton: View {
     private func ownerRow(_ filter: MapOwnerFilter, label: String, icon: String) -> some View {
         let isSelected = filterState.ownerFilters.contains(filter)
         return Button {
-            withAnimation(.easeInOut(duration: 0.2)) {
+            withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
                 filterState.toggleOwnerFilter(filter)
             }
         } label: {
@@ -119,15 +131,17 @@ struct MapFilterButton: View {
                 }
             }
             .padding(.vertical, CatchSpacing.space4)
+            .frame(minHeight: CatchTheme.minTapTarget)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private func timeRangeRow(_ range: MapTimeRange, label: String) -> some View {
         let isSelected = filterState.timeRange == range
         return Button {
-            withAnimation(.easeInOut(duration: 0.2)) {
+            withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
                 filterState.timeRange = range
             }
         } label: {
@@ -146,14 +160,16 @@ struct MapFilterButton: View {
                 }
             }
             .padding(.vertical, CatchSpacing.space4)
+            .frame(minHeight: CatchTheme.minTapTarget)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private var resetButton: some View {
         Button {
-            withAnimation(.easeInOut(duration: 0.2)) {
+            withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
                 filterState.reset()
             }
         } label: {
@@ -161,10 +177,11 @@ struct MapFilterButton: View {
                 Spacer()
                 Text(CatchStrings.Map.resetFilters)
                     .font(.caption.weight(.medium))
-                    .foregroundStyle(CatchTheme.primary)
+                    .foregroundStyle(CatchTheme.accessibleTextOrange)
                 Spacer()
             }
             .padding(.vertical, CatchSpacing.space4)
+            .frame(minHeight: CatchTheme.minTapTarget)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

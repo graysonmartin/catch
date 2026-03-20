@@ -3,7 +3,6 @@ import CatchCore
 
 private enum Layout {
     static let avatarSize: CGFloat = 40
-    static let initialFontSize: CGFloat = 16
 }
 
 struct CommentRowView: View {
@@ -46,6 +45,7 @@ struct CommentRowView: View {
                                 .foregroundStyle(CatchTheme.textSecondary)
                         }
                         .buttonStyle(.plain)
+                        .accessibilityLabel(CatchStrings.Accessibility.deleteComment)
                     }
                 }
                 Text(comment.text)
@@ -85,7 +85,7 @@ struct CommentRowView: View {
             NavigationLink(value: profileRoute) {
                 Text(comment.authorName)
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(CatchTheme.primary)
+                    .foregroundStyle(CatchTheme.accessibleTextOrange)
             }
             .buttonStyle(.plain)
         } else {
@@ -107,7 +107,7 @@ struct CommentRowView: View {
     private var avatar: some View {
         Group {
             if let url = comment.avatarURL, !url.isEmpty {
-                UserAvatarView(avatarURL: url, size: Layout.avatarSize)
+                UserAvatarView(avatarURL: url, size: Layout.avatarSize, accessibilityName: comment.authorName)
             } else {
                 initialAvatar
             }
@@ -120,8 +120,9 @@ struct CommentRowView: View {
             .frame(width: Layout.avatarSize, height: Layout.avatarSize)
             .overlay {
                 Text(String(comment.authorName.prefix(1)).uppercased())
-                    .font(.system(size: Layout.initialFontSize, weight: .bold))
-                    .foregroundStyle(CatchTheme.primary)
+                    .font(.body.weight(.bold))
+                    .foregroundStyle(CatchTheme.accessibleTextOrange)
             }
+            .accessibilityLabel(CatchStrings.Accessibility.userAvatar(name: comment.authorName))
     }
 }

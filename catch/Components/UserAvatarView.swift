@@ -1,10 +1,12 @@
 import SwiftUI
+import CatchCore
 
 /// Displays a user avatar from a remote URL, falling back to a system person icon.
 /// Used in list rows (follow lists, search results, pending requests, comments).
 struct UserAvatarView: View {
     let avatarURL: String?
     var size: CGFloat = 36
+    var accessibilityName: String?
 
     var body: some View {
         Group {
@@ -18,6 +20,10 @@ struct UserAvatarView: View {
                 placeholder
             }
         }
+        .accessibilityLabel(
+            accessibilityName.map { CatchStrings.Accessibility.userAvatar(name: $0) }
+                ?? CatchStrings.Accessibility.userAvatarPlaceholder
+        )
     }
 
     private var placeholder: some View {

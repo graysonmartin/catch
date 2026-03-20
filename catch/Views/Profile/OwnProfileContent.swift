@@ -70,6 +70,7 @@ struct OwnProfileContent: View {
                     Image(systemName: "gearshape")
                         .foregroundStyle(CatchTheme.primary)
                 }
+                .accessibilityLabel(CatchStrings.Accessibility.settings)
             }
 
             if profile != nil, authService.authState.isSignedIn {
@@ -81,6 +82,7 @@ struct OwnProfileContent: View {
                             Image(systemName: "person.badge.plus")
                                 .foregroundStyle(CatchTheme.primary)
                         }
+                        .accessibilityLabel(CatchStrings.Accessibility.findPeople)
 
                         Button {
                             isShowingEditSheet = true
@@ -88,6 +90,7 @@ struct OwnProfileContent: View {
                             Image(systemName: "pencil")
                                 .foregroundStyle(CatchTheme.primary)
                         }
+                        .accessibilityLabel(CatchStrings.Accessibility.editProfile)
                     }
                 }
             }
@@ -214,6 +217,11 @@ struct OwnProfileContent: View {
                     }
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(
+                    followService.pendingRequests.isEmpty
+                        ? CatchStrings.Accessibility.followerCount(followService.followers.count)
+                        : CatchStrings.Accessibility.followerCountWithPending(followService.followers.count, pending: followService.pendingRequests.count)
+                )
             } else {
                 Spacer()
             }
@@ -230,6 +238,7 @@ struct OwnProfileContent: View {
                     )
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(CatchStrings.Accessibility.followingCount(followService.following.count))
             } else {
                 Spacer()
             }
@@ -257,6 +266,7 @@ struct OwnProfileContent: View {
                     .foregroundStyle(CatchTheme.secondary)
             }
         }
+        .accessibilityLabel(CatchStrings.Accessibility.userAvatar(name: profile.displayName))
     }
 
     private func compactSocialStat(count: Int, label: String) -> some View {

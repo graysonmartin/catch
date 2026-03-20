@@ -2,7 +2,6 @@ import SwiftUI
 import CatchCore
 
 private enum PillLayout {
-    static let fontSize: CGFloat = 9
     static let horizontalPadding: CGFloat = 6
     static let verticalPadding: CGFloat = 2
     static let cornerRadius: CGFloat = 4
@@ -54,6 +53,8 @@ struct FeedItemView: View {
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
         .contentShape(Rectangle())
         .onTapGesture { showDetail = true }
+        .accessibilityElement(children: .contain)
+        .accessibilityHint(CatchStrings.Accessibility.feedCardHint)
         .sheet(isPresented: $showDetail) {
             EncounterDetailSheet(data: detailData)
         }
@@ -74,13 +75,20 @@ struct FeedItemView: View {
 
     private var header: some View {
         HStack(spacing: CatchSpacing.space12) {
-            CatPhotoView(photoData: nil, photoUrl: encounter.cat?.photoUrls.first, size: FeedItemLayout.thumbnailSize)
+            CatPhotoView(
+                photoData: nil,
+                photoUrl: encounter.cat?.photoUrls.first,
+                size: FeedItemLayout.thumbnailSize,
+                accessibilityName: encounter.cat?.displayName
+            )
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
+                Text(encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat)
+                    .font(.headline)
+                    .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
+                    .lineLimit(1)
+
                 HStack(spacing: CatchSpacing.space4) {
-                    Text(encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat)
-                        .font(.headline)
-                        .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
                     pill(
                         text: isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat,
                         isActive: isFirstEncounter
@@ -89,9 +97,6 @@ struct FeedItemView: View {
                         pill(text: CatchStrings.Feed.pillStray, isActive: false)
                     }
                 }
-                Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
             }
 
             Spacer()
@@ -100,6 +105,7 @@ struct FeedItemView: View {
                 Image(systemName: "heart.fill")
                     .foregroundStyle(CatchTheme.primary)
                     .font(.caption)
+                    .accessibilityLabel(CatchStrings.Accessibility.ownedCat)
             }
 
             overflowMenu
@@ -132,6 +138,7 @@ struct FeedItemView: View {
             HStack(spacing: CatchSpacing.space6) {
                 Image(systemName: "pawprint.fill")
                     .frame(width: 16, alignment: .center)
+                    .accessibilityHidden(true)
                 Text(breedName)
             }
             .font(.subheadline)
@@ -145,6 +152,7 @@ struct FeedItemView: View {
             HStack(spacing: CatchSpacing.space6) {
                 Image(systemName: "mappin.circle.fill")
                     .frame(width: 16, alignment: .center)
+                    .accessibilityHidden(true)
                 Text(encounter.location.name)
             }
             .font(.subheadline)
@@ -166,7 +174,7 @@ struct FeedItemView: View {
 
     @ViewBuilder
     private var interactionSection: some View {
-        InteractionBar(encounterRecordName: encounter.id.uuidString, showDetail: $showDetail, isOwnEncounter: true)
+        InteractionBar(encounterRecordName: encounter.id.uuidString, showDetail: $showDetail, isOwnEncounter: true, encounterDate: encounter.date)
     }
 
     // MARK: - Overflow Menu
@@ -188,9 +196,10 @@ struct FeedItemView: View {
             Image(systemName: "ellipsis")
                 .font(.body)
                 .foregroundStyle(CatchTheme.textSecondary)
-                .frame(width: 32, height: 32)
+                .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
                 .contentShape(Rectangle())
         }
+        .accessibilityLabel(CatchStrings.Accessibility.moreOptions)
     }
 
     // MARK: - Actions
@@ -200,7 +209,7 @@ struct FeedItemView: View {
             do {
                 try await encounterDataService.deleteEncounter(id: encounter.id)
                 feedDataService.removeEncounter(id: encounter.id)
-                // Reload cats — the DB trigger may have deleted the orphaned cat.
+                // Reload cats -- the DB trigger may have deleted the orphaned cat.
                 try await catDataService.loadCats()
             } catch {
                 toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
@@ -212,8 +221,8 @@ struct FeedItemView: View {
 
     private func pill(text: String, isActive: Bool) -> some View {
         Text(text)
-            .font(.system(size: PillLayout.fontSize, weight: .bold))
-            .foregroundStyle(isActive ? CatchTheme.primary : CatchTheme.textSecondary)
+            .font(.system(size: 9, weight: .bold))
+            .foregroundStyle(isActive ? CatchTheme.accessibleTextOrange : CatchTheme.textSecondary)
             .padding(.horizontal, PillLayout.horizontalPadding)
             .padding(.vertical, PillLayout.verticalPadding)
             .background(
@@ -224,5 +233,7 @@ struct FeedItemView: View {
                             : CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity)
                     )
             )
+            .fixedSize()
+            .accessibilityLabel(CatchStrings.Accessibility.encounterPill(text))
     }
 }

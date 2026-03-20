@@ -31,10 +31,13 @@ struct EncounterRowView: View {
             Image(systemName: "chevron.right")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(CatchTheme.textSecondary.opacity(0.4))
+                .accessibilityHidden(true)
         }
         .padding(CatchSpacing.space12)
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isButton)
         .shadow(
             color: .black.opacity(CatchTheme.cardShadowOpacity),
             radius: CatchTheme.cardShadowRadius,

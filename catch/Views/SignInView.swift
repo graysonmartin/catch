@@ -35,10 +35,11 @@ struct SignInView: View {
                 .font(.system(size: 64))
                 .foregroundStyle(CatchTheme.primary)
                 .shadow(color: CatchTheme.primary.opacity(0.3), radius: 12, y: 4)
+                .accessibilityHidden(true)
 
             VStack(spacing: CatchSpacing.space8) {
                 Text(CatchStrings.Onboarding.appName)
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                    .font(.largeTitle.weight(.bold))
                     .foregroundStyle(CatchTheme.textPrimary)
 
                 Text(CatchStrings.SignIn.tagline)

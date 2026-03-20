@@ -6,6 +6,7 @@ struct FeedView: View {
     @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(DefaultSocialFeedService.self) private var socialFeedService: DefaultSocialFeedService?
     @Environment(ToastManager.self) private var toastManager
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Binding var scrollToTop: Bool
     @State private var isShowingFindPeople = false
 
@@ -52,6 +53,7 @@ struct FeedView: View {
                         Image(systemName: "person.badge.plus")
                             .foregroundStyle(CatchTheme.primary)
                     }
+                    .accessibilityLabel(CatchStrings.Accessibility.findPeople)
                 }
             }
             .sheet(isPresented: $isShowingFindPeople) {
@@ -108,8 +110,12 @@ struct FeedView: View {
             }
             .onChange(of: scrollToTop) {
                 if scrollToTop {
-                    withAnimation {
+                    if reduceMotion {
                         proxy.scrollTo("feedTop", anchor: .top)
+                    } else {
+                        withAnimation {
+                            proxy.scrollTo("feedTop", anchor: .top)
+                        }
                     }
                     scrollToTop = false
                 }

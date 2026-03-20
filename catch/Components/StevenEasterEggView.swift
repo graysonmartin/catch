@@ -6,6 +6,7 @@ struct StevenEasterEggView: View {
 
     @State private var isShowingPaws = false
     @State private var isShowingToast = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let pawCount = 25
 
@@ -14,19 +15,28 @@ struct StevenEasterEggView: View {
             Color.black.opacity(0.3)
                 .ignoresSafeArea()
 
-            ForEach(0..<pawCount, id: \.self) { index in
-                PawParticle(index: index, isAnimating: isShowingPaws)
+            if !reduceMotion {
+                ForEach(0..<pawCount, id: \.self) { index in
+                    PawParticle(index: index, isAnimating: isShowingPaws)
+                }
             }
 
             toastView
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(CatchStrings.Components.youFoundHim)
         .onAppear {
             UINotificationFeedbackGenerator().notificationOccurred(.success)
-            withAnimation(.easeOut(duration: 0.6)) {
+            if reduceMotion {
                 isShowingPaws = true
-            }
-            withAnimation(.easeOut(duration: 0.8).delay(0.3)) {
                 isShowingToast = true
+            } else {
+                withAnimation(.easeOut(duration: 0.6)) {
+                    isShowingPaws = true
+                }
+                withAnimation(.easeOut(duration: 0.8).delay(0.3)) {
+                    isShowingToast = true
+                }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                 onComplete()
@@ -82,5 +92,6 @@ private struct PawParticle: View {
                 )
         }
         .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
