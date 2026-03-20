@@ -37,16 +37,22 @@ final class DeviceTokenService: DeviceTokenServiceProtocol, @unchecked Sendable 
         guard let userID = getCurrentUserID() else { return }
 
         let hexToken = hexEncodedString(from: token)
+        #if DEBUG
+        let environment = "sandbox"
+        #else
+        let environment = "production"
+        #endif
+
         let payload = DeviceTokenPayload(
             userID: userID,
             token: hexToken,
-            platform: "ios"
+            environment: environment
         )
 
         do {
             try await clientProvider.client
                 .from(Self.tableName)
-                .upsert(payload, onConflict: "user_id,token")
+                .upsert(payload, onConflict: "token")
                 .execute()
         } catch {
             // Token sync is best-effort — log but don't crash
@@ -98,11 +104,11 @@ final class DeviceTokenService: DeviceTokenServiceProtocol, @unchecked Sendable 
 private struct DeviceTokenPayload: Encodable {
     let userID: String
     let token: String
-    let platform: String
+    let environment: String
 
     enum CodingKeys: String, CodingKey {
         case userID = "user_id"
         case token
-        case platform
+        case environment
     }
 }
