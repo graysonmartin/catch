@@ -236,6 +236,10 @@
 		E8SI0000010B /* CommentThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000B /* CommentThreadView.swift */; };
 		E8SI00000208 /* MockSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000C /* MockSocialInteractionService.swift */; };
 		E8SP00000001 /* CatchSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SP00000010 /* CatchSpacing.swift */; };
+		E8XP00000101 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000001 /* ExportService.swift */; };
+		E8XP00000103 /* DataExportSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000003 /* DataExportSection.swift */; };
+		E8XP00000104 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000004 /* ShareSheet.swift */; };
+		E8XP00000105 /* CatchStrings+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000005 /* CatchStrings+Export.swift */; };
 		E8ST00000101 /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000001 /* SettingsService.swift */; };
 		E8ST00000102 /* UserDefaultsSettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000002 /* UserDefaultsSettingsService.swift */; };
 		E8ST00000103 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ST00000003 /* SettingsView.swift */; };
@@ -454,6 +458,10 @@
 		E8ST00000004 /* CatchStrings+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Settings.swift"; sourceTree = "<group>"; };
 		E8ST00000005 /* MockSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsService.swift; sourceTree = "<group>"; };
 		E8ST00000006 /* UserDefaultsSettingsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsSettingsServiceTests.swift; sourceTree = "<group>"; };
+		E8XP00000001 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
+		E8XP00000003 /* DataExportSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportSection.swift; sourceTree = "<group>"; };
+		E8XP00000004 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		E8XP00000005 /* CatchStrings+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Export.swift"; sourceTree = "<group>"; };
 		E8TI00000001 /* LimitedTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedTextFieldView.swift; sourceTree = "<group>"; };
 		E8TI00000002 /* LimitedSingleLineFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitedSingleLineFieldView.swift; sourceTree = "<group>"; };
 		E8TI00000003 /* CatchStrings+TextInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+TextInput.swift"; sourceTree = "<group>"; };
@@ -622,6 +630,7 @@
 				E8UA00000001 /* UserAvatarView.swift */,
 				E8SG00000002 /* SuggestedPersonCard.swift */,
 				E8UF00000001 /* UsernameFieldView.swift */,
+				E8XP00000004 /* ShareSheet.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -651,6 +660,7 @@
 				E8RS00000003 /* CatchStrings+Restore.swift */,
 				E8RP00000002 /* CatchStrings+Report.swift */,
 				E8RV00000002 /* CatchStrings+Recovery.swift */,
+				E8XP00000005 /* CatchStrings+Export.swift */,
 				E8CS0000000D /* CatchStrings+Walkthrough.swift */,
 				E8AK00000001 /* AppStorageKeys.swift */,
 				E8AU00000001 /* AppURL.swift */,
@@ -840,6 +850,7 @@
 				E8C29A31E399698E3B36A45C /* CloudKit */,
 				E8F500000020 /* CloudSync */,
 				E8DA0000F001 /* Data */,
+				E8XP0000F001 /* Export */,
 				E8E500000020 /* Follow */,
 				E8PY0000F001 /* Profile */,
 				E8ST0000F001 /* Settings */,
@@ -1084,6 +1095,14 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		E8XP0000F001 /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				E8XP00000001 /* ExportService.swift */,
+			);
+			path = Export;
+			sourceTree = "<group>";
+		};
 		E8ST0000F002 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -1096,6 +1115,7 @@
 			isa = PBXGroup;
 			children = (
 				E8ST00000003 /* SettingsView.swift */,
+				E8XP00000003 /* DataExportSection.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1371,6 +1391,10 @@
 				E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */,
 				E8WT00000104 /* WalkthroughPersonRow.swift in Sources */,
 				E8WT00000105 /* WalkthroughWelcomeStep.swift in Sources */,
+				E8XP00000101 /* ExportService.swift in Sources */,
+				E8XP00000103 /* DataExportSection.swift in Sources */,
+				E8XP00000104 /* ShareSheet.swift in Sources */,
+				E8XP00000105 /* CatchStrings+Export.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
