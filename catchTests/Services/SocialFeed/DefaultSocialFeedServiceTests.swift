@@ -138,7 +138,7 @@ final class DefaultSocialFeedServiceTests: XCTestCase {
             XCTFail("Expected remote feed item")
             return
         }
-        XCTAssertEqual(encounter.recordName, encounterID.uuidString)
+        XCTAssertEqual(encounter.recordName, encounterID.uuidString.lowercased())
         XCTAssertEqual(cat?.name, "Whiskers")
         XCTAssertEqual(owner.displayName, "alice")
     }
