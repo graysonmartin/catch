@@ -234,6 +234,9 @@ struct RemoteProfileContent: View {
                             do {
                                 try await followService.unfollow(targetID: userID, by: authenticatedUserID)
                                 browseService?.invalidateCache(for: userID)
+                            } catch is RateLimitError {
+                                followerCountAdjustment += 1
+                                toastManager.showError(CatchStrings.Toast.rateLimitedFollow)
                             } catch {
                                 followerCountAdjustment += 1
                                 toastManager.showError(CatchStrings.Toast.unfollowFailed)
@@ -258,6 +261,11 @@ struct RemoteProfileContent: View {
                                 isTargetPrivate: false
                             )
                             browseService?.invalidateCache(for: userID)
+                        } catch is RateLimitError {
+                            if !isPrivate {
+                                followerCountAdjustment -= 1
+                            }
+                            toastManager.showError(CatchStrings.Toast.rateLimitedFollow)
                         } catch {
                             followerCountAdjustment -= 1
                             toastManager.showError(CatchStrings.Toast.followFailed)
@@ -275,6 +283,47 @@ struct RemoteProfileContent: View {
             }
         }
     }
+
+    // MARK: - Follow Button (Inline for Private)
+
+    @ViewBuilder
+    private var inlineFollowButton: some View {
+        if !isOwnProfile {
+            if followService.pendingRequestTo(userID) != nil {
+                Text(CatchStrings.Social.requestedStatus)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(CatchTheme.textSecondary)
+                    .padding(.horizontal, CatchSpacing.space24)
+                    .padding(.vertical, CatchSpacing.space8)
+                    .background(CatchTheme.textSecondary.opacity(0.1))
+                    .clipShape(Capsule())
+            } else {
+                Button(CatchStrings.Social.follow) {
+                    Task {
+                        do {
+                            try await followService.follow(
+                                targetID: userID,
+                                by: authenticatedUserID,
+                                isTargetPrivate: true
+                            )
+                            browseService?.invalidateCache(for: userID)
+                        } catch is RateLimitError {
+                            toastManager.showError(CatchStrings.Toast.rateLimitedFollow)
+                        } catch {
+                            toastManager.showError(CatchStrings.Toast.followFailed)
+                        }
+                    }
+                }
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(.white)
+                .padding(.horizontal, CatchSpacing.space24)
+                .padding(.vertical, CatchSpacing.space8)
+                .background(CatchTheme.primary)
+                .clipShape(Capsule())
+            }
+        }
+    }
+
 
     // MARK: - Diary Feed
 
@@ -397,6 +446,10 @@ struct RemoteProfileContent: View {
 
     private var authenticatedUserID: String {
         authService.authState.user?.id ?? ""
+    }
+
+    private var isPrivate: Bool {
+        data?.profile.isPrivate ?? false
     }
 
     private func breedCount(data: UserBrowseData) -> Int {

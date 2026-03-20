@@ -6,17 +6,20 @@ final class SupabaseFollowServiceTests: XCTestCase {
 
     private var sut: SupabaseFollowService!
     private var mockRepo: MockSupabaseFollowRepository!
+    private var mockRateLimiter: MockRateLimiter!
     private let currentUserID = "current-user"
 
     override func setUp() {
         super.setUp()
         mockRepo = MockSupabaseFollowRepository()
-        sut = SupabaseFollowService(repository: mockRepo, pageSize: 3)
+        mockRateLimiter = MockRateLimiter()
+        sut = SupabaseFollowService(repository: mockRepo, pageSize: 3, rateLimiter: mockRateLimiter)
     }
 
     override func tearDown() {
         sut = nil
         mockRepo = nil
+        mockRateLimiter = nil
         super.tearDown()
     }
 

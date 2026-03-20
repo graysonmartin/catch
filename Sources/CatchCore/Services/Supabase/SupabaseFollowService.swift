@@ -17,6 +17,7 @@ public final class SupabaseFollowService: FollowService {
     private let profileRepository: (any SupabaseProfileRepository)?
     private let clientProvider: (any SupabaseClientProviding)?
     private let pageSize: Int
+    private let rateLimiter: any RateLimiting
     private var realtimeChannel: RealtimeChannelV2?
     private var realtimeTask: Task<Void, Never>?
 
@@ -24,12 +25,14 @@ public final class SupabaseFollowService: FollowService {
         repository: any SupabaseFollowRepository,
         clientProvider: (any SupabaseClientProviding)? = nil,
         profileRepository: (any SupabaseProfileRepository)? = nil,
-        pageSize: Int = PaginationConstants.defaultPageSize
+        pageSize: Int = PaginationConstants.defaultPageSize,
+        rateLimiter: any RateLimiting = RateLimiter()
     ) {
         self.repository = repository
         self.clientProvider = clientProvider
         self.profileRepository = profileRepository
         self.pageSize = pageSize
+        self.rateLimiter = rateLimiter
     }
 
     // MARK: - Follow / Unfollow
@@ -38,6 +41,8 @@ public final class SupabaseFollowService: FollowService {
         guard userID != targetID else { throw FollowServiceError.cannotFollowSelf }
         guard !isFollowing(targetID) else { throw FollowServiceError.alreadyFollowing }
         guard pendingRequestTo(targetID) == nil else { throw FollowServiceError.requestAlreadyPending }
+
+        try rateLimiter.checkAllowed(.follow)
 
         let status: FollowStatus = isTargetPrivate ? .pending : .active
         let optimisticID = "optimistic-\(UUID().uuidString)"
@@ -74,6 +79,7 @@ public final class SupabaseFollowService: FollowService {
                     outgoingPending[index] = realFollow
                 }
             }
+            rateLimiter.recordAction(.follow)
         } catch {
             if status == .active {
                 following.removeAll { $0.id == optimisticID }
@@ -85,12 +91,15 @@ public final class SupabaseFollowService: FollowService {
     }
 
     public func unfollow(targetID: String, by userID: String) async throws {
+        try rateLimiter.checkAllowed(.unfollow)
+
         guard let match = following.first(where: { $0.followeeID == targetID }) else {
             if let pending = outgoingPending.first(where: { $0.followeeID == targetID }) {
                 outgoingPending.removeAll { $0.id == pending.id }
 
                 do {
                     try await repository.deleteFollow(id: pending.id)
+                    rateLimiter.recordAction(.unfollow)
                 } catch {
                     outgoingPending.append(pending)
                     throw FollowServiceError.networkError(error.localizedDescription)
@@ -104,6 +113,7 @@ public final class SupabaseFollowService: FollowService {
 
         do {
             try await repository.deleteFollow(id: match.id)
+            rateLimiter.recordAction(.unfollow)
         } catch {
             following.append(match)
             throw FollowServiceError.networkError(error.localizedDescription)

@@ -38,6 +38,8 @@ struct InteractionBar: View {
                 Task {
                     do {
                         try await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                    } catch is RateLimitError {
+                        toastManager.showError(CatchStrings.Toast.rateLimitedLike)
                     } catch {
                         toastManager.showError(CatchStrings.Toast.likeFailed)
                     }
