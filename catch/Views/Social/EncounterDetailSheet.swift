@@ -47,12 +47,7 @@ struct EncounterDetailSheet: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: CatchSpacing.space12) {
                         if !isOwnEncounter {
-                            Button {
-                                showReportSheet = true
-                            } label: {
-                                Image(systemName: "flag")
-                                    .foregroundStyle(CatchTheme.textSecondary)
-                            }
+                            overflowMenu
                         }
                         Button(CatchStrings.Common.done) { dismiss() }
                     }
@@ -78,6 +73,22 @@ struct EncounterDetailSheet: View {
                     }
             )
         }
+    }
+
+    // MARK: - Overflow Menu
+
+    private var overflowMenu: some View {
+        Menu {
+            Button(role: .destructive) {
+                showReportSheet = true
+            } label: {
+                Label(CatchStrings.Report.reportPost, systemImage: "flag")
+            }
+        } label: {
+            Image(systemName: "ellipsis.circle")
+                .foregroundStyle(CatchTheme.textSecondary)
+        }
+        .accessibilityLabel(CatchStrings.Accessibility.moreOptions)
     }
 
     // MARK: - Scroll Content

@@ -4,6 +4,7 @@ import CatchCore
 struct NotificationItem: Identifiable, Equatable, Sendable {
     let id: String
     let notificationType: NotificationType
+    let actorUserID: String?
     let actorDisplayName: String
     let actorAvatarURL: String?
     let encounterId: String

@@ -34,6 +34,7 @@ final class MockInAppNotificationService: InAppNotificationService, @unchecked S
             notifications[index] = NotificationItem(
                 id: item.id,
                 notificationType: item.notificationType,
+                actorUserID: item.actorUserID,
                 actorDisplayName: item.actorDisplayName,
                 actorAvatarURL: item.actorAvatarURL,
                 encounterId: item.encounterId,
@@ -51,6 +52,7 @@ final class MockInAppNotificationService: InAppNotificationService, @unchecked S
             NotificationItem(
                 id: item.id,
                 notificationType: item.notificationType,
+                actorUserID: item.actorUserID,
                 actorDisplayName: item.actorDisplayName,
                 actorAvatarURL: item.actorAvatarURL,
                 encounterId: item.encounterId,
