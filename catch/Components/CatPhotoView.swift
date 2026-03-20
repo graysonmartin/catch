@@ -17,6 +17,12 @@ struct CatPhotoView: View {
         return useThumbnail ? ThumbnailURL.thumbnailOrOriginal(for: photoUrl) : photoUrl
     }
 
+    /// Original URL used as fallback when thumbnail doesn't exist on the server.
+    private var fallbackUrl: String? {
+        guard useThumbnail, let photoUrl, resolvedUrl != photoUrl else { return nil }
+        return photoUrl
+    }
+
     var body: some View {
         Group {
             if let data = photoData,
@@ -25,7 +31,7 @@ struct CatPhotoView: View {
                     .resizable()
                     .scaledToFill()
             } else if let url = resolvedUrl {
-                RemoteImageView(urlString: url) { placeholder }
+                RemoteImageView(urlString: url, fallbackUrlString: fallbackUrl) { placeholder }
             } else {
                 placeholder
             }

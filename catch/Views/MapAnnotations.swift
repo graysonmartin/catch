@@ -104,11 +104,16 @@ class CatAnnotationView: MKAnnotationView {
 
         let borderColor = pin.isRemote ? CatchTheme.remotePinUIColor : CatchTheme.primaryUIColor
 
-        // Use thumbnail URL for 40px map pins
-        let thumbUrl = pin.photoUrl.map { ThumbnailURL.thumbnailOrOriginal(for: $0) }
+        let originalUrl = pin.photoUrl
+        let thumbUrl = originalUrl.map { ThumbnailURL.thumbnailOrOriginal(for: $0) }
+        let hasSeparateThumb = thumbUrl != nil && thumbUrl != originalUrl
 
-        // Check cache first — instant, no flicker
+        // Check memory cache for thumbnail first, then original — instant, no flicker
         if let url = thumbUrl, let cached = RemoteImageCache.shared.memoryImage(for: url) {
+            renderPhoto(cached, borderColor: borderColor)
+            return
+        }
+        if hasSeparateThumb, let url = originalUrl, let cached = RemoteImageCache.shared.memoryImage(for: url) {
             renderPhoto(cached, borderColor: borderColor)
             return
         }
@@ -116,13 +121,21 @@ class CatAnnotationView: MKAnnotationView {
         // Show placeholder while loading
         renderPlaceholder(borderColor: borderColor)
 
-        // Load photo async
-        guard let url = thumbUrl else { return }
+        // Load photo async — try thumbnail first, fall back to original URL
+        guard let primary = thumbUrl ?? originalUrl else { return }
+        let fallback: String? = hasSeparateThumb ? originalUrl : nil
         imageLoadTask = Task { [weak self] in
-            guard let loaded = await RemoteImageCache.shared.loadImage(for: url) else { return }
-            guard !Task.isCancelled else { return }
+            let loaded: UIImage?
+            if let image = await RemoteImageCache.shared.loadImage(for: primary) {
+                loaded = image
+            } else if let fallback, let image = await RemoteImageCache.shared.loadImage(for: fallback) {
+                loaded = image
+            } else {
+                loaded = nil
+            }
+            guard let image = loaded, !Task.isCancelled else { return }
             await MainActor.run {
-                self?.renderPhoto(loaded, borderColor: borderColor)
+                self?.renderPhoto(image, borderColor: borderColor)
             }
         }
     }

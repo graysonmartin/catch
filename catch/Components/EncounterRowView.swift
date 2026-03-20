@@ -50,7 +50,11 @@ struct EncounterRowView: View {
     @ViewBuilder
     private var encounterThumbnail: some View {
         if let firstUrl = encounter.photoUrls.first {
-            RemoteImageView(urlString: ThumbnailURL.thumbnailOrOriginal(for: firstUrl)) {
+            let thumbUrl = ThumbnailURL.thumbnailOrOriginal(for: firstUrl)
+            RemoteImageView(
+                urlString: thumbUrl,
+                fallbackUrlString: thumbUrl != firstUrl ? firstUrl : nil
+            ) {
                 thumbnailPlaceholder
             }
             .frame(width: thumbnailSize, height: thumbnailSize)
