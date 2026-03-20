@@ -87,6 +87,7 @@ final class SupabaseInAppNotificationService: InAppNotificationService, @uncheck
         notifications[index] = NotificationItem(
             id: original.id,
             notificationType: original.notificationType,
+            actorUserID: original.actorUserID,
             actorDisplayName: original.actorDisplayName,
             actorAvatarURL: original.actorAvatarURL,
             encounterId: original.encounterId,
@@ -122,6 +123,7 @@ final class SupabaseInAppNotificationService: InAppNotificationService, @uncheck
             return NotificationItem(
                 id: item.id,
                 notificationType: item.notificationType,
+                actorUserID: item.actorUserID,
                 actorDisplayName: item.actorDisplayName,
                 actorAvatarURL: item.actorAvatarURL,
                 encounterId: item.encounterId,
@@ -156,6 +158,7 @@ final class SupabaseInAppNotificationService: InAppNotificationService, @uncheck
         return NotificationItem(
             id: row.id,
             notificationType: type,
+            actorUserID: row.actorId,
             actorDisplayName: row.actor?.displayName ?? CatchStrings.Notifications.unknownUser,
             actorAvatarURL: row.actor?.avatarURL,
             encounterId: row.entityId,

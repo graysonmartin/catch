@@ -10,6 +10,7 @@ private enum Layout {
 
 struct NotificationRowView: View {
     let item: NotificationItem
+    var onAvatarTap: (() -> Void)?
 
     var body: some View {
         HStack(alignment: .top, spacing: CatchSpacing.space10) {
@@ -27,20 +28,27 @@ struct NotificationRowView: View {
     // MARK: - Avatar
 
     private var avatarView: some View {
-        ZStack(alignment: .topLeading) {
-            if let url = item.actorAvatarURL, !url.isEmpty {
-                UserAvatarView(avatarURL: url, size: Layout.avatarSize)
-            } else {
-                initialAvatar
-            }
+        Button {
+            onAvatarTap?()
+        } label: {
+            ZStack(alignment: .topLeading) {
+                if let url = item.actorAvatarURL, !url.isEmpty {
+                    UserAvatarView(avatarURL: url, size: Layout.avatarSize)
+                } else {
+                    initialAvatar
+                }
 
-            if !item.isRead {
-                Circle()
-                    .fill(CatchTheme.primary)
-                    .frame(width: Layout.unreadDotSize, height: Layout.unreadDotSize)
-                    .offset(x: -2, y: -2)
+                if !item.isRead {
+                    Circle()
+                        .fill(CatchTheme.primary)
+                        .frame(width: Layout.unreadDotSize, height: Layout.unreadDotSize)
+                        .offset(x: -2, y: -2)
+                }
             }
         }
+        .buttonStyle(.plain)
+        .disabled(onAvatarTap == nil)
+        .accessibilityLabel(CatchStrings.Accessibility.userAvatar(name: item.actorDisplayName))
     }
 
     private var initialAvatar: some View {

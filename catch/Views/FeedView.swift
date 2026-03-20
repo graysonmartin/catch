@@ -43,17 +43,17 @@ struct FeedView: View {
             .background(CatchTheme.background)
             .navigationTitle(CatchStrings.Tabs.feed)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    NotificationBellButton()
-                }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        isShowingFindPeople = true
-                    } label: {
-                        Image(systemName: "person.badge.plus")
-                            .foregroundStyle(CatchTheme.primary)
+                    HStack(spacing: CatchSpacing.space12) {
+                        NotificationBellButton()
+                        Button {
+                            isShowingFindPeople = true
+                        } label: {
+                            Image(systemName: "person.badge.plus")
+                                .foregroundStyle(CatchTheme.primary)
+                        }
+                        .accessibilityLabel(CatchStrings.Accessibility.findPeople)
                     }
-                    .accessibilityLabel(CatchStrings.Accessibility.findPeople)
                 }
             }
             .sheet(isPresented: $isShowingFindPeople) {
