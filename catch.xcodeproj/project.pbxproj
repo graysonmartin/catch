@@ -47,6 +47,9 @@
 		E8IR00000102 /* ImageResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IR00000001 /* ImageResizer.swift */; };
 		E8IR00000202 /* ThumbnailGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IR00000002 /* ThumbnailGeneratorTests.swift */; };
 		E8IR00000203 /* ImageResizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IR00000003 /* ImageResizerTests.swift */; };
+		E8EX00000101 /* EXIFStripper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EX00000001 /* EXIFStripper.swift */; };
+		E8EX00000102 /* EXIFStripper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EX00000001 /* EXIFStripper.swift */; };
+		E8EX00000202 /* EXIFStripperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EX00000002 /* EXIFStripperTests.swift */; };
 		E8000001AA000051 /* ImageDownsampler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000050 /* ImageDownsampler.swift */; };
 		E8000001AA000052 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000060 /* UserProfile.swift */; };
 		E8000001AA000054 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000062 /* EditProfileView.swift */; };
@@ -296,6 +299,8 @@
 		E8IR00000001 /* ImageResizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizer.swift; sourceTree = "<group>"; };
 		E8IR00000002 /* ThumbnailGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailGeneratorTests.swift; sourceTree = "<group>"; };
 		E8IR00000003 /* ImageResizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizerTests.swift; sourceTree = "<group>"; };
+		E8EX00000001 /* EXIFStripper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXIFStripper.swift; sourceTree = "<group>"; };
+		E8EX00000002 /* EXIFStripperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXIFStripperTests.swift; sourceTree = "<group>"; };
 		E8000001AA000060 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		E8000001AA000062 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		E8000001AA000065 /* CatCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatCardView.swift; sourceTree = "<group>"; };
@@ -590,6 +595,7 @@
 				E8000001AA000029 /* CatPickerView.swift */,
 				E8000001AA000050 /* ImageDownsampler.swift */,
 				E8IR00000001 /* ImageResizer.swift */,
+				E8EX00000001 /* EXIFStripper.swift */,
 				E8PF00000005 /* ProfileHeaderView.swift */,
 				E8DR00000002 /* RemoteDiaryEntryRow.swift */,
 				E8SC00000001 /* StatCardView.swift */,
@@ -705,6 +711,7 @@
 			children = (
 				E8A100000017 /* ImageDownsamplerTests.swift */,
 				E8IR00000003 /* ImageResizerTests.swift */,
+				E8EX00000002 /* EXIFStripperTests.swift */,
 				E8RC00000001 /* RemoteImageCacheTests.swift */,
 				E8IR00000002 /* ThumbnailGeneratorTests.swift */,
 				E8TM00000004 /* ToastManagerTests.swift */,
@@ -1267,6 +1274,7 @@
 				E8UA00000101 /* UserAvatarView.swift in Sources */,
 				E8000001AA000051 /* ImageDownsampler.swift in Sources */,
 				E8IR00000101 /* ImageResizer.swift in Sources */,
+				E8EX00000101 /* EXIFStripper.swift in Sources */,
 				E8000001AA000052 /* UserProfile.swift in Sources */,
 				E8000001AA000059 /* CatCardView.swift in Sources */,
 				E8000001AA000054 /* EditProfileView.swift in Sources */,
@@ -1391,6 +1399,8 @@
 				E8A10000000C /* ImageDownsamplerTests.swift in Sources */,
 				E8IR00000102 /* ImageResizer.swift in Sources */,
 				E8IR00000203 /* ImageResizerTests.swift in Sources */,
+				E8EX00000102 /* EXIFStripper.swift in Sources */,
+				E8EX00000202 /* EXIFStripperTests.swift in Sources */,
 				E8IC00000201 /* ImageCache.swift in Sources */,
 				E8IR00000202 /* ThumbnailGeneratorTests.swift in Sources */,
 				E8RC00000101 /* RemoteImageCacheTests.swift in Sources */,

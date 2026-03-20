@@ -75,7 +75,8 @@ struct PhotoPickerView: View {
                            let uiImage = UIImage(data: data) {
                             let resized = ImageResizer.resize(uiImage, maxDimension: ImageResizer.photoMaxDimension)
                             if let compressed = resized.jpegData(compressionQuality: CatchTheme.jpegCompressionQuality) {
-                                selectedPhotos.append(.local(compressed))
+                                let stripped = EXIFStripper.stripMetadata(from: compressed)
+                                selectedPhotos.append(.local(stripped))
                             }
                         }
                     }
