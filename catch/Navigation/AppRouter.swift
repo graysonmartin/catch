@@ -9,6 +9,10 @@ final class AppRouter: ObservableObject {
     @Published var pendingRoute: AppRoute?
     @Published var activeTab: ContentTab?
 
+    /// Indicates whether the navigation hierarchy is mounted and ready
+    /// to handle route changes. Set to `true` once `ContentView` appears.
+    @Published private(set) var isReady = false
+
     // MARK: - Navigation
 
     func navigate(to route: AppRoute) {
@@ -37,5 +41,13 @@ final class AppRouter: ObservableObject {
 
     func clearPendingRoute() {
         pendingRoute = nil
+    }
+
+    /// Called once the navigation hierarchy is mounted and ready to handle routes.
+    /// Automatically executes any pending route that was stored during cold launch.
+    func markReady() {
+        guard !isReady else { return }
+        isReady = true
+        executePendingRoute()
     }
 }

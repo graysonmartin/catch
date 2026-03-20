@@ -71,6 +71,47 @@ final class AppRouterTests: XCTestCase {
         XCTAssertNil(router.activeTab)
     }
 
+    func test_initialState_isNotReady() {
+        let router = AppRouter()
+        XCTAssertFalse(router.isReady)
+    }
+
+    // MARK: - Ready State
+
+    func test_markReady_setsIsReady() {
+        let router = AppRouter()
+        router.markReady()
+        XCTAssertTrue(router.isReady)
+    }
+
+    func test_markReady_executesDeferredRoute() {
+        let router = AppRouter()
+        // Simulate a cold-launch pending route set before the UI is ready
+        router.pendingRoute = .encounter(id: "deferred-1")
+        XCTAssertFalse(router.isReady)
+
+        router.markReady()
+
+        XCTAssertTrue(router.isReady)
+        // The route should still be present for the view to consume
+        XCTAssertEqual(router.pendingRoute, .encounter(id: "deferred-1"))
+    }
+
+    func test_markReady_calledTwice_isIdempotent() {
+        let router = AppRouter()
+        router.markReady()
+        XCTAssertTrue(router.isReady)
+        router.markReady()
+        XCTAssertTrue(router.isReady)
+    }
+
+    func test_markReady_withNoPendingRoute_isNoOp() {
+        let router = AppRouter()
+        router.markReady()
+        XCTAssertTrue(router.isReady)
+        XCTAssertNil(router.pendingRoute)
+    }
+
     // MARK: - Helpers
 
     private let fixedDate = ISO8601DateFormatter().date(
