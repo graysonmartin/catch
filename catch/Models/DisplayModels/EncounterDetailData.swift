@@ -19,14 +19,15 @@ struct EncounterDetailData: Identifiable {
     // MARK: - Local init
 
     init(local encounter: Encounter, isFirstEncounter: Bool) {
+        let cat = Self.catFields(from: encounter.cat)
         self.id = encounter.id.uuidString
-        self.catName = encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat
+        self.catName = cat.name
         self.catPhotoData = nil
-        self.catPhotoUrl = encounter.cat?.photoUrls.first
-        self.breed = encounter.cat?.breed ?? ""
+        self.catPhotoUrl = cat.photoUrl
+        self.breed = cat.breed
         self.isFirstEncounter = isFirstEncounter
-        self.isUnnamed = encounter.cat?.isUnnamed ?? false
-        self.isOwned = encounter.cat?.isOwned ?? false
+        self.isUnnamed = cat.isUnnamed
+        self.isOwned = cat.isOwned
         self.date = encounter.date
         self.locationName = encounter.location.name
         self.notes = encounter.notes
@@ -37,19 +38,32 @@ struct EncounterDetailData: Identifiable {
     // MARK: - Supabase init (for notification deep links)
 
     init(supabase encounter: SupabaseEncounter, cat: Cat?) {
+        let catInfo = Self.catFields(from: cat)
         self.id = encounter.id.uuidString
-        self.catName = cat?.displayName ?? CatchStrings.Feed.unknownCat
+        self.catName = catInfo.name
         self.catPhotoData = nil
-        self.catPhotoUrl = cat?.photoUrls.first
-        self.breed = cat?.breed ?? ""
+        self.catPhotoUrl = catInfo.photoUrl
+        self.breed = catInfo.breed
         self.isFirstEncounter = false
-        self.isUnnamed = cat?.isUnnamed ?? true
-        self.isOwned = cat?.isOwned ?? false
+        self.isUnnamed = catInfo.isUnnamed
+        self.isOwned = catInfo.isOwned
         self.date = encounter.date
         self.locationName = encounter.locationName ?? ""
         self.notes = encounter.notes ?? ""
         self.photos = []
         self.photoUrls = encounter.photoUrls
+    }
+
+    // MARK: - Shared Cat Fields
+
+    private static func catFields(from cat: Cat?) -> (name: String, photoUrl: String?, breed: String, isUnnamed: Bool, isOwned: Bool) {
+        (
+            name: cat?.displayName ?? CatchStrings.Feed.unknownCat,
+            photoUrl: cat?.photoUrls.first,
+            breed: cat?.breed ?? "",
+            isUnnamed: cat?.isUnnamed ?? false,
+            isOwned: cat?.isOwned ?? false
+        )
     }
 
     // MARK: - Remote CloudKit init

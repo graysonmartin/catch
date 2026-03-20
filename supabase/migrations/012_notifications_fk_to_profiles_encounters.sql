@@ -11,3 +11,7 @@ ALTER TABLE notifications
 ALTER TABLE notifications
     ADD CONSTRAINT notifications_encounter_fkey
     FOREIGN KEY (entity_id) REFERENCES encounters(id) ON DELETE CASCADE;
+
+-- Index the FK columns used in PostgREST joins.
+CREATE INDEX IF NOT EXISTS idx_notifications_actor_id ON notifications(actor_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_entity_id ON notifications(entity_id);

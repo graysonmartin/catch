@@ -25,7 +25,7 @@ struct catchApp: App {
     @State private var feedDataService: FeedDataService
     @State private var reportService: SupabaseReportService
     @State private var suggestedPeopleService: SuggestedPeopleService
-    @StateObject private var appRouter = AppRouter()
+    @StateObject private var appRouter: AppRouter
     @State private var deviceTokenService: DeviceTokenService?
     @State private var notificationDelegate: NotificationDelegate?
     @State private var inAppNotificationService: SupabaseInAppNotificationService
@@ -95,16 +95,22 @@ struct catchApp: App {
             profileRepository: profileRepo,
             assetService: assets
         ))
-        _catDataService = State(initialValue: CatDataService(
+        let catData = CatDataService(
             catRepository: catRepo,
             encounterRepository: encRepo,
             assetService: assets,
             getUserID: getUserID
-        ))
-        _encounterDataService = State(initialValue: EncounterDataService(
+        )
+        let encounterData = EncounterDataService(
             encounterRepository: encRepo,
             assetService: assets,
             getUserID: getUserID
+        )
+        _catDataService = State(initialValue: catData)
+        _encounterDataService = State(initialValue: encounterData)
+        _appRouter = StateObject(wrappedValue: AppRouter(
+            encounterDataService: encounterData,
+            catDataService: catData
         ))
         _feedDataService = State(initialValue: FeedDataService(
             encounterRepository: encRepo,
