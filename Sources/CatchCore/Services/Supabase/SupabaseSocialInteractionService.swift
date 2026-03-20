@@ -150,8 +150,11 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
             throw SocialInteractionError.notSignedIn
         }
 
+        try rateLimiter.checkAllowed(.deleteComment)
+
         let encounterRecordName = rawName.lowercased()
         try await repository.deleteComment(id: recordName)
+        rateLimiter.recordAction(.deleteComment)
         commentCounts[encounterRecordName, default: 1] -= 1
     }
 

@@ -211,6 +211,8 @@ final class RateLimiterTests: XCTestCase {
         XCTAssertNotNil(configs[.follow])
         XCTAssertNotNil(configs[.unfollow])
         XCTAssertNotNil(configs[.search])
+        XCTAssertNotNil(configs[.report])
+        XCTAssertNotNil(configs[.deleteComment])
     }
 
     // MARK: - Sliding Window
@@ -275,6 +277,20 @@ final class RateLimiterTests: XCTestCase {
 
     func test_followConfig_hasReasonableDefaults() {
         let config = RateLimitConfig.follow
+        XCTAssertEqual(config.maxActions, 10)
+        XCTAssertEqual(config.windowSeconds, 60)
+        XCTAssertGreaterThan(config.minIntervalSeconds, 0)
+    }
+
+    func test_reportConfig_hasReasonableDefaults() {
+        let config = RateLimitConfig.report
+        XCTAssertEqual(config.maxActions, 5)
+        XCTAssertEqual(config.windowSeconds, 3600)
+        XCTAssertGreaterThan(config.minIntervalSeconds, 0)
+    }
+
+    func test_deleteCommentConfig_hasReasonableDefaults() {
+        let config = RateLimitConfig.deleteComment
         XCTAssertEqual(config.maxActions, 10)
         XCTAssertEqual(config.windowSeconds, 60)
         XCTAssertGreaterThan(config.minIntervalSeconds, 0)

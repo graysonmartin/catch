@@ -24,7 +24,9 @@ public final class RateLimiter: RateLimiting, @unchecked Sendable {
         .comment: .comment,
         .follow: .follow,
         .unfollow: .unfollow,
-        .search: .search
+        .search: .search,
+        .report: .report,
+        .deleteComment: .deleteComment
     ]
 
     // MARK: - RateLimiting

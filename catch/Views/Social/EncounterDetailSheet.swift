@@ -377,6 +377,9 @@ struct EncounterDetailSheet: View {
                     recordName: removedComment.id,
                     encounterRecordName: encounterRecordName
                 )
+            } catch is RateLimitError {
+                comments.insert(removedComment, at: 0)
+                toastManager.showError(CatchStrings.Toast.rateLimitedDeleteComment)
             } catch {
                 comments.insert(removedComment, at: 0)
                 toastManager.showError(CatchStrings.Toast.commentDeleteFailed)

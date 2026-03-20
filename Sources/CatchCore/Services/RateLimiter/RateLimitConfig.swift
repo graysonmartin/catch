@@ -60,4 +60,18 @@ extension RateLimitConfig {
         windowSeconds: 60,
         minIntervalSeconds: 0.3
     )
+
+    /// Report: max 5 per hour with 3s debounce to prevent spam.
+    public static let report = RateLimitConfig(
+        maxActions: 5,
+        windowSeconds: 3600,
+        minIntervalSeconds: 3
+    )
+
+    /// Delete comment: max 10 per minute with 1s debounce.
+    public static let deleteComment = RateLimitConfig(
+        maxActions: 10,
+        windowSeconds: 60,
+        minIntervalSeconds: 1
+    )
 }
