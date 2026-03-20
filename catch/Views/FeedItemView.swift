@@ -129,18 +129,26 @@ struct FeedItemView: View {
     @ViewBuilder
     private var breed: some View {
         if let breedName = encounter.cat?.breed, !breedName.isEmpty {
-            Label(breedName, systemImage: "pawprint.fill")
-                .font(.subheadline)
-                .foregroundStyle(CatchTheme.textSecondary)
+            HStack(spacing: CatchSpacing.space6) {
+                Image(systemName: "pawprint.fill")
+                    .frame(width: 16, alignment: .center)
+                Text(breedName)
+            }
+            .font(.subheadline)
+            .foregroundStyle(CatchTheme.textSecondary)
         }
     }
 
     @ViewBuilder
     private var location: some View {
         if !encounter.location.name.isEmpty {
-            Label(encounter.location.name, systemImage: "mappin.circle.fill")
-                .font(.subheadline)
-                .foregroundStyle(CatchTheme.textSecondary)
+            HStack(spacing: CatchSpacing.space6) {
+                Image(systemName: "mappin.circle.fill")
+                    .frame(width: 16, alignment: .center)
+                Text(encounter.location.name)
+            }
+            .font(.subheadline)
+            .foregroundStyle(CatchTheme.textSecondary)
         }
     }
 

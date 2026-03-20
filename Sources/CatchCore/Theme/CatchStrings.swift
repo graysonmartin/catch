@@ -20,7 +20,7 @@ public enum CatchStrings {
         public static let name = String(localized: "Name")
         public static let catInfo = String(localized: "Cat Info")
         public static let estimatedAge = String(localized: "Estimated Age")
-        public static let iOwnThisCat = String(localized: "I own this cat")
+        public static let iOwnThisCat = String(localized: "i own this cat")
         public static let notesPlaceholder = String(localized: "notes about this cat...")
         public static let sortBy = String(localized: "sort by")
         public static let unnamedCatFallback = String(localized: "mystery cat")
