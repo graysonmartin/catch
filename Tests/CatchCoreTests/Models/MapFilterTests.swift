@@ -8,12 +8,26 @@ final class MapFilterTests: XCTestCase {
     func testDefaultStateHasNoActiveFilters() {
         let state = MapFilterState()
         XCTAssertFalse(state.hasActiveFilters)
-        XCTAssertTrue(state.ownerFilters.isEmpty)
+        XCTAssertEqual(state.ownerFilters, [.myCats])
         XCTAssertEqual(state.timeRange, .allTime)
     }
 
-    func testOwnerFilterMakesStateActive() {
-        let state = MapFilterState(ownerFilters: [.myCats])
+    func testDefaultOwnerFiltersContainsMyCats() {
+        XCTAssertEqual(MapFilterState.defaultOwnerFilters, [.myCats])
+    }
+
+    func testDifferentOwnerFilterMakesStateActive() {
+        let state = MapFilterState(ownerFilters: [.friendsCats])
+        XCTAssertTrue(state.hasActiveFilters)
+    }
+
+    func testBothOwnerFiltersMakesStateActive() {
+        let state = MapFilterState(ownerFilters: [.myCats, .friendsCats])
+        XCTAssertTrue(state.hasActiveFilters)
+    }
+
+    func testEmptyOwnerFiltersMakesStateActive() {
+        let state = MapFilterState(ownerFilters: [])
         XCTAssertTrue(state.hasActiveFilters)
     }
 
@@ -24,21 +38,21 @@ final class MapFilterTests: XCTestCase {
 
     func testToggleOwnerFilterAdds() {
         var state = MapFilterState()
-        state.toggleOwnerFilter(.myCats)
-        XCTAssertTrue(state.ownerFilters.contains(.myCats))
+        state.toggleOwnerFilter(.friendsCats)
+        XCTAssertTrue(state.ownerFilters.contains(.friendsCats))
     }
 
     func testToggleOwnerFilterRemoves() {
-        var state = MapFilterState(ownerFilters: [.myCats])
+        var state = MapFilterState()
         state.toggleOwnerFilter(.myCats)
         XCTAssertFalse(state.ownerFilters.contains(.myCats))
     }
 
-    func testResetClearsAll() {
+    func testResetRestoresToDefault() {
         var state = MapFilterState(ownerFilters: [.myCats, .friendsCats], timeRange: .last7Days)
         state.reset()
         XCTAssertFalse(state.hasActiveFilters)
-        XCTAssertTrue(state.ownerFilters.isEmpty)
+        XCTAssertEqual(state.ownerFilters, [.myCats])
         XCTAssertEqual(state.timeRange, .allTime)
     }
 
