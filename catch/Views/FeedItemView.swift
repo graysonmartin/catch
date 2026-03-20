@@ -221,7 +221,7 @@ struct FeedItemView: View {
 
     private func pill(text: String, isActive: Bool) -> some View {
         Text(text)
-            .font(.caption2.weight(.bold))
+            .font(.system(size: 9, weight: .bold))
             .foregroundStyle(isActive ? CatchTheme.accessibleTextOrange : CatchTheme.textSecondary)
             .padding(.horizontal, PillLayout.horizontalPadding)
             .padding(.vertical, PillLayout.verticalPadding)
