@@ -43,8 +43,6 @@ struct CommentRowView: View {
                             Image(systemName: "trash")
                                 .font(.caption2)
                                 .foregroundStyle(CatchTheme.textSecondary)
-                                .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
-                                .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(CatchStrings.Accessibility.deleteComment)
