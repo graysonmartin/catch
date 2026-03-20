@@ -6,7 +6,6 @@ public enum SupabaseAuthError: LocalizedError, Sendable {
     case missingIdentityToken
     case invalidIdentityToken
     case sessionExpired
-    case signUpRequiresVerification
     case providerError(String)
 
     public var errorDescription: String? {
@@ -17,8 +16,6 @@ public enum SupabaseAuthError: LocalizedError, Sendable {
             return "The identity token could not be read."
         case .sessionExpired:
             return "Your session has expired. Please sign in again."
-        case .signUpRequiresVerification:
-            return "Check your email to verify your account."
         case .providerError(let message):
             return message
         }
@@ -83,29 +80,6 @@ public final class SupabaseAuthService: @unchecked Sendable {
     public func handleOAuthCallback(_ url: URL) async throws -> AuthUser {
         let session = try await client.auth.session(from: url)
         let user = mapSessionUser(session.user, provider: .google)
-        authState = .signedIn(user)
-        return user
-    }
-
-    // MARK: - Email / Password
-
-    @discardableResult
-    public func signUpWithEmail(_ email: String, password: String) async throws -> AuthUser {
-        let response = try await client.auth.signUp(email: email, password: password)
-
-        guard let session = response.session else {
-            throw SupabaseAuthError.signUpRequiresVerification
-        }
-
-        let user = mapSessionUser(session.user, provider: .email)
-        authState = .signedIn(user)
-        return user
-    }
-
-    @discardableResult
-    public func signInWithEmail(_ email: String, password: String) async throws -> AuthUser {
-        let session = try await client.auth.signIn(email: email, password: password)
-        let user = mapSessionUser(session.user, provider: .email)
         authState = .signedIn(user)
         return user
     }
@@ -194,8 +168,7 @@ public final class SupabaseAuthService: @unchecked Sendable {
         switch providerString {
         case "apple": return .apple
         case "google": return .google
-        case "email": return .email
-        default: return .email
+        default: return .apple
         }
     }
 }
