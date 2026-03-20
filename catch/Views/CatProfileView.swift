@@ -203,10 +203,7 @@ struct CatProfileView: View {
     private var infoCard: some View {
         if hasAboutInfo {
             VStack(alignment: .leading, spacing: CatchSpacing.space10) {
-                Text(CatchStrings.CatProfile.aboutSection)
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(CatchTheme.textSecondary)
-                    .textCase(.uppercase)
+                WhiskerSectionHeader(text: CatchStrings.CatProfile.aboutSection)
 
                 if let breed = cat.breed, !breed.isEmpty {
                     infoRow(icon: "pawprint.fill", label: CatchStrings.Common.breed, value: breed)
@@ -283,10 +280,7 @@ struct CatProfileView: View {
 
     private var encountersSection: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space10) {
-            Text(CatchStrings.CatProfile.encountersHeader(sortedEncounters.count))
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(CatchTheme.textSecondary)
-                .textCase(.uppercase)
+            WhiskerSectionHeader(text: CatchStrings.CatProfile.encountersHeader(sortedEncounters.count))
                 .padding(.horizontal, CatchSpacing.space16)
 
             if sortedEncounters.isEmpty {
@@ -388,9 +382,7 @@ struct CatProfileView: View {
 
     private func infoRow(icon: String, label: String, value: String) -> some View {
         HStack(alignment: .top, spacing: CatchSpacing.space8) {
-            Image(systemName: icon)
-                .font(.subheadline)
-                .foregroundStyle(CatchTheme.primary)
+            CatNoseBullet()
                 .frame(width: 20, height: 20, alignment: .center)
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(label)

@@ -112,14 +112,16 @@ struct EncounterDetailSheet: View {
                         .padding(.bottom, CatchSpacing.space8)
                 }
 
-                Divider()
+                CatTailDivider()
+                    .padding(.horizontal)
                     .padding(.vertical, CatchSpacing.space8)
 
                 interactionRow
                     .padding(.horizontal)
                     .padding(.bottom, CatchSpacing.space8)
 
-                Divider()
+                CatTailDivider()
+                    .padding(.horizontal)
                     .padding(.bottom, CatchSpacing.space8)
 
                 commentSection

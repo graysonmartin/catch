@@ -9,6 +9,14 @@ struct ContentView: View {
     @State private var selectedTab = 0
     @State private var feedScrollToTop = false
 
+    init() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.selectionIndicatorImage = ToeBeanIndicator.image()
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+    }
+
     var body: some View {
         TabView(selection: $selectedTab) {
             FeedView(scrollToTop: $feedScrollToTop)

@@ -28,10 +28,12 @@ struct CommentThreadView: View {
             VStack(spacing: 0) {
                 if showInteractionBar {
                     interactionHeader
-                    Divider()
+                    CatTailDivider()
+                        .padding(.horizontal)
                 }
                 commentList
-                Divider()
+                CatTailDivider()
+                    .padding(.horizontal)
                 CommentInputBar(text: $newCommentText) {
                     Task { await submitComment() }
                 }
