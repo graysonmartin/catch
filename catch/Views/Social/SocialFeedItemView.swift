@@ -4,12 +4,12 @@ import CatchCore
 private enum Layout {
     static let thumbnailSize: CGFloat = 48
     static let carouselHeight: CGFloat = 200
-    static let pillFontSize: CGFloat = 9
     static let pillHPadding: CGFloat = 6
     static let pillVPadding: CGFloat = 2
     static let pillCornerRadius: CGFloat = 4
     static let pillActiveBackgroundOpacity: Double = 0.15
     static let pillInactiveBackgroundOpacity: Double = 0.1
+    static let minOverflowTapSize: CGFloat = 44
 }
 
 struct SocialFeedItemView: View {
@@ -47,6 +47,8 @@ struct SocialFeedItemView: View {
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
         .contentShape(Rectangle())
         .onTapGesture { showDetail = true }
+        .accessibilityElement(children: .contain)
+        .accessibilityHint(CatchStrings.Accessibility.feedCardHint)
         .sheet(isPresented: $showDetail) {
             EncounterDetailSheet(data: detailData, isOwnEncounter: false)
         }
@@ -85,6 +87,7 @@ struct SocialFeedItemView: View {
                 Image(systemName: "heart.fill")
                     .foregroundStyle(CatchTheme.primary)
                     .font(.caption)
+                    .accessibilityLabel(CatchStrings.Accessibility.ownedCat)
             }
 
             reportMenu
@@ -102,9 +105,10 @@ struct SocialFeedItemView: View {
             Image(systemName: "ellipsis")
                 .font(.body)
                 .foregroundStyle(CatchTheme.textSecondary)
-                .frame(width: 32, height: 32)
+                .frame(minWidth: Layout.minOverflowTapSize, minHeight: Layout.minOverflowTapSize)
                 .contentShape(Rectangle())
         }
+        .accessibilityLabel(CatchStrings.Accessibility.moreOptions)
     }
 
     @ViewBuilder
@@ -117,7 +121,12 @@ struct SocialFeedItemView: View {
                     owner: owner
                 )
             } label: {
-                CatPhotoView(photoData: cat.photos.first, photoUrl: cat.photoUrls.first, size: Layout.thumbnailSize)
+                CatPhotoView(
+                    photoData: cat.photos.first,
+                    photoUrl: cat.photoUrls.first,
+                    size: Layout.thumbnailSize,
+                    accessibilityName: cat.displayName
+                )
             }
             .buttonStyle(.plain)
         } else {
@@ -127,8 +136,8 @@ struct SocialFeedItemView: View {
 
     private func pill(text: String, isActive: Bool) -> some View {
         Text(text)
-            .font(.system(size: Layout.pillFontSize, weight: .bold))
-            .foregroundStyle(isActive ? CatchTheme.primary : CatchTheme.textSecondary)
+            .font(.caption2.weight(.bold))
+            .foregroundStyle(isActive ? CatchTheme.accessibleTextOrange : CatchTheme.textSecondary)
             .padding(.horizontal, Layout.pillHPadding)
             .padding(.vertical, Layout.pillVPadding)
             .background(
@@ -139,6 +148,7 @@ struct SocialFeedItemView: View {
                             : CatchTheme.textSecondary.opacity(Layout.pillInactiveBackgroundOpacity)
                     )
             )
+            .accessibilityLabel(CatchStrings.Accessibility.encounterPill(text))
     }
 
     // MARK: - Photos
@@ -174,6 +184,7 @@ struct SocialFeedItemView: View {
             HStack(spacing: CatchSpacing.space6) {
                 Image(systemName: "pawprint.fill")
                     .frame(width: 16, alignment: .center)
+                    .accessibilityHidden(true)
                 Text(breedName)
             }
             .font(.subheadline)
@@ -187,6 +198,7 @@ struct SocialFeedItemView: View {
             HStack(spacing: CatchSpacing.space6) {
                 Image(systemName: "mappin.circle.fill")
                     .frame(width: 16, alignment: .center)
+                    .accessibilityHidden(true)
                 Text(encounter.locationName)
             }
             .font(.subheadline)

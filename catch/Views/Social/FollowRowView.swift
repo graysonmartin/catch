@@ -33,7 +33,7 @@ struct FollowRowView: View {
             )
         } label: {
             HStack(spacing: CatchSpacing.space12) {
-                UserAvatarView(avatarURL: resolvedAvatarURL)
+                UserAvatarView(avatarURL: resolvedAvatarURL, accessibilityName: resolvedName)
 
                 VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                     Text(resolvedName ?? CatchStrings.Social.loadingName)
@@ -69,7 +69,7 @@ struct FollowRowView: View {
                     Image(systemName: "ellipsis")
                         .font(.body)
                         .foregroundStyle(CatchTheme.textSecondary)
-                        .frame(width: 28, height: 28)
+                        .frame(minWidth: 44, minHeight: 44)
                         .contentShape(Rectangle())
                 }
             }

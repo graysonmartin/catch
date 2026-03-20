@@ -4,6 +4,7 @@ import CatchCore
 private enum Layout {
     static let thumbnailSize: CGFloat = 48
     static let carouselHeight: CGFloat = 200
+    static let minOverflowTapSize: CGFloat = 44
 }
 
 struct RemoteFeedItemView: View {
@@ -24,6 +25,8 @@ struct RemoteFeedItemView: View {
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
+        .accessibilityElement(children: .contain)
+        .accessibilityHint(CatchStrings.Accessibility.feedCardHint)
         .sheet(isPresented: $showDetail) {
             EncounterDetailSheet(
                 data: EncounterDetailData(remote: encounter, cat: cat, isFirstEncounter: false),
@@ -39,7 +42,12 @@ struct RemoteFeedItemView: View {
 
     private var header: some View {
         HStack(spacing: CatchSpacing.space12) {
-            CatPhotoView(photoData: cat?.photos.first, photoUrl: cat?.photoUrls.first, size: Layout.thumbnailSize)
+            CatPhotoView(
+                photoData: cat?.photos.first,
+                photoUrl: cat?.photoUrls.first,
+                size: Layout.thumbnailSize,
+                accessibilityName: cat?.displayName
+            )
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(cat?.displayName ?? CatchStrings.Social.unknownCat)
@@ -56,6 +64,7 @@ struct RemoteFeedItemView: View {
                 Image(systemName: "heart.fill")
                     .foregroundStyle(CatchTheme.primary)
                     .font(.caption)
+                    .accessibilityLabel(CatchStrings.Accessibility.ownedCat)
             }
 
             reportMenu
@@ -73,9 +82,10 @@ struct RemoteFeedItemView: View {
             Image(systemName: "ellipsis")
                 .font(.body)
                 .foregroundStyle(CatchTheme.textSecondary)
-                .frame(width: 32, height: 32)
+                .frame(minWidth: Layout.minOverflowTapSize, minHeight: Layout.minOverflowTapSize)
                 .contentShape(Rectangle())
         }
+        .accessibilityLabel(CatchStrings.Accessibility.moreOptions)
     }
 
     @ViewBuilder

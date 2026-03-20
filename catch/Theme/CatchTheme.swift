@@ -8,6 +8,10 @@ enum CatchTheme {
     static let primary = Color(red: 1.0, green: 0.6, blue: 0.2)       // warm orange
     static let secondary = Color(red: 1.0, green: 0.8, blue: 0.6)     // peach
 
+    /// Darkened orange that meets WCAG AA 4.5:1 contrast on warm off-white background.
+    /// Use for small text rendered in orange on light backgrounds.
+    static let accessibleTextOrange = Color(red: 0.70, green: 0.33, blue: 0.0)
+
     /// Warm off-white in light mode; system dark background in dark mode.
     static let background = Color(uiColor: .catchBackground)
 

@@ -171,11 +171,13 @@ struct CatMapView: View {
             }
             .padding(.horizontal, CatchSpacing.space12)
             .padding(.vertical, CatchSpacing.space8)
+            .frame(minHeight: 44)
             .background(.ultraThinMaterial)
             .clipShape(Capsule())
             .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(CatchStrings.Accessibility.hiddenCatsBanner)
     }
 }
 

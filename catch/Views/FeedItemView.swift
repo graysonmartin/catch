@@ -2,7 +2,6 @@ import SwiftUI
 import CatchCore
 
 private enum PillLayout {
-    static let fontSize: CGFloat = 9
     static let horizontalPadding: CGFloat = 6
     static let verticalPadding: CGFloat = 2
     static let cornerRadius: CGFloat = 4
@@ -13,6 +12,7 @@ private enum PillLayout {
 private enum FeedItemLayout {
     static let thumbnailSize: CGFloat = 48
     static let carouselHeight: CGFloat = 200
+    static let minOverflowTapSize: CGFloat = 44
 }
 
 struct FeedItemView: View {
@@ -54,6 +54,8 @@ struct FeedItemView: View {
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
         .contentShape(Rectangle())
         .onTapGesture { showDetail = true }
+        .accessibilityElement(children: .contain)
+        .accessibilityHint(CatchStrings.Accessibility.feedCardHint)
         .sheet(isPresented: $showDetail) {
             EncounterDetailSheet(data: detailData)
         }
@@ -74,7 +76,12 @@ struct FeedItemView: View {
 
     private var header: some View {
         HStack(spacing: CatchSpacing.space12) {
-            CatPhotoView(photoData: nil, photoUrl: encounter.cat?.photoUrls.first, size: FeedItemLayout.thumbnailSize)
+            CatPhotoView(
+                photoData: nil,
+                photoUrl: encounter.cat?.photoUrls.first,
+                size: FeedItemLayout.thumbnailSize,
+                accessibilityName: encounter.cat?.displayName
+            )
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack(spacing: CatchSpacing.space4) {
@@ -100,6 +107,7 @@ struct FeedItemView: View {
                 Image(systemName: "heart.fill")
                     .foregroundStyle(CatchTheme.primary)
                     .font(.caption)
+                    .accessibilityLabel(CatchStrings.Accessibility.ownedCat)
             }
 
             overflowMenu
@@ -132,6 +140,7 @@ struct FeedItemView: View {
             HStack(spacing: CatchSpacing.space6) {
                 Image(systemName: "pawprint.fill")
                     .frame(width: 16, alignment: .center)
+                    .accessibilityHidden(true)
                 Text(breedName)
             }
             .font(.subheadline)
@@ -145,6 +154,7 @@ struct FeedItemView: View {
             HStack(spacing: CatchSpacing.space6) {
                 Image(systemName: "mappin.circle.fill")
                     .frame(width: 16, alignment: .center)
+                    .accessibilityHidden(true)
                 Text(encounter.location.name)
             }
             .font(.subheadline)
@@ -188,9 +198,10 @@ struct FeedItemView: View {
             Image(systemName: "ellipsis")
                 .font(.body)
                 .foregroundStyle(CatchTheme.textSecondary)
-                .frame(width: 32, height: 32)
+                .frame(minWidth: FeedItemLayout.minOverflowTapSize, minHeight: FeedItemLayout.minOverflowTapSize)
                 .contentShape(Rectangle())
         }
+        .accessibilityLabel(CatchStrings.Accessibility.moreOptions)
     }
 
     // MARK: - Actions
@@ -200,7 +211,7 @@ struct FeedItemView: View {
             do {
                 try await encounterDataService.deleteEncounter(id: encounter.id)
                 feedDataService.removeEncounter(id: encounter.id)
-                // Reload cats — the DB trigger may have deleted the orphaned cat.
+                // Reload cats -- the DB trigger may have deleted the orphaned cat.
                 try await catDataService.loadCats()
             } catch {
                 toastManager.showError(CatchStrings.Toast.deleteSyncFailed)
@@ -212,8 +223,8 @@ struct FeedItemView: View {
 
     private func pill(text: String, isActive: Bool) -> some View {
         Text(text)
-            .font(.system(size: PillLayout.fontSize, weight: .bold))
-            .foregroundStyle(isActive ? CatchTheme.primary : CatchTheme.textSecondary)
+            .font(.caption2.weight(.bold))
+            .foregroundStyle(isActive ? CatchTheme.accessibleTextOrange : CatchTheme.textSecondary)
             .padding(.horizontal, PillLayout.horizontalPadding)
             .padding(.vertical, PillLayout.verticalPadding)
             .background(
@@ -224,5 +235,6 @@ struct FeedItemView: View {
                             : CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity)
                     )
             )
+            .accessibilityLabel(CatchStrings.Accessibility.encounterPill(text))
     }
 }

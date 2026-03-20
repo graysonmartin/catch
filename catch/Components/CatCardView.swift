@@ -6,7 +6,7 @@ struct CatCardView: View {
 
     var body: some View {
         VStack(spacing: CatchSpacing.space8) {
-            CatPhotoView(photoData: nil, photoUrl: data.firstPhotoUrl, size: 120)
+            CatPhotoView(photoData: nil, photoUrl: data.firstPhotoUrl, size: 120, accessibilityName: data.name)
                 .frame(maxWidth: .infinity)
                 .frame(height: 120)
                 .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
@@ -21,17 +21,19 @@ struct CatCardView: View {
                         Image(systemName: "crown.fill")
                             .font(.caption2)
                             .foregroundStyle(CatchTheme.primary)
+                            .accessibilityLabel(CatchStrings.Accessibility.stevenBadge)
                     }
                     if data.isOwned {
                         Image(systemName: "heart.fill")
                             .font(.caption2)
                             .foregroundStyle(CatchTheme.primary)
+                            .accessibilityLabel(CatchStrings.Accessibility.ownedCat)
                     }
                 }
 
                 Text(data.breed.isEmpty ? " " : data.breed.lowercased())
                     .font(.caption2)
-                    .foregroundStyle(CatchTheme.primary)
+                    .foregroundStyle(CatchTheme.accessibleTextOrange)
                     .lineLimit(1)
 
                 Text(CatchStrings.Common.encounterCount(data.encounterCount))
@@ -43,5 +45,8 @@ struct CatCardView: View {
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(CatchStrings.Accessibility.catCard(name: data.name, breed: data.breed, encounters: data.encounterCount))
+        .accessibilityAddTraits(.isButton)
     }
 }

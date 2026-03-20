@@ -37,7 +37,7 @@ struct SuggestedPersonCard: View {
     // MARK: - Subviews
 
     private var avatar: some View {
-        UserAvatarView(avatarURL: person.avatarURL, size: CardLayout.avatarSize)
+        UserAvatarView(avatarURL: person.avatarURL, size: CardLayout.avatarSize, accessibilityName: person.displayName)
     }
 
     private var nameSection: some View {

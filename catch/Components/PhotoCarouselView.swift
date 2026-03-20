@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct PhotoCarouselView: View {
     let photos: [Data]
@@ -52,6 +53,7 @@ struct PhotoCarouselView: View {
             .frame(height: height)
             .background(emptyBackgroundColor)
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .accessibilityLabel(CatchStrings.Accessibility.photoPlaceholder)
     }
 
     private var singlePhoto: some View {
@@ -62,6 +64,8 @@ struct PhotoCarouselView: View {
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             .contentShape(Rectangle())
             .onTapGesture { handleTap() }
+            .accessibilityLabel(CatchStrings.Accessibility.photoCarouselLabel(count: 1))
+            .accessibilityAddTraits(isTappable || onTap != nil ? .isButton : [])
             .fullScreenCover(isPresented: $isShowingFullScreen) {
                 FullScreenPhotoViewer(photos: photos, photoUrls: photoUrls, initialIndex: 0) {
                     isShowingFullScreen = false
@@ -75,6 +79,7 @@ struct PhotoCarouselView: View {
                 ForEach(0..<totalCount, id: \.self) { index in
                     photoView(at: index)
                         .tag(index)
+                        .accessibilityLabel(CatchStrings.Accessibility.photoPage(index + 1, of: totalCount))
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -87,6 +92,8 @@ struct PhotoCarouselView: View {
                     .padding(.bottom, Layout.indicatorBottomPadding)
             }
         }
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(CatchStrings.Accessibility.photoCarouselLabel(count: totalCount))
         .fullScreenCover(isPresented: $isShowingFullScreen) {
             FullScreenPhotoViewer(photos: photos, photoUrls: photoUrls, initialIndex: currentPage) {
                 isShowingFullScreen = false
@@ -105,6 +112,7 @@ struct PhotoCarouselView: View {
         .padding(.horizontal, Layout.indicatorPaddingH)
         .padding(.vertical, Layout.indicatorPaddingV)
         .background(Capsule().fill(.black.opacity(Layout.indicatorBackgroundOpacity)))
+        .accessibilityHidden(true)
     }
 
     private func handleTap() {

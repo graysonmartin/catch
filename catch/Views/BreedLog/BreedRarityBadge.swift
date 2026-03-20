@@ -6,7 +6,7 @@ struct BreedRarityBadge: View {
 
     var body: some View {
         Text(rarity.label)
-            .font(.system(size: 9, weight: .bold))
+            .font(.caption2.weight(.bold))
             .textCase(.uppercase)
             .tracking(0.5)
             .foregroundStyle(.white)

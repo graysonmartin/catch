@@ -45,8 +45,10 @@ struct InteractionBar: View {
                 Image(systemName: isLiked ? "heart.fill" : "heart")
                     .foregroundStyle(isLiked ? CatchTheme.primary : CatchTheme.textSecondary)
                     .contentTransition(.symbolEffect(.replace))
+                    .frame(minWidth: 44, minHeight: 44)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(isLiked ? CatchStrings.Accessibility.unlikeButton : CatchStrings.Accessibility.likeButton)
 
             if likeCount > 0 {
                 Button {
@@ -57,6 +59,7 @@ struct InteractionBar: View {
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(CatchStrings.Accessibility.likeCount(likeCount))
             }
         }
     }
@@ -74,8 +77,10 @@ struct InteractionBar: View {
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
             }
+            .frame(minHeight: 44)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(CatchStrings.Accessibility.commentButton(commentCount))
     }
 
     private var spottedByYouLabel: some View {

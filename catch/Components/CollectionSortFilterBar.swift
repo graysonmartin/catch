@@ -32,7 +32,7 @@ struct CollectionSortFilterBar: View {
             }
             .foregroundStyle(isActive ? .white : CatchTheme.textSecondary)
             .padding(.horizontal, CatchSpacing.space12)
-            .padding(.vertical, CatchSpacing.space6)
+            .padding(.vertical, CatchSpacing.space10)
             .background(isActive ? CatchTheme.primary : CatchTheme.cardBackground)
             .clipShape(Capsule())
             .shadow(
@@ -42,6 +42,7 @@ struct CollectionSortFilterBar: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityAddTraits(isActive ? .isSelected : [])
     }
 
     // MARK: - Helpers

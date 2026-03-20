@@ -23,6 +23,8 @@ struct EngagementIndicator: View {
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
             }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(CatchStrings.Accessibility.engagement(likes: likeCount, comments: commentCount))
         }
     }
 }

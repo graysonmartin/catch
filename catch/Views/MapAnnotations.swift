@@ -2,7 +2,7 @@ import MapKit
 import CatchCore
 
 enum AnnotationLayout {
-    static let catPinSize: CGFloat = 40
+    static let catPinSize: CGFloat = 44
     static let catPinBorderInset: CGFloat = 1
     static let catIconPointSize: CGFloat = 18
     static let overflowBubbleSize: CGFloat = 36
@@ -78,6 +78,7 @@ class CatAnnotationView: MKAnnotationView {
         clusteringIdentifier = AnnotationLayout.clusteringID
         collisionMode = .circle
         displayPriority = .defaultHigh
+        isAccessibilityElement = true
         render()
     }
 
@@ -99,6 +100,7 @@ class CatAnnotationView: MKAnnotationView {
     private func render() {
         imageLoadTask?.cancel()
         guard let catAnnotation = annotation as? CatAnnotation, let pin = catAnnotation.pin else { return }
+        accessibilityLabel = CatchStrings.Accessibility.mapPin(catName: pin.displayName)
 
         let borderColor = pin.isRemote ? CatchTheme.remotePinUIColor : CatchTheme.primaryUIColor
 
@@ -176,6 +178,7 @@ class OverflowAnnotationView: MKAnnotationView {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         collisionMode = .circle
         displayPriority = .required
+        isAccessibilityElement = true
         render()
     }
 
@@ -190,6 +193,7 @@ class OverflowAnnotationView: MKAnnotationView {
     private func render() {
         guard let overflow = annotation as? OverflowAnnotation else { return }
         let count = overflow.overflowPins.count
+        accessibilityLabel = CatchStrings.Accessibility.mapOverflow(count: count)
 
         let size = AnnotationLayout.overflowBubbleSize
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
@@ -216,6 +220,7 @@ class CatClusterView: MKAnnotationView {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         collisionMode = .circle
         displayPriority = .defaultHigh
+        isAccessibilityElement = true
         render()
     }
 
@@ -230,6 +235,7 @@ class CatClusterView: MKAnnotationView {
     private func render() {
         guard let cluster = annotation as? MKClusterAnnotation else { return }
         let count = cluster.memberAnnotations.count
+        accessibilityLabel = CatchStrings.Accessibility.mapCluster(count: count)
 
         let size = AnnotationLayout.clusterBubbleSize
         let inset = AnnotationLayout.clusterBorderInset
