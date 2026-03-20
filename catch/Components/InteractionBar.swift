@@ -23,6 +23,7 @@ struct InteractionBar: View {
                 spottedByYouLabel
             }
         }
+        .frame(minHeight: CatchTheme.minTapTarget)
         .sheet(isPresented: $showLikedBySheet) {
             LikedByListView(encounterRecordName: encounterRecordName)
         }
@@ -45,7 +46,6 @@ struct InteractionBar: View {
                 Image(systemName: isLiked ? "heart.fill" : "heart")
                     .foregroundStyle(isLiked ? CatchTheme.primary : CatchTheme.textSecondary)
                     .contentTransition(.symbolEffect(.replace))
-                    .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
             }
             .buttonStyle(.plain)
             .accessibilityLabel(isLiked ? CatchStrings.Accessibility.unlikeButton : CatchStrings.Accessibility.likeButton)
@@ -77,7 +77,6 @@ struct InteractionBar: View {
                         .foregroundStyle(CatchTheme.textSecondary)
                 }
             }
-            .frame(minHeight: CatchTheme.minTapTarget)
         }
         .buttonStyle(.plain)
         .accessibilityLabel(CatchStrings.Accessibility.commentButton(commentCount))

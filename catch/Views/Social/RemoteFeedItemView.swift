@@ -52,6 +52,7 @@ struct RemoteFeedItemView: View {
                 Text(cat?.displayName ?? CatchStrings.Social.unknownCat)
                     .font(.headline)
                     .foregroundStyle(cat?.isUnnamed == true ? CatchTheme.textSecondary : CatchTheme.textPrimary)
+                    .lineLimit(1)
                 Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)

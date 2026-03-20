@@ -67,6 +67,7 @@ struct SocialFeedItemView: View {
                     Text(cat?.displayName ?? CatchStrings.Social.unknownCat)
                         .font(.headline)
                         .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
+                        .lineLimit(1)
                     pill(
                         text: isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat,
                         isActive: isFirstEncounter
@@ -147,6 +148,7 @@ struct SocialFeedItemView: View {
                             : CatchTheme.textSecondary.opacity(Layout.pillInactiveBackgroundOpacity)
                     )
             )
+            .fixedSize()
             .accessibilityLabel(CatchStrings.Accessibility.encounterPill(text))
     }
 

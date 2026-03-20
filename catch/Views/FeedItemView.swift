@@ -87,6 +87,7 @@ struct FeedItemView: View {
                     Text(encounter.cat?.displayName ?? CatchStrings.Feed.unknownCat)
                         .font(.headline)
                         .foregroundStyle(isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
+                        .lineLimit(1)
                     pill(
                         text: isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat,
                         isActive: isFirstEncounter
@@ -234,6 +235,7 @@ struct FeedItemView: View {
                             : CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity)
                     )
             )
+            .fixedSize()
             .accessibilityLabel(CatchStrings.Accessibility.encounterPill(text))
     }
 }
