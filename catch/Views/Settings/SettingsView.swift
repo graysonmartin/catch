@@ -15,6 +15,7 @@ struct SettingsView: View {
     var body: some View {
         Form {
             aboutSection
+            DataExportSection()
             legalSection
             dangerZoneSection
             #if DEBUG
