@@ -27,8 +27,8 @@ final class SupabaseInAppNotificationService: InAppNotificationService, @uncheck
     /// `encounters` is joined via `entity_id` to get the encounter's first photo URL.
     private static let selectQuery = """
         id, notification_type, entity_id, actor_id, read_at, created_at, \
-        profiles!notifications_actor_id_fkey(display_name, avatar_url), \
-        encounters!notifications_entity_id_fkey(photo_urls)
+        profiles!notifications_actor_profile_fkey(display_name, avatar_url), \
+        encounters!notifications_encounter_fkey(photo_urls)
         """
 
     // MARK: - Init

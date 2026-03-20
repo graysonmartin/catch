@@ -44,6 +44,13 @@ struct ContentView: View {
             guard let newTab else { return }
             selectedTab = newTab.rawValue
         }
+        .onChange(of: appRouter.pendingRoute) { _, route in
+            guard let route else { return }
+            Task { await appRouter.handleRoute(route) }
+        }
+        .sheet(item: $appRouter.routedEncounterDetail) { detail in
+            EncounterDetailSheet(data: detail, isOwnEncounter: detail.isOwned)
+        }
         .task {
             guard let userID = authService.authState.user?.id else { return }
             async let cats: Void = { try? await catDataService.loadCats() }()
