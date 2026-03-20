@@ -296,7 +296,7 @@ extension SignInView {
 
     private func handleGoogleSignIn() async {
         do {
-            let redirectURL = URL(string: "catch://auth-callback")!
+            guard let redirectURL = URL(string: "catch://auth-callback") else { return }
             let oauthURL = try await authService.googleOAuthURL(redirectTo: redirectURL)
 
             let callbackURL: URL = try await withCheckedThrowingContinuation { continuation in

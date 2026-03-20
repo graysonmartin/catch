@@ -5,7 +5,6 @@ import Observation
 @MainActor
 final class MockSettingsService: SettingsService {
 
-    var isNotificationsEnabled: Bool = true
     var stubbedAppVersion: String = "1.0.0"
     var stubbedBuildNumber: String = "42"
 
