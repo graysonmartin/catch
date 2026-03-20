@@ -283,6 +283,12 @@
 		E8NV00000103 /* ContentTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NV00000003 /* ContentTab.swift */; };
 		E8NW00000101 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NW00000001 /* NotificationsView.swift */; };
 		E8NW00000102 /* NotificationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NW00000002 /* NotificationRowView.swift */; };
+		E8OB00000101 /* OnboardingBreedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000001 /* OnboardingBreedPreview.swift */; };
+		E8OB00000102 /* OnboardingMapPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000002 /* OnboardingMapPreview.swift */; };
+		E8OB00000103 /* OnboardingDiaryPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000003 /* OnboardingDiaryPreview.swift */; };
+		E8OB00000104 /* OnboardingCollectionPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000004 /* OnboardingCollectionPreview.swift */; };
+		E8OB00000105 /* CatchStrings+OnboardingTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000005 /* CatchStrings+OnboardingTour.swift */; };
+		E8OB00000305 /* CatchStrings+OnboardingTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000005 /* CatchStrings+OnboardingTour.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -507,6 +513,11 @@
 		E8NV00000003 /* ContentTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTab.swift; sourceTree = "<group>"; };
 		E8NW00000001 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		E8NW00000002 /* NotificationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowView.swift; sourceTree = "<group>"; };
+		E8OB00000001 /* OnboardingBreedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBreedPreview.swift; sourceTree = "<group>"; };
+		E8OB00000002 /* OnboardingMapPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMapPreview.swift; sourceTree = "<group>"; };
+		E8OB00000003 /* OnboardingDiaryPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDiaryPreview.swift; sourceTree = "<group>"; };
+		E8OB00000004 /* OnboardingCollectionPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCollectionPreview.swift; sourceTree = "<group>"; };
+		E8OB00000005 /* CatchStrings+OnboardingTour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+OnboardingTour.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -615,6 +626,7 @@
 				E8ST0000F003 /* Settings */,
 				E8WT0000F001 /* Walkthrough */,
 				E8NW0000F001 /* Notifications */,
+				E8OB0000F001 /* Onboarding */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -697,6 +709,7 @@
 				E8CS0000000D /* CatchStrings+Walkthrough.swift */,
 				E8CS0000000F /* CatchStrings+Accessibility.swift */,
 				E8CS0000000E /* CatchStrings+Notifications.swift */,
+				E8OB00000005 /* CatchStrings+OnboardingTour.swift */,
 				E8AK00000001 /* AppStorageKeys.swift */,
 				E8AU00000001 /* AppURL.swift */,
 			);
@@ -713,6 +726,17 @@
 				E8WT00000005 /* WalkthroughWelcomeStep.swift */,
 			);
 			path = Walkthrough;
+			sourceTree = "<group>";
+		};
+		E8OB0000F001 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				E8OB00000001 /* OnboardingBreedPreview.swift */,
+				E8OB00000002 /* OnboardingMapPreview.swift */,
+				E8OB00000003 /* OnboardingDiaryPreview.swift */,
+				E8OB00000004 /* OnboardingCollectionPreview.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		E8A100000021 /* catchTests */ = {
@@ -1470,6 +1494,11 @@
 				E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */,
 				E8WT00000104 /* WalkthroughPersonRow.swift in Sources */,
 				E8WT00000105 /* WalkthroughWelcomeStep.swift in Sources */,
+				E8OB00000101 /* OnboardingBreedPreview.swift in Sources */,
+				E8OB00000102 /* OnboardingMapPreview.swift in Sources */,
+				E8OB00000103 /* OnboardingDiaryPreview.swift in Sources */,
+				E8OB00000104 /* OnboardingCollectionPreview.swift in Sources */,
+				E8OB00000105 /* CatchStrings+OnboardingTour.swift in Sources */,
 				E8NV00000101 /* AppRoute.swift in Sources */,
 				E8NV00000102 /* AppRouter.swift in Sources */,
 				E8NV00000103 /* ContentTab.swift in Sources */,
@@ -1555,6 +1584,7 @@
 				E8CS0000030C /* CatchStrings+Diary.swift in Sources */,
 				E8CS0000030D /* CatchStrings+Walkthrough.swift in Sources */,
 				E8CS0000030F /* CatchStrings+Accessibility.swift in Sources */,
+				E8OB00000305 /* CatchStrings+OnboardingTour.swift in Sources */,
 				E8SI00000208 /* MockSocialInteractionService.swift in Sources */,
 				E8SF00000201 /* FeedItem.swift in Sources */,
 				E8SF00000202 /* SocialFeedService.swift in Sources */,

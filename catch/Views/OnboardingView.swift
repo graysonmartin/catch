@@ -8,6 +8,8 @@ struct OnboardingView: View {
     @State private var locationManager = OnboardingLocationManager()
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    private let totalPages = 6
+
     var body: some View {
         ZStack {
             CatchTheme.background
@@ -16,55 +18,67 @@ struct OnboardingView: View {
             VStack(spacing: 0) {
                 TabView(selection: $currentPage) {
                     welcomePage.tag(0)
-                    tourPage.tag(1)
-                    locationPage.tag(2)
+                    OnboardingBreedPreview().tag(1)
+                    OnboardingMapPreview().tag(2)
+                    OnboardingDiaryPreview().tag(3)
+                    OnboardingCollectionPreview().tag(4)
+                    locationPage.tag(5)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: currentPage)
 
-                // Page dots + button
-                VStack(spacing: CatchSpacing.space24) {
-                    HStack(spacing: CatchSpacing.space8) {
-                        ForEach(0..<3) { index in
-                            Circle()
-                                .fill(index == currentPage ? CatchTheme.primary : CatchTheme.primary.opacity(0.25))
-                                .frame(width: 8, height: 8)
-                        }
-                    }
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(CatchStrings.Accessibility.onboardingPage(currentPage + 1, of: 3))
-
-                    Button {
-                        if currentPage < 2 {
-                            currentPage += 1
-                        } else {
-                            hasCompletedOnboarding = true
-                        }
-                    } label: {
-                        Text(currentPage == 2 ? CatchStrings.Onboarding.letsGo : CatchStrings.Onboarding.next)
-                            .font(.headline)
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 52)
-                            .background(CatchTheme.primary)
-                            .clipShape(RoundedRectangle(cornerRadius: 14))
-                    }
-
-                    if currentPage < 2 {
-                        Button {
-                            hasCompletedOnboarding = true
-                        } label: {
-                            Text(CatchStrings.Onboarding.skip)
-                                .font(.subheadline)
-                                .foregroundStyle(CatchTheme.textSecondary)
-                                .frame(minHeight: CatchTheme.minTapTarget)
-                        }
-                    }
-                }
-                .padding(.horizontal, CatchSpacing.space32)
-                .padding(.bottom, CatchSpacing.space48)
+                bottomControls
             }
         }
+    }
+
+    // MARK: - Bottom Controls
+
+    private var bottomControls: some View {
+        VStack(spacing: CatchSpacing.space24) {
+            pageDots
+
+            Button {
+                if currentPage < totalPages - 1 {
+                    currentPage += 1
+                } else {
+                    hasCompletedOnboarding = true
+                }
+            } label: {
+                Text(currentPage == totalPages - 1 ? CatchStrings.Onboarding.letsGo : CatchStrings.Onboarding.next)
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 52)
+                    .background(CatchTheme.primary)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+            }
+
+            if currentPage < totalPages - 1 {
+                Button {
+                    hasCompletedOnboarding = true
+                } label: {
+                    Text(CatchStrings.Onboarding.skip)
+                        .font(.subheadline)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                        .frame(minHeight: CatchTheme.minTapTarget)
+                }
+            }
+        }
+        .padding(.horizontal, CatchSpacing.space32)
+        .padding(.bottom, CatchSpacing.space48)
+    }
+
+    private var pageDots: some View {
+        HStack(spacing: CatchSpacing.space8) {
+            ForEach(0..<totalPages, id: \.self) { index in
+                Circle()
+                    .fill(index == currentPage ? CatchTheme.primary : CatchTheme.primary.opacity(0.25))
+                    .frame(width: 8, height: 8)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(CatchStrings.Accessibility.onboardingPage(currentPage + 1, of: totalPages))
     }
 
     // MARK: - Page 1: Welcome
@@ -101,68 +115,7 @@ struct OnboardingView: View {
         }
     }
 
-    // MARK: - Page 2: Tour
-
-    private var tourPage: some View {
-        GeometryReader { geo in
-            ScrollView {
-                VStack(spacing: CatchSpacing.space32) {
-                    Text(CatchStrings.Onboarding.tourTitle)
-                        .font(.title2.weight(.bold))
-                        .foregroundStyle(CatchTheme.textPrimary)
-
-                    VStack(alignment: .leading, spacing: CatchSpacing.space20) {
-                        tourRow(
-                            icon: "pawprint.fill",
-                            title: CatchStrings.Onboarding.tourFeed,
-                            detail: CatchStrings.Onboarding.tourFeedDetail
-                        )
-                        tourRow(
-                            icon: "plus.circle.fill",
-                            title: CatchStrings.Onboarding.tourLog,
-                            detail: CatchStrings.Onboarding.tourLogDetail
-                        )
-                        tourRow(
-                            icon: "map.fill",
-                            title: CatchStrings.Onboarding.tourMap,
-                            detail: CatchStrings.Onboarding.tourMapDetail
-                        )
-                        tourRow(
-                            icon: "person.crop.circle",
-                            title: CatchStrings.Onboarding.tourProfile,
-                            detail: CatchStrings.Onboarding.tourProfileDetail
-                        )
-                    }
-                    .padding(.horizontal, CatchSpacing.space8)
-                }
-                .padding(.horizontal, CatchSpacing.space32)
-                .frame(maxWidth: .infinity, minHeight: geo.size.height)
-            }
-            .scrollBounceBehavior(.basedOnSize)
-        }
-    }
-
-    private func tourRow(icon: String, title: String, detail: String) -> some View {
-        HStack(spacing: CatchSpacing.space16) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundStyle(CatchTheme.primary)
-                .frame(width: 36, height: 36)
-                .accessibilityHidden(true)
-
-            VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                Text(title)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(CatchTheme.textPrimary)
-                Text(detail)
-                    .font(.caption)
-                    .foregroundStyle(CatchTheme.textSecondary)
-            }
-        }
-        .accessibilityElement(children: .combine)
-    }
-
-    // MARK: - Page 3: Location Permission
+    // MARK: - Page 6: Location Permission
 
     private var locationPage: some View {
         GeometryReader { geo in
