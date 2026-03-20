@@ -23,7 +23,6 @@ struct InteractionBar: View {
                 spottedByYouLabel
             }
         }
-        .frame(minHeight: CatchTheme.minTapTarget)
         .sheet(isPresented: $showLikedBySheet) {
             LikedByListView(encounterRecordName: encounterRecordName)
         }
