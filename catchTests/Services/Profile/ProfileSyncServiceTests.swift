@@ -86,7 +86,7 @@ final class ProfileSyncServiceTests: XCTestCase {
         XCTAssertNil(result)
         XCTAssertEqual(mockAssetService.deletePhotoCalls.count, 1)
         XCTAssertEqual(mockAssetService.deletePhotoCalls.first?.bucket, .profilePhotos)
-        XCTAssertEqual(mockAssetService.deletePhotoCalls.first?.path, "supa-789/avatar.jpg")
+        XCTAssertEqual(mockAssetService.deletePhotoCalls.first?.path, "supa-789/old-avatar.jpg")
         XCTAssertNil(mockProfileRepo.updateProfileCalls.first?.payload.avatarUrl)
     }
 
