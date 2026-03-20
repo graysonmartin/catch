@@ -237,7 +237,6 @@
 		E8SI00000208 /* MockSocialInteractionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SI0000000C /* MockSocialInteractionService.swift */; };
 		E8SP00000001 /* CatchSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8SP00000010 /* CatchSpacing.swift */; };
 		E8XP00000101 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000001 /* ExportService.swift */; };
-		E8XP00000102 /* ImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000002 /* ImportService.swift */; };
 		E8XP00000103 /* DataExportSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000003 /* DataExportSection.swift */; };
 		E8XP00000104 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000004 /* ShareSheet.swift */; };
 		E8XP00000105 /* CatchStrings+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000005 /* CatchStrings+Export.swift */; };
@@ -460,7 +459,6 @@
 		E8ST00000005 /* MockSettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsService.swift; sourceTree = "<group>"; };
 		E8ST00000006 /* UserDefaultsSettingsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsSettingsServiceTests.swift; sourceTree = "<group>"; };
 		E8XP00000001 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
-		E8XP00000002 /* ImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportService.swift; sourceTree = "<group>"; };
 		E8XP00000003 /* DataExportSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportSection.swift; sourceTree = "<group>"; };
 		E8XP00000004 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		E8XP00000005 /* CatchStrings+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Export.swift"; sourceTree = "<group>"; };
@@ -1101,7 +1099,6 @@
 			isa = PBXGroup;
 			children = (
 				E8XP00000001 /* ExportService.swift */,
-				E8XP00000002 /* ImportService.swift */,
 			);
 			path = Export;
 			sourceTree = "<group>";
@@ -1395,7 +1392,6 @@
 				E8WT00000104 /* WalkthroughPersonRow.swift in Sources */,
 				E8WT00000105 /* WalkthroughWelcomeStep.swift in Sources */,
 				E8XP00000101 /* ExportService.swift in Sources */,
-				E8XP00000102 /* ImportService.swift in Sources */,
 				E8XP00000103 /* DataExportSection.swift in Sources */,
 				E8XP00000104 /* ShareSheet.swift in Sources */,
 				E8XP00000105 /* CatchStrings+Export.swift in Sources */,
