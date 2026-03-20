@@ -27,8 +27,13 @@ function base64urlString(str: string): string {
 /**
  * Import a PKCS#8 private key (.p8) for ES256 signing.
  */
-async function importP8Key(p8Base64: string): Promise<CryptoKey> {
-  const raw = Uint8Array.from(atob(p8Base64), (c) => c.charCodeAt(0));
+async function importP8Key(p8Input: string): Promise<CryptoKey> {
+  // Strip PEM headers if present, then decode base64
+  const stripped = p8Input
+    .replace(/-----BEGIN PRIVATE KEY-----/g, "")
+    .replace(/-----END PRIVATE KEY-----/g, "")
+    .replace(/\s/g, "");
+  const raw = Uint8Array.from(atob(stripped), (c) => c.charCodeAt(0));
   return await crypto.subtle.importKey(
     "pkcs8",
     raw,
@@ -61,7 +66,6 @@ async function buildApnsJwt(
     new TextEncoder().encode(signingInput),
   );
 
-  // Convert DER signature to raw r||s for JWT
   const sig = base64url(new Uint8Array(signature));
   return `${header}.${claims}.${sig}`;
 }
