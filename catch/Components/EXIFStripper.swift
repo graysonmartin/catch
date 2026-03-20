@@ -47,7 +47,7 @@ enum EXIFStripper {
                 kCGImagePropertyColorModel,
                 kCGImagePropertyDepth,
                 kCGImagePropertyProfileName,
-                kCGImagePropertyICCProfile,
+                "ICCProfile" as CFString,
                 kCGImagePropertyHasAlpha
             ]
 

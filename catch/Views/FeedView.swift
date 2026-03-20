@@ -42,6 +42,9 @@ struct FeedView: View {
             .background(CatchTheme.background)
             .navigationTitle(CatchStrings.Tabs.feed)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    NotificationBellButton()
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         isShowingFindPeople = true
