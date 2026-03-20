@@ -9,6 +9,7 @@ final class MockSupabaseProfileRepository: SupabaseProfileRepository {
     var fetchProfilesCalls: [[String]] = []
     var createProfileCalls: [(payload: SupabaseProfilePayload, id: String)] = []
     var updateProfileCalls: [(id: String, payload: SupabaseProfilePayload)] = []
+    var upsertProfileCalls: [(payload: SupabaseProfilePayload, id: String)] = []
     var searchUsersCalls: [String] = []
     var checkUsernameCalls: [String] = []
     var fetchRecentPublicUsersCalls: [(excludedIDs: Set<String>, limit: Int)] = []
@@ -19,6 +20,7 @@ final class MockSupabaseProfileRepository: SupabaseProfileRepository {
     var fetchProfileError: (any Error)?
     var createProfileResult: SupabaseProfile?
     var updateProfileResult: SupabaseProfile?
+    var upsertProfileResult: SupabaseProfile?
     var searchUsersResult: [SupabaseProfile] = []
     var usernameAvailabilityResult: Bool = true
     var fetchRecentPublicUsersResult: [SupabaseProfile] = []
@@ -51,6 +53,15 @@ final class MockSupabaseProfileRepository: SupabaseProfileRepository {
         return result
     }
 
+    func upsertProfile(_ payload: SupabaseProfilePayload, id: String) async throws -> SupabaseProfile {
+        upsertProfileCalls.append((payload, id))
+        if let error = fetchProfileError { throw error }
+        guard let result = upsertProfileResult else {
+            return SupabaseProfile.fixture(displayName: payload.displayName, username: payload.username)
+        }
+        return result
+    }
+
     func searchUsers(query: String) async throws -> [SupabaseProfile] {
         searchUsersCalls.append(query)
         return searchUsersResult
@@ -75,6 +86,7 @@ final class MockSupabaseProfileRepository: SupabaseProfileRepository {
         fetchProfilesCalls = []
         createProfileCalls = []
         updateProfileCalls = []
+        upsertProfileCalls = []
         searchUsersCalls = []
         checkUsernameCalls = []
         fetchRecentPublicUsersCalls = []
@@ -84,6 +96,7 @@ final class MockSupabaseProfileRepository: SupabaseProfileRepository {
         fetchProfileError = nil
         createProfileResult = nil
         updateProfileResult = nil
+        upsertProfileResult = nil
         searchUsersResult = []
         usernameAvailabilityResult = true
         fetchRecentPublicUsersResult = []

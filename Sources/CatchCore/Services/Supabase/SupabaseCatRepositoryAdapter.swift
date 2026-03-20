@@ -41,4 +41,8 @@ public final class SupabaseCatRepositoryAdapter: CatRepository, @unchecked Senda
         let cats = try await repository.fetchCats(ownerID: ownerID)
         return cats.map { SupabaseCatMapper.toCloudCat($0) }
     }
+
+    public func fetchCatCounts(ownerIDs: [String]) async throws -> [String: Int] {
+        try await repository.fetchCatCounts(ownerIDs: ownerIDs)
+    }
 }

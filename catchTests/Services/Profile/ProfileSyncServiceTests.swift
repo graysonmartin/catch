@@ -25,7 +25,7 @@ final class ProfileSyncServiceTests: XCTestCase {
 
     // MARK: - syncProfile
 
-    func testSyncProfileCreatesWhenNoExistingProfile() async throws {
+    func testSyncProfileUsesUpsert() async throws {
         let profile = UserProfile(
             displayName: "Test User",
             bio: "A bio",
@@ -34,22 +34,18 @@ final class ProfileSyncServiceTests: XCTestCase {
             isPrivate: false
         )
 
-        mockProfileRepo.fetchProfileResult = nil
-        mockProfileRepo.createProfileResult = .fixture(
-            id: UUID(),
-            displayName: "Test User",
-            username: "testuser",
-            bio: "A bio"
-        )
-
         try await sut.syncProfile(profile)
 
-        XCTAssertEqual(mockProfileRepo.createProfileCalls.count, 1)
-        XCTAssertEqual(mockProfileRepo.createProfileCalls.first?.id, "supa-123")
-        XCTAssertEqual(mockProfileRepo.createProfileCalls.first?.payload.displayName, "Test User")
+        XCTAssertEqual(mockProfileRepo.upsertProfileCalls.count, 1)
+        XCTAssertEqual(mockProfileRepo.upsertProfileCalls.first?.id, "supa-123")
+        XCTAssertEqual(mockProfileRepo.upsertProfileCalls.first?.payload.displayName, "Test User")
+        // Verify no separate fetch + create/update calls
+        XCTAssertTrue(mockProfileRepo.fetchProfileCalls.isEmpty)
+        XCTAssertTrue(mockProfileRepo.createProfileCalls.isEmpty)
+        XCTAssertTrue(mockProfileRepo.updateProfileCalls.isEmpty)
     }
 
-    func testSyncProfileUpdatesWhenExistingProfile() async throws {
+    func testSyncProfileUpsertSendsCorrectPayload() async throws {
         let profile = UserProfile(
             displayName: "Updated User",
             bio: "New bio",
@@ -58,14 +54,12 @@ final class ProfileSyncServiceTests: XCTestCase {
             isPrivate: true
         )
 
-        mockProfileRepo.fetchProfileResult = .fixture(id: UUID(), displayName: "Old Name")
-        mockProfileRepo.updateProfileResult = .fixture(id: UUID(), displayName: "Updated User")
-
         try await sut.syncProfile(profile)
 
-        XCTAssertEqual(mockProfileRepo.updateProfileCalls.count, 1)
-        XCTAssertEqual(mockProfileRepo.updateProfileCalls.first?.id, "supa-456")
-        XCTAssertTrue(mockProfileRepo.createProfileCalls.isEmpty)
+        XCTAssertEqual(mockProfileRepo.upsertProfileCalls.count, 1)
+        XCTAssertEqual(mockProfileRepo.upsertProfileCalls.first?.id, "supa-456")
+        XCTAssertEqual(mockProfileRepo.upsertProfileCalls.first?.payload.isPrivate, true)
+        XCTAssertEqual(mockProfileRepo.upsertProfileCalls.first?.payload.bio, "New bio")
     }
 
     func testSyncProfileWithRemovedAvatarDeletesFromStorage() async throws {
@@ -78,16 +72,13 @@ final class ProfileSyncServiceTests: XCTestCase {
             avatarUrl: "https://example.com/old-avatar.jpg"
         )
 
-        mockProfileRepo.fetchProfileResult = .fixture(id: UUID(), displayName: "Test")
-        mockProfileRepo.updateProfileResult = .fixture(id: UUID(), displayName: "Test")
-
         let result = try await sut.syncProfile(profile, avatarChange: .removed)
 
         XCTAssertNil(result)
         XCTAssertEqual(mockAssetService.deletePhotoCalls.count, 1)
         XCTAssertEqual(mockAssetService.deletePhotoCalls.first?.bucket, .profilePhotos)
         XCTAssertEqual(mockAssetService.deletePhotoCalls.first?.path, "supa-789/old-avatar.jpg")
-        XCTAssertNil(mockProfileRepo.updateProfileCalls.first?.payload.avatarUrl)
+        XCTAssertNil(mockProfileRepo.upsertProfileCalls.first?.payload.avatarUrl)
     }
 
     func testSyncProfileWithNilSupabaseUserIDDoesNothing() async throws {
@@ -122,11 +113,13 @@ private final class MockSupabaseProfileRepo: SupabaseProfileRepository {
     var fetchProfileCalls: [String] = []
     var createProfileCalls: [(payload: SupabaseProfilePayload, id: String)] = []
     var updateProfileCalls: [(id: String, payload: SupabaseProfilePayload)] = []
+    var upsertProfileCalls: [(payload: SupabaseProfilePayload, id: String)] = []
     var checkUsernameCalls: [String] = []
 
     var fetchProfileResult: SupabaseProfile?
     var createProfileResult: SupabaseProfile?
     var updateProfileResult: SupabaseProfile?
+    var upsertProfileResult: SupabaseProfile?
     var usernameAvailabilityResult: Bool = true
 
     func fetchProfile(id: String) async throws -> SupabaseProfile? {
@@ -144,6 +137,11 @@ private final class MockSupabaseProfileRepo: SupabaseProfileRepository {
     func updateProfile(id: String, _ payload: SupabaseProfilePayload) async throws -> SupabaseProfile {
         updateProfileCalls.append((id, payload))
         return updateProfileResult ?? .fixture()
+    }
+
+    func upsertProfile(_ payload: SupabaseProfilePayload, id: String) async throws -> SupabaseProfile {
+        upsertProfileCalls.append((payload, id))
+        return upsertProfileResult ?? .fixture()
     }
 
     func searchUsers(query: String) async throws -> [SupabaseProfile] { [] }

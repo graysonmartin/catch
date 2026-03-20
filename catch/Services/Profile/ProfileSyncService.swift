@@ -55,13 +55,7 @@ final class ProfileSyncService {
             avatarUrl: avatarUrl
         )
 
-        // Try update first; if profile doesn't exist, create it
-        let existing = try await profileRepository.fetchProfile(id: userID)
-        if existing != nil {
-            _ = try await profileRepository.updateProfile(id: userID, payload)
-        } else {
-            _ = try await profileRepository.createProfile(payload, id: userID)
-        }
+        _ = try await profileRepository.upsertProfile(payload, id: userID)
         return avatarUrl
     }
 
