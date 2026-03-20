@@ -122,18 +122,7 @@ public final class SuggestedPeopleService: @unchecked Sendable {
     }
 
     private func fetchCatCounts(for userIDs: [String]) async -> [String: Int] {
-        var counts: [String: Int] = [:]
-        await withTaskGroup(of: (String, Int).self) { group in
-            for userID in userIDs {
-                group.addTask { [catRepository] in
-                    let cats = (try? await catRepository.fetchAll(ownerID: userID)) ?? []
-                    return (userID, cats.count)
-                }
-            }
-            for await (userID, count) in group {
-                counts[userID] = count
-            }
-        }
-        return counts
+        guard !userIDs.isEmpty else { return [:] }
+        return (try? await catRepository.fetchCatCounts(ownerIDs: userIDs)) ?? [:]
     }
 }

@@ -50,7 +50,8 @@ struct catchApp: App {
 
         let follow = SupabaseFollowService(
             repository: followRepo,
-            clientProvider: provider
+            clientProvider: provider,
+            profileRepository: profileRepo
         )
 
         let browseService = SupabaseUserBrowseService(

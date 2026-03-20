@@ -23,6 +23,24 @@ public final class DefaultSupabaseCatRepository: SupabaseCatRepository, @uncheck
         return response.first
     }
 
+    public func fetchCatCounts(ownerIDs: [String]) async throws -> [String: Int] {
+        guard !ownerIDs.isEmpty else { return [:] }
+
+        let rows: [CatOwnerRow] = try await clientProvider.client
+            .from(Self.tableName)
+            .select("owner_id")
+            .in("owner_id", values: ownerIDs)
+            .execute()
+            .value
+
+        var counts: [String: Int] = [:]
+        for row in rows {
+            let key = row.ownerID.uuidString.lowercased()
+            counts[key, default: 0] += 1
+        }
+        return counts
+    }
+
     public func fetchCats(ownerID: String) async throws -> [SupabaseCat] {
         try await clientProvider.client
             .from(Self.tableName)
@@ -60,5 +78,16 @@ public final class DefaultSupabaseCatRepository: SupabaseCatRepository, @uncheck
             .delete()
             .eq("id", value: id)
             .execute()
+    }
+}
+
+// MARK: - Lightweight Row Types
+
+/// Minimal row for batch cat count queries — only decodes the owner_id column.
+private struct CatOwnerRow: Decodable {
+    let ownerID: UUID
+
+    private enum CodingKeys: String, CodingKey {
+        case ownerID = "owner_id"
     }
 }
