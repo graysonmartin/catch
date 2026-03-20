@@ -108,6 +108,10 @@ function buildApnsPayload(notification: NotificationRow): Record<string, unknown
       title = "new comment";
       body = `${actorName} commented on your encounter with ${catName}`;
       break;
+    case "new_follower":
+      title = "new follower";
+      body = `${actorName} started following you`;
+      break;
     default:
       title = "catch";
       body = "you have a new notification";

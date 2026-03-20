@@ -27,6 +27,27 @@ final class APNsPayloadDecoderTests: XCTestCase {
         XCTAssertEqual(result?.notificationType, .encounterCommented)
     }
 
+    func test_decode_fromDataKey_newFollower() {
+        let data: [String: Any] = [
+            "notification_type": "new_follower",
+            "entity_type": "follow",
+            "entity_id": "user-789",
+            "actor_id": "user-789",
+            "created_at": "2026-03-20T12:00:00Z",
+            "version": 1
+        ]
+        let userInfo: [AnyHashable: Any] = [
+            "aps": ["alert": ["title": "new follower", "body": "someone followed you"]],
+            "data": data
+        ]
+        let result = APNsPayloadDecoder.decode(from: userInfo)
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result?.notificationType, .newFollower)
+        XCTAssertEqual(result?.entityType, "follow")
+        XCTAssertEqual(result?.entityId, "user-789")
+        XCTAssertEqual(result?.actorId, "user-789")
+    }
+
     // MARK: - Fallback to top-level keys
 
     func test_decode_fromTopLevel_whenNoDataKey() {
@@ -103,6 +124,25 @@ final class APNsPayloadDecoderTests: XCTestCase {
             original,
             title: "New comment",
             body: "Someone commented"
+        )
+        let decoded = APNsPayloadDecoder.decode(from: encoded)
+        XCTAssertEqual(decoded, original)
+    }
+
+    func test_roundTrip_newFollower_encodeThenDecode() throws {
+        let original = NotificationPayload(
+            notificationType: .newFollower,
+            entityType: "follow",
+            entityId: "user-follow",
+            actorId: "user-follow",
+            collapseKey: "follow-1",
+            createdAt: fixedDate,
+            version: 1
+        )
+        let encoded = try APNsPayloadEncoder.encode(
+            original,
+            title: "new follower",
+            body: "someone started following you"
         )
         let decoded = APNsPayloadDecoder.decode(from: encoded)
         XCTAssertEqual(decoded, original)

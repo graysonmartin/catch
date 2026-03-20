@@ -51,6 +51,19 @@ struct ContentView: View {
         .sheet(item: $appRouter.routedEncounterDetail) { detail in
             EncounterDetailSheet(data: detail, isOwnEncounter: detail.isOwned)
         }
+        .sheet(item: $appRouter.routedProfileId) { routed in
+            NavigationStack {
+                RemoteProfileContent(userID: routed.id, initialDisplayName: nil)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button(CatchStrings.Common.done) {
+                                appRouter.routedProfileId = nil
+                            }
+                            .foregroundStyle(CatchTheme.primary)
+                        }
+                    }
+            }
+        }
         .task {
             guard let userID = authService.authState.user?.id else { return }
             async let cats: Void = { try? await catDataService.loadCats() }()
