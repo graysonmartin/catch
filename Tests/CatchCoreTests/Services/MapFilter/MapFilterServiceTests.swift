@@ -66,8 +66,20 @@ final class MapFilterServiceTests: XCTestCase {
 
     // MARK: - Remote pin tests
 
-    func testRemotePinShownByDefault() {
+    func testRemotePinHiddenByDefault() {
         let state = MapFilterState()
+        XCTAssertFalse(
+            MapFilterService.shouldShowRemotePin(
+                encounterDate: Date(),
+                ownerID: "user-1",
+                followedUserIDs: ["user-1"],
+                filterState: state
+            )
+        )
+    }
+
+    func testRemotePinShownWhenNoOwnerFiltersActive() {
+        let state = MapFilterState(ownerFilters: [])
         XCTAssertTrue(
             MapFilterService.shouldShowRemotePin(
                 encounterDate: Date(),
@@ -128,7 +140,7 @@ final class MapFilterServiceTests: XCTestCase {
 
     func testRemotePinHiddenWhenEncounterOutsideTimeRange() {
         let oldDate = Calendar.current.date(byAdding: .day, value: -15, to: Date())!
-        let state = MapFilterState(timeRange: .last7Days)
+        let state = MapFilterState(ownerFilters: [.friendsCats], timeRange: .last7Days)
         XCTAssertFalse(
             MapFilterService.shouldShowRemotePin(
                 encounterDate: oldDate,
@@ -141,7 +153,7 @@ final class MapFilterServiceTests: XCTestCase {
 
     func testRemotePinShownWhenEncounterWithinTimeRange() {
         let recentDate = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
-        let state = MapFilterState(timeRange: .last7Days)
+        let state = MapFilterState(ownerFilters: [.friendsCats], timeRange: .last7Days)
         XCTAssertTrue(
             MapFilterService.shouldShowRemotePin(
                 encounterDate: recentDate,

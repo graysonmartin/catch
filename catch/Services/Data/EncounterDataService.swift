@@ -22,6 +22,12 @@ final class EncounterDataService {
         self.getUserID = getUserID
     }
 
+    // MARK: - Fetch
+
+    func fetchEncounter(id: String) async throws -> SupabaseEncounter? {
+        try await encounterRepository.fetchEncounter(id: id)
+    }
+
     // MARK: - Create
 
     func createEncounter(

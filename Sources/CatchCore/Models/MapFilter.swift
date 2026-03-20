@@ -27,22 +27,25 @@ public enum MapTimeRange: String, CaseIterable, Sendable, Equatable {
 }
 
 /// Holds the current filter selections for the map view.
-/// Default state: no owner filters active, time range is all time.
+/// Default state: "My Cats" selected, time range is all time.
 public struct MapFilterState: Equatable, Sendable {
     public var ownerFilters: Set<MapOwnerFilter>
     public var timeRange: MapTimeRange
 
+    /// The default owner filters applied on first load.
+    public static let defaultOwnerFilters: Set<MapOwnerFilter> = [.myCats]
+
     public init(
-        ownerFilters: Set<MapOwnerFilter> = [],
+        ownerFilters: Set<MapOwnerFilter> = MapFilterState.defaultOwnerFilters,
         timeRange: MapTimeRange = .allTime
     ) {
         self.ownerFilters = ownerFilters
         self.timeRange = timeRange
     }
 
-    /// Whether any filters differ from the default (show-all) state.
+    /// Whether any filters differ from the default state.
     public var hasActiveFilters: Bool {
-        !ownerFilters.isEmpty || timeRange != .allTime
+        ownerFilters != Self.defaultOwnerFilters || timeRange != .allTime
     }
 
     /// Toggles an owner filter on or off.
@@ -56,7 +59,7 @@ public struct MapFilterState: Equatable, Sendable {
 
     /// Resets all filters to default.
     public mutating func reset() {
-        ownerFilters = []
+        ownerFilters = Self.defaultOwnerFilters
         timeRange = .allTime
     }
 }

@@ -18,14 +18,6 @@ extension CatchStrings {
         static let accountConnected = String(localized: "account connected")
         static let signInWithApple = String(localized: "Sign in with Apple")
         static let signInWithGoogle = String(localized: "Sign in with Google")
-        static let signInWithEmail = String(localized: "Sign in with Email")
-        static let emailPlaceholder = String(localized: "your email")
-        static let passwordPlaceholder = String(localized: "password (6+ characters)")
-        static let signIn = String(localized: "sign in")
-        static let signUp = String(localized: "sign up")
-        static let switchToSignIn = String(localized: "already have an account?")
-        static let switchToSignUp = String(localized: "need an account?")
-        static let checkEmailForVerification = String(localized: "check your email to verify your account.")
 
         // Legacy — kept for backward compatibility
         static let appleAccountConnected = String(localized: "apple account connected")

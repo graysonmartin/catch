@@ -2,6 +2,7 @@ import SwiftUI
 import CatchCore
 
 struct ContentView: View {
+    @EnvironmentObject private var appRouter: AppRouter
     @Environment(SupabaseFollowService.self) private var followService
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(CatDataService.self) private var catDataService
@@ -36,6 +37,20 @@ struct ContentView: View {
                 .badge(followService.pendingRequests.count)
         }
         .tint(CatchTheme.primary)
+        .onAppear {
+            appRouter.markReady()
+        }
+        .onChange(of: appRouter.activeTab) { _, newTab in
+            guard let newTab else { return }
+            selectedTab = newTab.rawValue
+        }
+        .onChange(of: appRouter.pendingRoute) { _, route in
+            guard let route else { return }
+            Task { await appRouter.handleRoute(route) }
+        }
+        .sheet(item: $appRouter.routedEncounterDetail) { detail in
+            EncounterDetailSheet(data: detail, isOwnEncounter: detail.isOwned)
+        }
         .task {
             guard let userID = authService.authState.user?.id else { return }
             async let cats: Void = { try? await catDataService.loadCats() }()

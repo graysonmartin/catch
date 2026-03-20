@@ -14,6 +14,7 @@ public final class SupabaseFollowService: FollowService {
     public private(set) var hasMoreFollowing = false
 
     private let repository: any SupabaseFollowRepository
+    private let profileRepository: (any SupabaseProfileRepository)?
     private let clientProvider: (any SupabaseClientProviding)?
     private let pageSize: Int
     private var realtimeChannel: RealtimeChannelV2?
@@ -22,10 +23,12 @@ public final class SupabaseFollowService: FollowService {
     public init(
         repository: any SupabaseFollowRepository,
         clientProvider: (any SupabaseClientProviding)? = nil,
+        profileRepository: (any SupabaseProfileRepository)? = nil,
         pageSize: Int = PaginationConstants.defaultPageSize
     ) {
         self.repository = repository
         self.clientProvider = clientProvider
+        self.profileRepository = profileRepository
         self.pageSize = pageSize
     }
 
@@ -182,6 +185,14 @@ public final class SupabaseFollowService: FollowService {
     // MARK: - Counts & Lists
 
     public func fetchFollowCounts(for userID: String) async throws -> (followers: Int, following: Int) {
+        // Prefer denormalized counts from the profiles table (single query)
+        // over two HEAD count queries against the follows table
+        if let profileRepository {
+            if let profile = try await profileRepository.fetchProfile(id: userID) {
+                return (followers: profile.followerCount, following: profile.followingCount)
+            }
+        }
+        // Fallback to counting follows table if profile repo unavailable
         async let followerCount = repository.countFollowers(userID: userID)
         async let followingCount = repository.countFollowing(userID: userID)
         return try await (followers: followerCount, following: followingCount)

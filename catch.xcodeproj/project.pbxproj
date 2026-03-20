@@ -131,8 +131,8 @@
 		E8CS0000010C /* CatchStrings+Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000C /* CatchStrings+Diary.swift */; };
 		E8CS0000010D /* CatchStrings+Walkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000D /* CatchStrings+Walkthrough.swift */; };
 		E8CS0000030D /* CatchStrings+Walkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000D /* CatchStrings+Walkthrough.swift */; };
-		E8CS0000010E /* CatchStrings+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000E /* CatchStrings+Accessibility.swift */; };
-		E8CS0000030E /* CatchStrings+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000E /* CatchStrings+Accessibility.swift */; };
+		E8CS0000010F /* CatchStrings+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000F /* CatchStrings+Accessibility.swift */; };
+		E8CS0000030F /* CatchStrings+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000F /* CatchStrings+Accessibility.swift */; };
 		E8WT00000101 /* NewUserWalkthroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000001 /* NewUserWalkthroughView.swift */; };
 		E8WT00000102 /* WalkthroughLocationStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000002 /* WalkthroughLocationStep.swift */; };
 		E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000003 /* WalkthroughPeopleStep.swift */; };
@@ -263,6 +263,26 @@
 		E8RP00000101 /* ReportEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RP00000001 /* ReportEncounterView.swift */; };
 		E8RP00000102 /* CatchStrings+Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RP00000002 /* CatchStrings+Report.swift */; };
 		E8RS00000203 /* CatchStrings+Restore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8RS00000003 /* CatchStrings+Restore.swift */; };
+		E8AD00000101 /* CatchAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AD00000001 /* CatchAppDelegate.swift */; };
+		E8CS0000010E /* CatchStrings+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000E /* CatchStrings+Notifications.swift */; };
+		E8CS0000030E /* CatchStrings+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000E /* CatchStrings+Notifications.swift */; };
+		E8DT00000101 /* DeviceTokenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DT00000001 /* DeviceTokenService.swift */; };
+		E8IA00000101 /* InAppNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IA00000001 /* InAppNotificationService.swift */; };
+		E8IA00000102 /* NotificationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IA00000002 /* NotificationRow.swift */; };
+		E8IA00000103 /* SupabaseInAppNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IA00000003 /* SupabaseInAppNotificationService.swift */; };
+		E8IA00000201 /* MockInAppNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IA00000011 /* MockInAppNotificationService.swift */; };
+		E8IA00000301 /* InAppNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IA00000001 /* InAppNotificationService.swift */; };
+		E8IA00000202 /* NotificationItemTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IA00000012 /* NotificationItemTests.swift */; };
+		E8IA00000203 /* MockInAppNotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8IA00000013 /* MockInAppNotificationServiceTests.swift */; };
+		E8NB00000101 /* NotificationBellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NB00000001 /* NotificationBellButton.swift */; };
+		E8ND00000101 /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ND00000001 /* NotificationDelegate.swift */; };
+		E8NI00000101 /* NotificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NI00000001 /* NotificationItem.swift */; };
+		E8NI00000201 /* NotificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NI00000001 /* NotificationItem.swift */; };
+		E8NV00000101 /* AppRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NV00000001 /* AppRoute.swift */; };
+		E8NV00000102 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NV00000002 /* AppRouter.swift */; };
+		E8NV00000103 /* ContentTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NV00000003 /* ContentTab.swift */; };
+		E8NW00000101 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NW00000001 /* NotificationsView.swift */; };
+		E8NW00000102 /* NotificationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NW00000002 /* NotificationRowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -368,7 +388,7 @@
 		E8CS0000000B /* CatchStrings+Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Components.swift"; sourceTree = "<group>"; };
 		E8CS0000000C /* CatchStrings+Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Diary.swift"; sourceTree = "<group>"; };
 		E8CS0000000D /* CatchStrings+Walkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Walkthrough.swift"; sourceTree = "<group>"; };
-		E8CS0000000E /* CatchStrings+Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Accessibility.swift"; sourceTree = "<group>"; };
+		E8CS0000000F /* CatchStrings+Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Accessibility.swift"; sourceTree = "<group>"; };
 		E8WT00000001 /* NewUserWalkthroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserWalkthroughView.swift; sourceTree = "<group>"; };
 		E8WT00000002 /* WalkthroughLocationStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughLocationStep.swift; sourceTree = "<group>"; };
 		E8WT00000003 /* WalkthroughPeopleStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughPeopleStep.swift; sourceTree = "<group>"; };
@@ -470,6 +490,23 @@
 		E8RS00000003 /* CatchStrings+Restore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Restore.swift"; sourceTree = "<group>"; };
 		E8RP00000001 /* ReportEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportEncounterView.swift; sourceTree = "<group>"; };
 		E8RP00000002 /* CatchStrings+Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Report.swift"; sourceTree = "<group>"; };
+		E8AD00000001 /* CatchAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchAppDelegate.swift; sourceTree = "<group>"; };
+		E8CS0000000E /* CatchStrings+Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Notifications.swift"; sourceTree = "<group>"; };
+		E8DT00000001 /* DeviceTokenService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTokenService.swift; sourceTree = "<group>"; };
+		E8IA00000001 /* InAppNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppNotificationService.swift; sourceTree = "<group>"; };
+		E8IA00000002 /* NotificationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRow.swift; sourceTree = "<group>"; };
+		E8IA00000003 /* SupabaseInAppNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseInAppNotificationService.swift; sourceTree = "<group>"; };
+		E8IA00000011 /* MockInAppNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInAppNotificationService.swift; sourceTree = "<group>"; };
+		E8IA00000012 /* NotificationItemTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationItemTests.swift; sourceTree = "<group>"; };
+		E8IA00000013 /* MockInAppNotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockInAppNotificationServiceTests.swift; sourceTree = "<group>"; };
+		E8NB00000001 /* NotificationBellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBellButton.swift; sourceTree = "<group>"; };
+		E8ND00000001 /* NotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
+		E8NI00000001 /* NotificationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationItem.swift; sourceTree = "<group>"; };
+		E8NV00000001 /* AppRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoute.swift; sourceTree = "<group>"; };
+		E8NV00000002 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		E8NV00000003 /* ContentTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTab.swift; sourceTree = "<group>"; };
+		E8NW00000001 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		E8NW00000002 /* NotificationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -509,6 +546,7 @@
 				E8DB00000001 /* DatabaseState.swift */,
 				E8000001BB000001 /* DataSeeder.swift */,
 				E8000001AA000030 /* Models */,
+				E8NV0000F001 /* Navigation */,
 				E8000001AA000031 /* Views */,
 				E8000001AA000032 /* Components */,
 				E8000001AA000033 /* Theme */,
@@ -576,6 +614,7 @@
 				E8E500000021 /* Social */,
 				E8ST0000F003 /* Settings */,
 				E8WT0000F001 /* Walkthrough */,
+				E8NW0000F001 /* Notifications */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -625,6 +664,7 @@
 				E8UA00000001 /* UserAvatarView.swift */,
 				E8SG00000002 /* SuggestedPersonCard.swift */,
 				E8UF00000001 /* UsernameFieldView.swift */,
+				E8NB00000001 /* NotificationBellButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -655,7 +695,8 @@
 				E8RP00000002 /* CatchStrings+Report.swift */,
 				E8RV00000002 /* CatchStrings+Recovery.swift */,
 				E8CS0000000D /* CatchStrings+Walkthrough.swift */,
-				E8CS0000000E /* CatchStrings+Accessibility.swift */,
+				E8CS0000000F /* CatchStrings+Accessibility.swift */,
+				E8CS0000000E /* CatchStrings+Notifications.swift */,
 				E8AK00000001 /* AppStorageKeys.swift */,
 				E8AU00000001 /* AppURL.swift */,
 			);
@@ -803,6 +844,7 @@
 				E8SF0000F002 /* SocialFeed */,
 				E8FD0000F002 /* Feed */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
+				E8IA0000F002 /* InAppNotifications */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -852,6 +894,8 @@
 				E8SI0000F001 /* Social */,
 				E8SF0000F001 /* SocialFeed */,
 				E8LS0000F001 /* LocationSearch */,
+				E8PN0000F001 /* Notifications */,
+				E8IA0000F001 /* InAppNotifications */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -873,6 +917,7 @@
 				E8SF00000008 /* MockSupabaseFeedRepository.swift */,
 				E8ST00000005 /* MockSettingsService.swift */,
 				E8FD00000003 /* MockSupabaseEncounterRepository.swift */,
+				E8IA00000011 /* MockInAppNotificationService.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -924,6 +969,7 @@
 				E8ED00000001 /* EncounterDetailData.swift */,
 				E8SF00000001 /* FeedItem.swift */,
 				E8DM00000002 /* ProfileDisplayData.swift */,
+				E8NI00000001 /* NotificationItem.swift */,
 			);
 			path = DisplayModels;
 			sourceTree = "<group>";
@@ -1116,6 +1162,54 @@
 			children = (
 			);
 			path = Username;
+			sourceTree = "<group>";
+		};
+		E8NV0000F001 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				E8NV00000001 /* AppRoute.swift */,
+				E8NV00000002 /* AppRouter.swift */,
+				E8NV00000003 /* ContentTab.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		E8PN0000F001 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				E8AD00000001 /* CatchAppDelegate.swift */,
+				E8DT00000001 /* DeviceTokenService.swift */,
+				E8ND00000001 /* NotificationDelegate.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		E8IA0000F001 /* InAppNotifications */ = {
+			isa = PBXGroup;
+			children = (
+				E8IA00000001 /* InAppNotificationService.swift */,
+				E8IA00000002 /* NotificationRow.swift */,
+				E8IA00000003 /* SupabaseInAppNotificationService.swift */,
+			);
+			path = InAppNotifications;
+			sourceTree = "<group>";
+		};
+		E8NW0000F001 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				E8NW00000001 /* NotificationsView.swift */,
+				E8NW00000002 /* NotificationRowView.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		E8IA0000F002 /* InAppNotifications */ = {
+			isa = PBXGroup;
+			children = (
+				E8IA00000012 /* NotificationItemTests.swift */,
+				E8IA00000013 /* MockInAppNotificationServiceTests.swift */,
+			);
+			path = InAppNotifications;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1370,12 +1464,26 @@
 				E8RP00000101 /* ReportEncounterView.swift in Sources */,
 				E8RP00000102 /* CatchStrings+Report.swift in Sources */,
 				E8CS0000010D /* CatchStrings+Walkthrough.swift in Sources */,
-				E8CS0000010E /* CatchStrings+Accessibility.swift in Sources */,
+				E8CS0000010F /* CatchStrings+Accessibility.swift in Sources */,
 				E8WT00000101 /* NewUserWalkthroughView.swift in Sources */,
 				E8WT00000102 /* WalkthroughLocationStep.swift in Sources */,
 				E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */,
 				E8WT00000104 /* WalkthroughPersonRow.swift in Sources */,
 				E8WT00000105 /* WalkthroughWelcomeStep.swift in Sources */,
+				E8NV00000101 /* AppRoute.swift in Sources */,
+				E8NV00000102 /* AppRouter.swift in Sources */,
+				E8NV00000103 /* ContentTab.swift in Sources */,
+				E8AD00000101 /* CatchAppDelegate.swift in Sources */,
+				E8DT00000101 /* DeviceTokenService.swift in Sources */,
+				E8ND00000101 /* NotificationDelegate.swift in Sources */,
+				E8CS0000010E /* CatchStrings+Notifications.swift in Sources */,
+				E8NI00000101 /* NotificationItem.swift in Sources */,
+				E8IA00000101 /* InAppNotificationService.swift in Sources */,
+				E8IA00000102 /* NotificationRow.swift in Sources */,
+				E8IA00000103 /* SupabaseInAppNotificationService.swift in Sources */,
+				E8NW00000101 /* NotificationsView.swift in Sources */,
+				E8NW00000102 /* NotificationRowView.swift in Sources */,
+				E8NB00000101 /* NotificationBellButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1446,7 +1554,7 @@
 				E8PT00000212 /* ProfileDiaryTabTests.swift in Sources */,
 				E8CS0000030C /* CatchStrings+Diary.swift in Sources */,
 				E8CS0000030D /* CatchStrings+Walkthrough.swift in Sources */,
-				E8CS0000030E /* CatchStrings+Accessibility.swift in Sources */,
+				E8CS0000030F /* CatchStrings+Accessibility.swift in Sources */,
 				E8SI00000208 /* MockSocialInteractionService.swift in Sources */,
 				E8SF00000201 /* FeedItem.swift in Sources */,
 				E8SF00000202 /* SocialFeedService.swift in Sources */,
@@ -1475,6 +1583,12 @@
 				E8PY00000202 /* ProfileSyncServiceTests.swift in Sources */,
 				E8RS00000203 /* CatchStrings+Restore.swift in Sources */,
 				E8SN00000302 /* CatchStrings+SignIn.swift in Sources */,
+				E8IA00000201 /* MockInAppNotificationService.swift in Sources */,
+				E8IA00000202 /* NotificationItemTests.swift in Sources */,
+				E8IA00000203 /* MockInAppNotificationServiceTests.swift in Sources */,
+				E8CS0000030E /* CatchStrings+Notifications.swift in Sources */,
+				E8NI00000201 /* NotificationItem.swift in Sources */,
+				E8IA00000301 /* InAppNotificationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

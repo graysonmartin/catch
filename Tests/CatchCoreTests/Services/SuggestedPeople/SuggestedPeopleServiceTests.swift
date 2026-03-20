@@ -104,30 +104,43 @@ final class SuggestedPeopleServiceTests: XCTestCase {
 
     // MARK: - Cat Counts
 
-    func test_fetchesCatCountsForEachUser() async {
+    func test_fetchesCatCountsViaBatchQuery() async {
         let userID = UUID(uuidString: "00000000-0000-0000-0000-000000000042")!
         let profile = SupabaseProfile.fixture(id: userID, displayName: "Cat Collector")
         profileRepo.fetchRecentPublicUsersResult = [profile]
 
-        let fakeCat = CloudCat(
-            recordName: "cat-1",
-            ownerID: userID.uuidString.lowercased(),
-            name: "Whiskers",
-            breed: "",
-            estimatedAge: "",
-            locationName: "",
-            locationLatitude: nil,
-            locationLongitude: nil,
-            notes: "",
-            isOwned: false,
-            createdAt: Date(),
-            photos: []
-        )
-        catRepo.fetchAllResult = [fakeCat]
+        catRepo.fetchCatCountsResult = [userID.uuidString.lowercased(): 3]
 
         await sut.load()
 
-        XCTAssertEqual(sut.suggestedPeople.first?.catCount, 1)
+        XCTAssertEqual(sut.suggestedPeople.first?.catCount, 3)
+        // Verify the batch method was called with the correct user IDs
+        XCTAssertEqual(catRepo.fetchCatCountsCalls.count, 1)
+        XCTAssertEqual(catRepo.fetchCatCountsCalls.first, [userID.uuidString.lowercased()])
+        // Verify the old N+1 fetchAll was NOT called
+        XCTAssertTrue(catRepo.fetchAllCalls.isEmpty)
+    }
+
+    func test_batchCatCountsForMultipleUsers() async {
+        let user1ID = UUID(uuidString: "00000000-0000-0000-0000-000000000001")!
+        let user2ID = UUID(uuidString: "00000000-0000-0000-0000-000000000002")!
+        profileRepo.fetchRecentPublicUsersResult = [
+            SupabaseProfile.fixture(id: user1ID, displayName: "User1"),
+            SupabaseProfile.fixture(id: user2ID, displayName: "User2")
+        ]
+
+        catRepo.fetchCatCountsResult = [
+            user1ID.uuidString.lowercased(): 5,
+            user2ID.uuidString.lowercased(): 2
+        ]
+
+        await sut.load()
+
+        XCTAssertEqual(sut.suggestedPeople.count, 2)
+        XCTAssertEqual(sut.suggestedPeople.first(where: { $0.displayName == "User1" })?.catCount, 5)
+        XCTAssertEqual(sut.suggestedPeople.first(where: { $0.displayName == "User2" })?.catCount, 2)
+        // Single batch call, not N individual calls
+        XCTAssertEqual(catRepo.fetchCatCountsCalls.count, 1)
     }
 
     // MARK: - Username Handling

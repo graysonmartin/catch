@@ -1,8 +1,10 @@
 import SwiftUI
+import UserNotifications
 import CatchCore
 
 @main
 struct catchApp: App {
+    @UIApplicationDelegateAdaptor(CatchAppDelegate.self) private var appDelegate
     @AppStorage(AppStorageKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = false
     @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
     @AppStorage(AppStorageKeys.hasCompletedNewUserWalkthrough) private var hasCompletedNewUserWalkthrough = false
@@ -23,6 +25,10 @@ struct catchApp: App {
     @State private var feedDataService: FeedDataService
     @State private var reportService: SupabaseReportService
     @State private var suggestedPeopleService: SuggestedPeopleService
+    @StateObject private var appRouter: AppRouter
+    @State private var deviceTokenService: DeviceTokenService?
+    @State private var notificationDelegate: NotificationDelegate?
+    @State private var inAppNotificationService: SupabaseInAppNotificationService
 
     init() {
         #if DEBUG
@@ -50,7 +56,8 @@ struct catchApp: App {
 
         let follow = SupabaseFollowService(
             repository: followRepo,
-            clientProvider: provider
+            clientProvider: provider,
+            profileRepository: profileRepo
         )
 
         let browseService = SupabaseUserBrowseService(
@@ -88,16 +95,22 @@ struct catchApp: App {
             profileRepository: profileRepo,
             assetService: assets
         ))
-        _catDataService = State(initialValue: CatDataService(
+        let catData = CatDataService(
             catRepository: catRepo,
             encounterRepository: encRepo,
             assetService: assets,
             getUserID: getUserID
-        ))
-        _encounterDataService = State(initialValue: EncounterDataService(
+        )
+        let encounterData = EncounterDataService(
             encounterRepository: encRepo,
             assetService: assets,
             getUserID: getUserID
+        )
+        _catDataService = State(initialValue: catData)
+        _encounterDataService = State(initialValue: encounterData)
+        _appRouter = StateObject(wrappedValue: AppRouter(
+            encounterDataService: encounterData,
+            catDataService: catData
         ))
         _feedDataService = State(initialValue: FeedDataService(
             encounterRepository: encRepo,
@@ -111,6 +124,14 @@ struct catchApp: App {
                 Set(follow.following.map(\.followeeID))
             }
         ))
+        _deviceTokenService = State(initialValue: DeviceTokenService(
+            clientProvider: provider,
+            getCurrentUserID: getUserID
+        ))
+        _inAppNotificationService = State(initialValue: SupabaseInAppNotificationService(
+            clientProvider: provider,
+            getCurrentUserID: getUserID
+        ))
     }
 
     var body: some Scene {
@@ -118,6 +139,7 @@ struct catchApp: App {
             mainContent
                 .onAppear {
                     installToastWindow()
+                    setupNotificationDelegate()
                 }
                 .onChange(of: authService.authState) { oldState, newState in
                     if oldState == .unknown, newState.isSignedIn, !hasCompletedProfileSetup {
@@ -127,6 +149,10 @@ struct catchApp: App {
                     if newState == .signedOut {
                         hasCompletedProfileSetup = false
                         hasCompletedNewUserWalkthrough = false
+                        Task { await deviceTokenService?.clearToken() }
+                    }
+                    if !oldState.isSignedIn, newState.isSignedIn {
+                        Task { await deviceTokenService?.requestPermissionIfNeeded() }
                     }
                 }
         }
@@ -138,6 +164,17 @@ struct catchApp: App {
             .first
         else { return }
         toastWindow.install(in: windowScene, toastManager: toastManager)
+    }
+
+    private func setupNotificationDelegate() {
+        guard let tokenService = deviceTokenService, notificationDelegate == nil else { return }
+        let delegate = NotificationDelegate(
+            tokenService: tokenService,
+            router: appRouter
+        )
+        notificationDelegate = delegate
+        UNUserNotificationCenter.current().delegate = delegate
+        appDelegate.notificationDelegate = delegate
     }
 
     @ViewBuilder
@@ -176,6 +213,7 @@ struct catchApp: App {
                 .environment(toastManager)
         } else {
             ContentView()
+                .environmentObject(appRouter)
                 .environment(breedClassifier)
                 .environment(authService)
                 .environment(followService)
@@ -191,6 +229,7 @@ struct catchApp: App {
                 .environment(encounterDataService)
                 .environment(feedDataService)
                 .environment(suggestedPeopleService)
+                .environment(inAppNotificationService)
                 .task {
                     await authService.refreshSessionIfNeeded()
                 }
