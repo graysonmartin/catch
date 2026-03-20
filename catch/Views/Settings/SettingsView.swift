@@ -14,8 +14,8 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
-            notificationsSection
             aboutSection
+            legalSection
             dangerZoneSection
             #if DEBUG
             debugSection
@@ -48,21 +48,33 @@ struct SettingsView: View {
         }
     }
 
-    // MARK: - Notifications
+    // MARK: - Legal
 
-    private var notificationsSection: some View {
+    private var legalSection: some View {
         Section {
-            Toggle(
-                CatchStrings.Settings.notificationsToggle,
-                isOn: Binding(
-                    get: { settingsService.isNotificationsEnabled },
-                    set: { settingsService.isNotificationsEnabled = $0 }
-                )
-            )
+            Link(destination: AppURL.privacyPolicy) {
+                HStack {
+                    Image(systemName: "hand.raised")
+                    Text(CatchStrings.Settings.privacyPolicy)
+                    Spacer()
+                    Image(systemName: "arrow.up.forward")
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                }
+            }
+
+            Link(destination: AppURL.termsOfService) {
+                HStack {
+                    Image(systemName: "doc.text")
+                    Text(CatchStrings.Settings.termsOfService)
+                    Spacer()
+                    Image(systemName: "arrow.up.forward")
+                        .font(.caption)
+                        .foregroundStyle(CatchTheme.textSecondary)
+                }
+            }
         } header: {
-            Text(CatchStrings.Settings.notificationsSection)
-        } footer: {
-            Text(CatchStrings.Settings.notificationsFooter)
+            Text(CatchStrings.Settings.legalSection)
         }
     }
 

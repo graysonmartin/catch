@@ -53,7 +53,7 @@
 </head>
 <body>
     <h1>Privacy Policy</h1>
-    <p class="effective-date">Effective date: March 4, 2026</p>
+    <p class="effective-date">Effective date: March 20, 2026</p>
 
     <p>
         <span class="app-name">Catch</span> is a cat-tracking app that lets you log the cats
@@ -73,18 +73,18 @@
         </li>
         <li>
             <strong>Photos</strong> &mdash; Photos you select from your library are
-            stored locally on your device and, if you opt in, synced via iCloud. Catch
-            does not access your full photo library; only the images you explicitly
-            choose are used.
+            uploaded to our servers for display within the app. Catch does not access
+            your full photo library; only the images you explicitly choose are used.
         </li>
         <li>
             <strong>Cat encounter data</strong> &mdash; Names, notes, breed
             classifications, and encounter details you enter into the app.
         </li>
         <li>
-            <strong>Account information</strong> &mdash; If you sign in with Apple,
-            Catch stores the credentials needed to identify your account (Apple user
-            identifier). No passwords are stored by Catch.
+            <strong>Account information</strong> &mdash; When you sign in with Apple,
+            Google, or email, Catch stores the credentials needed to identify your
+            account. Passwords are managed by our authentication provider (Supabase)
+            and are never stored directly by Catch.
         </li>
         <li>
             <strong>Social data</strong> &mdash; Follow relationships, likes, and
@@ -95,22 +95,23 @@
     <h2>How Data Is Stored</h2>
     <ul>
         <li>
-            <strong>On-device storage</strong> &mdash; All cat encounter data, photos,
-            and account information are stored locally on your device using Apple's
-            SwiftData framework.
+            <strong>Cloud storage</strong> &mdash; Your cats, encounters, photos, and
+            social data (follows, likes, comments) are stored on servers hosted by
+            <a href="https://supabase.com" target="_blank" rel="noopener">Supabase</a>,
+            which runs on Amazon Web Services (AWS) infrastructure. Data is stored in
+            the United States.
         </li>
         <li>
-            <strong>iCloud sync</strong> &mdash; If you are signed in to iCloud, Catch
-            uses Apple CloudKit to sync your data across your devices and to power
-            social features (follows, likes, comments). Data stored in CloudKit is
-            governed by
-            <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">
-                Apple's Privacy Policy</a>.
+            <strong>Authentication</strong> &mdash; Sign-in is handled by Supabase Auth.
+            If you use Sign in with Apple or Google, Catch receives only the identity
+            token needed to verify your account. If you use email sign-in, your password
+            is hashed and managed by Supabase &mdash; Catch never has access to your
+            plaintext password.
         </li>
         <li>
-            <strong>Authentication credentials</strong> &mdash; Sign in with Apple
-            credentials are stored in the iOS Keychain, Apple's secure on-device
-            credential storage.
+            <strong>Photo storage</strong> &mdash; Photos you upload are stored in
+            Supabase Storage (backed by AWS S3). Images are resized before upload to
+            reduce storage and bandwidth usage.
         </li>
     </ul>
 
@@ -131,9 +132,8 @@
     <h2>Account Deletion</h2>
     <p>
         You can delete your account and all associated data at any time from the
-        Settings screen within the app. This removes your local data and signs you
-        out. Data previously synced to CloudKit can be managed through your iCloud
-        account settings.
+        Settings screen within the app. This removes your profile, cats, encounters,
+        photos, and social data from our servers and signs you out.
     </p>
 
     <h2>Children's Privacy</h2>

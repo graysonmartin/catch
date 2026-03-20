@@ -7,10 +7,10 @@ extension CatchStrings {
         // Navigation
         static let title = String(localized: "settings")
 
-        // Notifications
-        static let notificationsSection = String(localized: "notifications")
-        static let notificationsToggle = String(localized: "push notifications")
-        static let notificationsFooter = String(localized: "get notified about new followers and activity")
+        // Legal
+        static let legalSection = String(localized: "legal")
+        static let privacyPolicy = String(localized: "privacy policy")
+        static let termsOfService = String(localized: "terms of service")
 
         // About
         static let aboutSection = String(localized: "about")
