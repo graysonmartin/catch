@@ -6,8 +6,10 @@ struct ContentView: View {
     @Environment(SupabaseFollowService.self) private var followService
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(CatDataService.self) private var catDataService
+    @Environment(EncounterDataService.self) private var encounterDataService
     @State private var selectedTab = 0
     @State private var feedScrollToTop = false
+    @State private var routedEncounterDetail: EncounterDetailData?
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -44,6 +46,13 @@ struct ContentView: View {
             guard let newTab else { return }
             selectedTab = newTab.rawValue
         }
+        .onChange(of: appRouter.pendingRoute) { _, route in
+            guard let route else { return }
+            Task { await handleRoute(route) }
+        }
+        .sheet(item: $routedEncounterDetail) { detail in
+            EncounterDetailSheet(data: detail, isOwnEncounter: detail.isOwned)
+        }
         .task {
             guard let userID = authService.authState.user?.id else { return }
             async let cats: Void = { try? await catDataService.loadCats() }()
@@ -51,6 +60,22 @@ struct ContentView: View {
                 try? await followService.refresh(for: userID)
             }()
             _ = await (cats, follows)
+        }
+    }
+
+    // MARK: - Routing
+
+    private func handleRoute(_ route: AppRoute) async {
+        switch route {
+        case .encounter(let id):
+            appRouter.clearPendingRoute()
+            do {
+                guard let encounter = try await encounterDataService.fetchEncounter(id: id) else { return }
+                let cat = try? await catDataService.fetchCat(id: encounter.catID)
+                routedEncounterDetail = EncounterDetailData(supabase: encounter, cat: cat)
+            } catch {
+                // Silently fail — encounter may have been deleted
+            }
         }
     }
 }

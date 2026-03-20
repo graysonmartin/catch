@@ -34,6 +34,24 @@ struct EncounterDetailData: Identifiable {
         self.photoUrls = encounter.photoUrls.isEmpty ? (encounter.cat?.photoUrls ?? []) : encounter.photoUrls
     }
 
+    // MARK: - Supabase init (for notification deep links)
+
+    init(supabase encounter: SupabaseEncounter, cat: Cat?) {
+        self.id = encounter.id.uuidString
+        self.catName = cat?.displayName ?? CatchStrings.Feed.unknownCat
+        self.catPhotoData = nil
+        self.catPhotoUrl = cat?.photoUrls.first
+        self.breed = cat?.breed ?? ""
+        self.isFirstEncounter = false
+        self.isUnnamed = cat?.isUnnamed ?? true
+        self.isOwned = cat?.isOwned ?? false
+        self.date = encounter.date
+        self.locationName = encounter.locationName ?? ""
+        self.notes = encounter.notes ?? ""
+        self.photos = []
+        self.photoUrls = encounter.photoUrls
+    }
+
     // MARK: - Remote CloudKit init
 
     init(remote encounter: CloudEncounter, cat: CloudCat?, isFirstEncounter: Bool) {
