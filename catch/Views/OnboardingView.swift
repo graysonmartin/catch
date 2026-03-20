@@ -57,7 +57,7 @@ struct OnboardingView: View {
                             Text(CatchStrings.Onboarding.skip)
                                 .font(.subheadline)
                                 .foregroundStyle(CatchTheme.textSecondary)
-                                .frame(minHeight: 44)
+                                .frame(minHeight: CatchTheme.minTapTarget)
                         }
                     }
                 }
@@ -70,80 +70,76 @@ struct OnboardingView: View {
     // MARK: - Page 1: Welcome
 
     private var welcomePage: some View {
-        ScrollView {
-            VStack(spacing: CatchSpacing.space24) {
-                Spacer()
+        GeometryReader { geo in
+            ScrollView {
+                VStack(spacing: CatchSpacing.space24) {
+                    Image(systemName: "pawprint.fill")
+                        .font(.system(size: 72))
+                        .foregroundStyle(CatchTheme.primary)
+                        .accessibilityHidden(true)
 
-                Image(systemName: "pawprint.fill")
-                    .font(.system(size: 72))
-                    .foregroundStyle(CatchTheme.primary)
-                    .accessibilityHidden(true)
+                    VStack(spacing: CatchSpacing.space12) {
+                        Text(CatchStrings.Onboarding.appName)
+                            .font(.largeTitle.weight(.bold))
+                            .foregroundStyle(CatchTheme.textPrimary)
 
-                VStack(spacing: CatchSpacing.space12) {
-                    Text(CatchStrings.Onboarding.appName)
-                        .font(.largeTitle.weight(.bold))
-                        .foregroundStyle(CatchTheme.textPrimary)
+                        Text(CatchStrings.Onboarding.subtitle)
+                            .font(.title3)
+                            .foregroundStyle(CatchTheme.textSecondary)
 
-                    Text(CatchStrings.Onboarding.subtitle)
-                        .font(.title3)
-                        .foregroundStyle(CatchTheme.textSecondary)
-
-                    Text(CatchStrings.Onboarding.detail)
-                        .font(.subheadline)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(CatchSpacing.space4)
+                        Text(CatchStrings.Onboarding.detail)
+                            .font(.subheadline)
+                            .foregroundStyle(CatchTheme.textSecondary)
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(CatchSpacing.space4)
+                    }
                 }
-
-                Spacer()
-                Spacer()
+                .padding(.horizontal, CatchSpacing.space32)
+                .frame(maxWidth: .infinity, minHeight: geo.size.height)
             }
-            .padding(.horizontal, CatchSpacing.space32)
+            .scrollBounceBehavior(.basedOnSize)
         }
-        .scrollBounceBehavior(.basedOnSize)
     }
 
     // MARK: - Page 2: Tour
 
     private var tourPage: some View {
-        ScrollView {
-            VStack(spacing: CatchSpacing.space32) {
-                Spacer()
+        GeometryReader { geo in
+            ScrollView {
+                VStack(spacing: CatchSpacing.space32) {
+                    Text(CatchStrings.Onboarding.tourTitle)
+                        .font(.title2.weight(.bold))
+                        .foregroundStyle(CatchTheme.textPrimary)
 
-                Text(CatchStrings.Onboarding.tourTitle)
-                    .font(.title2.weight(.bold))
-                    .foregroundStyle(CatchTheme.textPrimary)
-
-                VStack(alignment: .leading, spacing: CatchSpacing.space20) {
-                    tourRow(
-                        icon: "pawprint.fill",
-                        title: CatchStrings.Onboarding.tourFeed,
-                        detail: CatchStrings.Onboarding.tourFeedDetail
-                    )
-                    tourRow(
-                        icon: "plus.circle.fill",
-                        title: CatchStrings.Onboarding.tourLog,
-                        detail: CatchStrings.Onboarding.tourLogDetail
-                    )
-                    tourRow(
-                        icon: "map.fill",
-                        title: CatchStrings.Onboarding.tourMap,
-                        detail: CatchStrings.Onboarding.tourMapDetail
-                    )
-                    tourRow(
-                        icon: "person.crop.circle",
-                        title: CatchStrings.Onboarding.tourProfile,
-                        detail: CatchStrings.Onboarding.tourProfileDetail
-                    )
+                    VStack(alignment: .leading, spacing: CatchSpacing.space20) {
+                        tourRow(
+                            icon: "pawprint.fill",
+                            title: CatchStrings.Onboarding.tourFeed,
+                            detail: CatchStrings.Onboarding.tourFeedDetail
+                        )
+                        tourRow(
+                            icon: "plus.circle.fill",
+                            title: CatchStrings.Onboarding.tourLog,
+                            detail: CatchStrings.Onboarding.tourLogDetail
+                        )
+                        tourRow(
+                            icon: "map.fill",
+                            title: CatchStrings.Onboarding.tourMap,
+                            detail: CatchStrings.Onboarding.tourMapDetail
+                        )
+                        tourRow(
+                            icon: "person.crop.circle",
+                            title: CatchStrings.Onboarding.tourProfile,
+                            detail: CatchStrings.Onboarding.tourProfileDetail
+                        )
+                    }
+                    .padding(.horizontal, CatchSpacing.space8)
                 }
-                .padding(.horizontal, CatchSpacing.space8)
-
-                Spacer()
-                Spacer()
+                .padding(.horizontal, CatchSpacing.space32)
+                .frame(maxWidth: .infinity, minHeight: geo.size.height)
             }
-            .padding(.horizontal, CatchSpacing.space32)
+            .scrollBounceBehavior(.basedOnSize)
         }
-        .scrollBounceBehavior(.basedOnSize)
     }
 
     private func tourRow(icon: String, title: String, detail: String) -> some View {
@@ -169,66 +165,64 @@ struct OnboardingView: View {
     // MARK: - Page 3: Location Permission
 
     private var locationPage: some View {
-        ScrollView {
-            VStack(spacing: CatchSpacing.space24) {
-                Spacer()
+        GeometryReader { geo in
+            ScrollView {
+                VStack(spacing: CatchSpacing.space24) {
+                    Image(systemName: "location.circle.fill")
+                        .font(.system(size: 72))
+                        .foregroundStyle(CatchTheme.primary)
+                        .accessibilityHidden(true)
 
-                Image(systemName: "location.circle.fill")
-                    .font(.system(size: 72))
-                    .foregroundStyle(CatchTheme.primary)
-                    .accessibilityHidden(true)
+                    VStack(spacing: CatchSpacing.space12) {
+                        Text(CatchStrings.Onboarding.locationTitle)
+                            .font(.title2.weight(.bold))
+                            .foregroundStyle(CatchTheme.textPrimary)
 
-                VStack(spacing: CatchSpacing.space12) {
-                    Text(CatchStrings.Onboarding.locationTitle)
-                        .font(.title2.weight(.bold))
-                        .foregroundStyle(CatchTheme.textPrimary)
-
-                    Text(CatchStrings.Onboarding.locationDescription)
-                        .font(.subheadline)
-                        .foregroundStyle(CatchTheme.textSecondary)
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(CatchSpacing.space4)
-
-                    Text(CatchStrings.Onboarding.locationReassurance)
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.textSecondary.opacity(0.7))
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(CatchSpacing.space4)
-                        .padding(.top, CatchSpacing.space4)
-                }
-
-                if !locationManager.hasRequested {
-                    Button {
-                        locationManager.requestPermission()
-                    } label: {
-                        HStack {
-                            Image(systemName: "location.fill")
-                            Text(CatchStrings.Onboarding.enableLocation)
-                        }
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(CatchTheme.accessibleTextOrange)
-                        .padding(.horizontal, CatchSpacing.space20)
-                        .padding(.vertical, CatchSpacing.space10)
-                        .background(CatchTheme.primary.opacity(0.12))
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                    }
-                    .frame(minHeight: 44)
-                } else {
-                    HStack(spacing: CatchSpacing.space6) {
-                        Image(systemName: locationManager.wasGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
-                            .foregroundStyle(locationManager.wasGranted ? .green : CatchTheme.textSecondary)
-                        Text(locationManager.wasGranted ? CatchStrings.Onboarding.locationEnabled : CatchStrings.Onboarding.locationDenied)
-                            .font(.caption)
+                        Text(CatchStrings.Onboarding.locationDescription)
+                            .font(.subheadline)
                             .foregroundStyle(CatchTheme.textSecondary)
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(CatchSpacing.space4)
+
+                        Text(CatchStrings.Onboarding.locationReassurance)
+                            .font(.caption)
+                            .foregroundStyle(CatchTheme.textSecondary.opacity(0.7))
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(CatchSpacing.space4)
+                            .padding(.top, CatchSpacing.space4)
+                    }
+
+                    if !locationManager.hasRequested {
+                        Button {
+                            locationManager.requestPermission()
+                        } label: {
+                            HStack {
+                                Image(systemName: "location.fill")
+                                Text(CatchStrings.Onboarding.enableLocation)
+                            }
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(CatchTheme.accessibleTextOrange)
+                            .padding(.horizontal, CatchSpacing.space20)
+                            .padding(.vertical, CatchSpacing.space10)
+                            .background(CatchTheme.primary.opacity(0.12))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        .frame(minHeight: CatchTheme.minTapTarget)
+                    } else {
+                        HStack(spacing: CatchSpacing.space6) {
+                            Image(systemName: locationManager.wasGranted ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                .foregroundStyle(locationManager.wasGranted ? .green : CatchTheme.textSecondary)
+                            Text(locationManager.wasGranted ? CatchStrings.Onboarding.locationEnabled : CatchStrings.Onboarding.locationDenied)
+                                .font(.caption)
+                                .foregroundStyle(CatchTheme.textSecondary)
+                        }
                     }
                 }
-
-                Spacer()
-                Spacer()
+                .padding(.horizontal, CatchSpacing.space32)
+                .frame(maxWidth: .infinity, minHeight: geo.size.height)
             }
-            .padding(.horizontal, CatchSpacing.space32)
+            .scrollBounceBehavior(.basedOnSize)
         }
-        .scrollBounceBehavior(.basedOnSize)
     }
 }
 

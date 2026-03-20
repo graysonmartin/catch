@@ -34,7 +34,7 @@ struct ToastView: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(CatchStrings.Accessibility.retryAction)
-                .frame(minWidth: 44, minHeight: 44)
+                .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
             }
 
             Button {
@@ -43,7 +43,7 @@ struct ToastView: View {
                 Image(systemName: "xmark")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(CatchTheme.textSecondary)
-                    .frame(minWidth: 44, minHeight: 44)
+                    .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
@@ -60,7 +60,6 @@ struct ToastView: View {
         )
         .padding(.horizontal, CatchSpacing.space16)
         .accessibilityElement(children: .contain)
-        .accessibilityAddTraits(.isStaticText)
     }
 
     // MARK: - Helpers

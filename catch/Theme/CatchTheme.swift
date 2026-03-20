@@ -45,6 +45,11 @@ enum CatchTheme {
     static let cardShadowY: CGFloat = 2
     static let cardShadowOpacity: Double = 0.05
 
+    // MARK: - Accessibility
+
+    /// Apple HIG minimum tap target size (44x44pt)
+    static let minTapTarget: CGFloat = 44
+
     // MARK: - Photo
 
     static let jpegCompressionQuality: CGFloat = 0.7

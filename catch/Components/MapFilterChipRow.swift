@@ -46,7 +46,7 @@ struct MapFilterButton: View {
                 Image(systemName: isExpanded ? "xmark" : "line.3.horizontal.decrease")
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(isExpanded ? .white : CatchTheme.textPrimary)
-                    .frame(width: 44, height: 44)
+                    .frame(width: CatchTheme.minTapTarget, height: CatchTheme.minTapTarget)
                     .background(isExpanded ? CatchTheme.primary : CatchTheme.cardBackground)
                     .clipShape(Circle())
                     .shadow(color: .black.opacity(0.12), radius: 6, y: 3)
@@ -131,7 +131,7 @@ struct MapFilterButton: View {
                 }
             }
             .padding(.vertical, CatchSpacing.space4)
-            .frame(minHeight: 44)
+            .frame(minHeight: CatchTheme.minTapTarget)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -160,7 +160,7 @@ struct MapFilterButton: View {
                 }
             }
             .padding(.vertical, CatchSpacing.space4)
-            .frame(minHeight: 44)
+            .frame(minHeight: CatchTheme.minTapTarget)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -181,7 +181,7 @@ struct MapFilterButton: View {
                 Spacer()
             }
             .padding(.vertical, CatchSpacing.space4)
-            .frame(minHeight: 44)
+            .frame(minHeight: CatchTheme.minTapTarget)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

@@ -69,7 +69,7 @@ struct FollowRowView: View {
                     Image(systemName: "ellipsis")
                         .font(.body)
                         .foregroundStyle(CatchTheme.textSecondary)
-                        .frame(minWidth: 44, minHeight: 44)
+                        .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
                         .contentShape(Rectangle())
                 }
             }

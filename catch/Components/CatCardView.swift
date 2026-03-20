@@ -21,13 +21,11 @@ struct CatCardView: View {
                         Image(systemName: "crown.fill")
                             .font(.caption2)
                             .foregroundStyle(CatchTheme.primary)
-                            .accessibilityLabel(CatchStrings.Accessibility.stevenBadge)
                     }
                     if data.isOwned {
                         Image(systemName: "heart.fill")
                             .font(.caption2)
                             .foregroundStyle(CatchTheme.primary)
-                            .accessibilityLabel(CatchStrings.Accessibility.ownedCat)
                     }
                 }
 
@@ -45,7 +43,7 @@ struct CatCardView: View {
         .background(CatchTheme.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(color: .black.opacity(CatchTheme.cardShadowOpacity), radius: CatchTheme.cardShadowRadius, y: CatchTheme.cardShadowY)
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
         .accessibilityLabel(CatchStrings.Accessibility.catCard(name: data.name, breed: data.breed, encounters: data.encounterCount))
         .accessibilityAddTraits(.isButton)
     }

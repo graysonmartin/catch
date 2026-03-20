@@ -9,7 +9,6 @@ private enum Layout {
     static let pillCornerRadius: CGFloat = 4
     static let pillActiveBackgroundOpacity: Double = 0.15
     static let pillInactiveBackgroundOpacity: Double = 0.1
-    static let minOverflowTapSize: CGFloat = 44
 }
 
 struct SocialFeedItemView: View {
@@ -105,7 +104,7 @@ struct SocialFeedItemView: View {
             Image(systemName: "ellipsis")
                 .font(.body)
                 .foregroundStyle(CatchTheme.textSecondary)
-                .frame(minWidth: Layout.minOverflowTapSize, minHeight: Layout.minOverflowTapSize)
+                .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
                 .contentShape(Rectangle())
         }
         .accessibilityLabel(CatchStrings.Accessibility.moreOptions)

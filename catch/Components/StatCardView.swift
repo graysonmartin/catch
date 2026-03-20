@@ -44,7 +44,6 @@ struct StatCardView: View {
                     .font(.system(size: 9, weight: .bold))
                     .foregroundStyle(CatchTheme.textSecondary)
                     .padding(CatchSpacing.space8)
-                    .accessibilityHidden(true)
             }
         }
         .accessibilityElement(children: .ignore)

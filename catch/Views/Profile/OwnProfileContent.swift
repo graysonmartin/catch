@@ -213,12 +213,15 @@ struct OwnProfileContent: View {
                                 .background(Color.red)
                                 .clipShape(Circle())
                                 .offset(x: 6, y: -6)
-                                .accessibilityLabel(CatchStrings.Accessibility.pendingRequests(followService.pendingRequests.count))
                         }
                     }
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(CatchStrings.Accessibility.followerCount(followService.followers.count))
+                .accessibilityLabel(
+                    followService.pendingRequests.isEmpty
+                        ? CatchStrings.Accessibility.followerCount(followService.followers.count)
+                        : CatchStrings.Accessibility.followerCountWithPending(followService.followers.count, pending: followService.pendingRequests.count)
+                )
             } else {
                 Spacer()
             }

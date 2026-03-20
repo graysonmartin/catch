@@ -18,9 +18,6 @@ extension CatchStrings {
         }
 
         // MARK: - Feed
-        static func feedCard(catName: String, date: String) -> String {
-            String(localized: "Encounter with \(catName) on \(date)")
-        }
         static let feedCardHint = String(localized: "Double tap for details")
         static let moreOptions = String(localized: "More options")
         static let ownedCat = String(localized: "Owned cat")
@@ -68,6 +65,9 @@ extension CatchStrings {
         static func followerCount(_ count: Int) -> String {
             String(localized: "\(count) follower\(count == 1 ? "" : "s")")
         }
+        static func followerCountWithPending(_ followers: Int, pending: Int) -> String {
+            String(localized: "\(followers) follower\(followers == 1 ? "" : "s"), \(pending) pending request\(pending == 1 ? "" : "s")")
+        }
         static func followingCount(_ count: Int) -> String {
             String(localized: "Following \(count)")
         }
@@ -88,8 +88,9 @@ extension CatchStrings {
         }
 
         // MARK: - Collection
+        static let unknownBreed = String(localized: "unknown breed")
         static func catCard(name: String, breed: String, encounters: Int) -> String {
-            String(localized: "\(name), \(breed.isEmpty ? "unknown breed" : breed), \(encounters) encounter\(encounters == 1 ? "" : "s")")
+            String(localized: "\(name), \(breed.isEmpty ? unknownBreed : breed), \(encounters) encounter\(encounters == 1 ? "" : "s")")
         }
 
         // MARK: - Loading & Toasts
@@ -99,10 +100,16 @@ extension CatchStrings {
 
         // MARK: - Engagement
         static func engagement(likes: Int, comments: Int) -> String {
-            var parts: [String] = []
-            if likes > 0 { parts.append("\(likes) like\(likes == 1 ? "" : "s")") }
-            if comments > 0 { parts.append("\(comments) comment\(comments == 1 ? "" : "s")") }
-            return String(localized: "\(parts.joined(separator: ", "))")
+            switch (likes > 0, comments > 0) {
+            case (true, true):
+                String(localized: "\(likes) like\(likes == 1 ? "" : "s"), \(comments) comment\(comments == 1 ? "" : "s")")
+            case (true, false):
+                String(localized: "\(likes) like\(likes == 1 ? "" : "s")")
+            case (false, true):
+                String(localized: "\(comments) comment\(comments == 1 ? "" : "s")")
+            case (false, false):
+                ""
+            }
         }
 
         // MARK: - Onboarding

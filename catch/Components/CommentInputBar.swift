@@ -37,7 +37,7 @@ struct CommentInputBar: View {
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.title2)
                         .foregroundStyle(canSubmit ? CatchTheme.primary : CatchTheme.textSecondary.opacity(0.3))
-                        .frame(minWidth: 44, minHeight: 44)
+                        .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
                 }
                 .disabled(!canSubmit)
                 .buttonStyle(.plain)

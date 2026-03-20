@@ -43,7 +43,7 @@ struct CommentRowView: View {
                             Image(systemName: "trash")
                                 .font(.caption2)
                                 .foregroundStyle(CatchTheme.textSecondary)
-                                .frame(minWidth: 44, minHeight: 44)
+                                .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
                                 .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)

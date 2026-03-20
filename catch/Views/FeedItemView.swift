@@ -12,7 +12,6 @@ private enum PillLayout {
 private enum FeedItemLayout {
     static let thumbnailSize: CGFloat = 48
     static let carouselHeight: CGFloat = 200
-    static let minOverflowTapSize: CGFloat = 44
 }
 
 struct FeedItemView: View {
@@ -198,7 +197,7 @@ struct FeedItemView: View {
             Image(systemName: "ellipsis")
                 .font(.body)
                 .foregroundStyle(CatchTheme.textSecondary)
-                .frame(minWidth: FeedItemLayout.minOverflowTapSize, minHeight: FeedItemLayout.minOverflowTapSize)
+                .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
                 .contentShape(Rectangle())
         }
         .accessibilityLabel(CatchStrings.Accessibility.moreOptions)

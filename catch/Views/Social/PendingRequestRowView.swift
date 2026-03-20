@@ -49,7 +49,7 @@ struct PendingRequestRowView: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.title3)
                     .foregroundStyle(CatchTheme.primary)
-                    .frame(minWidth: 44, minHeight: 44)
+                    .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
             }
             .buttonStyle(.plain)
             .accessibilityLabel(CatchStrings.Accessibility.approveRequest)
@@ -66,7 +66,7 @@ struct PendingRequestRowView: View {
                 Image(systemName: "xmark.circle.fill")
                     .font(.title3)
                     .foregroundStyle(CatchTheme.textSecondary)
-                    .frame(minWidth: 44, minHeight: 44)
+                    .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
             }
             .buttonStyle(.plain)
             .accessibilityLabel(CatchStrings.Accessibility.declineRequest)
