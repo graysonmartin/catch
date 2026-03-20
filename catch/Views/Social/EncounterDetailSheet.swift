@@ -1,6 +1,15 @@
 import SwiftUI
 import CatchCore
 
+private enum DetailLayout {
+    static let catPhotoSize: CGFloat = 40
+    static let pillFontSize: CGFloat = 9
+static let pillActiveOpacity: Double = 0.15
+    static let pillInactiveOpacity: Double = 0.1
+    static let heartIconSize: CGFloat = 10
+    static let carouselHeight: CGFloat = 260
+}
+
 struct EncounterDetailSheet: View {
     let data: EncounterDetailData
     var isOwnEncounter: Bool = true
@@ -77,7 +86,7 @@ struct EncounterDetailSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 if !data.photos.isEmpty || !data.photoUrls.isEmpty {
-                    PhotoCarouselView(photos: data.photos, photoUrls: data.photoUrls, height: 260, isTappable: true)
+                    PhotoCarouselView(photos: data.photos, photoUrls: data.photoUrls, height: DetailLayout.carouselHeight, isTappable: true)
                         .padding(.bottom, CatchSpacing.space12)
                 }
 
@@ -124,7 +133,7 @@ struct EncounterDetailSheet: View {
 
     private var catHeader: some View {
         HStack(spacing: CatchSpacing.space10) {
-            CatPhotoView(photoData: data.catPhotoData, photoUrl: data.catPhotoUrl, size: 40)
+            CatPhotoView(photoData: data.catPhotoData, photoUrl: data.catPhotoUrl, size: DetailLayout.catPhotoSize)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack(spacing: CatchSpacing.space4) {
@@ -137,7 +146,7 @@ struct EncounterDetailSheet: View {
                     if data.isOwned {
                         Image(systemName: "heart.fill")
                             .foregroundStyle(CatchTheme.primary)
-                            .font(.system(size: 10))
+                            .font(.system(size: DetailLayout.heartIconSize))
                     }
                 }
 
@@ -152,15 +161,15 @@ struct EncounterDetailSheet: View {
 
     private var encounterPill: some View {
         Text(data.isFirstEncounter ? CatchStrings.Feed.pillNew : CatchStrings.Feed.pillRepeat)
-            .font(.system(size: 9, weight: .bold))
+            .font(.system(size: DetailLayout.pillFontSize, weight: .bold))
             .foregroundStyle(data.isFirstEncounter ? CatchTheme.primary : CatchTheme.textSecondary)
             .padding(.horizontal, CatchSpacing.space6)
             .padding(.vertical, CatchSpacing.space2)
             .background(
                 RoundedRectangle(cornerRadius: CatchSpacing.space4)
                     .fill(data.isFirstEncounter
-                        ? CatchTheme.primary.opacity(0.15)
-                        : CatchTheme.textSecondary.opacity(0.1))
+                        ? CatchTheme.primary.opacity(DetailLayout.pillActiveOpacity)
+                        : CatchTheme.textSecondary.opacity(DetailLayout.pillInactiveOpacity))
             )
     }
 
