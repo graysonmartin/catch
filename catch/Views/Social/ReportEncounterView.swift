@@ -140,6 +140,8 @@ struct ReportEncounterView: View {
         } catch let error as ReportError where error == .alreadyReported {
             toastManager.showError(CatchStrings.Report.alreadyReported)
             dismiss()
+        } catch is RateLimitError {
+            toastManager.showError(CatchStrings.Toast.rateLimitedReport)
         } catch {
             toastManager.showError(CatchStrings.Toast.reportFailed)
         }
