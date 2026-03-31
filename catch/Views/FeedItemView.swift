@@ -11,7 +11,7 @@ private enum PillLayout {
 
 private enum FeedItemLayout {
     static let thumbnailSize: CGFloat = 48
-    static let carouselHeight: CGFloat = 200
+    static let carouselHeight: CGFloat = 240
 }
 
 struct FeedItemView: View {
