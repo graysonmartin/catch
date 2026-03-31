@@ -41,11 +41,11 @@ extension CatchStrings {
 
         // Rate limiting
         static let rateLimitedGeneric = String(localized: "slow down there")
-        static let rateLimitedComment = String(localized: "easy on the comments, give it a sec")
-        static let rateLimitedFollow = String(localized: "chill with the follows for a bit")
-        static let rateLimitedLike = String(localized: "we get it, you like stuff. take a breather")
-        static let rateLimitedReport = String(localized: "too many reports. chill for a bit")
-        static let rateLimitedDeleteComment = String(localized: "slow down on the deleting")
+        static let rateLimitedComment = String(localized: "too many comments. slow down")
+        static let rateLimitedFollow = String(localized: "too many follows. slow down")
+        static let rateLimitedLike = String(localized: "too many likes. slow down")
+        static let rateLimitedReport = String(localized: "too many reports. slow down")
+        static let rateLimitedDeleteComment = String(localized: "too many deletes. slow down")
 
         // CloudKit save/update/delete
         static let catSyncFailed = String(localized: "couldn't save to the cloud. check your connection?")
