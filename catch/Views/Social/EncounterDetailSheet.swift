@@ -46,9 +46,13 @@ struct EncounterDetailSheet: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: CatchSpacing.space12) {
+                        #if DEBUG
+                        overflowMenu
+                        #else
                         if !isOwnEncounter {
                             overflowMenu
                         }
+                        #endif
                         Button(CatchStrings.Common.done) { dismiss() }
                     }
                 }
