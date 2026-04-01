@@ -59,6 +59,7 @@ final class NotificationItemTests: XCTestCase {
         let a = NotificationItem(
             id: "1",
             notificationType: .encounterLiked,
+            actorUserID: nil,
             actorDisplayName: "alice",
             actorAvatarURL: nil,
             actorId: "user-1",
@@ -70,6 +71,7 @@ final class NotificationItemTests: XCTestCase {
         let b = NotificationItem(
             id: "1",
             notificationType: .encounterLiked,
+            actorUserID: nil,
             actorDisplayName: "alice",
             actorAvatarURL: nil,
             actorId: "user-1",
@@ -86,6 +88,7 @@ final class NotificationItemTests: XCTestCase {
         let a = NotificationItem(
             id: "1",
             notificationType: .encounterLiked,
+            actorUserID: nil,
             actorDisplayName: "alice",
             actorAvatarURL: nil,
             actorId: "user-1",
@@ -97,6 +100,7 @@ final class NotificationItemTests: XCTestCase {
         let b = NotificationItem(
             id: "1",
             notificationType: .encounterLiked,
+            actorUserID: nil,
             actorDisplayName: "alice",
             actorAvatarURL: nil,
             actorId: "user-1",
@@ -124,6 +128,7 @@ final class NotificationItemTests: XCTestCase {
         NotificationItem(
             id: "test-id",
             notificationType: type,
+            actorUserID: "user-456",
             actorDisplayName: "test user",
             actorAvatarURL: nil,
             actorId: "actor-1",

@@ -4,6 +4,7 @@ import CatchCore
 struct NotificationItem: Identifiable, Equatable, Sendable {
     let id: String
     let notificationType: NotificationType
+    let actorUserID: String?
     let actorDisplayName: String
     let actorAvatarURL: String?
     let actorId: String?
@@ -28,6 +29,7 @@ struct NotificationItem: Identifiable, Equatable, Sendable {
         NotificationItem(
             id: id,
             notificationType: notificationType,
+            actorUserID: actorUserID,
             actorDisplayName: actorDisplayName,
             actorAvatarURL: actorAvatarURL,
             actorId: actorId,

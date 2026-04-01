@@ -6,8 +6,10 @@ struct NotificationsView: View {
     @EnvironmentObject private var appRouter: AppRouter
     @Environment(\.dismiss) private var dismiss
 
+    @State private var navigationPath = NavigationPath()
+
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             Group {
                 if notificationService.isLoading && !notificationService.hasLoaded {
                     PawLoadingView()
@@ -33,6 +35,12 @@ struct NotificationsView: View {
                     .foregroundStyle(CatchTheme.primary)
                 }
             }
+            .navigationDestination(for: RemoteProfileRoute.self) { route in
+                RemoteProfileContent(
+                    userID: route.userID,
+                    initialDisplayName: route.displayName
+                )
+            }
             .refreshable {
                 await notificationService.refresh()
             }
@@ -50,9 +58,11 @@ struct NotificationsView: View {
             LazyVStack(spacing: 0) {
                 ForEach(notificationService.notifications) { item in
                     Button {
-                        handleTap(item)
+                        handleEncounterTap(item)
                     } label: {
-                        NotificationRowView(item: item)
+                        NotificationRowView(item: item) {
+                            handleAvatarTap(item)
+                        }
                     }
                     .buttonStyle(.plain)
 
@@ -67,7 +77,7 @@ struct NotificationsView: View {
 
     // MARK: - Actions
 
-    private func handleTap(_ item: NotificationItem) {
+    private func handleEncounterTap(_ item: NotificationItem) {
         Task {
             await notificationService.markAsRead(notificationId: item.id)
         }
@@ -83,5 +93,19 @@ struct NotificationsView: View {
                 appRouter.navigate(to: .profile(id: actorId))
             }
         }
+    }
+
+    private func handleAvatarTap(_ item: NotificationItem) {
+        guard let userID = item.actorUserID, !userID.isEmpty else {
+            handleEncounterTap(item)
+            return
+        }
+        Task {
+            await notificationService.markAsRead(notificationId: item.id)
+        }
+        navigationPath.append(RemoteProfileRoute(
+            userID: userID,
+            displayName: item.actorDisplayName
+        ))
     }
 }

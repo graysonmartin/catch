@@ -12,6 +12,7 @@ struct FollowRowView: View {
     @State private var resolvedName: String?
     @State private var resolvedUsername: String?
     @State private var resolvedAvatarURL: String?
+    @State private var isShowingConfirmation = false
 
     private var targetUserID: String {
         isFollowerRow ? follow.followerID : follow.followeeID
@@ -54,16 +55,7 @@ struct FollowRowView: View {
 
                 Menu {
                     Button(actionLabel, role: .destructive) {
-                        Task {
-                            do {
-                                try await onAction()
-                            } catch {
-                                let message = isFollowerRow
-                                    ? CatchStrings.Toast.removeFollowerFailed
-                                    : CatchStrings.Toast.unfollowFailed
-                                toastManager.showError(message)
-                            }
-                        }
+                        isShowingConfirmation = true
                     }
                 } label: {
                     Image(systemName: "ellipsis")
@@ -73,6 +65,24 @@ struct FollowRowView: View {
                         .contentShape(Rectangle())
                 }
             }
+        }
+        .confirmationDialog(actionLabel, isPresented: $isShowingConfirmation) {
+            Button(actionLabel, role: .destructive) {
+                Task {
+                    do {
+                        try await onAction()
+                    } catch is RateLimitError {
+                        toastManager.showError(CatchStrings.Toast.rateLimitedFollow)
+                    } catch {
+                        let message = isFollowerRow
+                            ? CatchStrings.Toast.removeFollowerFailed
+                            : CatchStrings.Toast.unfollowFailed
+                        toastManager.showError(message)
+                    }
+                }
+            }
+        } message: {
+            Text(CatchStrings.Social.areYouSure)
         }
         .task {
             if let profile = browseService?.cachedProfile(for: targetUserID) {

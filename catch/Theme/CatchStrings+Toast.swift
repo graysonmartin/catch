@@ -39,6 +39,14 @@ extension CatchStrings {
         static let reportFailed = String(localized: "report didn't go through. try again?")
         static let reportSuccess = String(localized: "thanks for letting us know")
 
+        // Rate limiting
+        static let rateLimitedGeneric = String(localized: "slow down there")
+        static let rateLimitedComment = String(localized: "too many comments. slow down")
+        static let rateLimitedFollow = String(localized: "too many follows. slow down")
+        static let rateLimitedLike = String(localized: "too many likes. slow down")
+        static let rateLimitedReport = String(localized: "too many reports. slow down")
+        static let rateLimitedDeleteComment = String(localized: "too many deletes. slow down")
+
         // CloudKit save/update/delete
         static let catSyncFailed = String(localized: "couldn't save to the cloud. check your connection?")
         static let encounterSyncFailed = String(localized: "encounter didn't sync. give it another shot?")

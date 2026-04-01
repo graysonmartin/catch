@@ -8,6 +8,7 @@ struct catchApp: App {
     @AppStorage(AppStorageKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = false
     @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetup = false
     @AppStorage(AppStorageKeys.hasCompletedNewUserWalkthrough) private var hasCompletedNewUserWalkthrough = false
+    @AppStorage(AppStorageKeys.hasCompletedUnifiedOnboarding) private var hasCompletedUnifiedOnboarding = false
     @State private var isCheckingProfile = false
     @State private var authService: SupabaseAuthService
     @State private var followService: SupabaseFollowService
@@ -148,7 +149,6 @@ struct catchApp: App {
                     }
                     if newState == .signedOut {
                         hasCompletedProfileSetup = false
-                        hasCompletedNewUserWalkthrough = false
                         Task { await deviceTokenService?.clearToken() }
                     }
                     if !oldState.isSignedIn, newState.isSignedIn {
@@ -177,10 +177,32 @@ struct catchApp: App {
         appDelegate.notificationDelegate = delegate
     }
 
+    /// Existing users who finished the old onboarding + walkthrough flow skip the unified flow.
+    private var hasLegacyOnboardingComplete: Bool {
+        hasCompletedOnboarding && hasCompletedProfileSetup
+    }
+
+    /// If the user is already signed in with a profile, skip straight to post-auth steps.
+    private var onboardingStartPhase: UnifiedOnboardingView.Phase {
+        if hasCompletedProfileSetup && authService.authState.isSignedIn {
+            return .postAuth(0)
+        }
+        return .featureTour
+    }
+
     @ViewBuilder
     private var mainContent: some View {
-        if !hasCompletedOnboarding {
-            OnboardingView(hasCompletedOnboarding: $hasCompletedOnboarding)
+        if !hasCompletedUnifiedOnboarding && !hasLegacyOnboardingComplete {
+            UnifiedOnboardingView(startPhase: onboardingStartPhase) {
+                hasCompletedUnifiedOnboarding = true
+                hasCompletedProfileSetup = true
+                hasCompletedOnboarding = true
+            }
+            .environment(authService)
+            .environment(profileSyncService)
+            .environment(toastManager)
+            .environment(followService)
+            .environment(suggestedPeopleService)
         } else if authService.authState == .unknown || isCheckingProfile {
             PawLoadingView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -188,9 +210,6 @@ struct catchApp: App {
         } else if !authService.authState.isSignedIn {
             ProfileSetupView { isNewUser in
                 hasCompletedProfileSetup = true
-                if !isNewUser {
-                    hasCompletedNewUserWalkthrough = true
-                }
             }
             .environment(authService)
             .environment(profileSyncService)
@@ -198,19 +217,10 @@ struct catchApp: App {
         } else if !hasCompletedProfileSetup {
             ProfileSetupView { isNewUser in
                 hasCompletedProfileSetup = true
-                if !isNewUser {
-                    hasCompletedNewUserWalkthrough = true
-                }
             }
             .environment(authService)
             .environment(profileSyncService)
             .environment(toastManager)
-        } else if !hasCompletedNewUserWalkthrough {
-            NewUserWalkthroughView(hasCompleted: $hasCompletedNewUserWalkthrough)
-                .environment(authService)
-                .environment(followService)
-                .environment(suggestedPeopleService)
-                .environment(toastManager)
         } else {
             ContentView()
                 .environmentObject(appRouter)
@@ -246,8 +256,6 @@ struct catchApp: App {
             let profile = try await profileSyncService.fetchProfile(userID: userID)
             if profile != nil {
                 hasCompletedProfileSetup = true
-                // Returning user — skip the new-user walkthrough
-                hasCompletedNewUserWalkthrough = true
             }
         } catch {
             // Profile check failed — fall through to ProfileSetupView

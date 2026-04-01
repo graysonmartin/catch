@@ -152,6 +152,7 @@ final class SupabaseInAppNotificationService: InAppNotificationService, @uncheck
         return NotificationItem(
             id: row.id,
             notificationType: type,
+            actorUserID: row.actorId,
             actorDisplayName: row.actor?.displayName ?? CatchStrings.Notifications.unknownUser,
             actorAvatarURL: row.actor?.avatarURL,
             actorId: row.actorId,

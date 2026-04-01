@@ -94,6 +94,7 @@ final class MockInAppNotificationServiceTests: XCTestCase {
         NotificationItem(
             id: id,
             notificationType: .encounterLiked,
+            actorUserID: "user-\(id)",
             actorDisplayName: "user",
             actorAvatarURL: nil,
             actorId: "actor-\(id)",

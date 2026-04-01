@@ -8,13 +8,16 @@ public final class SupabaseReportService: ReportService {
 
     private let repository: any SupabaseReportRepository
     private let getCurrentUserID: () -> String?
+    private let rateLimiter: any RateLimiting
 
     public init(
         repository: any SupabaseReportRepository,
-        getCurrentUserID: @escaping @Sendable () -> String?
+        getCurrentUserID: @escaping @Sendable () -> String?,
+        rateLimiter: any RateLimiting = RateLimiter()
     ) {
         self.repository = repository
         self.getCurrentUserID = getCurrentUserID
+        self.rateLimiter = rateLimiter
     }
 
     public func submitReport(
@@ -25,6 +28,8 @@ public final class SupabaseReportService: ReportService {
         guard let userID = getCurrentUserID() else {
             throw ReportError.notSignedIn
         }
+
+        try rateLimiter.checkAllowed(.report)
 
         let encounterID = encounterRecordName.lowercased()
 
@@ -45,6 +50,7 @@ public final class SupabaseReportService: ReportService {
 
         do {
             _ = try await repository.insertReport(payload: payload)
+            rateLimiter.recordAction(.report)
             reportedEncounters.insert(encounterID)
         } catch {
             throw ReportError.networkError(error.localizedDescription)
