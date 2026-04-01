@@ -6,6 +6,10 @@ struct RemoteProfileRoute: Hashable {
     let displayName: String
 }
 
+struct EncounterRoute: Hashable {
+    let encounterID: String
+}
+
 enum FeedItem: Identifiable {
     case local(Encounter)
     case remote(CloudEncounter, cat: CloudCat?, owner: CloudUserProfile, isFirstEncounter: Bool)

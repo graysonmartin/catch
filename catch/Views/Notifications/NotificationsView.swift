@@ -3,7 +3,6 @@ import CatchCore
 
 struct NotificationsView: View {
     @Environment(SupabaseInAppNotificationService.self) private var notificationService
-    @EnvironmentObject private var appRouter: AppRouter
     @Environment(\.dismiss) private var dismiss
 
     @State private var navigationPath = NavigationPath()
@@ -40,6 +39,9 @@ struct NotificationsView: View {
                     userID: route.userID,
                     initialDisplayName: route.displayName
                 )
+            }
+            .navigationDestination(for: EncounterRoute.self) { route in
+                EncounterDetailLoadingView(encounterID: route.encounterID)
             }
             .refreshable {
                 await notificationService.refresh()
@@ -81,16 +83,18 @@ struct NotificationsView: View {
         Task {
             await notificationService.markAsRead(notificationId: item.id)
         }
-        dismiss()
 
         switch item.notificationType {
         case .encounterLiked, .encounterCommented:
             if let encounterId = item.encounterId {
-                appRouter.navigate(to: .encounter(id: encounterId))
+                navigationPath.append(EncounterRoute(encounterID: encounterId))
             }
         case .newFollower:
             if let actorId = item.actorId {
-                appRouter.navigate(to: .profile(id: actorId))
+                navigationPath.append(RemoteProfileRoute(
+                    userID: actorId,
+                    displayName: item.actorDisplayName
+                ))
             }
         }
     }
