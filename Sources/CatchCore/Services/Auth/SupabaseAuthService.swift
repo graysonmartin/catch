@@ -7,6 +7,7 @@ public enum SupabaseAuthError: LocalizedError, Sendable {
     case invalidIdentityToken
     case sessionExpired
     case providerError(String)
+    case demoSignInFailed
 
     public var errorDescription: String? {
         switch self {
@@ -18,6 +19,8 @@ public enum SupabaseAuthError: LocalizedError, Sendable {
             return "Your session has expired. Please sign in again."
         case .providerError(let message):
             return message
+        case .demoSignInFailed:
+            return "Demo sign-in failed."
         }
     }
 }
@@ -80,6 +83,26 @@ public final class SupabaseAuthService: @unchecked Sendable {
     public func handleOAuthCallback(_ url: URL) async throws -> AuthUser {
         let session = try await client.auth.session(from: url)
         let user = mapSessionUser(session.user, provider: .google)
+        authState = .signedIn(user)
+        return user
+    }
+
+    // MARK: - Demo Sign-In
+
+    /// Signs in using the demo account edge function. Used for App Store review.
+    /// The edge function generates a fresh session — no hardcoded tokens.
+    public func signInWithDemo() async throws -> AuthUser {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let tokenResponse: DemoTokenResponse = try await client.functions
+            .invoke("demo-session", options: .init(method: .post), decoder: decoder)
+
+        let session = try await client.auth.setSession(
+            accessToken: tokenResponse.accessToken,
+            refreshToken: tokenResponse.refreshToken
+        )
+
+        let user = mapSessionUser(session.user, provider: .email)
         authState = .signedIn(user)
         return user
     }
@@ -171,4 +194,11 @@ public final class SupabaseAuthService: @unchecked Sendable {
         default: return .apple
         }
     }
+}
+
+// MARK: - Demo Token Response
+
+private struct DemoTokenResponse: Decodable {
+    let accessToken: String
+    let refreshToken: String
 }

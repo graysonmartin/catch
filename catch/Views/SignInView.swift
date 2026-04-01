@@ -7,6 +7,9 @@ struct SignInView: View {
 
     @State private var currentNonce: String?
     @State private var signInError: String?
+    @State private var demoTapCount = 0
+    @State private var demoTapResetTask: Task<Void, Never>?
+    @State private var isDemoLoading = false
 
     var onSignedIn: (AuthUser) -> Void
 
@@ -24,6 +27,14 @@ struct SignInView: View {
                 .padding(.horizontal, CatchSpacing.space32)
             }
             .scrollBounceBehavior(.basedOnSize)
+            .allowsHitTesting(!isDemoLoading)
+            .overlay {
+                if isDemoLoading {
+                    Color.black.opacity(0.3).ignoresSafeArea()
+                    PawLoadingView()
+                }
+            }
+            .onDisappear { demoTapResetTask?.cancel() }
         }
     }
 
@@ -36,6 +47,7 @@ struct SignInView: View {
                 .foregroundStyle(CatchTheme.primary)
                 .shadow(color: CatchTheme.primary.opacity(0.3), radius: 12, y: 4)
                 .accessibilityHidden(true)
+                .onTapGesture { handleDemoTap() }
 
             VStack(spacing: CatchSpacing.space8) {
                 Text(CatchStrings.Onboarding.appName)
@@ -131,6 +143,39 @@ struct SignInView: View {
         .frame(maxWidth: .infinity)
         .background(.red.opacity(0.08))
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
+    }
+}
+
+// MARK: - Demo Login
+
+extension SignInView {
+
+    private func handleDemoTap() {
+        demoTapCount += 1
+        demoTapResetTask?.cancel()
+        demoTapResetTask = Task {
+            try? await Task.sleep(for: .seconds(3))
+            guard !Task.isCancelled else { return }
+            demoTapCount = 0
+        }
+        if demoTapCount >= 5 {
+            demoTapCount = 0
+            demoTapResetTask?.cancel()
+            Task { await handleDemoSignIn() }
+        }
+    }
+
+    private func handleDemoSignIn() async {
+        isDemoLoading = true
+        defer { isDemoLoading = false }
+
+        do {
+            let user = try await authService.signInWithDemo()
+            signInError = nil
+            onSignedIn(user)
+        } catch {
+            signInError = CatchStrings.SignIn.demoSignInFailed
+        }
     }
 }
 
