@@ -94,6 +94,14 @@ struct EditEncounterView: View {
             var result = try await encounterDataService.updateEncounter(updated, photos: photos)
             result.cat = encounter.cat
             feedDataService.replaceEncounter(result)
+
+            if let catID = encounter.catID {
+                try await catDataService.syncCatLocationIfSoleEncounter(
+                    catID: catID,
+                    newLocation: location
+                )
+            }
+
             try await catDataService.loadCats()
             dismiss()
         } catch {

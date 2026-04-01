@@ -56,6 +56,10 @@
 		E8000001AA000059 /* CatCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000065 /* CatCardView.swift */; };
 		E8000001AA000071 /* RemoteCatMapSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000072 /* RemoteCatMapSheet.swift */; };
 		E8000001BB000002 /* DataSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001BB000001 /* DataSeeder.swift */; };
+		E8CD00000200 /* CatDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DA00000001 /* CatDataService.swift */; };
+		E8CD00000201 /* MockSupabaseCatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD00000001 /* MockSupabaseCatRepository.swift */; };
+		E8CD00000202 /* MockSupabaseAssetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD00000002 /* MockSupabaseAssetService.swift */; };
+		E8CD00000203 /* CatDataServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CD00000003 /* CatDataServiceTests.swift */; };
 		E8A100000003 /* CatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000012 /* CatTests.swift */; };
 		E8A100000004 /* EncounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000013 /* EncounterTests.swift */; };
 		E8A100000005 /* ModelContainerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A100000014 /* ModelContainerFactory.swift */; };
@@ -339,6 +343,9 @@
 		E8000001AA000070 /* CatchSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatchSchema.swift; sourceTree = "<group>"; };
 		E8000001AA000072 /* RemoteCatMapSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCatMapSheet.swift; sourceTree = "<group>"; };
 		E8000001BB000001 /* DataSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSeeder.swift; sourceTree = "<group>"; };
+		E8CD00000001 /* MockSupabaseCatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSupabaseCatRepository.swift; sourceTree = "<group>"; };
+		E8CD00000002 /* MockSupabaseAssetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSupabaseAssetService.swift; sourceTree = "<group>"; };
+		E8CD00000003 /* CatDataServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDataServiceTests.swift; sourceTree = "<group>"; };
 		E8A100000012 /* CatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatTests.swift; sourceTree = "<group>"; };
 		E8A100000013 /* EncounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterTests.swift; sourceTree = "<group>"; };
 		E8A100000014 /* ModelContainerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerFactory.swift; sourceTree = "<group>"; };
@@ -881,6 +888,7 @@
 				E8FD0000F002 /* Feed */,
 				E8CB8601EE8D9224ECDE331C /* Mocks */,
 				E8IA0000F002 /* InAppNotifications */,
+				E8CD0000F001 /* CatData */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -955,8 +963,18 @@
 				E8ST00000005 /* MockSettingsService.swift */,
 				E8FD00000003 /* MockSupabaseEncounterRepository.swift */,
 				E8IA00000011 /* MockInAppNotificationService.swift */,
+				E8CD00000001 /* MockSupabaseCatRepository.swift */,
+				E8CD00000002 /* MockSupabaseAssetService.swift */,
 			);
 			path = Mocks;
+			sourceTree = "<group>";
+		};
+		E8CD0000F001 /* CatData */ = {
+			isa = PBXGroup;
+			children = (
+				E8CD00000003 /* CatDataServiceTests.swift */,
+			);
+			path = CatData;
 			sourceTree = "<group>";
 		};
 		E8CF211849B3A47ED1640CA4 /* Auth */ = {
@@ -1648,6 +1666,10 @@
 				E8CS0000030E /* CatchStrings+Notifications.swift in Sources */,
 				E8NI00000201 /* NotificationItem.swift in Sources */,
 				E8IA00000301 /* InAppNotificationService.swift in Sources */,
+				E8CD00000200 /* CatDataService.swift in Sources */,
+				E8CD00000201 /* MockSupabaseCatRepository.swift in Sources */,
+				E8CD00000202 /* MockSupabaseAssetService.swift in Sources */,
+				E8CD00000203 /* CatDataServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

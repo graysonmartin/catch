@@ -154,27 +154,6 @@ private final class MockSupabaseProfileRepo: SupabaseProfileRepository {
     }
 }
 
-@MainActor
-private final class MockSupabaseAssetService: SupabaseAssetService {
-    var deletePhotoCalls: [(bucket: SupabaseStorageBucket, path: String)] = []
-
-    func uploadPhoto(_ data: Data, bucket: SupabaseStorageBucket, ownerID: String, fileName: String) async throws -> String {
-        "https://example.com/\(fileName)"
-    }
-
-    func uploadPhotos(_ photos: [Data], bucket: SupabaseStorageBucket, ownerID: String) async throws -> [String] {
-        photos.indices.map { "https://example.com/photo_\($0).jpg" }
-    }
-
-    func deletePhoto(bucket: SupabaseStorageBucket, path: String) async throws {
-        deletePhotoCalls.append((bucket, path))
-    }
-
-    func publicURL(bucket: SupabaseStorageBucket, path: String) -> String {
-        "https://example.com/\(path)"
-    }
-}
-
 extension SupabaseProfile {
     fileprivate static func fixture(
         id: UUID = UUID(),
