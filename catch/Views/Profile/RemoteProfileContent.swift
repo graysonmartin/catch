@@ -41,7 +41,7 @@ struct RemoteProfileContent: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     toolbarFollowButton
                 }
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .topBarTrailing) {
                     toolbarOverflowMenu
                 }
             }
