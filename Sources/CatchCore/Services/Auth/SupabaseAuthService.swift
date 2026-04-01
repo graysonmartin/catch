@@ -84,6 +84,40 @@ public final class SupabaseAuthService: @unchecked Sendable {
         return user
     }
 
+    // MARK: - Demo Sign-In
+
+    /// Signs in using the demo account edge function. Used for App Store review.
+    /// The edge function generates a fresh session — no hardcoded tokens.
+    @discardableResult
+    public func signInWithDemo() async throws -> AuthUser {
+        let functionURL = SupabaseConfig.url
+            .appendingPathComponent("functions/v1/demo-session")
+
+        var request = URLRequest(url: functionURL)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(SupabaseConfig.anonKey, forHTTPHeaderField: "apikey")
+        request.setValue("Bearer \(SupabaseConfig.anonKey)", forHTTPHeaderField: "Authorization")
+
+        let (responseData, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            throw SupabaseAuthError.providerError("Demo sign-in failed.")
+        }
+
+        let tokenResponse = try JSONDecoder().decode(DemoTokenResponse.self, from: responseData)
+
+        let session = try await client.auth.setSession(
+            accessToken: tokenResponse.accessToken,
+            refreshToken: tokenResponse.refreshToken
+        )
+
+        let user = mapSessionUser(session.user, provider: .email)
+        authState = .signedIn(user)
+        return user
+    }
+
     // MARK: - Sign Out
 
     public func signOut() async {
@@ -170,5 +204,17 @@ public final class SupabaseAuthService: @unchecked Sendable {
         case "google": return .google
         default: return .apple
         }
+    }
+}
+
+// MARK: - Demo Token Response
+
+private struct DemoTokenResponse: Decodable {
+    let accessToken: String
+    let refreshToken: String
+
+    enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+        case refreshToken = "refresh_token"
     }
 }
