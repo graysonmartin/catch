@@ -96,8 +96,9 @@ struct CatProfileView: View {
             Text(CatchStrings.CatProfile.deleteCatMessage)
         }
         .task {
-            await refreshCat()
-            await loadOwnerProfile()
+            async let catRefresh: Void = refreshCat()
+            async let ownerLoad: Void = loadOwnerProfile()
+            _ = await (catRefresh, ownerLoad)
         }
     }
 
@@ -256,6 +257,16 @@ struct CatProfileView: View {
                 }
             }
             .buttonStyle(.plain)
+        } else {
+            HStack(spacing: CatchSpacing.space8) {
+                ownerAvatarPlaceholder
+                    .opacity(0)
+
+                Text(" ")
+                    .font(.subheadline.weight(.medium))
+            }
+            .opacity(0)
+            .accessibilityHidden(true)
         }
     }
 
