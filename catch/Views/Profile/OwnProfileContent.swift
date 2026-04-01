@@ -16,8 +16,7 @@ struct OwnProfileContent: View {
     @State private var isShowingEditSheet = false
     @State private var isShowingFindPeople = false
     @State private var isShowingCollection = false
-    @State private var searchText = ""
-    @State private var avatarData: Data?
+@State private var avatarData: Data?
 
     private var cats: [Cat] { catDataService.cats }
 
@@ -46,8 +45,7 @@ struct OwnProfileContent: View {
                 }
 
                 ProfileDiaryTab(
-                    encounters: encounters,
-                    searchText: searchText
+                    encounters: encounters
                 )
 
                 if let profile {
@@ -61,7 +59,6 @@ struct OwnProfileContent: View {
         .background(CatchTheme.background)
         .navigationTitle(CatchStrings.Profile.profileTitle)
         .navigationBarTitleDisplayMode(.large)
-        .searchable(text: $searchText, prompt: CatchStrings.Diary.searchPrompt)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 NavigationLink {

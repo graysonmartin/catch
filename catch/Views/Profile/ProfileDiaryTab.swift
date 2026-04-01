@@ -3,24 +3,14 @@ import CatchCore
 
 struct ProfileDiaryTab: View {
     let encounters: [Encounter]
-    let searchText: String
 
     @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(ToastManager.self) private var toastManager
 
     @State private var selectedEncounterDetail: EncounterDetailData?
 
-    private var filteredEncounters: [Encounter] {
-        guard !searchText.isEmpty else { return encounters }
-        return encounters.filter { encounter in
-            encounter.cat?.displayName.localizedCaseInsensitiveContains(searchText) == true
-            || encounter.notes.localizedCaseInsensitiveContains(searchText)
-            || encounter.location.name.localizedCaseInsensitiveContains(searchText)
-        }
-    }
-
     private var groupedEncounters: [(date: Date, encounters: [Encounter])] {
-        let grouped = Dictionary(grouping: filteredEncounters) { encounter in
+        let grouped = Dictionary(grouping: encounters) { encounter in
             Calendar.current.startOfDay(for: encounter.date)
         }
         return grouped
@@ -54,12 +44,6 @@ struct ProfileDiaryTab: View {
                 icon: "book.closed",
                 title: CatchStrings.Diary.emptyTitle,
                 subtitle: CatchStrings.Diary.emptySubtitle
-            )
-        } else if filteredEncounters.isEmpty {
-            EmptyStateView(
-                icon: "magnifyingglass",
-                title: CatchStrings.Collection.searchEmptyTitle,
-                subtitle: CatchStrings.Diary.searchEmptySubtitle(searchText)
             )
         } else {
             LazyVStack(alignment: .leading, spacing: 0) {
