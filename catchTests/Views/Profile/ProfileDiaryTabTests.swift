@@ -75,57 +75,6 @@ final class ProfileDiaryTabTests: XCTestCase {
         XCTAssertTrue(header.contains("2024"), "Previous year should appear in header")
     }
 
-    // MARK: - Search filtering
-
-    func testSearchFiltersByCatName() {
-        let mochi = Fixtures.cat(name: "Mochi")
-        let luna = Fixtures.cat(name: "Luna")
-
-        let encounters = [
-            Fixtures.encounter(for: mochi),
-            Fixtures.encounter(for: luna)
-        ]
-        let filtered = filterEncounters(encounters, searchText: "mochi")
-
-        XCTAssertEqual(filtered.count, 1)
-        XCTAssertEqual(filtered[0].cat?.name, "Mochi")
-    }
-
-    func testSearchFiltersByNotes() {
-        let cat = Fixtures.cat(name: "Biscuit")
-        let encounters = [
-            Fixtures.encounter(for: cat, notes: "spotted near the park"),
-            Fixtures.encounter(for: cat, notes: "chilling on a car")
-        ]
-        let filtered = filterEncounters(encounters, searchText: "park")
-
-        XCTAssertEqual(filtered.count, 1)
-        XCTAssertTrue(filtered[0].notes.contains("park"))
-    }
-
-    func testSearchFiltersByLocation() {
-        let cat = Fixtures.cat(name: "Shadow")
-        let encounters = [
-            Fixtures.encounter(for: cat, location: Location(name: "Central Park")),
-            Fixtures.encounter(for: cat, location: Location(name: "Back Alley"))
-        ]
-        let filtered = filterEncounters(encounters, searchText: "central")
-
-        XCTAssertEqual(filtered.count, 1)
-        XCTAssertEqual(filtered[0].location.name, "Central Park")
-    }
-
-    func testEmptySearchReturnsAll() {
-        let cat = Fixtures.cat(name: "Bean")
-        let encounters = [
-            Fixtures.encounter(for: cat),
-            Fixtures.encounter(for: cat)
-        ]
-        let filtered = filterEncounters(encounters, searchText: "")
-
-        XCTAssertEqual(filtered.count, 2)
-    }
-
     // MARK: - First encounter detection
 
     func testEarliestEncounterIDsForMultipleCats() {
@@ -198,15 +147,6 @@ final class ProfileDiaryTabTests: XCTestCase {
         return grouped
             .sorted { $0.key > $1.key }
             .map { (date: $0.key, encounters: $0.value.sorted { $0.date > $1.date }) }
-    }
-
-    private func filterEncounters(_ encounters: [Encounter], searchText: String) -> [Encounter] {
-        guard !searchText.isEmpty else { return encounters }
-        return encounters.filter { encounter in
-            encounter.cat?.displayName.localizedCaseInsensitiveContains(searchText) == true
-            || encounter.notes.localizedCaseInsensitiveContains(searchText)
-            || encounter.location.name.localizedCaseInsensitiveContains(searchText)
-        }
     }
 
     private func formattedDateHeader(_ date: Date) -> String {
