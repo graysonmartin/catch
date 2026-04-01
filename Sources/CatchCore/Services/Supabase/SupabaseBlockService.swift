@@ -25,11 +25,13 @@ public final class SupabaseBlockService: BlockService {
             throw BlockError.notSignedIn
         }
 
-        guard userID != targetID else {
+        let normalizedID = targetID.lowercased()
+
+        guard userID.lowercased() != normalizedID else {
             throw BlockError.cannotBlockSelf
         }
 
-        guard !blockedUserIDs.contains(targetID) else {
+        guard !blockedUserIDs.contains(normalizedID) else {
             throw BlockError.alreadyBlocked
         }
 
@@ -40,7 +42,7 @@ public final class SupabaseBlockService: BlockService {
         do {
             _ = try await repository.insertBlock(payload: payload)
             rateLimiter.recordAction(.block)
-            blockedUserIDs.insert(targetID)
+            blockedUserIDs.insert(normalizedID)
         } catch {
             throw BlockError.networkError(error.localizedDescription)
         }
@@ -56,14 +58,14 @@ public final class SupabaseBlockService: BlockService {
         do {
             try await repository.deleteBlock(blockerID: userID, blockedID: targetID)
             rateLimiter.recordAction(.unblock)
-            blockedUserIDs.remove(targetID)
+            blockedUserIDs.remove(targetID.lowercased())
         } catch {
             throw BlockError.networkError(error.localizedDescription)
         }
     }
 
     public func isBlocked(_ targetID: String) -> Bool {
-        blockedUserIDs.contains(targetID)
+        blockedUserIDs.contains(targetID.lowercased())
     }
 
     public func loadBlocks() async throws {

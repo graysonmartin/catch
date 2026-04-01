@@ -327,7 +327,6 @@ struct RemoteProfileContent: View {
     private func performBlock() async {
         do {
             try await blockService.blockUser(userID)
-            // Unfollow if currently following
             if followService.isFollowing(userID) {
                 try? await followService.unfollow(targetID: userID, by: authenticatedUserID)
             }

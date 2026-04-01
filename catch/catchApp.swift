@@ -253,8 +253,9 @@ struct catchApp: App {
                 .environment(inAppNotificationService)
                 .task {
                     await authService.refreshSessionIfNeeded()
-                    try? await blockService.loadBlocks()
-                    try? await reportService.loadHiddenEncounters()
+                    async let blocks: Void = { try? await blockService.loadBlocks() }()
+                    async let hidden: Void = { try? await reportService.loadHiddenEncounters() }()
+                    _ = await (blocks, hidden)
                 }
         }
     }

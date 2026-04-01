@@ -11,7 +11,11 @@ struct BlockedUsersView: View {
     @State private var unblockTarget: String?
 
     private var sortedBlockedIDs: [String] {
-        Array(blockService.blockedUserIDs).sorted()
+        Array(blockService.blockedUserIDs).sorted { id1, id2 in
+            let name1 = profiles[id1]?.displayName ?? ""
+            let name2 = profiles[id2]?.displayName ?? ""
+            return name1.localizedCaseInsensitiveCompare(name2) == .orderedAscending
+        }
     }
 
     var body: some View {
@@ -68,7 +72,7 @@ struct BlockedUsersView: View {
 
     private func blockedRow(userID: String) -> some View {
         HStack(spacing: CatchSpacing.space12) {
-            avatarView(for: userID)
+            UserAvatarView(avatarURL: profiles[userID]?.avatarURL)
 
             Text(profiles[userID]?.displayName ?? CatchStrings.Social.profileFallbackTitle)
                 .font(.subheadline.weight(.medium))
@@ -89,27 +93,6 @@ struct BlockedUsersView: View {
             }
         }
         .padding(.vertical, CatchSpacing.space4)
-    }
-
-    @ViewBuilder
-    private func avatarView(for userID: String) -> some View {
-        if let avatarUrl = profiles[userID]?.avatarURL, !avatarUrl.isEmpty {
-            RemoteImageView(urlString: avatarUrl) {
-                avatarPlaceholder
-            }
-            .frame(width: 36, height: 36)
-            .clipShape(Circle())
-        } else {
-            avatarPlaceholder
-        }
-    }
-
-    private var avatarPlaceholder: some View {
-        Image(systemName: "person.crop.circle.fill")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 36, height: 36)
-            .foregroundStyle(CatchTheme.secondary)
     }
 
     private func loadProfiles() async {
