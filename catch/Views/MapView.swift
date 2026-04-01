@@ -121,8 +121,7 @@ struct CatMapView: View {
                     }
                 }
             }
-            .navigationTitle(CatchStrings.Tabs.map)
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true)
             .navigationDestination(item: $selectedCat) { cat in
                 CatProfileView(cat: cat)
             }
