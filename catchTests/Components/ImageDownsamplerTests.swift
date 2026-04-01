@@ -6,9 +6,13 @@ final class ImageDownsamplerTests: XCTestCase {
     // MARK: - Helpers
 
     /// Creates a solid-color JPEG of the given pixel dimensions.
+    /// Uses explicit scale 1.0 so pixel dimensions match the requested size
+    /// regardless of the simulator's screen scale.
     private func makeTestJPEG(width: Int, height: Int, color: UIColor = .orange) -> Data {
         let size = CGSize(width: width, height: height)
-        let renderer = UIGraphicsImageRenderer(size: size)
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1.0
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
         let image = renderer.image { ctx in
             color.setFill()
             ctx.fill(CGRect(origin: .zero, size: size))

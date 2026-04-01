@@ -10,6 +10,7 @@ struct ToastView: View {
             Image(systemName: iconName)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(iconColor)
+                .accessibilityHidden(true)
 
             Text(toast.message)
                 .font(.subheadline)
@@ -32,6 +33,8 @@ struct ToastView: View {
                         .clipShape(Capsule())
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(CatchStrings.Accessibility.retryAction)
+                .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
             }
 
             Button {
@@ -40,8 +43,11 @@ struct ToastView: View {
                 Image(systemName: "xmark")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(CatchTheme.textSecondary)
+                    .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
+                    .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(CatchStrings.Accessibility.dismissToast)
         }
         .padding(.horizontal, CatchSpacing.space16)
         .padding(.vertical, CatchSpacing.space12)
@@ -53,6 +59,7 @@ struct ToastView: View {
             y: 4
         )
         .padding(.horizontal, CatchSpacing.space16)
+        .accessibilityElement(children: .contain)
     }
 
     // MARK: - Helpers
@@ -73,4 +80,3 @@ struct ToastView: View {
         }
     }
 }
-

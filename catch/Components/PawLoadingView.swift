@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct PawLoadingView: View {
     enum Size {
@@ -7,8 +8,8 @@ struct PawLoadingView: View {
 
         var pawFont: Font {
             switch self {
-            case .full: .system(size: 20)
-            case .inline: .system(size: 12)
+            case .full: .title3
+            case .inline: .caption
             }
         }
 
@@ -24,6 +25,7 @@ struct PawLoadingView: View {
     var label: String?
 
     @State private var animating = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: CatchSpacing.space8) {
@@ -32,10 +34,11 @@ struct PawLoadingView: View {
                     Image(systemName: "pawprint.fill")
                         .font(size.pawFont)
                         .foregroundStyle(CatchTheme.primary)
-                        .scaleEffect(animating ? 1.0 : 0.6)
-                        .opacity(animating ? 1.0 : 0.3)
+                        .scaleEffect(reduceMotion ? 1.0 : (animating ? 1.0 : 0.6))
+                        .opacity(reduceMotion ? 1.0 : (animating ? 1.0 : 0.3))
                         .animation(
-                            .easeInOut(duration: 0.5)
+                            reduceMotion ? nil :
+                                .easeInOut(duration: 0.5)
                                 .repeatForever(autoreverses: true)
                                 .delay(Double(index) * 0.2),
                             value: animating
@@ -51,6 +54,9 @@ struct PawLoadingView: View {
         }
         .frame(maxWidth: size == .full ? .infinity : nil,
                maxHeight: size == .full ? .infinity : nil)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(label ?? CatchStrings.Accessibility.loading)
+        .accessibilityAddTraits(.updatesFrequently)
         .onAppear { animating = true }
     }
 }

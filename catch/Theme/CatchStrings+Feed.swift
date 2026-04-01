@@ -24,6 +24,14 @@ extension CatchStrings {
             String(localized: "spotted by \(name)")
         }
 
+        static func spottedOnByPrefix(_ date: String) -> String {
+            String(localized: "spotted \(date) by ")
+        }
+
+        static func spottedOn(_ date: String) -> String {
+            String(localized: "spotted \(date)")
+        }
+
         // Detail labels
         static let breedLabel = String(localized: "breed")
         static let tapForDetails = String(localized: "tap for details")

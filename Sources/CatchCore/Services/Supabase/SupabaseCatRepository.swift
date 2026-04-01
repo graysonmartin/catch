@@ -5,6 +5,7 @@ import Foundation
 public protocol SupabaseCatRepository: Sendable {
     func fetchCat(id: String) async throws -> SupabaseCat?
     func fetchCats(ownerID: String) async throws -> [SupabaseCat]
+    func fetchCatCounts(ownerIDs: [String]) async throws -> [String: Int]
     func insertCat(_ payload: SupabaseCatInsertPayload) async throws -> SupabaseCat
     func updateCat(id: String, _ payload: SupabaseCatUpdatePayload) async throws -> SupabaseCat
     func deleteCat(id: String) async throws

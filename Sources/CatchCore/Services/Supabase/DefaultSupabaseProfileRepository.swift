@@ -65,6 +65,19 @@ public final class DefaultSupabaseProfileRepository: SupabaseProfileRepository, 
         return profile
     }
 
+    public func upsertProfile(_ payload: SupabaseProfilePayload, id: String) async throws -> SupabaseProfile {
+        let insertPayload = SupabaseProfileInsertPayload(id: id, profile: payload)
+
+        let profile: SupabaseProfile = try await clientProvider.client
+            .from(Self.tableName)
+            .upsert(insertPayload)
+            .select()
+            .single()
+            .execute()
+            .value
+        return profile
+    }
+
     public func searchUsers(query: String) async throws -> [SupabaseProfile] {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !trimmed.isEmpty else { return [] }
@@ -81,33 +94,33 @@ public final class DefaultSupabaseProfileRepository: SupabaseProfileRepository, 
     }
 
     public func checkUsernameAvailability(_ username: String) async throws -> Bool {
-        let results: [SupabaseProfile] = try await clientProvider.client
+        let response = try await clientProvider.client
             .from(Self.tableName)
-            .select()
+            .select("id")
             .eq("username", value: username.lowercased())
             .limit(1)
-            .execute()
-            .value
-        return results.isEmpty
+            .execute(options: FetchOptions(head: true, count: .exact))
+        return (response.count ?? 0) == 0
     }
 
     public func fetchRecentPublicUsers(excluding excludedIDs: Set<String>, limit: Int) async throws -> [SupabaseProfile] {
-        // Fetch more than requested so we can filter locally after exclusion
-        let fetchLimit = limit + excludedIDs.count
-        let profiles: [SupabaseProfile] = try await clientProvider.client
+        var query = clientProvider.client
             .from(Self.tableName)
             .select()
             .eq("is_private", value: false)
+
+        if !excludedIDs.isEmpty {
+            let excludedArray = "(\(excludedIDs.joined(separator: ",")))"
+            query = query.not("id", operator: .in, value: excludedArray)
+        }
+
+        let profiles: [SupabaseProfile] = try await query
             .order("follower_count", ascending: false)
-            .limit(fetchLimit)
+            .limit(limit)
             .execute()
             .value
 
-        let idStrings = excludedIDs
         return profiles
-            .filter { !idStrings.contains($0.id.uuidString.lowercased()) }
-            .prefix(limit)
-            .map { $0 }
     }
 }
 

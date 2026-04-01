@@ -25,7 +25,7 @@ struct ProfileHeaderView: View {
             if let username = data.username, !username.isEmpty {
                 Text(UsernameValidator.formatDisplay(username))
                     .font(.subheadline)
-                    .foregroundStyle(CatchTheme.primary)
+                    .foregroundStyle(CatchTheme.accessibleTextOrange)
             }
 
             Text(data.bio.isEmpty ? CatchStrings.Profile.tooCoolForBio : data.bio)
@@ -46,8 +46,10 @@ struct ProfileHeaderView: View {
             }
             .frame(width: avatarSize, height: avatarSize)
             .clipShape(Circle())
+            .accessibilityLabel(CatchStrings.Accessibility.userAvatar(name: data.displayName))
         } else {
             avatarPlaceholder
+                .accessibilityLabel(CatchStrings.Accessibility.userAvatarPlaceholder)
         }
     }
 

@@ -8,20 +8,24 @@ final class SupabaseSocialInteractionServiceTests: XCTestCase {
     private var mockRepo: MockSupabaseSocialRepository!
     private let currentUserID = "current-user-id"
     private let encounterID = "encounter-001"
+    private var mockRateLimiter: MockRateLimiter!
 
     override func setUp() {
         super.setUp()
         mockRepo = MockSupabaseSocialRepository()
+        mockRateLimiter = MockRateLimiter()
         sut = SupabaseSocialInteractionService(
             repository: mockRepo,
             getCurrentUserID: { [currentUserID] in currentUserID },
-            pageSize: 3
+            pageSize: 3,
+            rateLimiter: mockRateLimiter
         )
     }
 
     override func tearDown() {
         sut = nil
         mockRepo = nil
+        mockRateLimiter = nil
         super.tearDown()
     }
 

@@ -65,11 +65,20 @@ final class ImageDownsampler: ImageDownsamplingService {
             return nil
         }
 
+        // Clamp to source dimensions to prevent upscaling small images.
+        var effectiveMax = maxPixelDimension
+        if let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
+           let width = (properties[kCGImagePropertyPixelWidth] as? NSNumber)?.doubleValue,
+           let height = (properties[kCGImagePropertyPixelHeight] as? NSNumber)?.doubleValue {
+            let sourceMax = CGFloat(max(width, height))
+            effectiveMax = min(effectiveMax, sourceMax)
+        }
+
         let downsampleOptions: [CFString: Any] = [
             kCGImageSourceCreateThumbnailFromImageAlways: true,
             kCGImageSourceShouldCacheImmediately: true,
             kCGImageSourceCreateThumbnailWithTransform: true,
-            kCGImageSourceThumbnailMaxPixelSize: maxPixelDimension
+            kCGImageSourceThumbnailMaxPixelSize: effectiveMax
         ]
         guard let thumbnail = CGImageSourceCreateThumbnailAtIndex(
             source,

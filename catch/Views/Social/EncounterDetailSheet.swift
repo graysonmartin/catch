@@ -46,14 +46,13 @@ struct EncounterDetailSheet: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: CatchSpacing.space12) {
+                        #if DEBUG
+                        overflowMenu
+                        #else
                         if !isOwnEncounter {
-                            Button {
-                                showReportSheet = true
-                            } label: {
-                                Image(systemName: "flag")
-                                    .foregroundStyle(CatchTheme.textSecondary)
-                            }
+                            overflowMenu
                         }
+                        #endif
                         Button(CatchStrings.Common.done) { dismiss() }
                     }
                 }
@@ -78,6 +77,22 @@ struct EncounterDetailSheet: View {
                     }
             )
         }
+    }
+
+    // MARK: - Overflow Menu
+
+    private var overflowMenu: some View {
+        Menu {
+            Button(role: .destructive) {
+                showReportSheet = true
+            } label: {
+                Label(CatchStrings.Report.reportPost, systemImage: "flag")
+            }
+        } label: {
+            Image(systemName: "ellipsis.circle")
+                .foregroundStyle(CatchTheme.textSecondary)
+        }
+        .accessibilityLabel(CatchStrings.Accessibility.moreOptions)
     }
 
     // MARK: - Scroll Content
@@ -222,6 +237,8 @@ struct EncounterDetailSheet: View {
                 Task {
                     do {
                         try await socialService.toggleLike(encounterRecordName: encounterRecordName)
+                    } catch is RateLimitError {
+                        toastManager.showError(CatchStrings.Toast.rateLimitedLike)
                     } catch {
                         toastManager.showError(CatchStrings.Toast.likeFailed)
                     }
@@ -350,6 +367,12 @@ struct EncounterDetailSheet: View {
             if let index = comments.firstIndex(where: { $0.id == pendingComment.id }) {
                 comments[index] = confirmed
             }
+        } catch is RateLimitError {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                comments.removeAll { $0.id == pendingComment.id }
+            }
+            newCommentText = text
+            toastManager.showError(CatchStrings.Toast.rateLimitedComment)
         } catch {
             withAnimation(.easeInOut(duration: 0.2)) {
                 comments.removeAll { $0.id == pendingComment.id }
@@ -369,6 +392,9 @@ struct EncounterDetailSheet: View {
                     recordName: removedComment.id,
                     encounterRecordName: encounterRecordName
                 )
+            } catch is RateLimitError {
+                comments.insert(removedComment, at: 0)
+                toastManager.showError(CatchStrings.Toast.rateLimitedDeleteComment)
             } catch {
                 comments.insert(removedComment, at: 0)
                 toastManager.showError(CatchStrings.Toast.commentDeleteFailed)

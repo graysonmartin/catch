@@ -108,7 +108,7 @@ struct FullScreenPhotoViewer: View {
 
     private var pageCounter: some View {
         Text(CatchStrings.Components.photoPageIndicator(currentPage + 1, totalCount))
-            .font(.system(size: Layout.counterFontSize, weight: .medium))
+            .font(.subheadline.weight(.medium))
             .foregroundStyle(.white)
             .padding(.horizontal, Layout.counterPaddingH)
             .padding(.vertical, Layout.counterPaddingV)

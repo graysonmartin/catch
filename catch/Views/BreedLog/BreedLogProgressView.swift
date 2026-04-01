@@ -5,6 +5,8 @@ struct BreedLogProgressView: View {
     let discoveredCount: Int
     let totalCount: Int
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     private var progress: Double {
         guard totalCount > 0 else { return 0 }
         return Double(discoveredCount) / Double(totalCount)
@@ -54,10 +56,13 @@ struct BreedLogProgressView: View {
                     Capsule()
                         .fill(CatchTheme.primary)
                         .frame(width: geo.size.width * progress, height: 10)
-                        .animation(.spring(response: 0.5), value: progress)
+                        .animation(reduceMotion ? nil : .spring(response: 0.5), value: progress)
                 }
             }
             .frame(height: 10)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(CatchStrings.Accessibility.breedProgress(discovered: discoveredCount, total: totalCount))
+            .accessibilityValue("\(Int(progress * 100))%")
 
             Text(flavorText)
                 .font(.caption)

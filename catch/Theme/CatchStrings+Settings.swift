@@ -36,6 +36,7 @@ extension CatchStrings {
         // Debug
         static let debugSection = String(localized: "admin (debug only)")
         static let debugFooter = String(localized: "this section only shows in debug builds. go wild.")
-        static let debugResetWalkthrough = String(localized: "reset walkthrough")
+        static let debugResetOnboarding = String(localized: "reset onboarding")
+        static let debugResetPostAuth = String(localized: "reset post-auth steps only")
     }
 }

@@ -1,4 +1,5 @@
 import SwiftUI
+import CatchCore
 
 struct StatCardView: View {
     let count: Int
@@ -45,5 +46,8 @@ struct StatCardView: View {
                     .padding(CatchSpacing.space8)
             }
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(CatchStrings.Accessibility.statCard(count: count, label: label))
+        .accessibilityAddTraits(showChevron ? .isButton : [])
     }
 }

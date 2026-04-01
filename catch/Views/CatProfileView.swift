@@ -138,6 +138,7 @@ struct CatProfileView: View {
                     Image(systemName: "crown.fill")
                         .font(.caption)
                         .foregroundStyle(CatchTheme.primary)
+                        .accessibilityLabel(CatchStrings.Accessibility.stevenBadge)
                 }
             }
 

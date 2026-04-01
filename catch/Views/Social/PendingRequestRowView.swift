@@ -21,7 +21,7 @@ struct PendingRequestRowView: View {
 
     var body: some View {
         HStack(spacing: CatchSpacing.space12) {
-            UserAvatarView(avatarURL: resolvedAvatarURL)
+            UserAvatarView(avatarURL: resolvedAvatarURL, accessibilityName: displayName)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(displayName ?? CatchStrings.Social.loadingName)
@@ -49,8 +49,10 @@ struct PendingRequestRowView: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.title3)
                     .foregroundStyle(CatchTheme.primary)
+                    .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(CatchStrings.Accessibility.approveRequest)
 
             Button {
                 Task {
@@ -64,8 +66,10 @@ struct PendingRequestRowView: View {
                 Image(systemName: "xmark.circle.fill")
                     .font(.title3)
                     .foregroundStyle(CatchTheme.textSecondary)
+                    .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(CatchStrings.Accessibility.declineRequest)
         }
         .task {
             if let profile = browseService?.cachedProfile(for: follow.followerID) {

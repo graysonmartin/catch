@@ -7,12 +7,14 @@ import Observation
 final class MockSupabaseCatRepository: SupabaseCatRepository {
     private(set) var fetchCatCalls: [String] = []
     private(set) var fetchCatsCalls: [String] = []
+    private(set) var fetchCatCountsCalls: [[String]] = []
     private(set) var insertCatCalls: [SupabaseCatInsertPayload] = []
     private(set) var updateCatCalls: [(id: String, payload: SupabaseCatUpdatePayload)] = []
     private(set) var deleteCatCalls: [String] = []
 
     var fetchCatResult: SupabaseCat?
     var fetchCatsResult: [SupabaseCat] = []
+    var fetchCatCountsResult: [String: Int] = [:]
     var insertCatResult: SupabaseCat?
     var updateCatResult: SupabaseCat?
     var errorToThrow: (any Error)?
@@ -27,6 +29,12 @@ final class MockSupabaseCatRepository: SupabaseCatRepository {
         fetchCatsCalls.append(ownerID)
         if let error = errorToThrow { throw error }
         return fetchCatsResult
+    }
+
+    func fetchCatCounts(ownerIDs: [String]) async throws -> [String: Int] {
+        fetchCatCountsCalls.append(ownerIDs)
+        if let error = errorToThrow { throw error }
+        return fetchCatCountsResult
     }
 
     func insertCat(_ payload: SupabaseCatInsertPayload) async throws -> SupabaseCat {
@@ -55,11 +63,13 @@ final class MockSupabaseCatRepository: SupabaseCatRepository {
     func reset() {
         fetchCatCalls = []
         fetchCatsCalls = []
+        fetchCatCountsCalls = []
         insertCatCalls = []
         updateCatCalls = []
         deleteCatCalls = []
         fetchCatResult = nil
         fetchCatsResult = []
+        fetchCatCountsResult = [:]
         insertCatResult = nil
         updateCatResult = nil
         errorToThrow = nil
