@@ -25,6 +25,7 @@ struct catchApp: App {
     @State private var encounterDataService: EncounterDataService
     @State private var feedDataService: FeedDataService
     @State private var reportService: SupabaseReportService
+    @State private var blockService: SupabaseBlockService
     @State private var suggestedPeopleService: SuggestedPeopleService
     @StateObject private var appRouter: AppRouter
     @State private var deviceTokenService: DeviceTokenService?
@@ -49,6 +50,8 @@ struct catchApp: App {
         let followRepo = DefaultSupabaseFollowRepository(clientProvider: provider)
         let socialRepo = DefaultSupabaseSocialRepository(clientProvider: provider)
         let reportRepo = DefaultSupabaseReportRepository(clientProvider: provider)
+        let blockRepo = DefaultBlockRepository(clientProvider: provider)
+        let hiddenEncounterRepo = DefaultHiddenEncounterRepository(clientProvider: provider)
         let feedRepo = DefaultSupabaseFeedRepository(clientProvider: provider)
         let assets = DefaultSupabaseAssetService(clientProvider: provider)
 
@@ -77,6 +80,12 @@ struct catchApp: App {
 
         let report = SupabaseReportService(
             repository: reportRepo,
+            hiddenEncounterRepository: hiddenEncounterRepo,
+            getCurrentUserID: getUserID
+        )
+
+        let block = SupabaseBlockService(
+            repository: blockRepo,
             getCurrentUserID: getUserID
         )
 
@@ -91,6 +100,7 @@ struct catchApp: App {
         _userBrowseService = State(initialValue: browseService)
         _socialInteractionService = State(initialValue: socialInteraction)
         _reportService = State(initialValue: report)
+        _blockService = State(initialValue: block)
         _socialFeedService = State(initialValue: socialFeed)
         _profileSyncService = State(initialValue: ProfileSyncService(
             profileRepository: profileRepo,
@@ -230,6 +240,7 @@ struct catchApp: App {
                 .environment(userBrowseService)
                 .environment(socialInteractionService)
                 .environment(reportService)
+                .environment(blockService)
                 .environment(socialFeedService)
                 .environment(profileSyncService)
                 .environment(supabaseProvider)
@@ -242,6 +253,8 @@ struct catchApp: App {
                 .environment(inAppNotificationService)
                 .task {
                     await authService.refreshSessionIfNeeded()
+                    try? await blockService.loadBlocks()
+                    try? await reportService.loadHiddenEncounters()
                 }
         }
     }

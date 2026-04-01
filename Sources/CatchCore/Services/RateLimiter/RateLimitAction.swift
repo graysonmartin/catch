@@ -9,4 +9,6 @@ public enum RateLimitAction: String, Sendable, Hashable {
     case search
     case report
     case deleteComment
+    case block
+    case unblock
 }

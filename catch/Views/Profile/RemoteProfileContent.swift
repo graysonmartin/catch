@@ -9,6 +9,7 @@ struct RemoteProfileContent: View {
     @Environment(SupabaseUserBrowseService.self) private var browseService: SupabaseUserBrowseService?
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
+    @Environment(SupabaseBlockService.self) private var blockService
     @Environment(ToastManager.self) private var toastManager
 
     @State private var data: UserBrowseData?
@@ -16,6 +17,7 @@ struct RemoteProfileContent: View {
     @State private var isShowingCollection = false
     @State private var isShowingBreedLog = false
     @State private var isShowingUnfollowConfirmation = false
+    @State private var isShowingBlockConfirmation = false
     @State private var selectedEncounterDetail: EncounterDetailData?
     @State private var followerCountAdjustment = 0
 
@@ -37,9 +39,23 @@ struct RemoteProfileContent: View {
         .toolbar {
             if !isOwnProfile {
                 ToolbarItem(placement: .topBarTrailing) {
-                    toolbarFollowButton
+                    HStack(spacing: CatchSpacing.space8) {
+                        toolbarFollowButton
+                        toolbarOverflowMenu
+                    }
                 }
             }
+        }
+        .confirmationDialog(
+            CatchStrings.Block.blockConfirmTitle,
+            isPresented: $isShowingBlockConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button(CatchStrings.Block.blockUser, role: .destructive) {
+                Task { await performBlock() }
+            }
+        } message: {
+            Text(CatchStrings.Block.blockConfirmMessage)
         }
         .task {
             await loadData()
@@ -281,6 +297,58 @@ struct RemoteProfileContent: View {
                         .clipShape(Capsule())
                 }
             }
+        }
+    }
+
+    // MARK: - Overflow Menu
+
+    private var toolbarOverflowMenu: some View {
+        Menu {
+            if blockService.isBlocked(userID) {
+                Button {
+                    Task { await performUnblock() }
+                } label: {
+                    Label(CatchStrings.Block.unblockUser, systemImage: "hand.raised.slash")
+                }
+            } else {
+                Button(role: .destructive) {
+                    isShowingBlockConfirmation = true
+                } label: {
+                    Label(CatchStrings.Block.blockUser, systemImage: "hand.raised")
+                }
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.body)
+                .foregroundStyle(CatchTheme.textPrimary)
+        }
+    }
+
+    private func performBlock() async {
+        do {
+            try await blockService.blockUser(userID)
+            // Unfollow if currently following
+            if followService.isFollowing(userID) {
+                try? await followService.unfollow(targetID: userID, by: authenticatedUserID)
+            }
+            browseService?.invalidateCache(for: userID)
+            toastManager.showSuccess(CatchStrings.Toast.blockSuccess)
+        } catch is RateLimitError {
+            toastManager.showError(CatchStrings.Toast.rateLimitedBlock)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.blockFailed)
+        }
+    }
+
+    private func performUnblock() async {
+        do {
+            try await blockService.unblockUser(userID)
+            browseService?.invalidateCache(for: userID)
+            toastManager.showSuccess(CatchStrings.Toast.unblockSuccess)
+        } catch is RateLimitError {
+            toastManager.showError(CatchStrings.Toast.rateLimitedBlock)
+        } catch {
+            toastManager.showError(CatchStrings.Toast.unblockFailed)
         }
     }
 

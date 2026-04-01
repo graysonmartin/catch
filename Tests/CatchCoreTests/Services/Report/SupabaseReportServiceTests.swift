@@ -5,20 +5,24 @@ import XCTest
 final class SupabaseReportServiceTests: XCTestCase {
 
     private var repository: MockSupabaseReportRepository!
+    private var hiddenEncounterRepository: MockHiddenEncounterRepository!
     private var service: SupabaseReportService!
     private let currentUserID = "user-123"
 
     override func setUp() {
         super.setUp()
         repository = MockSupabaseReportRepository()
+        hiddenEncounterRepository = MockHiddenEncounterRepository()
         service = SupabaseReportService(
             repository: repository,
+            hiddenEncounterRepository: hiddenEncounterRepository,
             getCurrentUserID: { [currentUserID] in currentUserID }
         )
     }
 
     override func tearDown() {
         repository = nil
+        hiddenEncounterRepository = nil
         service = nil
         super.tearDown()
     }
@@ -151,5 +155,66 @@ final class SupabaseReportServiceTests: XCTestCase {
         )
 
         XCTAssertEqual(repository.insertReportCalls.first?.reason, "spammy stuff")
+    }
+
+    // MARK: - Hide on Report
+
+    func testSubmitReportHidesEncounter() async throws {
+        repository.insertReportResult = .fixture()
+
+        try await service.submitReport(
+            encounterRecordName: "ENC-1",
+            category: .spam,
+            reason: ""
+        )
+
+        XCTAssertTrue(service.isHidden("enc-1"))
+        XCTAssertTrue(service.isHidden("ENC-1"))
+        XCTAssertEqual(hiddenEncounterRepository.hideEncounterCalls.count, 1)
+        XCTAssertEqual(hiddenEncounterRepository.hideEncounterCalls.first?.encounterID, "enc-1")
+        XCTAssertEqual(hiddenEncounterRepository.hideEncounterCalls.first?.userID, currentUserID)
+    }
+
+    func testSubmitReportHidesEvenIfHideRepoFails() async throws {
+        repository.insertReportResult = .fixture()
+        hiddenEncounterRepository.hideEncounterError = NSError(domain: "test", code: 1)
+
+        try await service.submitReport(
+            encounterRecordName: "enc-1",
+            category: .spam,
+            reason: ""
+        )
+
+        // Report still succeeds and encounter is hidden locally
+        XCTAssertTrue(service.isHidden("enc-1"))
+        XCTAssertTrue(service.reportedEncounters.contains("enc-1"))
+    }
+
+    func testIsHiddenReturnsFalseByDefault() {
+        XCTAssertFalse(service.isHidden("enc-1"))
+    }
+
+    func testLoadHiddenEncounters() async throws {
+        hiddenEncounterRepository.fetchHiddenResult = ["enc-1", "enc-2"]
+
+        try await service.loadHiddenEncounters()
+
+        XCTAssertEqual(hiddenEncounterRepository.fetchHiddenCalls.count, 1)
+        XCTAssertTrue(service.isHidden("enc-1"))
+        XCTAssertTrue(service.isHidden("enc-2"))
+        XCTAssertFalse(service.isHidden("enc-3"))
+    }
+
+    func testLoadHiddenEncountersNotSignedInNoOp() async throws {
+        let sut = SupabaseReportService(
+            repository: repository,
+            hiddenEncounterRepository: hiddenEncounterRepository,
+            getCurrentUserID: { nil }
+        )
+
+        try await sut.loadHiddenEncounters()
+
+        XCTAssertEqual(hiddenEncounterRepository.fetchHiddenCalls.count, 0)
+        XCTAssertTrue(sut.hiddenEncounterIDs.isEmpty)
     }
 }

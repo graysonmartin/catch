@@ -15,6 +15,7 @@ struct SettingsView: View {
     var body: some View {
         Form {
             aboutSection
+            accountSection
             DataExportSection()
             legalSection
             dangerZoneSection
@@ -46,6 +47,23 @@ struct SettingsView: View {
             Button(CatchStrings.Common.cancel, role: .cancel) { }
         } message: {
             Text(CatchStrings.Settings.signOutConfirmMessage)
+        }
+    }
+
+    // MARK: - Account
+
+    private var accountSection: some View {
+        Section {
+            NavigationLink {
+                BlockedUsersView()
+            } label: {
+                HStack {
+                    Image(systemName: "hand.raised")
+                    Text(CatchStrings.Block.blockedUsersTitle)
+                }
+            }
+        } header: {
+            Text(CatchStrings.Settings.accountSection)
         }
     }
 

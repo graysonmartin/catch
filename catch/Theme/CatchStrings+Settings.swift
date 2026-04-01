@@ -7,6 +7,9 @@ extension CatchStrings {
         // Navigation
         static let title = String(localized: "settings")
 
+        // Account
+        static let accountSection = String(localized: "account")
+
         // Legal
         static let legalSection = String(localized: "legal")
         static let privacyPolicy = String(localized: "privacy policy")

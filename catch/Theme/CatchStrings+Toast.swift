@@ -39,6 +39,13 @@ extension CatchStrings {
         static let reportFailed = String(localized: "report didn't go through. try again?")
         static let reportSuccess = String(localized: "thanks for letting us know")
 
+        // Block
+        static let blockFailed = String(localized: "couldn't block them. try again?")
+        static let blockSuccess = String(localized: "blocked. they're gone")
+        static let unblockFailed = String(localized: "couldn't unblock them. try again?")
+        static let unblockSuccess = String(localized: "unblocked")
+        static let rateLimitedBlock = String(localized: "too many blocks. slow down")
+
         // Rate limiting
         static let rateLimitedGeneric = String(localized: "slow down there")
         static let rateLimitedComment = String(localized: "too many comments. slow down")

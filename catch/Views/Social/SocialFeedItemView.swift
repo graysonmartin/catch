@@ -18,8 +18,12 @@ struct SocialFeedItemView: View {
     let isFirstEncounter: Bool
     let catEncounters: [CloudEncounter]
 
+    @Environment(SupabaseBlockService.self) private var blockService
+    @Environment(ToastManager.self) private var toastManager
+
     @State private var showDetail = false
     @State private var showReportSheet = false
+    @State private var showBlockConfirmation = false
 
     private var isUnnamed: Bool {
         cat?.isUnnamed ?? true
@@ -54,6 +58,26 @@ struct SocialFeedItemView: View {
         }
         .sheet(isPresented: $showReportSheet) {
             ReportEncounterView(encounterRecordName: encounter.recordName)
+        }
+        .confirmationDialog(
+            CatchStrings.Block.blockConfirmTitle,
+            isPresented: $showBlockConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button(CatchStrings.Block.blockUser, role: .destructive) {
+                Task {
+                    do {
+                        try await blockService.blockUser(owner.appleUserID)
+                        toastManager.showSuccess(CatchStrings.Toast.blockSuccess)
+                    } catch is RateLimitError {
+                        toastManager.showError(CatchStrings.Toast.rateLimitedBlock)
+                    } catch {
+                        toastManager.showError(CatchStrings.Toast.blockFailed)
+                    }
+                }
+            }
+        } message: {
+            Text(CatchStrings.Block.blockConfirmMessage)
         }
     }
 
@@ -99,6 +123,12 @@ struct SocialFeedItemView: View {
                 showReportSheet = true
             } label: {
                 Label(CatchStrings.Report.reportPost, systemImage: "flag")
+            }
+
+            Button(role: .destructive) {
+                showBlockConfirmation = true
+            } label: {
+                Label(CatchStrings.Block.blockUser, systemImage: "hand.raised")
             }
         } label: {
             Image(systemName: "ellipsis")
