@@ -1,16 +1,24 @@
 import SwiftUI
+import MapKit
 import CatchCore
 
 /// Onboarding preview page showing the cat map feature.
-/// Displays mock map pins to illustrate location tracking.
+/// Displays a real MapKit map centered on the US with mock cat pins.
 struct OnboardingMapPreview: View {
+
+    private let mockPins: [MockCatPin] = [
+        MockCatPin(id: "pin_a", name: CatchStrings.OnboardingTour.mapMockCatA, coordinate: .init(latitude: 39.5, longitude: -98.0), isOwn: true),
+        MockCatPin(id: "pin_b", name: CatchStrings.OnboardingTour.mapMockCatB, coordinate: .init(latitude: 37.0, longitude: -95.0), isOwn: false),
+        MockCatPin(id: "pin_c", name: CatchStrings.OnboardingTour.mapMockCatC, coordinate: .init(latitude: 41.0, longitude: -101.0), isOwn: false)
+    ]
 
     var body: some View {
         GeometryReader { geo in
             ScrollView {
                 VStack(spacing: CatchSpacing.space24) {
                     headerSection
-                    mockMap
+                    mapCard
+                    legendRow
                 }
                 .padding(.horizontal, CatchSpacing.space32)
                 .frame(maxWidth: .infinity, minHeight: geo.size.height)
@@ -41,77 +49,33 @@ struct OnboardingMapPreview: View {
         }
     }
 
-    // MARK: - Mock Map
+    // MARK: - Map
 
-    private var mockMap: some View {
-        ZStack {
-            // Map background
-            RoundedRectangle(cornerRadius: CatchTheme.cornerRadius)
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            Color(red: 0.85, green: 0.91, blue: 0.82),
-                            Color(red: 0.90, green: 0.94, blue: 0.88)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .frame(height: 220)
-                .overlay {
-                    // Mock street grid
-                    mockStreetGrid
+    private var mapCard: some View {
+        Map(interactionModes: []) {
+            ForEach(mockPins) { pin in
+                Annotation(pin.name, coordinate: pin.coordinate) {
+                    pinMarker(name: pin.name, isOwn: pin.isOwn)
                 }
-
-            // Pins
-            pinView(
-                name: CatchStrings.OnboardingTour.mapMockCatA,
-                offset: CGSize(width: -40, height: -30)
-            )
-            pinView(
-                name: CatchStrings.OnboardingTour.mapMockCatB,
-                offset: CGSize(width: 50, height: 20)
-            )
-            pinView(
-                name: CatchStrings.OnboardingTour.mapMockCatC,
-                offset: CGSize(width: -10, height: 55)
-            )
+            }
         }
+        .mapStyle(.standard(pointsOfInterest: .excludingAll))
+        .frame(height: 220)
         .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadius))
         .shadow(
             color: .black.opacity(CatchTheme.cardShadowOpacity),
             radius: CatchTheme.cardShadowRadius,
             y: CatchTheme.cardShadowY
         )
+        .allowsHitTesting(false)
     }
 
-    private var mockStreetGrid: some View {
-        Canvas { context, size in
-            let lineColor = Color.gray.opacity(0.15)
+    private func pinMarker(name: String, isOwn: Bool) -> some View {
+        let pinColor = isOwn ? CatchTheme.primary : CatchTheme.remotePinColor
 
-            // Horizontal lines
-            for yFraction in stride(from: 0.2, through: 0.8, by: 0.3) {
-                var path = Path()
-                path.move(to: CGPoint(x: 0, y: size.height * yFraction))
-                path.addLine(to: CGPoint(x: size.width, y: size.height * yFraction))
-                context.stroke(path, with: .color(lineColor), lineWidth: 1.5)
-            }
-
-            // Vertical lines
-            for xFraction in stride(from: 0.25, through: 0.75, by: 0.25) {
-                var path = Path()
-                path.move(to: CGPoint(x: size.width * xFraction, y: 0))
-                path.addLine(to: CGPoint(x: size.width * xFraction, y: size.height))
-                context.stroke(path, with: .color(lineColor), lineWidth: 1.5)
-            }
-        }
-    }
-
-    private func pinView(name: String, offset: CGSize) -> some View {
-        VStack(spacing: CatchSpacing.space2) {
-            // Pin head
+        return VStack(spacing: CatchSpacing.space2) {
             Circle()
-                .fill(CatchTheme.primary)
+                .fill(pinColor)
                 .frame(width: 28, height: 28)
                 .overlay {
                     Image(systemName: "cat.fill")
@@ -120,7 +84,6 @@ struct OnboardingMapPreview: View {
                 }
                 .shadow(color: .black.opacity(0.15), radius: 3, y: 2)
 
-            // Pin label
             Text(name)
                 .font(.system(size: 9, weight: .semibold))
                 .foregroundStyle(CatchTheme.textPrimary)
@@ -131,6 +94,34 @@ struct OnboardingMapPreview: View {
                         .fill(CatchTheme.cardBackground.opacity(0.9))
                 )
         }
-        .offset(offset)
     }
+
+    // MARK: - Legend
+
+    private var legendRow: some View {
+        HStack(spacing: CatchSpacing.space16) {
+            legendItem(color: CatchTheme.primary, label: CatchStrings.OnboardingTour.mapLegendYours)
+            legendItem(color: CatchTheme.remotePinColor, label: CatchStrings.OnboardingTour.mapLegendFriends)
+        }
+    }
+
+    private func legendItem(color: Color, label: String) -> some View {
+        HStack(spacing: CatchSpacing.space6) {
+            Circle()
+                .fill(color)
+                .frame(width: 10, height: 10)
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(CatchTheme.textSecondary)
+        }
+    }
+}
+
+// MARK: - Mock Data
+
+private struct MockCatPin: Identifiable {
+    let id: String
+    let name: String
+    let coordinate: CLLocationCoordinate2D
+    let isOwn: Bool
 }

@@ -34,7 +34,6 @@
 		E8LS00000002 /* MKLocationSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8LS00000020 /* MKLocationSearchService.swift */; };
 		E8000001AA000024 /* PhotoCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000028 /* PhotoCarouselView.swift */; };
 		E8000001AA000035 /* CatPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA000029 /* CatPickerView.swift */; };
-		E8000001AA000036 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002A /* OnboardingView.swift */; };
 		E8000001AA000038 /* EditEncounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002C /* EditEncounterView.swift */; };
 		E8000001AA00003A /* ClusterMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002E /* ClusterMapView.swift */; };
 		E8000001AA00003B /* MapAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8000001AA00002F /* MapAnnotations.swift */; };
@@ -133,11 +132,9 @@
 		E8CS0000030D /* CatchStrings+Walkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000D /* CatchStrings+Walkthrough.swift */; };
 		E8CS0000010F /* CatchStrings+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000F /* CatchStrings+Accessibility.swift */; };
 		E8CS0000030F /* CatchStrings+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000F /* CatchStrings+Accessibility.swift */; };
-		E8WT00000101 /* NewUserWalkthroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000001 /* NewUserWalkthroughView.swift */; };
 		E8WT00000102 /* WalkthroughLocationStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000002 /* WalkthroughLocationStep.swift */; };
 		E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000003 /* WalkthroughPeopleStep.swift */; };
 		E8WT00000104 /* WalkthroughPersonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000004 /* WalkthroughPersonRow.swift */; };
-		E8WT00000105 /* WalkthroughWelcomeStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000005 /* WalkthroughWelcomeStep.swift */; };
 		E8CS00000302 /* CatchStrings+Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000002 /* CatchStrings+Feed.swift */; };
 		E8CS00000303 /* CatchStrings+CatProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000003 /* CatchStrings+CatProfile.swift */; };
 		E8CS00000304 /* CatchStrings+Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000004 /* CatchStrings+Collection.swift */; };
@@ -283,10 +280,13 @@
 		E8NV00000103 /* ContentTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NV00000003 /* ContentTab.swift */; };
 		E8NW00000101 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NW00000001 /* NotificationsView.swift */; };
 		E8NW00000102 /* NotificationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NW00000002 /* NotificationRowView.swift */; };
-		E8OB00000101 /* OnboardingBreedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000001 /* OnboardingBreedPreview.swift */; };
-		E8OB00000102 /* OnboardingMapPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000002 /* OnboardingMapPreview.swift */; };
-		E8OB00000103 /* OnboardingDiaryPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000003 /* OnboardingDiaryPreview.swift */; };
-		E8OB00000104 /* OnboardingCollectionPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000004 /* OnboardingCollectionPreview.swift */; };
+		A1B2C3D4E5F60001000B0001 /* OnboardingBreedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0001 /* OnboardingBreedPreview.swift */; };
+		A1B2C3D4E5F60001000B0002 /* OnboardingMapPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0002 /* OnboardingMapPreview.swift */; };
+		A1B2C3D4E5F60001000B0003 /* OnboardingDiaryPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0003 /* OnboardingDiaryPreview.swift */; };
+		A1B2C3D4E5F60001000B0004 /* OnboardingCollectionPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0004 /* OnboardingCollectionPreview.swift */; };
+		A1B2C3D4E5F60001000B0005 /* OnboardingFeedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0005 /* OnboardingFeedPreview.swift */; };
+		A1B2C3D4E5F60001000B0006 /* UnifiedOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0006 /* UnifiedOnboardingView.swift */; };
+		A1B2C3D4E5F60001000B0007 /* OnboardingLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0007 /* OnboardingLocationManager.swift */; };
 		E8OB00000105 /* CatchStrings+OnboardingTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000005 /* CatchStrings+OnboardingTour.swift */; };
 		E8OB00000305 /* CatchStrings+OnboardingTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000005 /* CatchStrings+OnboardingTour.swift */; };
 /* End PBXBuildFile section */
@@ -317,7 +317,6 @@
 		E8LS00000020 /* MKLocationSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKLocationSearchService.swift; sourceTree = "<group>"; };
 		E8000001AA000028 /* PhotoCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCarouselView.swift; sourceTree = "<group>"; };
 		E8000001AA000029 /* CatPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatPickerView.swift; sourceTree = "<group>"; };
-		E8000001AA00002A /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		E8000001AA00002C /* EditEncounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEncounterView.swift; sourceTree = "<group>"; };
 		E8000001AA00002E /* ClusterMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterMapView.swift; sourceTree = "<group>"; };
 		E8000001AA00002F /* MapAnnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapAnnotations.swift; sourceTree = "<group>"; };
@@ -395,11 +394,9 @@
 		E8CS0000000C /* CatchStrings+Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Diary.swift"; sourceTree = "<group>"; };
 		E8CS0000000D /* CatchStrings+Walkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Walkthrough.swift"; sourceTree = "<group>"; };
 		E8CS0000000F /* CatchStrings+Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Accessibility.swift"; sourceTree = "<group>"; };
-		E8WT00000001 /* NewUserWalkthroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUserWalkthroughView.swift; sourceTree = "<group>"; };
 		E8WT00000002 /* WalkthroughLocationStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughLocationStep.swift; sourceTree = "<group>"; };
 		E8WT00000003 /* WalkthroughPeopleStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughPeopleStep.swift; sourceTree = "<group>"; };
 		E8WT00000004 /* WalkthroughPersonRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughPersonRow.swift; sourceTree = "<group>"; };
-		E8WT00000005 /* WalkthroughWelcomeStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughWelcomeStep.swift; sourceTree = "<group>"; };
 		E8SD00000001 /* SwipeToDeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToDeleteView.swift; sourceTree = "<group>"; };
 		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
@@ -513,10 +510,13 @@
 		E8NV00000003 /* ContentTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTab.swift; sourceTree = "<group>"; };
 		E8NW00000001 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		E8NW00000002 /* NotificationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowView.swift; sourceTree = "<group>"; };
-		E8OB00000001 /* OnboardingBreedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBreedPreview.swift; sourceTree = "<group>"; };
-		E8OB00000002 /* OnboardingMapPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMapPreview.swift; sourceTree = "<group>"; };
-		E8OB00000003 /* OnboardingDiaryPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDiaryPreview.swift; sourceTree = "<group>"; };
-		E8OB00000004 /* OnboardingCollectionPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCollectionPreview.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001000A0001 /* OnboardingBreedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBreedPreview.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001000A0002 /* OnboardingMapPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMapPreview.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001000A0003 /* OnboardingDiaryPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDiaryPreview.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001000A0004 /* OnboardingCollectionPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCollectionPreview.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001000A0005 /* OnboardingFeedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFeedPreview.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001000A0006 /* UnifiedOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedOnboardingView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60001000A0007 /* OnboardingLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingLocationManager.swift; sourceTree = "<group>"; };
 		E8OB00000005 /* CatchStrings+OnboardingTour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+OnboardingTour.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -614,7 +614,6 @@
 				E8000001AA00002E /* ClusterMapView.swift */,
 				E8000001AA00002F /* MapAnnotations.swift */,
 				E8000001AA000072 /* RemoteCatMapSheet.swift */,
-				E8000001AA00002A /* OnboardingView.swift */,
 				E8PS00000001 /* ProfileSetupView.swift */,
 				E8SN00000001 /* SignInView.swift */,
 				E8RS00000002 /* DataRestoreView.swift */,
@@ -626,7 +625,7 @@
 				E8ST0000F003 /* Settings */,
 				E8WT0000F001 /* Walkthrough */,
 				E8NW0000F001 /* Notifications */,
-				E8OB0000F001 /* Onboarding */,
+				A1B2C3D4E5F60001000C0001 /* Onboarding */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -719,22 +718,23 @@
 		E8WT0000F001 /* Walkthrough */ = {
 			isa = PBXGroup;
 			children = (
-				E8WT00000001 /* NewUserWalkthroughView.swift */,
 				E8WT00000002 /* WalkthroughLocationStep.swift */,
 				E8WT00000003 /* WalkthroughPeopleStep.swift */,
 				E8WT00000004 /* WalkthroughPersonRow.swift */,
-				E8WT00000005 /* WalkthroughWelcomeStep.swift */,
 			);
 			path = Walkthrough;
 			sourceTree = "<group>";
 		};
-		E8OB0000F001 /* Onboarding */ = {
+		A1B2C3D4E5F60001000C0001 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				E8OB00000001 /* OnboardingBreedPreview.swift */,
-				E8OB00000002 /* OnboardingMapPreview.swift */,
-				E8OB00000003 /* OnboardingDiaryPreview.swift */,
-				E8OB00000004 /* OnboardingCollectionPreview.swift */,
+				A1B2C3D4E5F60001000A0001 /* OnboardingBreedPreview.swift */,
+				A1B2C3D4E5F60001000A0002 /* OnboardingMapPreview.swift */,
+				A1B2C3D4E5F60001000A0003 /* OnboardingDiaryPreview.swift */,
+				A1B2C3D4E5F60001000A0004 /* OnboardingCollectionPreview.swift */,
+				A1B2C3D4E5F60001000A0005 /* OnboardingFeedPreview.swift */,
+				A1B2C3D4E5F60001000A0006 /* UnifiedOnboardingView.swift */,
+				A1B2C3D4E5F60001000A0007 /* OnboardingLocationManager.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -1390,7 +1390,6 @@
 				E8000001AA000024 /* PhotoCarouselView.swift in Sources */,
 				E8000001BB000002 /* DataSeeder.swift in Sources */,
 				E8000001AA000035 /* CatPickerView.swift in Sources */,
-				E8000001AA000036 /* OnboardingView.swift in Sources */,
 				E8EC00000101 /* Error+Cancellation.swift in Sources */,
 				E8IC00000101 /* ImageCache.swift in Sources */,
 				E8UA00000101 /* UserAvatarView.swift in Sources */,
@@ -1489,15 +1488,16 @@
 				E8RP00000102 /* CatchStrings+Report.swift in Sources */,
 				E8CS0000010D /* CatchStrings+Walkthrough.swift in Sources */,
 				E8CS0000010F /* CatchStrings+Accessibility.swift in Sources */,
-				E8WT00000101 /* NewUserWalkthroughView.swift in Sources */,
 				E8WT00000102 /* WalkthroughLocationStep.swift in Sources */,
 				E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */,
 				E8WT00000104 /* WalkthroughPersonRow.swift in Sources */,
-				E8WT00000105 /* WalkthroughWelcomeStep.swift in Sources */,
-				E8OB00000101 /* OnboardingBreedPreview.swift in Sources */,
-				E8OB00000102 /* OnboardingMapPreview.swift in Sources */,
-				E8OB00000103 /* OnboardingDiaryPreview.swift in Sources */,
-				E8OB00000104 /* OnboardingCollectionPreview.swift in Sources */,
+				A1B2C3D4E5F60001000B0001 /* OnboardingBreedPreview.swift in Sources */,
+				A1B2C3D4E5F60001000B0002 /* OnboardingMapPreview.swift in Sources */,
+				A1B2C3D4E5F60001000B0003 /* OnboardingDiaryPreview.swift in Sources */,
+				A1B2C3D4E5F60001000B0004 /* OnboardingCollectionPreview.swift in Sources */,
+				A1B2C3D4E5F60001000B0005 /* OnboardingFeedPreview.swift in Sources */,
+				A1B2C3D4E5F60001000B0006 /* UnifiedOnboardingView.swift in Sources */,
+				A1B2C3D4E5F60001000B0007 /* OnboardingLocationManager.swift in Sources */,
 				E8OB00000105 /* CatchStrings+OnboardingTour.swift in Sources */,
 				E8NV00000101 /* AppRoute.swift in Sources */,
 				E8NV00000102 /* AppRouter.swift in Sources */,

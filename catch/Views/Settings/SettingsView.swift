@@ -143,16 +143,29 @@ struct SettingsView: View {
     // MARK: - Debug
 
     #if DEBUG
-    @AppStorage(AppStorageKeys.hasCompletedNewUserWalkthrough) private var hasCompletedWalkthrough = false
+    @AppStorage(AppStorageKeys.hasCompletedUnifiedOnboarding) private var hasCompletedUnifiedOnboarding = true
+    @AppStorage(AppStorageKeys.hasCompletedOnboarding) private var hasCompletedOnboarding = true
+    @AppStorage(AppStorageKeys.hasCompletedProfileSetup) private var hasCompletedProfileSetupDebug = true
 
     private var debugSection: some View {
         Section {
             Button {
-                hasCompletedWalkthrough = false
+                hasCompletedUnifiedOnboarding = false
+                hasCompletedOnboarding = false
+                hasCompletedProfileSetupDebug = false
             } label: {
                 HStack {
                     Image(systemName: "arrow.counterclockwise")
-                    Text(CatchStrings.Settings.debugResetWalkthrough)
+                    Text(CatchStrings.Settings.debugResetOnboarding)
+                }
+            }
+            Button {
+                hasCompletedUnifiedOnboarding = false
+                hasCompletedOnboarding = false
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.counterclockwise")
+                    Text(CatchStrings.Settings.debugResetPostAuth)
                 }
             }
         } header: {
