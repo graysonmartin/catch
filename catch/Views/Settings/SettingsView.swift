@@ -14,7 +14,6 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
-            aboutSection
             accountSection
             DataExportSection()
             legalSection
@@ -22,6 +21,7 @@ struct SettingsView: View {
             #if DEBUG
             debugSection
             #endif
+            aboutSection
         }
         .navigationTitle(CatchStrings.Settings.title)
         .navigationBarTitleDisplayMode(.inline)
@@ -110,12 +110,6 @@ struct SettingsView: View {
                 ))
                 .foregroundStyle(CatchTheme.textSecondary)
             }
-
-            Text(CatchStrings.Settings.madeWith)
-                .font(.caption)
-                .foregroundStyle(CatchTheme.textSecondary)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .listRowBackground(Color.clear)
         } header: {
             Text(CatchStrings.Settings.aboutSection)
         }
