@@ -221,7 +221,7 @@ struct RemoteProfileContent: View {
             )
         }
         .navigationDestination(isPresented: $isShowingBreedLog) {
-            BreedLogView(entries: breedLogEntries(data: data))
+            BreedLogView(entries: breedLogEntries(data: data), cloudCats: data.cats)
         }
     }
 

@@ -6,10 +6,12 @@ final class MockBreedLogService: BreedLogService {
     private(set) var buildBreedLogCalls: [[Cat]] = []
     private(set) var buildBreedLogCloudCalls: [[CloudCat]] = []
     private(set) var catsForBreedCalls: [(breedName: String, cats: [Cat])] = []
+    private(set) var cloudCatsForBreedCalls: [(breedName: String, cats: [CloudCat])] = []
 
     var buildBreedLogResult: [BreedLogEntry] = []
     var buildBreedLogCloudResult: [BreedLogEntry] = []
     var catsForBreedResult: [Cat] = []
+    var cloudCatsForBreedResult: [CloudCat] = []
 
     func buildBreedLog(from cats: [Cat]) -> [BreedLogEntry] {
         buildBreedLogCalls.append(cats)
@@ -26,12 +28,19 @@ final class MockBreedLogService: BreedLogService {
         return catsForBreedResult
     }
 
+    func cloudCatsForBreed(_ breedName: String, from cats: [CloudCat]) -> [CloudCat] {
+        cloudCatsForBreedCalls.append((breedName, cats))
+        return cloudCatsForBreedResult
+    }
+
     func reset() {
         buildBreedLogCalls = []
         buildBreedLogCloudCalls = []
         catsForBreedCalls = []
+        cloudCatsForBreedCalls = []
         buildBreedLogResult = []
         buildBreedLogCloudResult = []
         catsForBreedResult = []
+        cloudCatsForBreedResult = []
     }
 }

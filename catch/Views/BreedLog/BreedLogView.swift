@@ -8,6 +8,7 @@ struct BreedLogView: View {
     @State private var selectedEntry: BreedLogEntry?
 
     private let externalEntries: [BreedLogEntry]?
+    private let cloudCats: [CloudCat]?
     private let service: BreedLogService
     private let columns = [
         GridItem(.flexible(), spacing: CatchSpacing.space8),
@@ -15,8 +16,13 @@ struct BreedLogView: View {
         GridItem(.flexible(), spacing: CatchSpacing.space8)
     ]
 
-    init(entries: [BreedLogEntry]? = nil, service: BreedLogService = DefaultBreedLogService()) {
+    init(
+        entries: [BreedLogEntry]? = nil,
+        cloudCats: [CloudCat]? = nil,
+        service: BreedLogService = DefaultBreedLogService()
+    ) {
         self.externalEntries = entries
+        self.cloudCats = cloudCats
         self.service = service
     }
 
@@ -60,7 +66,8 @@ struct BreedLogView: View {
         .sheet(item: $selectedEntry) { entry in
             BreedDetailView(
                 entry: entry,
-                cats: externalEntries != nil ? [] : service.catsForBreed(entry.id, from: catDataService.cats)
+                cats: externalEntries != nil ? [] : service.catsForBreed(entry.id, from: catDataService.cats),
+                cloudCats: cloudCats.map { service.cloudCatsForBreed(entry.id, from: $0) } ?? []
             )
         }
     }
