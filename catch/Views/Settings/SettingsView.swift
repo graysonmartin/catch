@@ -14,13 +14,14 @@ struct SettingsView: View {
 
     var body: some View {
         Form {
-            aboutSection
+            accountSection
             DataExportSection()
             legalSection
             dangerZoneSection
             #if DEBUG
             debugSection
             #endif
+            aboutSection
         }
         .navigationTitle(CatchStrings.Settings.title)
         .navigationBarTitleDisplayMode(.inline)
@@ -46,6 +47,23 @@ struct SettingsView: View {
             Button(CatchStrings.Common.cancel, role: .cancel) { }
         } message: {
             Text(CatchStrings.Settings.signOutConfirmMessage)
+        }
+    }
+
+    // MARK: - Account
+
+    private var accountSection: some View {
+        Section {
+            NavigationLink {
+                BlockedUsersView()
+            } label: {
+                HStack {
+                    Image(systemName: "hand.raised")
+                    Text(CatchStrings.Block.blockedUsersTitle)
+                }
+            }
+        } header: {
+            Text(CatchStrings.Settings.accountSection)
         }
     }
 
@@ -92,12 +110,6 @@ struct SettingsView: View {
                 ))
                 .foregroundStyle(CatchTheme.textSecondary)
             }
-
-            Text(CatchStrings.Settings.madeWith)
-                .font(.caption)
-                .foregroundStyle(CatchTheme.textSecondary)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .listRowBackground(Color.clear)
         } header: {
             Text(CatchStrings.Settings.aboutSection)
         }

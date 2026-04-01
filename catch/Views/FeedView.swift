@@ -5,6 +5,8 @@ struct FeedView: View {
     @Environment(FeedDataService.self) private var feedDataService
     @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(DefaultSocialFeedService.self) private var socialFeedService: DefaultSocialFeedService?
+    @Environment(SupabaseBlockService.self) private var blockService
+    @Environment(SupabaseReportService.self) private var reportService
     @Environment(ToastManager.self) private var toastManager
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Binding var scrollToTop: Bool
@@ -12,7 +14,12 @@ struct FeedView: View {
 
     private var feedItems: [FeedItem] {
         let local = feedDataService.encounters.map { FeedItem.local($0) }
-        let remote = socialFeedService?.remoteEncounters ?? []
+        let remote = (socialFeedService?.remoteEncounters ?? []).filter { item in
+            guard case .remote(let encounter, _, let owner, _) = item else { return true }
+            let ownerID = owner.appleUserID
+            let encounterID = encounter.recordName
+            return !blockService.isBlocked(ownerID) && !reportService.isHidden(encounterID)
+        }
         return (local + remote).sorted { $0.date > $1.date }
     }
 
