@@ -57,8 +57,7 @@ struct OwnProfileContent: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(CatchTheme.background)
-        .navigationTitle(CatchStrings.Profile.profileTitle)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 NavigationLink {

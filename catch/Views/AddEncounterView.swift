@@ -51,7 +51,7 @@ struct AddEncounterView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(CatchTheme.background)
-            .navigationTitle(CatchStrings.Tabs.log)
+            .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showingAddCat) {
                 AddCatView(onSave: switchToFeed)
             }
