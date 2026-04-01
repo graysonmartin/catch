@@ -7,22 +7,12 @@ struct DataExportSection: View {
     @Environment(ToastManager.self) private var toastManager
 
     @State private var isExporting = false
-    @State private var exportFileURL: URL?
-    @State private var isShowingShareSheet = false
 
     var body: some View {
         Section {
             exportRow
         } header: {
             Text(CatchStrings.Export.sectionTitle)
-        }
-        .sheet(isPresented: $isShowingShareSheet) {
-            cleanUpExportFile()
-        } content: {
-            if let exportFileURL {
-                ShareSheet(items: [exportFileURL])
-                    .presentationDetents([.medium, .large])
-            }
         }
     }
 
@@ -57,18 +47,12 @@ struct DataExportSection: View {
             defer { isExporting = false }
             do {
                 let url = try ExportService.writeTemporaryFile(from: catDataService.cats)
-                exportFileURL = url
-                isShowingShareSheet = true
+                SharePresenter.present(items: [url]) {
+                    try? FileManager.default.removeItem(at: url)
+                }
             } catch {
                 toastManager.showError(CatchStrings.Export.exportFailed)
             }
-        }
-    }
-
-    private func cleanUpExportFile() {
-        if let url = exportFileURL {
-            try? FileManager.default.removeItem(at: url)
-            exportFileURL = nil
         }
     }
 }

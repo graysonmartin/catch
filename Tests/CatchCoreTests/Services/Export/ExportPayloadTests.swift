@@ -12,7 +12,7 @@ final class ExportPayloadTests: XCTestCase {
 
     func testPayloadEquality() {
         let date = Date(timeIntervalSince1970: 1_000_000)
-        let cat = makeExportCat(id: "cat-1", createdAt: date)
+        let cat = makeExportCat(createdAt: date)
         let a = ExportPayload(version: 1, exportedAt: date, cats: [cat])
         let b = ExportPayload(version: 1, exportedAt: date, cats: [cat])
         XCTAssertEqual(a, b)
@@ -21,7 +21,7 @@ final class ExportPayloadTests: XCTestCase {
     // MARK: - ExportCat
 
     func testExportCatCodableRoundTrip() throws {
-        let cat = makeExportCat(id: "test-uuid")
+        let cat = makeExportCat()
         let data = try JSONEncoder.iso8601Encoder.encode(cat)
         let decoded = try JSONDecoder.iso8601Decoder.decode(ExportCat.self, from: data)
         XCTAssertEqual(decoded, cat)
@@ -29,7 +29,6 @@ final class ExportPayloadTests: XCTestCase {
 
     func testExportCatNilOptionalFields() throws {
         let cat = ExportCat(
-            id: "bare",
             name: nil,
             breed: nil,
             estimatedAge: nil,
@@ -38,7 +37,6 @@ final class ExportPayloadTests: XCTestCase {
             locationLng: nil,
             notes: nil,
             isOwned: false,
-            photoUrls: [],
             createdAt: Date(timeIntervalSince1970: 0),
             encounters: []
         )
@@ -53,7 +51,7 @@ final class ExportPayloadTests: XCTestCase {
     // MARK: - ExportEncounter
 
     func testExportEncounterCodableRoundTrip() throws {
-        let encounter = makeExportEncounter(id: "enc-1")
+        let encounter = makeExportEncounter()
         let data = try JSONEncoder.iso8601Encoder.encode(encounter)
         let decoded = try JSONDecoder.iso8601Decoder.decode(ExportEncounter.self, from: data)
         XCTAssertEqual(decoded, encounter)
@@ -62,11 +60,9 @@ final class ExportPayloadTests: XCTestCase {
     // MARK: - Helpers
 
     private func makeExportCat(
-        id: String,
         createdAt: Date = Date(timeIntervalSince1970: 1_000_000)
     ) -> ExportCat {
         ExportCat(
-            id: id,
             name: "whiskers",
             breed: "tabby",
             estimatedAge: "2 years",
@@ -75,21 +71,18 @@ final class ExportPayloadTests: XCTestCase {
             locationLng: -122.4194,
             notes: "friendly",
             isOwned: false,
-            photoUrls: ["https://example.com/photo.jpg"],
             createdAt: createdAt,
-            encounters: [makeExportEncounter(id: "enc-for-\(id)")]
+            encounters: [makeExportEncounter()]
         )
     }
 
-    private func makeExportEncounter(id: String) -> ExportEncounter {
+    private func makeExportEncounter() -> ExportEncounter {
         ExportEncounter(
-            id: id,
             date: Date(timeIntervalSince1970: 1_000_000),
             locationName: "alley",
             locationLat: 40.7128,
             locationLng: -74.0060,
             notes: "saw it again",
-            photoUrls: [],
             createdAt: Date(timeIntervalSince1970: 1_000_000)
         )
     }

@@ -5,30 +5,27 @@ import CatchCore
 /// Lives in the app target because it depends on the app-level `Cat` / `Encounter` models.
 enum ExportService {
 
-    /// Maps the user's cats (with nested encounters) into a serializable payload.
     static func buildPayload(from cats: [Cat]) -> ExportPayload {
         let exportCats = cats.map { cat in
-            ExportCat(
-                id: cat.id.uuidString,
+            let (locName, locLat, locLng) = exportLocation(cat.location)
+            return ExportCat(
                 name: cat.name,
                 breed: cat.breed,
                 estimatedAge: cat.estimatedAge.isEmpty ? nil : cat.estimatedAge,
-                locationName: cat.location.name.isEmpty ? nil : cat.location.name,
-                locationLat: cat.location.latitude,
-                locationLng: cat.location.longitude,
+                locationName: locName,
+                locationLat: locLat,
+                locationLng: locLng,
                 notes: cat.notes.isEmpty ? nil : cat.notes,
                 isOwned: cat.isOwned,
-                photoUrls: cat.photoUrls,
                 createdAt: cat.createdAt,
                 encounters: cat.encounters.map { encounter in
-                    ExportEncounter(
-                        id: encounter.id.uuidString,
+                    let (eName, eLat, eLng) = exportLocation(encounter.location)
+                    return ExportEncounter(
                         date: encounter.date,
-                        locationName: encounter.location.name.isEmpty ? nil : encounter.location.name,
-                        locationLat: encounter.location.latitude,
-                        locationLng: encounter.location.longitude,
+                        locationName: eName,
+                        locationLat: eLat,
+                        locationLng: eLng,
                         notes: encounter.notes.isEmpty ? nil : encounter.notes,
-                        photoUrls: encounter.photoUrls,
                         createdAt: encounter.createdAt
                     )
                 }
@@ -38,7 +35,6 @@ enum ExportService {
         return ExportPayload(cats: exportCats)
     }
 
-    /// Serializes the user's data to JSON `Data`.
     static func exportJSON(from cats: [Cat]) throws -> Data {
         let payload = buildPayload(from: cats)
         return try ExportSerializer.encode(payload)
@@ -51,5 +47,13 @@ enum ExportService {
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
         try data.write(to: tempURL, options: .atomic)
         return tempURL
+    }
+
+    private static func exportLocation(_ location: Location) -> (String?, Double?, Double?) {
+        (
+            location.name.isEmpty ? nil : location.name,
+            location.latitude,
+            location.longitude
+        )
     }
 }
