@@ -153,6 +153,32 @@ final class CatDataService {
         return result
     }
 
+    /// Updates only the location on a cat, preserving all other fields.
+    func updateCatLocation(_ cat: Cat, location: Location) async throws {
+        var updatedCat = cat
+        updatedCat.location = location
+
+        let updated = try await catRepository.updateCat(
+            id: cat.id.uuidString,
+            updatedCat.toUpdatePayload()
+        )
+
+        let result = Cat(supabase: updated, encounters: cat.encounters)
+        if let idx = cats.firstIndex(where: { $0.id == result.id }) {
+            cats[idx] = result
+        }
+    }
+
+    /// When a cat has only one encounter, syncs the cat's location to match.
+    /// No-op if the cat has multiple encounters or the location is unchanged.
+    func syncCatLocationIfSoleEncounter(catID: UUID, newLocation: Location) async throws {
+        guard let cat = cats.first(where: { $0.id == catID }) else { return }
+        guard cat.encounters.count == 1 else { return }
+        guard cat.location != newLocation else { return }
+
+        try await updateCatLocation(cat, location: newLocation)
+    }
+
     // MARK: - Delete
 
     func deleteCat(_ cat: Cat) async throws {

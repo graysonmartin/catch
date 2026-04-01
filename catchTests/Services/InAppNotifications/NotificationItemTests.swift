@@ -143,6 +143,7 @@ final class NotificationItemTests: XCTestCase {
         NotificationItem(
             id: "follow-notif-1",
             notificationType: .newFollower,
+            actorUserID: "follower-1",
             actorDisplayName: "cat_lover_99",
             actorAvatarURL: nil,
             actorId: "follower-1",
