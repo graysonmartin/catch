@@ -280,6 +280,7 @@
 		E8NV00000103 /* ContentTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NV00000003 /* ContentTab.swift */; };
 		E8NW00000101 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NW00000001 /* NotificationsView.swift */; };
 		E8NW00000102 /* NotificationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NW00000002 /* NotificationRowView.swift */; };
+		E8NW00000103 /* EncounterDetailLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NW00000003 /* EncounterDetailLoadingView.swift */; };
 		A1B2C3D4E5F60001000B0001 /* OnboardingBreedPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0001 /* OnboardingBreedPreview.swift */; };
 		A1B2C3D4E5F60001000B0002 /* OnboardingMapPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0002 /* OnboardingMapPreview.swift */; };
 		A1B2C3D4E5F60001000B0003 /* OnboardingDiaryPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001000A0003 /* OnboardingDiaryPreview.swift */; };
@@ -510,6 +511,7 @@
 		E8NV00000003 /* ContentTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTab.swift; sourceTree = "<group>"; };
 		E8NW00000001 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		E8NW00000002 /* NotificationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowView.swift; sourceTree = "<group>"; };
+		E8NW00000003 /* EncounterDetailLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailLoadingView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60001000A0001 /* OnboardingBreedPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBreedPreview.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60001000A0002 /* OnboardingMapPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingMapPreview.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60001000A0003 /* OnboardingDiaryPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDiaryPreview.swift; sourceTree = "<group>"; };
@@ -1221,6 +1223,7 @@
 		E8NW0000F001 /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
+				E8NW00000003 /* EncounterDetailLoadingView.swift */,
 				E8NW00000001 /* NotificationsView.swift */,
 				E8NW00000002 /* NotificationRowView.swift */,
 			);
@@ -1512,6 +1515,7 @@
 				E8IA00000103 /* SupabaseInAppNotificationService.swift in Sources */,
 				E8NW00000101 /* NotificationsView.swift in Sources */,
 				E8NW00000102 /* NotificationRowView.swift in Sources */,
+				E8NW00000103 /* EncounterDetailLoadingView.swift in Sources */,
 				E8NB00000101 /* NotificationBellButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
