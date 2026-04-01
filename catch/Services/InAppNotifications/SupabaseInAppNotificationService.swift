@@ -23,13 +23,18 @@ final class SupabaseInAppNotificationService: InAppNotificationService, @uncheck
     private static let pageSize = PaginationConstants.defaultPageSize
 
     /// Supabase select query joining actor profile and encounter thumbnail.
-    /// `profiles` is joined via `actor_id` to get the actor's display name and avatar.
-    /// `encounters` is joined via `entity_id` to get the encounter's first photo URL.
+    /// The encounter join uses the dedicated `encounter_id` FK column (nullable).
+    /// Follow notifications have `encounter_id = NULL` so the join returns null gracefully.
     private static let selectQuery = """
         id, notification_type, entity_id, actor_id, read_at, created_at, \
         profiles!notifications_actor_profile_fkey(display_name, avatar_url), \
-        encounters!notifications_encounter_fkey(photo_urls)
+        encounters!notifications_encounter_id_fkey(photo_urls)
         """
+
+    private static let readAtFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        return formatter
+    }()
 
     // MARK: - Init
 
@@ -84,23 +89,13 @@ final class SupabaseInAppNotificationService: InAppNotificationService, @uncheck
 
         // Optimistic update
         let original = notifications[index]
-        notifications[index] = NotificationItem(
-            id: original.id,
-            notificationType: original.notificationType,
-            actorUserID: original.actorUserID,
-            actorDisplayName: original.actorDisplayName,
-            actorAvatarURL: original.actorAvatarURL,
-            encounterId: original.encounterId,
-            encounterThumbnailURL: original.encounterThumbnailURL,
-            timestamp: original.timestamp,
-            isRead: true
-        )
+        notifications[index] = original.withReadState(true)
         unreadCount = notifications.filter { !$0.isRead }.count
 
         do {
             try await clientProvider.client
                 .from(Self.tableName)
-                .update(["read_at": ISO8601DateFormatter().string(from: Date())])
+                .update(["read_at": Self.readAtFormatter.string(from: Date())])
                 .eq("id", value: notificationId)
                 .execute()
         } catch {
@@ -118,26 +113,13 @@ final class SupabaseInAppNotificationService: InAppNotificationService, @uncheck
 
         // Optimistic update
         let originals = notifications
-        notifications = notifications.map { item in
-            guard !item.isRead else { return item }
-            return NotificationItem(
-                id: item.id,
-                notificationType: item.notificationType,
-                actorUserID: item.actorUserID,
-                actorDisplayName: item.actorDisplayName,
-                actorAvatarURL: item.actorAvatarURL,
-                encounterId: item.encounterId,
-                encounterThumbnailURL: item.encounterThumbnailURL,
-                timestamp: item.timestamp,
-                isRead: true
-            )
-        }
+        notifications = notifications.map { $0.isRead ? $0 : $0.withReadState(true) }
         unreadCount = 0
 
         do {
             try await clientProvider.client
                 .from(Self.tableName)
-                .update(["read_at": ISO8601DateFormatter().string(from: Date())])
+                .update(["read_at": Self.readAtFormatter.string(from: Date())])
                 .eq("recipient_user_id", value: userID)
                 .is("read_at", value: nil)
                 .execute()
@@ -155,14 +137,27 @@ final class SupabaseInAppNotificationService: InAppNotificationService, @uncheck
             return nil
         }
 
+        let encounterId: String?
+        let encounterThumbnailURL: String?
+
+        switch type {
+        case .encounterLiked, .encounterCommented:
+            encounterId = row.entityId
+            encounterThumbnailURL = row.encounter?.photoURLs?.first
+        case .newFollower:
+            encounterId = nil
+            encounterThumbnailURL = nil
+        }
+
         return NotificationItem(
             id: row.id,
             notificationType: type,
             actorUserID: row.actorId,
             actorDisplayName: row.actor?.displayName ?? CatchStrings.Notifications.unknownUser,
             actorAvatarURL: row.actor?.avatarURL,
-            encounterId: row.entityId,
-            encounterThumbnailURL: row.encounter?.photoURLs?.first,
+            actorId: row.actorId,
+            encounterId: encounterId,
+            encounterThumbnailURL: encounterThumbnailURL,
             timestamp: row.createdAt,
             isRead: row.readAt != nil
         )

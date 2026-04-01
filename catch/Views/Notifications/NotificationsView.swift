@@ -82,7 +82,17 @@ struct NotificationsView: View {
             await notificationService.markAsRead(notificationId: item.id)
         }
         dismiss()
-        appRouter.navigate(to: .encounter(id: item.encounterId))
+
+        switch item.notificationType {
+        case .encounterLiked, .encounterCommented:
+            if let encounterId = item.encounterId {
+                appRouter.navigate(to: .encounter(id: encounterId))
+            }
+        case .newFollower:
+            if let actorId = item.actorId {
+                appRouter.navigate(to: .profile(id: actorId))
+            }
+        }
     }
 
     private func handleAvatarTap(_ item: NotificationItem) {

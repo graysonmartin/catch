@@ -10,6 +10,7 @@ extension CatchStrings {
         // Action descriptions
         static let likedYourEncounter = String(localized: "liked your encounter")
         static let commentedOnYourEncounter = String(localized: "commented on your encounter")
+        static let startedFollowingYou = String(localized: "started following you")
 
         // Empty state
         static let emptyTitle = String(localized: "nothing here")

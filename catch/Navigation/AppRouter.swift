@@ -14,6 +14,7 @@ final class AppRouter: ObservableObject {
     @Published var pendingRoute: AppRoute?
     @Published var activeTab: ContentTab?
     @Published var routedEncounterDetail: EncounterDetailData?
+    @Published var routedProfileId: RoutedProfileId?
 
     /// Indicates whether the navigation hierarchy is mounted and ready
     /// to handle route changes. Set to `true` once `ContentView` appears.
@@ -32,6 +33,8 @@ final class AppRouter: ObservableObject {
         switch route {
         case .encounter:
             activeTab = .feed
+        case .profile:
+            activeTab = .feed
         }
         pendingRoute = route
     }
@@ -40,6 +43,9 @@ final class AppRouter: ObservableObject {
         switch payload.notificationType {
         case .encounterLiked, .encounterCommented:
             return .encounter(id: payload.entityId)
+        case .newFollower:
+            guard let actorId = payload.actorId else { return nil }
+            return .profile(id: actorId)
         }
     }
 
@@ -56,6 +62,9 @@ final class AppRouter: ObservableObject {
             } catch {
                 print("[AppRouter] Failed to load encounter \(id): \(error.localizedDescription)")
             }
+        case .profile(let id):
+            clearPendingRoute()
+            routedProfileId = RoutedProfileId(id: id)
         }
     }
 
