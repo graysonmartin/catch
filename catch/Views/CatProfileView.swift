@@ -96,8 +96,9 @@ struct CatProfileView: View {
             Text(CatchStrings.CatProfile.deleteCatMessage)
         }
         .task {
-            await refreshCat()
-            await loadOwnerProfile()
+            async let catRefresh: Void = refreshCat()
+            async let ownerLoad: Void = loadOwnerProfile()
+            _ = await (catRefresh, ownerLoad)
         }
     }
 
