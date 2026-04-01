@@ -18,11 +18,10 @@ serve(async (req: Request) => {
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
-  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   const demoEmail = Deno.env.get("DEMO_USER_EMAIL");
   const demoPassword = Deno.env.get("DEMO_USER_PASSWORD");
 
-  if (!supabaseUrl || !serviceRoleKey || !demoEmail || !demoPassword) {
+  if (!supabaseUrl || !demoEmail || !demoPassword) {
     return new Response(
       JSON.stringify({ error: "Missing required environment variables" }),
       { status: 500, headers: { "Content-Type": "application/json" } }
@@ -30,9 +29,6 @@ serve(async (req: Request) => {
   }
 
   try {
-    // Use the anon client for signInWithPassword — service role can't generate
-    // user-scoped JWTs via password auth. The anon key is embedded in the URL
-    // config, so we use it from the request's Authorization header.
     const anonKey =
       req.headers.get("apikey") ??
       Deno.env.get("SUPABASE_ANON_KEY") ??

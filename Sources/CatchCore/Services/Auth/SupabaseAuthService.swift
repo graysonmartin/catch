@@ -7,6 +7,7 @@ public enum SupabaseAuthError: LocalizedError, Sendable {
     case invalidIdentityToken
     case sessionExpired
     case providerError(String)
+    case demoSignInFailed
 
     public var errorDescription: String? {
         switch self {
@@ -18,6 +19,8 @@ public enum SupabaseAuthError: LocalizedError, Sendable {
             return "Your session has expired. Please sign in again."
         case .providerError(let message):
             return message
+        case .demoSignInFailed:
+            return "Demo sign-in failed."
         }
     }
 }
@@ -88,25 +91,11 @@ public final class SupabaseAuthService: @unchecked Sendable {
 
     /// Signs in using the demo account edge function. Used for App Store review.
     /// The edge function generates a fresh session — no hardcoded tokens.
-    @discardableResult
     public func signInWithDemo() async throws -> AuthUser {
-        let functionURL = SupabaseConfig.url
-            .appendingPathComponent("functions/v1/demo-session")
-
-        var request = URLRequest(url: functionURL)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(SupabaseConfig.anonKey, forHTTPHeaderField: "apikey")
-        request.setValue("Bearer \(SupabaseConfig.anonKey)", forHTTPHeaderField: "Authorization")
-
-        let (responseData, response) = try await URLSession.shared.data(for: request)
-
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
-            throw SupabaseAuthError.providerError("Demo sign-in failed.")
-        }
-
-        let tokenResponse = try JSONDecoder().decode(DemoTokenResponse.self, from: responseData)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let tokenResponse: DemoTokenResponse = try await client.functions
+            .invoke("demo-session", options: .init(method: .post), decoder: decoder)
 
         let session = try await client.auth.setSession(
             accessToken: tokenResponse.accessToken,
@@ -212,9 +201,4 @@ public final class SupabaseAuthService: @unchecked Sendable {
 private struct DemoTokenResponse: Decodable {
     let accessToken: String
     let refreshToken: String
-
-    enum CodingKeys: String, CodingKey {
-        case accessToken = "access_token"
-        case refreshToken = "refresh_token"
-    }
 }

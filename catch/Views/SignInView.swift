@@ -30,14 +30,11 @@ struct SignInView: View {
             .allowsHitTesting(!isDemoLoading)
             .overlay {
                 if isDemoLoading {
-                    ZStack {
-                        Color.black.opacity(0.3).ignoresSafeArea()
-                        ProgressView()
-                            .controlSize(.large)
-                            .tint(CatchTheme.primary)
-                    }
+                    Color.black.opacity(0.3).ignoresSafeArea()
+                    PawLoadingView()
                 }
             }
+            .onDisappear { demoTapResetTask?.cancel() }
         }
     }
 
