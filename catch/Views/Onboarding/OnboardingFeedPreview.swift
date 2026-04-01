@@ -62,14 +62,11 @@ struct OnboardingFeedPreview: View {
 
     private var cardHeader: some View {
         HStack(spacing: CatchSpacing.space12) {
-            Circle()
-                .fill(CatchTheme.primary.opacity(0.2))
+            Image("OnboardingSteven")
+                .resizable()
+                .scaledToFill()
                 .frame(width: 40, height: 40)
-                .overlay {
-                    Image(systemName: "cat.fill")
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.primary)
-                }
+                .clipShape(Circle())
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 Text(CatchStrings.OnboardingTour.feedMockName)
@@ -90,23 +87,11 @@ struct OnboardingFeedPreview: View {
     }
 
     private var mockPhotoStrip: some View {
-        RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall)
-            .fill(
-                LinearGradient(
-                    colors: [
-                        CatchTheme.primary.opacity(0.2),
-                        CatchTheme.secondary.opacity(0.35)
-                    ],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-            )
+        Image("OnboardingSteven")
+            .resizable()
+            .scaledToFill()
             .frame(height: 120)
-            .overlay {
-                Image(systemName: "cat.fill")
-                    .font(.system(size: 36))
-                    .foregroundStyle(CatchTheme.primary.opacity(0.5))
-            }
+            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
     }
 
     private var cardMetadata: some View {

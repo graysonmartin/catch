@@ -7,9 +7,9 @@ import CatchCore
 struct OnboardingMapPreview: View {
 
     private let mockPins: [MockCatPin] = [
-        MockCatPin(id: "pin_a", name: CatchStrings.OnboardingTour.mapMockCatA, coordinate: .init(latitude: 39.5, longitude: -98.0), isOwn: true),
-        MockCatPin(id: "pin_b", name: CatchStrings.OnboardingTour.mapMockCatB, coordinate: .init(latitude: 37.0, longitude: -95.0), isOwn: false),
-        MockCatPin(id: "pin_c", name: CatchStrings.OnboardingTour.mapMockCatC, coordinate: .init(latitude: 41.0, longitude: -101.0), isOwn: false)
+        MockCatPin(id: "pin_a", name: CatchStrings.OnboardingTour.mapMockCatA, image: "OnboardingSteven", coordinate: .init(latitude: 39.5, longitude: -98.0), isOwn: true),
+        MockCatPin(id: "pin_b", name: CatchStrings.OnboardingTour.mapMockCatB, image: "OnboardingGarfield", coordinate: .init(latitude: 37.0, longitude: -95.0), isOwn: false),
+        MockCatPin(id: "pin_c", name: CatchStrings.OnboardingTour.mapMockCatC, image: "OnboardingOdie", coordinate: .init(latitude: 41.0, longitude: -101.0), isOwn: false)
     ]
 
     var body: some View {
@@ -55,7 +55,7 @@ struct OnboardingMapPreview: View {
         Map(interactionModes: []) {
             ForEach(mockPins) { pin in
                 Annotation(pin.name, coordinate: pin.coordinate) {
-                    pinMarker(name: pin.name, isOwn: pin.isOwn)
+                    pinMarker(image: pin.image, name: pin.name, isOwn: pin.isOwn)
                 }
             }
         }
@@ -70,18 +70,16 @@ struct OnboardingMapPreview: View {
         .allowsHitTesting(false)
     }
 
-    private func pinMarker(name: String, isOwn: Bool) -> some View {
+    private func pinMarker(image: String, name: String, isOwn: Bool) -> some View {
         let pinColor = isOwn ? CatchTheme.primary : CatchTheme.remotePinColor
 
         return VStack(spacing: CatchSpacing.space2) {
-            Circle()
-                .fill(pinColor)
+            Image(image)
+                .resizable()
+                .scaledToFill()
                 .frame(width: 28, height: 28)
-                .overlay {
-                    Image(systemName: "cat.fill")
-                        .font(.system(size: 12))
-                        .foregroundStyle(.white)
-                }
+                .clipShape(Circle())
+                .overlay(Circle().stroke(pinColor, lineWidth: 2))
                 .shadow(color: .black.opacity(0.15), radius: 3, y: 2)
 
             Text(name)
@@ -122,6 +120,7 @@ struct OnboardingMapPreview: View {
 private struct MockCatPin: Identifiable {
     let id: String
     let name: String
+    let image: String
     let coordinate: CLLocationCoordinate2D
     let isOwn: Bool
 }

@@ -47,6 +47,7 @@ struct OnboardingDiaryPreview: View {
         VStack(spacing: CatchSpacing.space8) {
             mockRow(
                 name: CatchStrings.OnboardingTour.diaryMockCatA,
+                image: "OnboardingSteven",
                 isNew: true,
                 location: CatchStrings.OnboardingTour.diaryMockLocationA,
                 likes: 3,
@@ -54,6 +55,7 @@ struct OnboardingDiaryPreview: View {
             )
             mockRow(
                 name: CatchStrings.OnboardingTour.diaryMockCatB,
+                image: "OnboardingGarfield",
                 isNew: false,
                 location: CatchStrings.OnboardingTour.diaryMockLocationB,
                 likes: 1,
@@ -61,6 +63,7 @@ struct OnboardingDiaryPreview: View {
             )
             mockRow(
                 name: CatchStrings.OnboardingTour.diaryMockCatC,
+                image: "OnboardingOdie",
                 isNew: true,
                 location: CatchStrings.OnboardingTour.diaryMockLocationC,
                 likes: 5,
@@ -71,21 +74,18 @@ struct OnboardingDiaryPreview: View {
 
     private func mockRow(
         name: String,
+        image: String,
         isNew: Bool,
         location: String,
         likes: Int,
         comments: Int
     ) -> some View {
         HStack(alignment: .top, spacing: CatchSpacing.space12) {
-            // Cat photo circle
-            Circle()
-                .fill(CatchTheme.primary.opacity(0.2))
+            Image(image)
+                .resizable()
+                .scaledToFill()
                 .frame(width: 48, height: 48)
-                .overlay {
-                    Image(systemName: "cat.fill")
-                        .font(.caption)
-                        .foregroundStyle(CatchTheme.primary)
-                }
+                .clipShape(Circle())
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
                 HStack(spacing: CatchSpacing.space4) {

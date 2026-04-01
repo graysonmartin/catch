@@ -7,7 +7,7 @@ struct OnboardingBreedPreview: View {
 
     private let samplePredictions: [BreedPrediction] = [
         BreedPrediction(breed: "Orange Tabby", rawIdentifier: "orange_tabby", confidence: 0.87),
-        BreedPrediction(breed: "Maine Coon", rawIdentifier: "maine_coon", confidence: 0.09),
+        BreedPrediction(breed: "Maine Coon", rawIdentifier: "maine_coon", confidence: 0.10),
         BreedPrediction(breed: "British Shorthair", rawIdentifier: "british_shorthair", confidence: 0.03)
     ]
 

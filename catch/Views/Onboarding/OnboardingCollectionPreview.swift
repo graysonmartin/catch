@@ -54,17 +54,17 @@ struct OnboardingCollectionPreview: View {
         return LazyVGrid(columns: columns, spacing: CatchSpacing.space12) {
             discoveredCard(
                 name: CatchStrings.OnboardingTour.collectionMockBreedA,
-                icon: "cat.fill",
+                image: "OnboardingSteven",
                 rarity: CatchStrings.BreedLog.rarityCommon
             )
             discoveredCard(
                 name: CatchStrings.OnboardingTour.collectionMockBreedB,
-                icon: "cat.fill",
+                image: "OnboardingGarfield",
                 rarity: CatchStrings.BreedLog.rarityUncommon
             )
             discoveredCard(
                 name: CatchStrings.OnboardingTour.collectionMockBreedC,
-                icon: "cat.fill",
+                image: "OnboardingOdie",
                 rarity: CatchStrings.BreedLog.rarityRare
             )
             undiscoveredCard
@@ -73,16 +73,13 @@ struct OnboardingCollectionPreview: View {
         }
     }
 
-    private func discoveredCard(name: String, icon: String, rarity: String) -> some View {
+    private func discoveredCard(name: String, image: String, rarity: String) -> some View {
         VStack(spacing: CatchSpacing.space6) {
-            RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall)
-                .fill(CatchTheme.secondary.opacity(0.3))
+            Image(image)
+                .resizable()
+                .scaledToFill()
                 .frame(height: 70)
-                .overlay {
-                    Image(systemName: icon)
-                        .font(.title2)
-                        .foregroundStyle(CatchTheme.primary)
-                }
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusSmall))
 
             Text(name)
                 .font(.caption2.weight(.semibold))
