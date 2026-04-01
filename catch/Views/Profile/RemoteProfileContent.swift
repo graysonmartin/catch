@@ -34,7 +34,6 @@ struct RemoteProfileContent: View {
             }
         }
         .background(CatchTheme.background)
-        .navigationTitle(displayTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if !isOwnProfile {
