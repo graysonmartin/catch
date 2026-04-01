@@ -366,4 +366,26 @@ final class SupabaseSocialInteractionServiceTests: XCTestCase {
         // the service was created without error.
         XCTAssertNotNil(sut)
     }
+
+    // MARK: - Reset State
+
+    func testResetStateClearsAllCachedData() async throws {
+        mockRepo.insertLikeResult = .fixture()
+        try await sut.toggleLike(encounterRecordName: encounterID)
+        mockRepo.insertCommentResult = .fixture()
+        _ = try await sut.addComment(encounterRecordName: encounterID, text: "hi")
+
+        XCTAssertTrue(sut.isLiked(encounterID))
+        XCTAssertEqual(sut.likeCount(for: encounterID), 1)
+        XCTAssertEqual(sut.commentCount(for: encounterID), 1)
+
+        await sut.resetState()
+
+        XCTAssertFalse(sut.isLiked(encounterID))
+        XCTAssertEqual(sut.likeCount(for: encounterID), 0)
+        XCTAssertEqual(sut.commentCount(for: encounterID), 0)
+        XCTAssertTrue(sut.likedEncounters.isEmpty)
+        XCTAssertTrue(sut.likeCounts.isEmpty)
+        XCTAssertTrue(sut.commentCounts.isEmpty)
+    }
 }

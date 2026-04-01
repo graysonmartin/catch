@@ -159,7 +159,10 @@ struct catchApp: App {
                     }
                     if newState == .signedOut {
                         hasCompletedProfileSetup = false
-                        Task { await deviceTokenService?.clearToken() }
+                        Task {
+                            await deviceTokenService?.clearToken()
+                            await socialInteractionService.resetState()
+                        }
                     }
                     if !oldState.isSignedIn, newState.isSignedIn {
                         Task { await deviceTokenService?.requestPermissionIfNeeded() }
