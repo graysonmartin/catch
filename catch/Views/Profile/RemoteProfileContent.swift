@@ -39,10 +39,10 @@ struct RemoteProfileContent: View {
         .toolbar {
             if !isOwnProfile {
                 ToolbarItem(placement: .topBarTrailing) {
-                    HStack(spacing: CatchSpacing.space8) {
-                        toolbarFollowButton
-                        toolbarOverflowMenu
-                    }
+                    toolbarFollowButton
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    toolbarOverflowMenu
                 }
             }
         }
