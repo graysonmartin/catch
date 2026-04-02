@@ -37,10 +37,6 @@ final class BreedLogSortOptionTests: XCTestCase {
         XCTAssertEqual(BreedLogSortOption.rarity.defaultDirection, .ascending)
     }
 
-    func test_defaultDirection_alphabeticalIsAscending() {
-        XCTAssertEqual(BreedLogSortOption.alphabetical.defaultDirection, .ascending)
-    }
-
     func test_defaultDirection_discoveredFirstIsDescending() {
         XCTAssertEqual(BreedLogSortOption.discoveredFirst.defaultDirection, .descending)
     }
@@ -77,20 +73,6 @@ final class BreedLogSortOptionTests: XCTestCase {
         let result = BreedLogSortOption.rarity.sorted(sampleEntries, direction: .ascending)
         let names = result.map(\.catalogEntry.displayName)
         XCTAssertEqual(names, ["Siamese", "Abyssinian", "Bengal", "Sphynx"])
-    }
-
-    // MARK: - Alphabetical Sort
-
-    func test_alphabetical_ascending_aToZ() {
-        let result = BreedLogSortOption.alphabetical.sorted(sampleEntries, direction: .ascending)
-        let names = result.map(\.catalogEntry.displayName)
-        XCTAssertEqual(names, ["Abyssinian", "Bengal", "Siamese", "Sphynx"])
-    }
-
-    func test_alphabetical_descending_zToA() {
-        let result = BreedLogSortOption.alphabetical.sorted(sampleEntries, direction: .descending)
-        let names = result.map(\.catalogEntry.displayName)
-        XCTAssertEqual(names, ["Sphynx", "Siamese", "Bengal", "Abyssinian"])
     }
 
     // MARK: - Discovered First Sort
