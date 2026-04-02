@@ -94,7 +94,8 @@ public final class SupabaseAuthService: @unchecked Sendable {
     // MARK: - Demo Sign-In
 
     /// Signs in using the demo account edge function. Used for App Store review.
-    /// The edge function validates the key server-side — no secrets stored in the client.
+    /// Security: the edge function validates the key server-side — no secrets stored in the client.
+    /// The UI surface is hidden behind a 5-tap activation gesture.
     public func signInWithDemo(key: String) async throws -> AuthUser {
         let body = try JSONEncoder().encode(["key": key])
         let decoder = JSONDecoder()

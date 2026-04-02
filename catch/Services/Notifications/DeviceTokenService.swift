@@ -1,4 +1,5 @@
 import Foundation
+import os
 import UIKit
 import UserNotifications
 import CatchCore
@@ -14,6 +15,7 @@ final class DeviceTokenService: DeviceTokenServiceProtocol, @unchecked Sendable 
     private let notificationCenter: UNUserNotificationCenter
 
     private static let tableName = "device_tokens"
+    private let logger = Logger(subsystem: "com.graysonmartin.catch", category: "DeviceTokenService")
 
     // MARK: - Init
 
@@ -55,8 +57,7 @@ final class DeviceTokenService: DeviceTokenServiceProtocol, @unchecked Sendable 
                 .upsert(payload, onConflict: "token")
                 .execute()
         } catch {
-            // Token sync is best-effort — log but don't crash
-            print("[DeviceTokenService] Failed to sync token: \(error.localizedDescription)")
+            logger.error("Failed to sync token: \(error.localizedDescription, privacy: .public)")
         }
     }
 
@@ -70,7 +71,7 @@ final class DeviceTokenService: DeviceTokenServiceProtocol, @unchecked Sendable 
                 .eq("user_id", value: userID)
                 .execute()
         } catch {
-            print("[DeviceTokenService] Failed to clear tokens: \(error.localizedDescription)")
+            logger.error("Failed to clear tokens: \(error.localizedDescription, privacy: .public)")
         }
     }
 
@@ -87,7 +88,7 @@ final class DeviceTokenService: DeviceTokenServiceProtocol, @unchecked Sendable 
                     registerForPushNotifications()
                 }
             } catch {
-                print("[DeviceTokenService] Permission request failed: \(error.localizedDescription)")
+                logger.error("Permission request failed: \(error.localizedDescription, privacy: .public)")
             }
         case .authorized, .provisional, .ephemeral:
             registerForPushNotifications()

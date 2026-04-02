@@ -82,11 +82,13 @@ public final class DefaultSupabaseProfileRepository: SupabaseProfileRepository, 
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !trimmed.isEmpty else { return [] }
 
-        let pattern = "%\(trimmed)%"
+        // Escape double quotes, then wrap in quotes to protect PostgREST special chars (comma, dot, parens)
+        let sanitized = trimmed.replacingOccurrences(of: "\"", with: "\\\"")
+        let quotedPattern = "\"%\(sanitized)%\""
         let profiles: [SupabaseProfile] = try await clientProvider.client
             .from(Self.tableName)
             .select()
-            .or("username.ilike.\(pattern),display_name.ilike.\(pattern)")
+            .or("username.ilike.\(quotedPattern),display_name.ilike.\(quotedPattern)")
             .limit(20)
             .execute()
             .value
@@ -110,8 +112,12 @@ public final class DefaultSupabaseProfileRepository: SupabaseProfileRepository, 
             .eq("is_private", value: false)
 
         if !excludedIDs.isEmpty {
-            let excludedArray = "(\(excludedIDs.joined(separator: ",")))"
-            query = query.not("id", operator: .in, value: excludedArray)
+            // Validate UUIDs to prevent injection via the CSV list
+            let validIDs = excludedIDs.filter { UUID(uuidString: $0) != nil }
+            if !validIDs.isEmpty {
+                let excludedArray = "(\(validIDs.joined(separator: ",")))"
+                query = query.not("id", operator: .in, value: excludedArray)
+            }
         }
 
         let profiles: [SupabaseProfile] = try await query

@@ -1,5 +1,6 @@
 import AuthenticationServices
 import Observation
+import os
 import CatchCore
 
 /// Legacy Apple-only auth service. Retained for backward compatibility with tests.
@@ -10,6 +11,7 @@ final class AppleAuthService: AuthService {
     private(set) var authState: AuthState = .unknown
 
     private static let keychainKey = "catch.appleUser"
+    private static let logger = Logger(subsystem: "com.graysonmartin.catch", category: "AppleAuthService")
 
     @ObservationIgnored
     private let keychain: any KeychainService
@@ -107,17 +109,40 @@ final class AppleAuthService: AuthService {
     // MARK: - Persistence
 
     private static func persistUser(_ user: AuthUser, to keychain: any KeychainService) {
-        guard let data = try? JSONEncoder().encode(user) else { return }
-        try? keychain.save(data, forKey: keychainKey)
+        guard let data = try? JSONEncoder().encode(user) else {
+            logger.error("Failed to encode user for keychain persistence")
+            return
+        }
+        do {
+            try keychain.save(data, forKey: keychainKey)
+        } catch {
+            logger.error("Keychain save failed: \(error.localizedDescription, privacy: .public)")
+        }
     }
 
     private static func loadPersistedUser(from keychain: any KeychainService) -> AuthUser? {
-        guard let data = try? keychain.load(forKey: keychainKey) else { return nil }
-        return try? JSONDecoder().decode(AuthUser.self, from: data)
+        let data: Data
+        do {
+            guard let loaded = try keychain.load(forKey: keychainKey) else { return nil }
+            data = loaded
+        } catch {
+            logger.info("No persisted user in keychain: \(error.localizedDescription, privacy: .public)")
+            return nil
+        }
+        do {
+            return try JSONDecoder().decode(AuthUser.self, from: data)
+        } catch {
+            logger.error("Failed to decode persisted user: \(error.localizedDescription, privacy: .public)")
+            return nil
+        }
     }
 
     private static func clearPersistedUser(from keychain: any KeychainService) {
-        try? keychain.delete(forKey: keychainKey)
+        do {
+            try keychain.delete(forKey: keychainKey)
+        } catch {
+            logger.warning("Keychain delete failed: \(error.localizedDescription, privacy: .public)")
+        }
     }
 
     // MARK: - Revocation

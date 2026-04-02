@@ -1,4 +1,5 @@
 import Foundation
+import os
 import UIKit
 import UserNotifications
 import CatchCore
@@ -11,6 +12,7 @@ final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
 
     // MARK: - Dependencies
 
+    private let logger = Logger(subsystem: "com.graysonmartin.catch", category: "NotificationDelegate")
     private let tokenService: any DeviceTokenServiceProtocol
     private let router: AppRouter
 
@@ -77,6 +79,6 @@ final class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
 
     /// Called by the AppDelegate when APNs registration fails.
     func didFailToRegisterForRemoteNotifications(withError error: Error) {
-        print("[NotificationDelegate] APNs registration failed: \(error.localizedDescription)")
+        logger.error("APNs registration failed: \(error.localizedDescription, privacy: .public)")
     }
 }

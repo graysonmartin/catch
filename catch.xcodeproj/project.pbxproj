@@ -123,6 +123,9 @@
 		E8CS0000010D /* CatchStrings+Walkthrough.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000D /* CatchStrings+Walkthrough.swift */; };
 		E8CS0000010E /* CatchStrings+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000E /* CatchStrings+Notifications.swift */; };
 		E8CS0000010F /* CatchStrings+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000F /* CatchStrings+Accessibility.swift */; };
+		E8CS00000110 /* CatchStrings+Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000010 /* CatchStrings+Network.swift */; };
+		E8NM00000101 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NM00000001 /* NetworkMonitor.swift */; };
+		E8OF00000101 /* OfflineBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OF00000001 /* OfflineBanner.swift */; };
 		E8CS00000302 /* CatchStrings+Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000002 /* CatchStrings+Feed.swift */; };
 		E8CS00000303 /* CatchStrings+CatProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000003 /* CatchStrings+CatProfile.swift */; };
 		E8CS00000304 /* CatchStrings+Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000004 /* CatchStrings+Collection.swift */; };
@@ -404,6 +407,9 @@
 		E8CS0000000D /* CatchStrings+Walkthrough.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Walkthrough.swift"; sourceTree = "<group>"; };
 		E8CS0000000E /* CatchStrings+Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Notifications.swift"; sourceTree = "<group>"; };
 		E8CS0000000F /* CatchStrings+Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Accessibility.swift"; sourceTree = "<group>"; };
+		E8CS00000010 /* CatchStrings+Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Network.swift"; sourceTree = "<group>"; };
+		E8NM00000001 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		E8OF00000001 /* OfflineBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBanner.swift; sourceTree = "<group>"; };
 		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
 		E8DA00000001 /* CatDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDataService.swift; sourceTree = "<group>"; };
@@ -712,6 +718,7 @@
 				E8UF00000001 /* UsernameFieldView.swift */,
 				E8XP00000004 /* ShareSheet.swift */,
 				E8NB00000001 /* NotificationBellButton.swift */,
+				E8OF00000001 /* OfflineBanner.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -746,6 +753,7 @@
 				E8CS0000000D /* CatchStrings+Walkthrough.swift */,
 				E8CS0000000F /* CatchStrings+Accessibility.swift */,
 				E8CS0000000E /* CatchStrings+Notifications.swift */,
+				E8CS00000010 /* CatchStrings+Network.swift */,
 				E8OB00000005 /* CatchStrings+OnboardingTour.swift */,
 				E8AK00000001 /* AppStorageKeys.swift */,
 				E8AU00000001 /* AppURL.swift */,
@@ -926,6 +934,7 @@
 				E8LS0000F001 /* LocationSearch */,
 				E8PN0000F001 /* Notifications */,
 				E8IA0000F001 /* InAppNotifications */,
+				E8NM00000001 /* NetworkMonitor.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1386,6 +1395,9 @@
 			files = (
 				E80000012B5A00000002 /* ContentView.swift in Sources */,
 				E80000012B5A00000001 /* catchApp.swift in Sources */,
+				E8NM00000101 /* NetworkMonitor.swift in Sources */,
+				E8OF00000101 /* OfflineBanner.swift in Sources */,
+				E8CS00000110 /* CatchStrings+Network.swift in Sources */,
 				E8SD00000101 /* SwipeToDeleteView.swift in Sources */,
 				E8DB00000101 /* DatabaseState.swift in Sources */,
 				E8BL00000101 /* BreedRarity.swift in Sources */,
