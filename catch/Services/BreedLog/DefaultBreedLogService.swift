@@ -53,6 +53,11 @@ final class DefaultBreedLogService: BreedLogService {
             .sorted { $0.createdAt < $1.createdAt }
     }
 
+    func cloudCatsForBreed(_ breedName: String, from cats: [CloudCat]) -> [CloudCat] {
+        cats.filter { $0.breed == breedName }
+            .sorted { $0.createdAt < $1.createdAt }
+    }
+
     // MARK: - Private
 
     private func groupCatsByBreed(_ cats: [Cat]) -> [String: [Cat]] {

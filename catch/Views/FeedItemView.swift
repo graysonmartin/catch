@@ -1,17 +1,14 @@
 import SwiftUI
 import CatchCore
 
-private enum PillLayout {
-    static let horizontalPadding: CGFloat = 6
-    static let verticalPadding: CGFloat = 2
-    static let cornerRadius: CGFloat = 4
-    static let activeBackgroundOpacity: Double = 0.15
-    static let inactiveBackgroundOpacity: Double = 0.1
-}
-
-private enum FeedItemLayout {
+enum FeedCardLayout {
     static let thumbnailSize: CGFloat = 48
-    static let carouselHeight: CGFloat = 240
+    static let carouselHeight: CGFloat = 200
+    static let pillHorizontalPadding: CGFloat = 6
+    static let pillVerticalPadding: CGFloat = 2
+    static let pillCornerRadius: CGFloat = 4
+    static let pillActiveBackgroundOpacity: Double = 0.15
+    static let pillInactiveBackgroundOpacity: Double = 0.1
 }
 
 struct FeedItemView: View {
@@ -78,7 +75,7 @@ struct FeedItemView: View {
             CatPhotoView(
                 photoData: nil,
                 photoUrl: encounter.cat?.photoUrls.first,
-                size: FeedItemLayout.thumbnailSize,
+                size: FeedCardLayout.thumbnailSize,
                 accessibilityName: encounter.cat?.displayName
             )
 
@@ -118,7 +115,7 @@ struct FeedItemView: View {
     private var photoSection: some View {
         let urls = !encounter.photoUrls.isEmpty ? encounter.photoUrls : (encounter.cat?.photoUrls ?? [])
         if !urls.isEmpty {
-            PhotoCarouselView(photos: [], photoUrls: urls, height: FeedItemLayout.carouselHeight, cornerRadius: CatchTheme.cornerRadiusSmall, onTap: { showDetail = true })
+            PhotoCarouselView(photos: [], photoUrls: urls, height: FeedCardLayout.carouselHeight, cornerRadius: CatchTheme.cornerRadiusSmall, onTap: { showDetail = true })
         }
     }
 
@@ -223,14 +220,14 @@ struct FeedItemView: View {
         Text(text)
             .font(.system(size: 9, weight: .bold))
             .foregroundStyle(isActive ? CatchTheme.accessibleTextOrange : CatchTheme.textSecondary)
-            .padding(.horizontal, PillLayout.horizontalPadding)
-            .padding(.vertical, PillLayout.verticalPadding)
+            .padding(.horizontal, FeedCardLayout.pillHorizontalPadding)
+            .padding(.vertical, FeedCardLayout.pillVerticalPadding)
             .background(
-                RoundedRectangle(cornerRadius: PillLayout.cornerRadius)
+                RoundedRectangle(cornerRadius: FeedCardLayout.pillCornerRadius)
                     .fill(
                         isActive
-                            ? CatchTheme.primary.opacity(PillLayout.activeBackgroundOpacity)
-                            : CatchTheme.textSecondary.opacity(PillLayout.inactiveBackgroundOpacity)
+                            ? CatchTheme.primary.opacity(FeedCardLayout.pillActiveBackgroundOpacity)
+                            : CatchTheme.textSecondary.opacity(FeedCardLayout.pillInactiveBackgroundOpacity)
                     )
             )
             .fixedSize()

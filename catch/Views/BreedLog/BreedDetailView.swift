@@ -4,6 +4,7 @@ import CatchCore
 struct BreedDetailView: View {
     let entry: BreedLogEntry
     let cats: [Cat]
+    var cloudCats: [CloudCat] = []
 
     var body: some View {
         ScrollView {
@@ -13,6 +14,8 @@ struct BreedDetailView: View {
                 funFactSection
                 if !cats.isEmpty {
                     catsSection
+                } else if !cloudCats.isEmpty {
+                    cloudCatsSection
                 }
             }
             .padding()
@@ -133,6 +136,30 @@ struct BreedDetailView: View {
                             .font(.caption)
                             .foregroundStyle(CatchTheme.textSecondary)
                     }
+
+                    Spacer()
+                }
+                .padding(CatchSpacing.space10)
+                .background(CatchTheme.cardBackground)
+                .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
+            }
+        }
+    }
+
+    private var cloudCatsSection: some View {
+        VStack(alignment: .leading, spacing: CatchSpacing.space12) {
+            Text(CatchStrings.BreedLog.yourBreedCats(entry.catalogEntry.displayName.lowercased()))
+                .font(.caption.weight(.bold))
+                .textCase(.uppercase)
+                .foregroundStyle(CatchTheme.textSecondary)
+
+            ForEach(cloudCats, id: \.recordName) { cat in
+                HStack(spacing: CatchSpacing.space12) {
+                    CatPhotoView(photoData: nil, photoUrl: cat.photoUrls.first, size: 44)
+
+                    Text(cat.displayName)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(cat.isUnnamed ? CatchTheme.textSecondary : CatchTheme.textPrimary)
 
                     Spacer()
                 }

@@ -309,7 +309,7 @@ struct EncounterDetailSheet: View {
                 title: CatchStrings.Interaction.noCommentsTitle,
                 subtitle: CatchStrings.Interaction.noCommentsSubtitle
             )
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: .infinity)
             .padding(.vertical, CatchSpacing.space32)
         } else {
             LazyVStack(alignment: .leading, spacing: CatchSpacing.space12) {

@@ -56,28 +56,34 @@ struct PhotoCarouselView: View {
             .accessibilityLabel(CatchStrings.Accessibility.photoPlaceholder)
     }
 
+    private func constrainedPhoto(at index: Int) -> some View {
+        GeometryReader { geo in
+            photoView(at: index)
+                .frame(width: geo.size.width, height: height)
+                .clipped()
+        }
+        .frame(height: height)
+    }
+
     private var singlePhoto: some View {
-        photoView(at: 0)
-            .frame(maxWidth: .infinity)
-            .frame(height: height)
-            .clipped()
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-            .contentShape(Rectangle())
-            .onTapGesture { handleTap() }
-            .accessibilityLabel(CatchStrings.Accessibility.photoCarouselLabel(count: 1))
-            .accessibilityAddTraits(isTappable || onTap != nil ? .isButton : [])
-            .fullScreenCover(isPresented: $isShowingFullScreen) {
-                FullScreenPhotoViewer(photos: photos, photoUrls: photoUrls, initialIndex: 0) {
-                    isShowingFullScreen = false
-                }
+        constrainedPhoto(at: 0)
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+        .contentShape(Rectangle())
+        .onTapGesture { handleTap() }
+        .accessibilityLabel(CatchStrings.Accessibility.photoCarouselLabel(count: 1))
+        .accessibilityAddTraits(isTappable || onTap != nil ? .isButton : [])
+        .fullScreenCover(isPresented: $isShowingFullScreen) {
+            FullScreenPhotoViewer(photos: photos, photoUrls: photoUrls, initialIndex: 0) {
+                isShowingFullScreen = false
             }
+        }
     }
 
     private var carousel: some View {
         ZStack(alignment: .bottom) {
             TabView(selection: $currentPage) {
                 ForEach(0..<totalCount, id: \.self) { index in
-                    photoView(at: index)
+                    constrainedPhoto(at: index)
                         .tag(index)
                         .accessibilityLabel(CatchStrings.Accessibility.photoPage(index + 1, of: totalCount))
                 }
