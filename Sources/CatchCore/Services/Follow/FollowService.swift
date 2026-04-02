@@ -7,6 +7,7 @@ public protocol FollowService: Observable, Sendable {
     var outgoingPending: [Follow] { get }
     var pendingRequests: [Follow] { get }
     var isLoading: Bool { get }
+    var hasLoaded: Bool { get }
     var hasMoreFollowers: Bool { get }
     var hasMoreFollowing: Bool { get }
 

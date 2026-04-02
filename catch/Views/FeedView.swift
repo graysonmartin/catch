@@ -83,8 +83,8 @@ struct FeedView: View {
                 _ = await (local, remote)
             }
             .task {
-                // Wait for follows to load so the social feed query has user IDs.
-                while followService.isLoading {
+                // Wait for follows to finish loading so the social feed has user IDs.
+                while !followService.hasLoaded {
                     try? await Task.sleep(for: .milliseconds(50))
                     if Task.isCancelled { return }
                 }

@@ -10,6 +10,7 @@ final class MockFollowService: FollowService {
     var outgoingPending: [Follow] = []
     var pendingRequests: [Follow] = []
     var isLoading = false
+    var hasLoaded = true
     var hasMoreFollowers = false
     var hasMoreFollowing = false
 
