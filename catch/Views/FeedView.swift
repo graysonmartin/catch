@@ -5,6 +5,7 @@ struct FeedView: View {
     @Environment(FeedDataService.self) private var feedDataService
     @Environment(SupabaseSocialInteractionService.self) private var socialService: SupabaseSocialInteractionService?
     @Environment(DefaultSocialFeedService.self) private var socialFeedService: DefaultSocialFeedService?
+    @Environment(SupabaseFollowService.self) private var followService
     @Environment(SupabaseBlockService.self) private var blockService
     @Environment(SupabaseReportService.self) private var reportService
     @Environment(ToastManager.self) private var toastManager
@@ -37,11 +38,15 @@ struct FeedView: View {
                 if isInitialLoad {
                     PawLoadingView()
                 } else if isEmpty {
-                    EmptyStateView(
-                        icon: "pawprint.circle",
-                        title: CatchStrings.Feed.emptyTitle,
-                        subtitle: CatchStrings.Feed.emptySubtitle
-                    )
+                    ScrollView {
+                        EmptyStateView(
+                            icon: "pawprint.circle",
+                            title: CatchStrings.Feed.emptyTitle,
+                            subtitle: CatchStrings.Feed.emptySubtitle
+                        )
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, CatchSpacing.space48)
+                    }
                 } else {
                     feedList
                 }
@@ -78,6 +83,12 @@ struct FeedView: View {
                 _ = await (local, remote)
             }
             .task {
+                // Wait for follows to load so the social feed query has user IDs.
+                while followService.isLoading {
+                    try? await Task.sleep(for: .milliseconds(50))
+                    if Task.isCancelled { return }
+                }
+
                 let wasAlreadyLoaded = feedDataService.hasLoaded
                 async let local: Void = feedDataService.loadIfNeeded()
                 async let remote: Void = socialFeedService?.loadIfNeeded() ?? ()
