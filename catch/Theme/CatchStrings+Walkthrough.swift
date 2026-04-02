@@ -21,7 +21,7 @@ extension CatchStrings {
         static let notificationTitle = String(localized: "stay in the loop")
         static let notificationSubtitle = String(localized: "get pinged when someone likes your\nspotting, drops a comment, or follows you.")
         static let enableNotifications = String(localized: "enable notifications")
-        static let notificationEnabled = String(localized: "notifictions enabled")
+        static let notificationEnabled = String(localized: "notifications enabled")
         static let notificationSkipped = String(localized: "no worries, you can turn these on later")
 
         // Suggested people step
