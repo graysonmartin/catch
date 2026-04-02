@@ -5,6 +5,7 @@ struct BreedDetailView: View {
     let entry: BreedLogEntry
     let cats: [Cat]
     var cloudCats: [CloudCat] = []
+    var ownerHandle: String?
 
     var body: some View {
         ScrollView {
@@ -74,7 +75,7 @@ struct BreedDetailView: View {
         HStack(spacing: CatchSpacing.space16) {
             statCard(value: "\(entry.catCount)", label: CatchStrings.BreedLog.catsFound)
             if let date = entry.firstDiscoveredDate {
-                statCard(value: date.formatted(.dateTime.month(.abbreviated).day()), label: CatchStrings.BreedLog.firstSeen)
+                statCard(value: DateFormatting.encounterDate(date), label: CatchStrings.BreedLog.firstSeen)
             }
         }
     }
@@ -117,9 +118,17 @@ struct BreedDetailView: View {
 
     // MARK: - Cats List
 
+    private var breedCatsSectionTitle: String {
+        let breedName = entry.catalogEntry.displayName.lowercased()
+        if let handle = ownerHandle {
+            return CatchStrings.BreedLog.userBreedCats(handle, breedName)
+        }
+        return CatchStrings.BreedLog.yourBreedCats(breedName)
+    }
+
     private var catsSection: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
-            Text(CatchStrings.BreedLog.yourBreedCats(entry.catalogEntry.displayName.lowercased()))
+            Text(breedCatsSectionTitle)
                 .font(.caption.weight(.bold))
                 .textCase(.uppercase)
                 .foregroundStyle(CatchTheme.textSecondary)
@@ -148,7 +157,7 @@ struct BreedDetailView: View {
 
     private var cloudCatsSection: some View {
         VStack(alignment: .leading, spacing: CatchSpacing.space12) {
-            Text(CatchStrings.BreedLog.yourBreedCats(entry.catalogEntry.displayName.lowercased()))
+            Text(breedCatsSectionTitle)
                 .font(.caption.weight(.bold))
                 .textCase(.uppercase)
                 .foregroundStyle(CatchTheme.textSecondary)

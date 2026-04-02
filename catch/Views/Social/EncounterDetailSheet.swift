@@ -121,6 +121,12 @@ struct EncounterDetailSheet: View {
                         .padding(.bottom, CatchSpacing.space8)
                 }
 
+                if data.posterDisplayName != nil {
+                    posterRow
+                        .padding(.horizontal)
+                        .padding(.bottom, CatchSpacing.space8)
+                }
+
                 if !data.notes.isEmpty {
                     notesRow
                         .padding(.horizontal)
@@ -165,7 +171,7 @@ struct EncounterDetailSheet: View {
                     }
                 }
 
-                Text(data.date.formatted(date: .abbreviated, time: .shortened))
+                Text(DateFormatting.encounterDateTime(data.date))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }
@@ -214,6 +220,57 @@ struct EncounterDetailSheet: View {
         Text(data.notes)
             .font(.subheadline)
             .foregroundStyle(CatchTheme.textPrimary)
+    }
+
+    // MARK: - Poster
+
+    @ViewBuilder
+    private var posterRow: some View {
+        if let displayName = data.posterDisplayName, let userID = data.posterUserID {
+            NavigationLink(value: RemoteProfileRoute(userID: userID, displayName: displayName)) {
+                HStack(spacing: CatchSpacing.space8) {
+                    posterAvatarView
+
+                    if let username = data.posterUsername, !username.isEmpty {
+                        Text("@\(username)")
+                            .font(.subheadline)
+                            .foregroundStyle(CatchTheme.textSecondary)
+                    } else {
+                        Text(displayName)
+                            .font(.subheadline)
+                            .foregroundStyle(CatchTheme.textSecondary)
+                    }
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
+                }
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    @ViewBuilder
+    private var posterAvatarView: some View {
+        if let avatarUrl = data.posterAvatarURL, !avatarUrl.isEmpty {
+            RemoteImageView(urlString: avatarUrl) {
+                posterAvatarPlaceholder
+            }
+            .frame(width: 28, height: 28)
+            .clipShape(Circle())
+        } else {
+            posterAvatarPlaceholder
+        }
+    }
+
+    private var posterAvatarPlaceholder: some View {
+        Image(systemName: "person.crop.circle.fill")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 28, height: 28)
+            .foregroundStyle(CatchTheme.secondary)
     }
 
     // MARK: - Interaction

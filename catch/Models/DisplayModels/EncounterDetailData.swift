@@ -15,6 +15,10 @@ struct EncounterDetailData: Identifiable {
     let notes: String
     let photos: [Data]
     let photoUrls: [String]
+    let posterUserID: String?
+    let posterDisplayName: String?
+    let posterUsername: String?
+    let posterAvatarURL: String?
 
     // MARK: - Local init
 
@@ -33,6 +37,10 @@ struct EncounterDetailData: Identifiable {
         self.notes = encounter.notes
         self.photos = []
         self.photoUrls = encounter.photoUrls.isEmpty ? (encounter.cat?.photoUrls ?? []) : encounter.photoUrls
+        self.posterUserID = nil
+        self.posterDisplayName = nil
+        self.posterUsername = nil
+        self.posterAvatarURL = nil
     }
 
     // MARK: - Supabase init (for notification deep links)
@@ -52,6 +60,10 @@ struct EncounterDetailData: Identifiable {
         self.notes = encounter.notes ?? ""
         self.photos = []
         self.photoUrls = encounter.photoUrls
+        self.posterUserID = nil
+        self.posterDisplayName = nil
+        self.posterUsername = nil
+        self.posterAvatarURL = nil
     }
 
     // MARK: - Shared Cat Fields
@@ -68,7 +80,7 @@ struct EncounterDetailData: Identifiable {
 
     // MARK: - Remote CloudKit init
 
-    init(remote encounter: CloudEncounter, cat: CloudCat?, isFirstEncounter: Bool) {
+    init(remote encounter: CloudEncounter, cat: CloudCat?, isFirstEncounter: Bool, owner: CloudUserProfile? = nil) {
         self.id = encounter.recordName
         self.catName = cat?.displayName ?? CatchStrings.Social.unknownCat
         self.catPhotoData = cat?.photos.first
@@ -82,5 +94,9 @@ struct EncounterDetailData: Identifiable {
         self.notes = encounter.notes
         self.photos = encounter.photos.isEmpty ? (cat?.photos ?? []) : encounter.photos
         self.photoUrls = encounter.photoUrls.isEmpty ? (cat?.photoUrls ?? []) : encounter.photoUrls
+        self.posterUserID = owner?.appleUserID
+        self.posterDisplayName = owner?.displayName
+        self.posterUsername = owner?.username
+        self.posterAvatarURL = owner?.avatarURL
     }
 }

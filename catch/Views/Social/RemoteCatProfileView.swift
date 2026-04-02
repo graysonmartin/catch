@@ -212,7 +212,7 @@ struct RemoteCatProfileView: View {
             encounterThumbnail(encounter)
 
             VStack(alignment: .leading, spacing: CatchSpacing.space2) {
-                Text(encounter.date.formatted(date: .abbreviated, time: .shortened))
+                Text(DateFormatting.encounterDateTime(encounter.date))
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(CatchTheme.textPrimary)
                 if !encounter.locationName.isEmpty {

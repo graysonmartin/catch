@@ -20,7 +20,7 @@ struct SocialFeedItemView: View {
     }
 
     private var detailData: EncounterDetailData {
-        EncounterDetailData(remote: encounter, cat: cat, isFirstEncounter: isFirstEncounter)
+        EncounterDetailData(remote: encounter, cat: cat, isFirstEncounter: isFirstEncounter, owner: owner)
     }
 
     var body: some View {
@@ -32,6 +32,7 @@ struct SocialFeedItemView: View {
                 encounterRecordName: encounter.recordName,
                 showDetail: $showDetail,
                 ownerRoute: RemoteProfileRoute(userID: owner.appleUserID, displayName: owner.displayName),
+                ownerHandle: owner.username.map { "@\($0)" },
                 encounterDate: encounter.date
             )
         }

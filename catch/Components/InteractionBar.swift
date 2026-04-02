@@ -5,6 +5,7 @@ struct InteractionBar: View {
     let encounterRecordName: String
     @Binding var showDetail: Bool
     var ownerRoute: RemoteProfileRoute?
+    var ownerHandle: String?
     var isOwnEncounter: Bool = false
     var encounterDate: Date?
 
@@ -14,7 +15,7 @@ struct InteractionBar: View {
     @State private var showLikedBySheet = false
 
     private var formattedDate: String? {
-        encounterDate?.formatted(.dateTime.month(.abbreviated).day())
+        encounterDate.map { DateFormatting.encounterDate($0) }
     }
 
     var body: some View {
@@ -91,7 +92,7 @@ struct InteractionBar: View {
         if let ownerRoute {
             NavigationLink(value: ownerRoute) {
                 HStack(spacing: CatchSpacing.space4) {
-                    spottedText(name: ownerRoute.displayName, highlight: false)
+                    spottedText(name: ownerHandle ?? ownerRoute.displayName, highlight: ownerHandle != nil)
                     Image(systemName: "chevron.right")
                         .font(.system(size: 9, weight: .semibold))
                         .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
