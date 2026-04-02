@@ -26,7 +26,6 @@ enum BreedLogSortDirection: Equatable {
 
 enum BreedLogSortOption: String, CaseIterable, Identifiable {
     case rarity = "rarity"
-    case alphabetical = "alphabetical"
     case discoveredFirst = "discovery date"
 
     var id: String { rawValue }
@@ -34,7 +33,6 @@ enum BreedLogSortOption: String, CaseIterable, Identifiable {
     var displayName: String {
         switch self {
         case .rarity: CatchStrings.BreedLog.sortRarity
-        case .alphabetical: CatchStrings.BreedLog.sortAlphabetical
         case .discoveredFirst: CatchStrings.BreedLog.sortDiscoveredFirst
         }
     }
@@ -42,7 +40,6 @@ enum BreedLogSortOption: String, CaseIterable, Identifiable {
     var defaultDirection: BreedLogSortDirection {
         switch self {
         case .rarity: .ascending
-        case .alphabetical: .ascending
         case .discoveredFirst: .descending
         }
     }
@@ -58,14 +55,6 @@ enum BreedLogSortOption: String, CaseIterable, Identifiable {
                 isAscending
                     ? $0.catalogEntry.rarity < $1.catalogEntry.rarity
                     : $0.catalogEntry.rarity > $1.catalogEntry.rarity
-            }
-        case .alphabetical:
-            return log.sorted {
-                let result = $0.catalogEntry.displayName
-                    .localizedCaseInsensitiveCompare($1.catalogEntry.displayName)
-                return isAscending
-                    ? result == .orderedAscending
-                    : result == .orderedDescending
             }
         case .discoveredFirst:
             return log.sorted { lhs, rhs in

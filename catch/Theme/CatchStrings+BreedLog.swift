@@ -10,7 +10,6 @@ extension CatchStrings {
 
         // Sort options
         static let sortRarity = String(localized: "rarity")
-        static let sortAlphabetical = String(localized: "alphabetical")
         static let sortDiscoveredFirst = String(localized: "discovery date")
 
         // BreedDetailView

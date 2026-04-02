@@ -82,6 +82,10 @@ final class MockSocialInteractionService: SocialInteractionService {
         loadInteractionDataCalls.append(encounterRecordNames)
     }
 
+    func resetState() async {
+        reset()
+    }
+
     // MARK: - Test Helpers
 
     func reset() {
