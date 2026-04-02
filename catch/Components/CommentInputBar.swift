@@ -25,6 +25,8 @@ struct CommentInputBar: View {
                             Text(CatchStrings.Interaction.addComment)
                                 .font(.subheadline)
                                 .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
+                                .padding(.leading, 5)
+                                .padding(.top, 8)
                                 .allowsHitTesting(false)
                         }
                     }
