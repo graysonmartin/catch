@@ -56,13 +56,17 @@ struct PhotoCarouselView: View {
             .accessibilityLabel(CatchStrings.Accessibility.photoPlaceholder)
     }
 
-    private var singlePhoto: some View {
+    private func constrainedPhoto(at index: Int) -> some View {
         GeometryReader { geo in
-            photoView(at: 0)
+            photoView(at: index)
                 .frame(width: geo.size.width, height: height)
                 .clipped()
         }
         .frame(height: height)
+    }
+
+    private var singlePhoto: some View {
+        constrainedPhoto(at: 0)
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
         .contentShape(Rectangle())
         .onTapGesture { handleTap() }
@@ -79,13 +83,9 @@ struct PhotoCarouselView: View {
         ZStack(alignment: .bottom) {
             TabView(selection: $currentPage) {
                 ForEach(0..<totalCount, id: \.self) { index in
-                    GeometryReader { geo in
-                        photoView(at: index)
-                            .frame(width: geo.size.width, height: height)
-                            .clipped()
-                    }
-                    .tag(index)
-                    .accessibilityLabel(CatchStrings.Accessibility.photoPage(index + 1, of: totalCount))
+                    constrainedPhoto(at: index)
+                        .tag(index)
+                        .accessibilityLabel(CatchStrings.Accessibility.photoPage(index + 1, of: totalCount))
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
