@@ -75,7 +75,11 @@ public final class SupabaseAuthService: @unchecked Sendable {
     /// Returns the OAuth URL for Google sign-in. The caller should open this in
     /// `ASWebAuthenticationSession` and pass the callback URL to `handleOAuthCallback(_:)`.
     public func googleOAuthURL(redirectTo: URL) async throws -> URL {
-        try await client.auth.getOAuthSignInURL(provider: .google, redirectTo: redirectTo)
+        try await client.auth.getOAuthSignInURL(
+            provider: .google,
+            redirectTo: redirectTo,
+            queryParams: [(name: "prompt", value: "select_account")]
+        )
     }
 
     /// Completes the OAuth flow after the user is redirected back from the provider.

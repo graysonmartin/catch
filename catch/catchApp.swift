@@ -153,7 +153,9 @@ struct catchApp: App {
                     setupNotificationDelegate()
                 }
                 .onChange(of: authService.authState) { oldState, newState in
-                    if oldState == .unknown, newState.isSignedIn, !hasCompletedProfileSetup {
+                    let isNewSignIn = !oldState.isSignedIn && newState.isSignedIn
+
+                    if isNewSignIn, !hasCompletedProfileSetup {
                         isCheckingProfile = true
                         Task { await checkExistingProfile() }
                     }
@@ -166,7 +168,7 @@ struct catchApp: App {
                             await socialInteractionService.resetState()
                         }
                     }
-                    if !oldState.isSignedIn, newState.isSignedIn {
+                    if isNewSignIn {
                         Task { await deviceTokenService?.requestPermissionIfNeeded() }
                     }
                 }
