@@ -37,7 +37,7 @@ struct ContentView: View {
                 .tag(3)
                 .badge(followService.pendingRequests.count)
         }
-        .safeAreaInset(edge: .bottom) {
+        .safeAreaInset(edge: .top) {
             if !networkMonitor.isConnected {
                 OfflineBanner()
             }
