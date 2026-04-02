@@ -6,14 +6,13 @@ public enum SupabaseConfig {
         case production
     }
 
-    public static var current: Environment = .development
+    public static var current: Environment = .production
 
     public static var url: URL {
         switch current {
         case .development:
             URL(string: "https://tqmjfpevabhfaxotfvge.supabase.co")!
         case .production:
-            // TODO: Replace with production URL when available
             URL(string: "https://jxvuloqmmvuvrnnqgddf.supabase.co")!
         }
     }
@@ -23,7 +22,6 @@ public enum SupabaseConfig {
         case .development:
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxbWpmcGV2YWJoZmF4b3RmdmdlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODYwODMsImV4cCI6MjA4OTI2MjA4M30.w_LpZwt9dOGhkgkogVFwAF9sjI-DzDs-oEUntQ1VLkw"
         case .production:
-            // TODO: Replace with production anon key when available
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp4dnVsb3FtbXZ1dnJubnFnZGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4MTE3ODEsImV4cCI6MjA4ODM4Nzc4MX0.VSLMp6rhgPJczLlRYyetQz7ku2ouBAs2fasl4WwkRbE"
         }
     }
