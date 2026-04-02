@@ -41,13 +41,6 @@ struct WalkthroughNotificationStep: View {
                 .foregroundStyle(CatchTheme.textSecondary)
                 .multilineTextAlignment(.center)
                 .lineSpacing(CatchSpacing.space4)
-
-            Text(CatchStrings.Walkthrough.notificationReassurance)
-                .font(.caption)
-                .foregroundStyle(CatchTheme.textSecondary.opacity(0.7))
-                .multilineTextAlignment(.center)
-                .lineSpacing(CatchSpacing.space4)
-                .padding(.top, CatchSpacing.space4)
         }
     }
 
