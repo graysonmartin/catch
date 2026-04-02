@@ -1,4 +1,5 @@
 import Foundation
+import os
 import CatchCore
 
 @MainActor
@@ -6,6 +7,7 @@ final class AppRouter: ObservableObject {
 
     // MARK: - Dependencies
 
+    private let logger = Logger(subsystem: "com.graysonmartin.catch", category: "AppRouter")
     private let encounterDataService: EncounterDataService
     private let catDataService: CatDataService
 
@@ -60,7 +62,7 @@ final class AppRouter: ObservableObject {
                 let cat = try? await catDataService.fetchCat(id: encounter.catID)
                 routedEncounterDetail = EncounterDetailData(supabase: encounter, cat: cat)
             } catch {
-                print("[AppRouter] Failed to load encounter \(id): \(error.localizedDescription)")
+                logger.error("Failed to load encounter \(id, privacy: .public): \(error.localizedDescription, privacy: .public)")
             }
         case .profile(let id):
             clearPendingRoute()

@@ -31,6 +31,7 @@ struct catchApp: App {
     @State private var deviceTokenService: DeviceTokenService?
     @State private var notificationDelegate: NotificationDelegate?
     @State private var inAppNotificationService: SupabaseInAppNotificationService
+    @State private var networkMonitor = NetworkMonitor()
 
     init() {
         #if DEBUG
@@ -258,6 +259,7 @@ struct catchApp: App {
                 .environment(feedDataService)
                 .environment(suggestedPeopleService)
                 .environment(inAppNotificationService)
+                .environment(networkMonitor)
                 .task {
                     await authService.refreshSessionIfNeeded()
                     async let blocks: Void = { try? await blockService.loadBlocks() }()

@@ -6,6 +6,7 @@ struct ContentView: View {
     @Environment(SupabaseFollowService.self) private var followService
     @Environment(SupabaseAuthService.self) private var authService
     @Environment(CatDataService.self) private var catDataService
+    @Environment(NetworkMonitor.self) private var networkMonitor
     @State private var selectedTab = 0
     @State private var feedScrollToTop = false
 
@@ -35,6 +36,11 @@ struct ContentView: View {
                 }
                 .tag(3)
                 .badge(followService.pendingRequests.count)
+        }
+        .safeAreaInset(edge: .top) {
+            if !networkMonitor.isConnected {
+                OfflineBanner()
+            }
         }
         .tint(CatchTheme.primary)
         .onAppear {
