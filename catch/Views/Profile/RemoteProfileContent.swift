@@ -221,7 +221,11 @@ struct RemoteProfileContent: View {
             )
         }
         .navigationDestination(isPresented: $isShowingBreedLog) {
-            BreedLogView(entries: breedLogEntries(data: data), cloudCats: data.cats)
+            BreedLogView(
+                entries: breedLogEntries(data: data),
+                cloudCats: data.cats,
+                ownerHandle: data.profile.username.map { "@\($0)" } ?? data.profile.displayName
+            )
         }
     }
 
@@ -500,7 +504,9 @@ struct RemoteProfileContent: View {
 
     private func formattedDateHeader(_ date: Date) -> String {
         let calendar = Calendar.current
-        if calendar.isDate(date, equalTo: Date(), toGranularity: .year) {
+        if calendar.isDateInToday(date) {
+            return DateFormatting.encounterDate(date)
+        } else if calendar.isDate(date, equalTo: Date(), toGranularity: .year) {
             return date.formatted(.dateTime.month(.abbreviated).day()).lowercased()
         } else {
             return date.formatted(.dateTime.month(.abbreviated).day().year()).lowercased()

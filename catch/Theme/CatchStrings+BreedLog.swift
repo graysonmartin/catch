@@ -21,6 +21,10 @@ extension CatchStrings {
             String(localized: "your \(breedName) cats")
         }
 
+        static func userBreedCats(_ handle: String, _ breedName: String) -> String {
+            String(localized: "\(handle)'s \(breedName) cats")
+        }
+
         // BreedRarity
         static let rarityCommon = String(localized: "common")
         static let rarityUncommon = String(localized: "uncommon")

@@ -152,7 +152,7 @@ struct EncounterDetailLoadingView: View {
                     }
                 }
 
-                Text(data.date.formatted(date: .abbreviated, time: .shortened))
+                Text(DateFormatting.encounterDateTime(data.date))
                     .font(.caption)
                     .foregroundStyle(CatchTheme.textSecondary)
             }

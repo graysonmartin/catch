@@ -14,7 +14,7 @@ struct InteractionBar: View {
     @State private var showLikedBySheet = false
 
     private var formattedDate: String? {
-        encounterDate?.formatted(.dateTime.month(.abbreviated).day())
+        encounterDate.map { DateFormatting.encounterDate($0) }
     }
 
     var body: some View {

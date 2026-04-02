@@ -9,6 +9,7 @@ struct BreedLogView: View {
 
     private let externalEntries: [BreedLogEntry]?
     private let cloudCats: [CloudCat]?
+    private let ownerHandle: String?
     private let service: BreedLogService
     private let columns = [
         GridItem(.flexible(), spacing: CatchSpacing.space8),
@@ -19,10 +20,12 @@ struct BreedLogView: View {
     init(
         entries: [BreedLogEntry]? = nil,
         cloudCats: [CloudCat]? = nil,
+        ownerHandle: String? = nil,
         service: BreedLogService = DefaultBreedLogService()
     ) {
         self.externalEntries = entries
         self.cloudCats = cloudCats
+        self.ownerHandle = ownerHandle
         self.service = service
     }
 
@@ -67,7 +70,8 @@ struct BreedLogView: View {
             BreedDetailView(
                 entry: entry,
                 cats: externalEntries != nil ? [] : service.catsForBreed(entry.id, from: catDataService.cats),
-                cloudCats: cloudCats.map { service.cloudCatsForBreed(entry.id, from: $0) } ?? []
+                cloudCats: cloudCats.map { service.cloudCatsForBreed(entry.id, from: $0) } ?? [],
+                ownerHandle: ownerHandle
             )
         }
     }

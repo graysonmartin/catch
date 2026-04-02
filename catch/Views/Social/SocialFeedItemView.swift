@@ -20,7 +20,7 @@ struct SocialFeedItemView: View {
     }
 
     private var detailData: EncounterDetailData {
-        EncounterDetailData(remote: encounter, cat: cat, isFirstEncounter: isFirstEncounter)
+        EncounterDetailData(remote: encounter, cat: cat, isFirstEncounter: isFirstEncounter, owner: owner)
     }
 
     var body: some View {
