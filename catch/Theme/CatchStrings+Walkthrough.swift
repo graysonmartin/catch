@@ -17,6 +17,14 @@ extension CatchStrings {
         static let locationEnabled = String(localized: "nice, you're on the grid")
         static let locationSkipped = String(localized: "no worries, you can turn this on later")
 
+        // Notification step
+        static let notificationTitle = String(localized: "stay in the loop")
+        static let notificationSubtitle = String(localized: "get pinged when someone likes your\nspotting, drops a comment, or follows you.")
+        static let notificationReassurance = String(localized: "totally optional. we won't spam you.\nsteven's honor.")
+        static let enableNotifications = String(localized: "enable notifications")
+        static let notificationEnabled = String(localized: "you'll be the first to know")
+        static let notificationSkipped = String(localized: "no worries, you can turn these on later")
+
         // Suggested people step
         static let peopleTitle = String(localized: "find your people")
         static let peopleSubtitle = String(localized: "follow some cat spotters to see\ntheir encounters in your feed.")

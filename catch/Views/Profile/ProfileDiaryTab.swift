@@ -111,9 +111,7 @@ struct ProfileDiaryTab: View {
 
     private func formattedDateHeader(_ date: Date) -> String {
         let calendar = Calendar.current
-        if calendar.isDateInToday(date) {
-            return DateFormatting.encounterDate(date)
-        } else if calendar.isDate(date, equalTo: Date(), toGranularity: .year) {
+        if calendar.isDate(date, equalTo: Date(), toGranularity: .year) {
             return date.formatted(.dateTime.month(.abbreviated).day()).lowercased()
         } else {
             return date.formatted(.dateTime.month(.abbreviated).day().year()).lowercased()

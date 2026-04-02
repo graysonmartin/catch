@@ -17,11 +17,11 @@ struct UnifiedOnboardingView: View {
     enum Phase {
         case featureTour
         case signIn
-        case postAuth(Int) // 0 = location, 1 = people
+        case postAuth(Int) // 0 = location, 1 = notifications, 2 = people
     }
 
     private let tourPageCount = 6  // welcome through collection
-    private let postAuthPageCount = 2 // location + people
+    private let postAuthPageCount = 3 // location + notifications + people
 
     var body: some View {
         ZStack {
@@ -110,7 +110,8 @@ struct UnifiedOnboardingView: View {
 
             TabView(selection: $postAuthPage) {
                 WalkthroughLocationStep().tag(0)
-                WalkthroughPeopleStep(onComplete: onComplete).tag(1)
+                WalkthroughNotificationStep().tag(1)
+                WalkthroughPeopleStep(onComplete: onComplete).tag(2)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .animation(reduceMotion ? nil : .easeInOut(duration: 0.3), value: postAuthPage)

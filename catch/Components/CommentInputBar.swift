@@ -18,7 +18,7 @@ struct CommentInputBar: View {
                     .textFieldStyle(.plain)
                     .lineLimit(1...6)
                     .font(.subheadline)
-                    .padding(.vertical, CatchSpacing.space8)
+                    .padding(.vertical, CatchSpacing.space4)
                     .focused($isFocused)
                     .submitLabel(.send)
                     .onSubmit { onSubmit() }
