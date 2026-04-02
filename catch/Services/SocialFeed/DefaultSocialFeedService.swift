@@ -66,7 +66,6 @@ final class DefaultSocialFeedService: SocialFeedService {
                 limit: pageSize,
                 cursor: nil
             )
-
             earliestEncounterPerCat = [:]
             remoteEncounters = mapRows(rows)
             nextCursor = cursorFromRows(rows)
