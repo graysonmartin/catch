@@ -121,14 +121,14 @@ struct EncounterDetailSheet: View {
                         .padding(.bottom, CatchSpacing.space8)
                 }
 
-                if !data.notes.isEmpty {
-                    notesRow
+                if data.posterDisplayName != nil {
+                    posterRow
                         .padding(.horizontal)
                         .padding(.bottom, CatchSpacing.space8)
                 }
 
-                if data.posterDisplayName != nil {
-                    posterRow
+                if !data.notes.isEmpty {
+                    notesRow
                         .padding(.horizontal)
                         .padding(.bottom, CatchSpacing.space8)
                 }
