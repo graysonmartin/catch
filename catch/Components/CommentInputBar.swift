@@ -13,23 +13,14 @@ struct CommentInputBar: View {
 
     var body: some View {
         VStack(alignment: .trailing, spacing: CatchSpacing.space4) {
-            HStack(alignment: .bottom, spacing: CatchSpacing.space8) {
-                TextEditor(text: $text)
+            HStack(alignment: .center, spacing: CatchSpacing.space8) {
+                TextField(CatchStrings.Interaction.addComment, text: $text, axis: .vertical)
+                    .textFieldStyle(.plain)
+                    .lineLimit(1...6)
                     .font(.subheadline)
-                    .scrollContentBackground(.hidden)
-                    .frame(minHeight: 20, maxHeight: 120)
-                    .fixedSize(horizontal: false, vertical: true)
                     .focused($isFocused)
-                    .overlay(alignment: .topLeading) {
-                        if text.isEmpty {
-                            Text(CatchStrings.Interaction.addComment)
-                                .font(.subheadline)
-                                .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
-                                .padding(.leading, 5)
-                                .padding(.top, 8)
-                                .allowsHitTesting(false)
-                        }
-                    }
+                    .submitLabel(.send)
+                    .onSubmit { onSubmit() }
                     .onChange(of: text) { _, newValue in
                         if newValue.count > TextInputLimits.comment {
                             text = TextInputLimits.enforceLimit(
@@ -45,12 +36,10 @@ struct CommentInputBar: View {
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.title2)
                         .foregroundStyle(canSubmit ? CatchTheme.primary : CatchTheme.textSecondary.opacity(0.3))
-                        .frame(minWidth: CatchTheme.minTapTarget, minHeight: CatchTheme.minTapTarget)
                 }
                 .disabled(!canSubmit)
                 .buttonStyle(.plain)
                 .accessibilityLabel(CatchStrings.Accessibility.submitComment)
-                .padding(.bottom, CatchSpacing.space6)
             }
 
             if TextInputLimits.shouldShowCount(text: text, limit: TextInputLimits.comment) {
@@ -58,7 +47,7 @@ struct CommentInputBar: View {
             }
         }
         .padding(.horizontal)
-        .padding(.vertical, CatchSpacing.space4)
+        .padding(.vertical, CatchSpacing.space12)
         .background(CatchTheme.cardBackground)
     }
 
