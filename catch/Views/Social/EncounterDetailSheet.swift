@@ -231,19 +231,14 @@ struct EncounterDetailSheet: View {
                 HStack(spacing: CatchSpacing.space8) {
                     posterAvatarView
 
-                    HStack(spacing: CatchSpacing.space4) {
-                        Image(systemName: "person.fill")
-                            .frame(width: 16, alignment: .center)
+                    if let username = data.posterUsername, !username.isEmpty {
+                        Text("@\(username)")
+                            .font(.subheadline)
                             .foregroundStyle(CatchTheme.textSecondary)
-                        if let username = data.posterUsername, !username.isEmpty {
-                            Text("@\(username)")
-                                .font(.subheadline)
-                                .foregroundStyle(CatchTheme.textSecondary)
-                        } else {
-                            Text(displayName)
-                                .font(.subheadline)
-                                .foregroundStyle(CatchTheme.textSecondary)
-                        }
+                    } else {
+                        Text(displayName)
+                            .font(.subheadline)
+                            .foregroundStyle(CatchTheme.textSecondary)
                     }
 
                     Spacer()

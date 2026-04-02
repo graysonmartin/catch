@@ -32,6 +32,7 @@ struct SocialFeedItemView: View {
                 encounterRecordName: encounter.recordName,
                 showDetail: $showDetail,
                 ownerRoute: RemoteProfileRoute(userID: owner.appleUserID, displayName: owner.displayName),
+                ownerHandle: owner.username.map { "@\($0)" },
                 encounterDate: encounter.date
             )
         }
