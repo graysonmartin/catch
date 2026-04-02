@@ -94,12 +94,13 @@ public final class SupabaseAuthService: @unchecked Sendable {
     // MARK: - Demo Sign-In
 
     /// Signs in using the demo account edge function. Used for App Store review.
-    /// The edge function generates a fresh session — no hardcoded tokens.
-    public func signInWithDemo() async throws -> AuthUser {
+    /// The edge function validates the key server-side — no secrets stored in the client.
+    public func signInWithDemo(key: String) async throws -> AuthUser {
+        let body = try JSONEncoder().encode(["key": key])
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let tokenResponse: DemoTokenResponse = try await client.functions
-            .invoke("demo-session", options: .init(method: .post), decoder: decoder)
+            .invoke("demo-session", options: .init(method: .post, body: body), decoder: decoder)
 
         let session = try await client.auth.setSession(
             accessToken: tokenResponse.accessToken,
