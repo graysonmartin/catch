@@ -14,14 +14,20 @@ struct CommentInputBar: View {
     var body: some View {
         VStack(alignment: .trailing, spacing: CatchSpacing.space4) {
             HStack(alignment: .bottom, spacing: CatchSpacing.space8) {
-                TextField(CatchStrings.Interaction.addComment, text: $text, axis: .vertical)
-                    .textFieldStyle(.plain)
-                    .lineLimit(1...6)
+                TextEditor(text: $text)
                     .font(.subheadline)
-                    .padding(.vertical, CatchSpacing.space4)
+                    .scrollContentBackground(.hidden)
+                    .frame(minHeight: 20, maxHeight: 120)
+                    .fixedSize(horizontal: false, vertical: true)
                     .focused($isFocused)
-                    .submitLabel(.send)
-                    .onSubmit { onSubmit() }
+                    .overlay(alignment: .topLeading) {
+                        if text.isEmpty {
+                            Text(CatchStrings.Interaction.addComment)
+                                .font(.subheadline)
+                                .foregroundStyle(CatchTheme.textSecondary.opacity(0.5))
+                                .allowsHitTesting(false)
+                        }
+                    }
                     .onChange(of: text) { _, newValue in
                         if newValue.count > TextInputLimits.comment {
                             text = TextInputLimits.enforceLimit(
