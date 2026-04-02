@@ -1,16 +1,6 @@
 import SwiftUI
 import CatchCore
 
-private enum Layout {
-    static let thumbnailSize: CGFloat = 48
-    static let carouselHeight: CGFloat = 200
-    static let pillHPadding: CGFloat = 6
-    static let pillVPadding: CGFloat = 2
-    static let pillCornerRadius: CGFloat = 4
-    static let pillActiveBackgroundOpacity: Double = 0.15
-    static let pillInactiveBackgroundOpacity: Double = 0.1
-}
-
 struct SocialFeedItemView: View {
     let encounter: CloudEncounter
     let cat: CloudCat?
@@ -153,13 +143,13 @@ struct SocialFeedItemView: View {
                 CatPhotoView(
                     photoData: cat.photos.first,
                     photoUrl: cat.photoUrls.first,
-                    size: Layout.thumbnailSize,
+                    size: FeedCardLayout.thumbnailSize,
                     accessibilityName: cat.displayName
                 )
             }
             .buttonStyle(.plain)
         } else {
-            CatPhotoView(photoData: nil, size: Layout.thumbnailSize)
+            CatPhotoView(photoData: nil, size: FeedCardLayout.thumbnailSize)
         }
     }
 
@@ -167,14 +157,14 @@ struct SocialFeedItemView: View {
         Text(text)
             .font(.system(size: 9, weight: .bold))
             .foregroundStyle(isActive ? CatchTheme.accessibleTextOrange : CatchTheme.textSecondary)
-            .padding(.horizontal, Layout.pillHPadding)
-            .padding(.vertical, Layout.pillVPadding)
+            .padding(.horizontal, FeedCardLayout.pillHorizontalPadding)
+            .padding(.vertical, FeedCardLayout.pillVerticalPadding)
             .background(
-                RoundedRectangle(cornerRadius: Layout.pillCornerRadius)
+                RoundedRectangle(cornerRadius: FeedCardLayout.pillCornerRadius)
                     .fill(
                         isActive
-                            ? CatchTheme.primary.opacity(Layout.pillActiveBackgroundOpacity)
-                            : CatchTheme.textSecondary.opacity(Layout.pillInactiveBackgroundOpacity)
+                            ? CatchTheme.primary.opacity(FeedCardLayout.pillActiveBackgroundOpacity)
+                            : CatchTheme.textSecondary.opacity(FeedCardLayout.pillInactiveBackgroundOpacity)
                     )
             )
             .fixedSize()
@@ -191,7 +181,7 @@ struct SocialFeedItemView: View {
             PhotoCarouselView(
                 photos: allPhotos,
                 photoUrls: allPhotoUrls,
-                height: Layout.carouselHeight,
+                height: FeedCardLayout.carouselHeight,
                 cornerRadius: CatchTheme.cornerRadiusSmall,
                 onTap: { showDetail = true }
             )
