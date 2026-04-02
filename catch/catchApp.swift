@@ -168,7 +168,7 @@ struct catchApp: App {
                             await socialInteractionService.resetState()
                         }
                     }
-                    if isNewSignIn {
+                    if isNewSignIn, hasCompletedUnifiedOnboarding || hasLegacyOnboardingComplete {
                         Task { await deviceTokenService?.requestPermissionIfNeeded() }
                     }
                 }

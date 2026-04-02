@@ -141,6 +141,7 @@
 		E8WT00000102 /* WalkthroughLocationStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000002 /* WalkthroughLocationStep.swift */; };
 		E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000003 /* WalkthroughPeopleStep.swift */; };
 		E8WT00000104 /* WalkthroughPersonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000004 /* WalkthroughPersonRow.swift */; };
+		E8WT00000105 /* WalkthroughNotificationStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8WT00000005 /* WalkthroughNotificationStep.swift */; };
 		E8CS00000302 /* CatchStrings+Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000002 /* CatchStrings+Feed.swift */; };
 		E8CS00000303 /* CatchStrings+CatProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000003 /* CatchStrings+CatProfile.swift */; };
 		E8CS00000304 /* CatchStrings+Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000004 /* CatchStrings+Collection.swift */; };
@@ -411,6 +412,7 @@
 		E8WT00000002 /* WalkthroughLocationStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughLocationStep.swift; sourceTree = "<group>"; };
 		E8WT00000003 /* WalkthroughPeopleStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughPeopleStep.swift; sourceTree = "<group>"; };
 		E8WT00000004 /* WalkthroughPersonRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughPersonRow.swift; sourceTree = "<group>"; };
+		E8WT00000005 /* WalkthroughNotificationStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughNotificationStep.swift; sourceTree = "<group>"; };
 		E8SD00000001 /* SwipeToDeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToDeleteView.swift; sourceTree = "<group>"; };
 		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
@@ -743,6 +745,7 @@
 			isa = PBXGroup;
 			children = (
 				E8WT00000002 /* WalkthroughLocationStep.swift */,
+				E8WT00000005 /* WalkthroughNotificationStep.swift */,
 				E8WT00000003 /* WalkthroughPeopleStep.swift */,
 				E8WT00000004 /* WalkthroughPersonRow.swift */,
 			);
@@ -1540,7 +1543,7 @@
 				E8WT00000102 /* WalkthroughLocationStep.swift in Sources */,
 				E8WT00000103 /* WalkthroughPeopleStep.swift in Sources */,
 				E8WT00000104 /* WalkthroughPersonRow.swift in Sources */,
-				E8WT00000105 /* WalkthroughWelcomeStep.swift in Sources */,
+				E8WT00000105 /* WalkthroughNotificationStep.swift in Sources */,
 				E8XP00000101 /* ExportService.swift in Sources */,
 				E8XP00000103 /* DataExportSection.swift in Sources */,
 				E8XP00000104 /* ShareSheet.swift in Sources */,

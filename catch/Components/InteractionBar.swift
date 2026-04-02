@@ -99,12 +99,15 @@ struct InteractionBar: View {
                 }
             }
             .buttonStyle(.plain)
+            .lineLimit(1)
         } else if isOwnEncounter {
             spottedText(name: CatchStrings.Social.you, highlight: true)
+                .lineLimit(1)
         } else if let formattedDate {
             Text(CatchStrings.Feed.spottedOn(formattedDate))
                 .font(.caption.weight(.medium))
                 .foregroundStyle(CatchTheme.textSecondary)
+                .lineLimit(1)
         }
     }
 
@@ -123,6 +126,7 @@ struct InteractionBar: View {
             }
         }
         .font(.caption.weight(.medium))
+        .truncationMode(.tail)
     }
 
     // MARK: - Helpers
