@@ -8,5 +8,6 @@ extension CatchStrings {
         static let prompt = String(localized: "sign in to start your cat census.")
         static let orDivider = String(localized: "or")
         static let demoSignInFailed = String(localized: "Demo sign-in failed. Try again.")
+        static let demoKeyPlaceholder = String(localized: "shhh")
     }
 }

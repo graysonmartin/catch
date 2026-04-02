@@ -10,6 +10,9 @@ struct SignInView: View {
     @State private var demoTapCount = 0
     @State private var demoTapResetTask: Task<Void, Never>?
     @State private var isDemoLoading = false
+    @State private var showDemoKeyField = false
+    @State private var demoKeyInput = ""
+    @FocusState private var isDemoKeyFocused: Bool
 
     var onSignedIn: (AuthUser) -> Void
 
@@ -64,7 +67,28 @@ struct SignInView: View {
                     .padding(.top, CatchSpacing.space4)
             }
             .multilineTextAlignment(.center)
+
+            if showDemoKeyField {
+                demoKeyField
+            }
         }
+    }
+
+    private var demoKeyField: some View {
+        SecureField(CatchStrings.SignIn.demoKeyPlaceholder, text: $demoKeyInput)
+            .font(.caption)
+            .foregroundStyle(CatchTheme.textSecondary)
+            .multilineTextAlignment(.center)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .focused($isDemoKeyFocused)
+            .padding(.vertical, CatchSpacing.space8)
+            .padding(.horizontal, CatchSpacing.space16)
+            .background(CatchTheme.textSecondary.opacity(0.06))
+            .clipShape(RoundedRectangle(cornerRadius: CatchTheme.cornerRadiusTight))
+            .frame(maxWidth: 200)
+            .transition(.opacity.combined(with: .move(edge: .top)))
+            .onSubmit { submitDemoKey() }
     }
 
     // MARK: - Sign In Buttons
@@ -161,16 +185,29 @@ extension SignInView {
         if demoTapCount >= 5 {
             demoTapCount = 0
             demoTapResetTask?.cancel()
-            Task { await handleDemoSignIn() }
+            withAnimation(.easeInOut(duration: 0.25)) {
+                showDemoKeyField = true
+            }
+            isDemoKeyFocused = true
         }
     }
 
-    private func handleDemoSignIn() async {
+    private func submitDemoKey() {
+        let key = demoKeyInput
+        demoKeyInput = ""
+        withAnimation(.easeInOut(duration: 0.25)) {
+            showDemoKeyField = false
+        }
+        guard !key.isEmpty else { return }
+        Task { await handleDemoSignIn(key: key) }
+    }
+
+    private func handleDemoSignIn(key: String) async {
         isDemoLoading = true
         defer { isDemoLoading = false }
 
         do {
-            let user = try await authService.signInWithDemo()
+            let user = try await authService.signInWithDemo(key: key)
             signInError = nil
             onSignedIn(user)
         } catch {
