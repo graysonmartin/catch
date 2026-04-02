@@ -12,7 +12,7 @@ public final class DefaultSupabaseFeedRepository: SupabaseFeedRepository, @unche
         id, owner_id, cat_id, date, location_name, location_lat, location_lng, \
         notes, photo_urls, like_count, comment_count, created_at, \
         cats!inner(id, name, breed, estimated_age, location_name, location_lat, location_lng, notes, is_owned, photo_urls, created_at), \
-        profiles!inner(id, display_name, username, bio, is_private, avatar_url)
+        profiles!encounters_owner_id_fkey(id, display_name, username, bio, is_private, avatar_url)
         """
 
     public init(clientProvider: any SupabaseClientProviding) {

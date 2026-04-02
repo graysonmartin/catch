@@ -17,4 +17,5 @@ public protocol SocialInteractionService: Observable, Sendable {
     func commentCount(for encounterRecordName: String) -> Int
 
     func loadInteractionData(for encounterRecordNames: [String]) async throws
+    func resetState() async
 }

@@ -210,6 +210,16 @@ public final class SupabaseSocialInteractionService: SocialInteractionService {
         likedEncounters.formUnion(likedIDs)
     }
 
+    // MARK: - Reset
+
+    public func resetState() async {
+        likedEncounters.removeAll()
+        likeCounts.removeAll()
+        commentCounts.removeAll()
+        ownedEncounterIDs.removeAll()
+        await stopListening()
+    }
+
     // MARK: - Realtime
 
     /// Registers encounter IDs owned by the current user for realtime filtering.
