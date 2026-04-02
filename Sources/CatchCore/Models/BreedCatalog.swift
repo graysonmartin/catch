@@ -7,85 +7,85 @@ public enum BreedCatalog {
     public static let allBreeds: [BreedCatalogEntry] = [
         BreedCatalogEntry(
             breed: .abyssinian,
-            description: "ancient vibes, modern chaos. one of the oldest known breeds, looks like a tiny mountain lion.",
-            funFact: "nicknamed the 'aby-grabbys' because they steal everything",
+            description: "one of the oldest known breeds. looks like a small mountain lion.",
+            funFact: "extremely curious and known for getting into places they shouldn't be",
             rarity: .uncommon,
             icon: "hare"
         ),
         BreedCatalogEntry(
             breed: .bengal,
-            description: "literally a tiny leopard that lives in your house. chaos incarnate.",
-            funFact: "they love water. like, actually enjoy baths. broken cats.",
+            description: "wild-looking coat pattern. descended from asian leopard cats.",
+            funFact: "one of the few breeds that actually enjoys water",
             rarity: .rare,
             icon: "bolt.fill"
         ),
         BreedCatalogEntry(
             breed: .bombay,
-            description: "mini panther. all black everything. walks like they own the night.",
-            funFact: "bred specifically to look like a panther. someone said 'what if house cat but spooky' and here we are",
+            description: "solid black coat, copper eyes. sometimes called a pocket panther.",
+            funFact: "bred in the 1950s to resemble a miniature black panther",
             rarity: .rare,
             icon: "moon.fill"
         ),
         BreedCatalogEntry(
             breed: .britishShorthair,
-            description: "round face, round eyes, round everything. built like a distinguished gentleman.",
-            funFact: "the cheshire cat was based on this breed. the smile checks out",
+            description: "round face, dense coat, stocky build. very calm temperament.",
+            funFact: "the cheshire cat was based on this breed",
             rarity: .uncommon,
             icon: "crown"
         ),
         BreedCatalogEntry(
             breed: .domesticShorthair,
-            description: "the mutt of cats. no pedigree, all personality. literally every other cat you've ever met.",
-            funFact: "make up about 95% of cats in the US. they're the main characters and they know it",
+            description: "no specific pedigree. the most common cat you'll find. #basic",
+            funFact: "make up about 95% of cats in the US",
             rarity: .common,
             icon: "house.fill"
         ),
         BreedCatalogEntry(
             breed: .maineCoon,
-            description: "absolute unit. the great dane of cats. somehow still thinks it's a kitten.",
-            funFact: "can grow up to 40 inches long. that's not a cat, that's a roommate",
+            description: "the largest domesticated cat breed. long fur, tufted ears.",
+            funFact: "can grow up to 40 inches long and weigh over 25 pounds.",
             rarity: .uncommon,
             icon: "mountain.2"
         ),
         BreedCatalogEntry(
             breed: .persian,
-            description: "flat face, maximum floof. the influencer of the cat world. high maintenance and proud.",
-            funFact: "most popular pedigree breed worldwide. basic but make it elegant",
+            description: "flat face, long fur, quiet demeanor. needs regular grooming.",
+            funFact: "the most popular pedigree breed worldwide",
             rarity: .uncommon,
             icon: "cloud"
         ),
         BreedCatalogEntry(
             breed: .ragdoll,
-            description: "goes completely limp when picked up. zero survival instinct. maximum chill.",
-            funFact: "named ragdoll because they literally flop like a stuffed animal. no thoughts head empty",
+            description: "large, blue-eyed, semi-longhair. goes limp when picked up.",
+            funFact: "named for their tendency to go completely relaxed when held",
             rarity: .uncommon,
             icon: "sofa"
         ),
         BreedCatalogEntry(
             breed: .russianBlue,
-            description: "silver-blue coat, green eyes, permanent resting cat face. elegant and unbothered.",
-            funFact: "they're said to smile because of their slightly upturned mouth. it's sarcasm",
+            description: "silver-blue coat, bright green eyes. quiet and reserved.",
+            funFact: "their slightly upturned mouth gives them a subtle permanent smile",
             rarity: .uncommon,
             icon: "diamond"
         ),
         BreedCatalogEntry(
             breed: .scottishFold,
-            description: "folded ears, owl face. sits in weird positions on purpose. knows they're cute.",
-            funFact: "all scottish folds descend from one barn cat named susie. nepotism",
+            description: "folded ears, round face. known for sitting in odd positions.",
+            funFact: "every scottish fold descends from a single barn cat named susie",
             rarity: .rare,
             icon: "ear"
         ),
         BreedCatalogEntry(
             breed: .siamese,
-            description: "talks more than your group chat. piercing blue eyes. drama incarnate.",
-            funFact: "one of the most vocal breeds. they will tell you about their day whether you asked or not",
+            description: "blue eyes, color-point coat. extremely vocal.",
+            funFact: "one of the most talkative breeds #meowmeow",
             rarity: .common,
             icon: "bubble.left"
         ),
         BreedCatalogEntry(
             breed: .sphynx,
-            description: "hairless and proud. warm to the touch. looks like an alien, acts like a dog.",
-            funFact: "they're not actually hypoallergenic. they just look like they should be",
+            description: "hairless, warm to the touch. very social and affectionate.",
+            funFact: "not actually hypoallergenic. the allergen is in their skin, not fur",
             rarity: .legendary,
             icon: "globe.americas"
         ),
