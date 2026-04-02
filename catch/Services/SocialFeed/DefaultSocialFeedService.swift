@@ -31,6 +31,16 @@ final class DefaultSocialFeedService: SocialFeedService {
         self.pageSize = pageSize
     }
 
+    func resetState() {
+        remoteEncounters = []
+        nextCursor = nil
+        earliestEncounterPerCat = [:]
+        hasMorePages = false
+        hasLoaded = false
+        isLoading = false
+        isLoadingMore = false
+    }
+
     func loadIfNeeded() async {
         guard !hasLoaded else { return }
         await refresh()
@@ -56,7 +66,6 @@ final class DefaultSocialFeedService: SocialFeedService {
                 limit: pageSize,
                 cursor: nil
             )
-
             earliestEncounterPerCat = [:]
             remoteEncounters = mapRows(rows)
             nextCursor = cursorFromRows(rows)

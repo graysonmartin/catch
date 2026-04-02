@@ -10,6 +10,7 @@ public final class SupabaseFollowService: FollowService {
     public private(set) var outgoingPending: [Follow] = []
     public private(set) var pendingRequests: [Follow] = []
     public private(set) var isLoading = false
+    public private(set) var hasLoaded = false
     public private(set) var hasMoreFollowers = false
     public private(set) var hasMoreFollowing = false
 
@@ -166,6 +167,7 @@ public final class SupabaseFollowService: FollowService {
         hasMoreFollowing = gRows.count >= pageSize
         pendingRequests = piRows.map { $0.toDomain() }  // Includes joined display names
         outgoingPending = poRows.map { $0.toDomain() }
+        hasLoaded = true
     }
 
     public func loadMoreFollowers(for userID: String) async throws {

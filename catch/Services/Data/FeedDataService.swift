@@ -97,6 +97,16 @@ final class FeedDataService {
 
     // MARK: - Mutation Support
 
+    /// Clears all cached feed data. Call on sign-out to prevent stale data across accounts.
+    func resetState() {
+        encounters = []
+        nextCursor = nil
+        hasMorePages = false
+        hasLoaded = false
+        isLoading = false
+        isLoadingMore = false
+    }
+
     /// Prepends a newly created encounter to the top of the feed.
     func prependEncounter(_ encounter: Encounter) {
         encounters.insert(encounter, at: 0)
