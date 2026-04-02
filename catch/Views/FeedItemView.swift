@@ -3,7 +3,7 @@ import CatchCore
 
 enum FeedCardLayout {
     static let thumbnailSize: CGFloat = 48
-    static let carouselHeight: CGFloat = 240
+    static let carouselHeight: CGFloat = 200
     static let pillHorizontalPadding: CGFloat = 6
     static let pillVerticalPadding: CGFloat = 2
     static let pillCornerRadius: CGFloat = 4

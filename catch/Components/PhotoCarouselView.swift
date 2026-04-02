@@ -57,29 +57,35 @@ struct PhotoCarouselView: View {
     }
 
     private var singlePhoto: some View {
-        photoView(at: 0)
-            .frame(maxWidth: .infinity)
-            .frame(height: height)
-            .clipped()
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-            .contentShape(Rectangle())
-            .onTapGesture { handleTap() }
-            .accessibilityLabel(CatchStrings.Accessibility.photoCarouselLabel(count: 1))
-            .accessibilityAddTraits(isTappable || onTap != nil ? .isButton : [])
-            .fullScreenCover(isPresented: $isShowingFullScreen) {
-                FullScreenPhotoViewer(photos: photos, photoUrls: photoUrls, initialIndex: 0) {
-                    isShowingFullScreen = false
-                }
+        GeometryReader { geo in
+            photoView(at: 0)
+                .frame(width: geo.size.width, height: height)
+                .clipped()
+        }
+        .frame(height: height)
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+        .contentShape(Rectangle())
+        .onTapGesture { handleTap() }
+        .accessibilityLabel(CatchStrings.Accessibility.photoCarouselLabel(count: 1))
+        .accessibilityAddTraits(isTappable || onTap != nil ? .isButton : [])
+        .fullScreenCover(isPresented: $isShowingFullScreen) {
+            FullScreenPhotoViewer(photos: photos, photoUrls: photoUrls, initialIndex: 0) {
+                isShowingFullScreen = false
             }
+        }
     }
 
     private var carousel: some View {
         ZStack(alignment: .bottom) {
             TabView(selection: $currentPage) {
                 ForEach(0..<totalCount, id: \.self) { index in
-                    photoView(at: index)
-                        .tag(index)
-                        .accessibilityLabel(CatchStrings.Accessibility.photoPage(index + 1, of: totalCount))
+                    GeometryReader { geo in
+                        photoView(at: index)
+                            .frame(width: geo.size.width, height: height)
+                            .clipped()
+                    }
+                    .tag(index)
+                    .accessibilityLabel(CatchStrings.Accessibility.photoPage(index + 1, of: totalCount))
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
