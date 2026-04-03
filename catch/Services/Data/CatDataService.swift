@@ -99,7 +99,7 @@ final class CatDataService {
             id: UUID(),
             date: encounterDate,
             location: location,
-            notes: "",
+            notes: notes,
             catID: insertedCat.id,
             ownerID: UUID(uuidString: userID) ?? UUID(),
             photoUrls: photoUrls
