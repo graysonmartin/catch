@@ -8,9 +8,9 @@ public enum EncounterDateValidationResult: Equatable {
 
 public enum EncounterDateValidator {
 
-    /// Earliest allowed encounter date: January 1, 2020.
+    /// Earliest allowed encounter date: January 1, 2026.
     public static let minimumDate: Date = {
-        guard let date = DateComponents(calendar: .current, year: 2020, month: 1, day: 1).date else {
+        guard let date = DateComponents(calendar: .current, year: 2026, month: 1, day: 1).date else {
             return Date.distantPast
         }
         return date

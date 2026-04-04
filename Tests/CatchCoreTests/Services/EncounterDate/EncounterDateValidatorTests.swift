@@ -5,9 +5,9 @@ final class EncounterDateValidatorTests: XCTestCase {
 
     // MARK: - Minimum date
 
-    func test_minimumDate_isJanuary1_2020() {
+    func test_minimumDate_isJanuary1_2026() {
         let components = Calendar.current.dateComponents([.year, .month, .day], from: EncounterDateValidator.minimumDate)
-        XCTAssertEqual(components.year, 2020)
+        XCTAssertEqual(components.year, 2026)
         XCTAssertEqual(components.month, 1)
         XCTAssertEqual(components.day, 1)
     }
@@ -49,15 +49,15 @@ final class EncounterDateValidatorTests: XCTestCase {
         XCTAssertEqual(EncounterDateValidator.validate(EncounterDateValidator.minimumDate), .valid)
     }
 
-    func test_validate_dateIn2021_returnsValid() {
-        let date = DateComponents(calendar: .current, year: 2021, month: 6, day: 15).date!
+    func test_validate_dateIn2026_returnsValid() {
+        let date = DateComponents(calendar: .current, year: 2026, month: 2, day: 15).date!
         XCTAssertEqual(EncounterDateValidator.validate(date), .valid)
     }
 
     // MARK: - Validation: too far in past
 
-    func test_validate_before2020_returnsTooFarInPast() {
-        let oldDate = DateComponents(calendar: .current, year: 2019, month: 12, day: 31).date!
+    func test_validate_before2026_returnsTooFarInPast() {
+        let oldDate = DateComponents(calendar: .current, year: 2025, month: 12, day: 31).date!
         XCTAssertEqual(EncounterDateValidator.validate(oldDate), .tooFarInPast)
     }
 
@@ -66,8 +66,8 @@ final class EncounterDateValidatorTests: XCTestCase {
         XCTAssertEqual(EncounterDateValidator.validate(ancientDate), .tooFarInPast)
     }
 
-    func test_validate_year2000_returnsTooFarInPast() {
-        let date = DateComponents(calendar: .current, year: 2000, month: 3, day: 15).date!
+    func test_validate_year2020_returnsTooFarInPast() {
+        let date = DateComponents(calendar: .current, year: 2020, month: 3, day: 15).date!
         XCTAssertEqual(EncounterDateValidator.validate(date), .tooFarInPast)
     }
 
