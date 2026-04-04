@@ -55,12 +55,17 @@ struct AddCatView: View {
                 }
 
                 Section(CatchStrings.Log.detailsSection) {
-                    if !isUnnamed {
+                    VStack(alignment: .leading, spacing: CatchSpacing.space4) {
                         LimitedSingleLineFieldView(
                             CatchStrings.Common.name,
                             text: $name,
                             limit: TextInputLimits.catName
                         )
+                        if isUnnamed {
+                            Text(CatchStrings.Common.strayNameHint)
+                                .font(.caption)
+                                .foregroundStyle(CatchTheme.textSecondary)
+                        }
                     }
                     BreedPickerView(breed: $breed)
                 }
@@ -101,9 +106,6 @@ struct AddCatView: View {
                 }
             }
             .disabled(isSaving)
-            .onChange(of: isUnnamed) {
-                if isUnnamed { name = "" }
-            }
             .onChange(of: photos) {
                 let localPhotos = photos.localData
                 guard breed == nil, !isDismissedSuggestion, !localPhotos.isEmpty else { return }
@@ -126,7 +128,8 @@ struct AddCatView: View {
     }
 
     private func save() async {
-        let trimmedName = isUnnamed ? nil : name.trimmingCharacters(in: .whitespaces)
+        let trimmed = name.trimmingCharacters(in: .whitespaces)
+        let trimmedName = trimmed.isEmpty ? nil : trimmed
 
         isSaving = true
         defer { isSaving = false }

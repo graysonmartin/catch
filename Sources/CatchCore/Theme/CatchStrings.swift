@@ -24,7 +24,8 @@ public enum CatchStrings {
         public static let notesPlaceholder = String(localized: "notes about this cat...")
         public static let sortBy = String(localized: "sort by")
         public static let unnamedCatFallback = String(localized: "mystery cat")
-        public static let unnamedStray = String(localized: "stray / unnamed")
+        public static let unnamedStray = String(localized: "stray")
+        public static let strayNameHint = String(localized: "give them a nickname, or leave blank")
         public static let middot = "\u{00B7}"
 
         public static func encounterCount(_ count: Int) -> String {
