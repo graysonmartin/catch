@@ -26,6 +26,7 @@ public enum CatchStrings {
         public static let unnamedCatFallback = String(localized: "mystery cat")
         public static let unnamedStray = String(localized: "stray / unnamed")
         public static let middot = "\u{00B7}"
+        public static let today = String(localized: "today")
 
         public static func encounterCount(_ count: Int) -> String {
             String(localized: "\(count) encounter\(count == 1 ? "" : "s")")
