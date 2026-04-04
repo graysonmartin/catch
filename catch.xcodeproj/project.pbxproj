@@ -124,8 +124,6 @@
 		E8CS0000010E /* CatchStrings+Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000E /* CatchStrings+Notifications.swift */; };
 		E8CS0000010F /* CatchStrings+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS0000000F /* CatchStrings+Accessibility.swift */; };
 		E8CS00000110 /* CatchStrings+Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000010 /* CatchStrings+Network.swift */; };
-		E8NM00000101 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NM00000001 /* NetworkMonitor.swift */; };
-		E8OF00000101 /* OfflineBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OF00000001 /* OfflineBanner.swift */; };
 		E8CS00000302 /* CatchStrings+Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000002 /* CatchStrings+Feed.swift */; };
 		E8CS00000303 /* CatchStrings+CatProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000003 /* CatchStrings+CatProfile.swift */; };
 		E8CS00000304 /* CatchStrings+Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8CS00000004 /* CatchStrings+Collection.swift */; };
@@ -214,6 +212,7 @@
 		E8ND00000101 /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ND00000001 /* NotificationDelegate.swift */; };
 		E8NI00000101 /* NotificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NI00000001 /* NotificationItem.swift */; };
 		E8NI00000201 /* NotificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NI00000001 /* NotificationItem.swift */; };
+		E8NM00000101 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NM00000001 /* NetworkMonitor.swift */; };
 		E8NV00000101 /* AppRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NV00000001 /* AppRoute.swift */; };
 		E8NV00000102 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NV00000002 /* AppRouter.swift */; };
 		E8NV00000103 /* ContentTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NV00000003 /* ContentTab.swift */; };
@@ -222,6 +221,7 @@
 		E8NW00000103 /* EncounterDetailLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8NW00000003 /* EncounterDetailLoadingView.swift */; };
 		E8OB00000105 /* CatchStrings+OnboardingTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000005 /* CatchStrings+OnboardingTour.swift */; };
 		E8OB00000305 /* CatchStrings+OnboardingTour.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OB00000005 /* CatchStrings+OnboardingTour.swift */; };
+		E8OF00000101 /* OfflineBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8OF00000001 /* OfflineBanner.swift */; };
 		E8PF00000101 /* ProfileMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000001 /* ProfileMode.swift */; };
 		E8PF00000102 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000002 /* ProfileView.swift */; };
 		E8PF00000103 /* OwnProfileContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8PF00000003 /* OwnProfileContent.swift */; };
@@ -302,6 +302,7 @@
 		E8XP00000103 /* DataExportSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000003 /* DataExportSection.swift */; };
 		E8XP00000104 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000004 /* ShareSheet.swift */; };
 		E8XP00000105 /* CatchStrings+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8XP00000005 /* CatchStrings+Export.swift */; };
+		E8PI00000101 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E8PI00000001 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -408,8 +409,6 @@
 		E8CS0000000E /* CatchStrings+Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Notifications.swift"; sourceTree = "<group>"; };
 		E8CS0000000F /* CatchStrings+Accessibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Accessibility.swift"; sourceTree = "<group>"; };
 		E8CS00000010 /* CatchStrings+Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Network.swift"; sourceTree = "<group>"; };
-		E8NM00000001 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
-		E8OF00000001 /* OfflineBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBanner.swift; sourceTree = "<group>"; };
 		E8D800000001 /* StevenEasterEggView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StevenEasterEggView.swift; sourceTree = "<group>"; };
 		E8D800000002 /* CatStevenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatStevenTests.swift; sourceTree = "<group>"; };
 		E8DA00000001 /* CatDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatDataService.swift; sourceTree = "<group>"; };
@@ -472,6 +471,7 @@
 		E8NB00000001 /* NotificationBellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBellButton.swift; sourceTree = "<group>"; };
 		E8ND00000001 /* NotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
 		E8NI00000001 /* NotificationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationItem.swift; sourceTree = "<group>"; };
+		E8NM00000001 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		E8NV00000001 /* AppRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoute.swift; sourceTree = "<group>"; };
 		E8NV00000002 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		E8NV00000003 /* ContentTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTab.swift; sourceTree = "<group>"; };
@@ -479,6 +479,7 @@
 		E8NW00000002 /* NotificationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowView.swift; sourceTree = "<group>"; };
 		E8NW00000003 /* EncounterDetailLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncounterDetailLoadingView.swift; sourceTree = "<group>"; };
 		E8OB00000005 /* CatchStrings+OnboardingTour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+OnboardingTour.swift"; sourceTree = "<group>"; };
+		E8OF00000001 /* OfflineBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineBanner.swift; sourceTree = "<group>"; };
 		E8PF00000001 /* ProfileMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMode.swift; sourceTree = "<group>"; };
 		E8PF00000002 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		E8PF00000003 /* OwnProfileContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnProfileContent.swift; sourceTree = "<group>"; };
@@ -545,6 +546,7 @@
 		E8XP00000003 /* DataExportSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExportSection.swift; sourceTree = "<group>"; };
 		E8XP00000004 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		E8XP00000005 /* CatchStrings+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CatchStrings+Export.swift"; sourceTree = "<group>"; };
+		E8PI00000001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -605,6 +607,7 @@
 				E8C7643E7D80FDFED273606F /* Services */,
 				E8F500000300 /* Extensions */,
 				E8CA167FE482ED4A92C8C805 /* catch.entitlements */,
+				E8PI00000001 /* PrivacyInfo.xcprivacy */,
 				E80000012B5A00000012 /* Assets.xcassets */,
 				E80000012B5A0000000E /* Preview Content */,
 			);
@@ -1381,6 +1384,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8PI00000101 /* PrivacyInfo.xcprivacy in Resources */,
 				E80000012B5A00000004 /* Preview Assets.xcassets in Resources */,
 				E80000012B5A00000003 /* Assets.xcassets in Resources */,
 			);
@@ -1823,7 +1827,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = catch/catch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "\"catch/Preview Content\"";
 				DEVELOPMENT_TEAM = SZC3MJ9V7Y;
 				ENABLE_PREVIEWS = YES;
@@ -1845,7 +1849,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1856,7 +1860,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = catch/catch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_ASSET_PATHS = "\"catch/Preview Content\"";
 				DEVELOPMENT_TEAM = SZC3MJ9V7Y;
 				ENABLE_PREVIEWS = YES;
@@ -1878,7 +1882,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1894,7 +1898,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1910,7 +1914,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
